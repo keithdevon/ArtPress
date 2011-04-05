@@ -2,6 +2,7 @@
 
 <?php
 
+    // TODO investigate alternatives to wp-load.php
 	require_once('../../../wp-load.php');
 
     $options = get_option('artpress_theme_options');
