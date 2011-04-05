@@ -143,37 +143,115 @@ function artpress_options_do_page() {
 				?>
 				
 				
-<script type="text/javascript">
-  jQuery(document).ready(function() {
-    jQuery('#primary-color').farbtastic('#artpress_theme_options[primarycolor]');
-    jQuery('#secondary-color').farbtastic('#artpress_colors_secondary');
+<script>
+jQuery(document).ready(function() {
+    var f = jQuery.farbtastic('#picker');
+    var p = jQuery('#picker').css('opacity', 0.25);
+    var selected;
+    jQuery('.colorwell')
+      .each(function () { f.linkTo(this); jQuery(this).css('opacity', 0.75); })
+      .focus(function() {
+        if (selected) {
+          jQuery(selected).css('opacity', 0.75).removeClass('colorwell-selected');
+        }
+        f.linkTo(this);
+        p.css('opacity', 1);
+        jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
+      });
   });
-</script>
+ </script>
+
     			
     			<tr valign="top"><th scope="row"><?php _e( 'Colors' ); ?></th>
     				<td>
     					<!-- We insert divs into our admin page
 these will be converted into color wheels -->
 
-<div id = 'primary-color'></div>
-<div id = 'secondary-color'></div>
+<div id="picker" style="float: right;"></div>
+
 
 <!-- And we place input fields to hold the value,
 the value is updated as the user plays around with the wheel -->
 
-<input id = 'artpress_theme_options[primarycolor]' type = 'text' 
+<input id = 'artpress_theme_options[primarycolor]' type = 'text' class='colorwell'
 name = 'artpress_theme_options[primarycolor]' 
 value = "<?php esc_attr_e( $options['primarycolor'] ); ?>" />
 <label class="description" for="artpress_theme_options[primarycolor]"><?php _e( 'Primary Color' ); ?></label>
 <br />
 
 
-<input id = 'artpress_colors_secondary' type = 'text' 
-name = 'artpress_colors_secondary' 
-value = "<?php echo get_option('artpress_colors_secondary'); ?>" />	
+<input id = 'artpress_theme_options[secondarycolor]' type = 'text' class='colorwell' 
+name = 'artpress_theme_options[secondarycolor]' 
+value = "<?php esc_attr_e( $options['secondarycolor'] ); ?>" />	
 <label class="description" for="artpress_theme_options[secondarycolor]"><?php _e( 'Secondary Color' ); ?></label>
+<br />
+
+
+<input id = 'artpress_theme_options[tertiarycolor]' type = 'text' class='colorwell'
+name = 'artpress_theme_options[tertiarycolor]' 
+value = "<?php esc_attr_e( $options['tertiarycolor'] ); ?>" />	
+<label class="description" for="artpress_theme_options[tertiarycolor]"><?php _e( 'Tertiary Color' ); ?></label>
+<br />
+
+
+<input id = 'artpress_theme_options[backgroundcolor]' type = 'text' class='colorwell'
+name = 'artpress_theme_options[backgroundcolor]' 
+value = "<?php esc_attr_e( $options['backgroundcolor'] ); ?>" />	
+<label class="description" for="artpress_theme_options[backgroundcolor]"><?php _e( 'Background Color' ); ?></label>
 				</td>
     			</tr>
+    			
+    			
+    				<?php
+				/**
+				 * Logo Color
+				 */
+				 
+$artpress_colors = array(
+	'primary' => array(
+		'value' => 'primary',
+		'label' => __( 'Primary' )
+	),
+	'secondary' => array(
+		'value' => 'secondary',
+		'label' => __( 'Secondary' )
+	),
+	'tertiary' => array(
+		'value' => 'tertiary',
+		'label' => __( 'Tertiary' )
+	),
+	'background' => array(
+		'value' => 'background',
+		'label' => __( 'Background' )
+	)
+	);
+				 
+				 
+				?>
+				<tr valign="top"><th scope="row"><?php _e( 'Logo Color' ); ?></th>
+					<td>
+						<fieldset><legend class="screen-reader-text"><span><?php _e( 'Logo Color' ); ?></span></legend>
+						<?php
+							if ( ! isset( $checked ) )
+								$checked = '';
+							foreach ( $artpress_colors as $option ) {
+								$radio_setting = $options['logo-color'];
+
+								if ( '' != $radio_setting ) {
+									if ( $options['logo-color'] == $option['value'] ) {
+										$checked = "checked=\"checked\"";
+									} else {
+										$checked = '';
+									}
+								}
+								?>
+								<label class="description"><input type="radio" name="artpress_theme_options[logo-color]" value="<?php esc_attr_e( $option['value'] ); ?>" <?php echo $checked; ?> /> <?php echo $option['label']; ?></label><br />
+								<?php
+							}
+						?>
+						</fieldset>
+					</td>
+				</tr>
 
 				
 				<?php
@@ -232,6 +310,8 @@ value = "<?php echo get_option('artpress_colors_secondary'); ?>" />
 						</fieldset>
 					</td>
 				</tr>
+				
+				
 
 				<?php
 				/**
@@ -258,11 +338,20 @@ value = "<?php echo get_option('artpress_colors_secondary'); ?>" />
  * Sanitize and validate input. Accepts an array, return a sanitized array.
  */
 function artpress_options_validate( $input ) {
-	global $select_options, $radio_options;
+	global $select_options, $radio_options, $artpress_colors;
 
 	if ( ! isset( $input['base_text_size'] ) )
 		$input['base_text_size'] = 1;
 	//$input['base_text_size'] =  $input['base_text_size'];
+	
+	if ( ! isset( $input['primarycolor'] ) )
+		$input['primarycolor'] = 'red';
+		
+	if ( ! isset( $input['secondarycolor'] ) )
+		$input['secondarycolor'] = 'blue';
+		
+	if ( ! isset( $input['tertiarycolor'] ) )
+		$input['tertiarycolor'] = 'orange';
 	
 	// Our checkbox value is either 0 or 1
 	if ( ! isset( $input['option1'] ) )
@@ -281,6 +370,7 @@ function artpress_options_validate( $input ) {
 		$input['radioinput'] = null;
 	if ( ! array_key_exists( $input['radioinput'], $radio_options ) )
 		$input['radioinput'] = null;
+
 
 	// Say our textarea option must be safe text with the allowed tags for posts
 	$input['sometextarea'] = wp_filter_post_kses( $input['sometextarea'] );
