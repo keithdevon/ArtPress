@@ -97,6 +97,20 @@ function artpress_options_do_page() {
 
 			<table class="form-table">
 
+				<tr valign="top"><th scope="row"><?php _e( 'Base text size' ); ?></th>
+					<td>
+						<input 
+							id="artpress_theme_options[base_text_size]" 
+							name="artpress_theme_options[base_text_size]" 
+							type="text" 
+						
+							value="<?php esc_attr_e( $options['base_text_size'] ); ?>"
+							class="regular-text"
+							<?php checked( '1', $options['base_text_size'] ); ?> />
+						<label class="description" for="artpress_theme_options[base_text_size]"><?php _e( 'Base text size blurb label' ); ?></label>
+					</td>
+				</tr>
+				
 				<?php
 				/**
 				 * A sample checkbox option
@@ -246,6 +260,10 @@ value = "<?php echo get_option('artpress_colors_secondary'); ?>" />
 function artpress_options_validate( $input ) {
 	global $select_options, $radio_options;
 
+	if ( ! isset( $input['base_text_size'] ) )
+		$input['base_text_size'] = 1;
+	//$input['base_text_size'] =  $input['base_text_size'];
+	
 	// Our checkbox value is either 0 or 1
 	if ( ! isset( $input['option1'] ) )
 		$input['option1'] = null;
