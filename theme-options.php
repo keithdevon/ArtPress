@@ -2,6 +2,18 @@
 
 add_action( 'admin_init', 'theme_options_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
+add_action('init', 'artpress_options_load_scripts');
+
+// Load our scripts
+function artpress_options_load_scripts() {
+
+	wp_enqueue_script('farbtastic', get_bloginfo('template_url') . 
+        '/scripts/farbtastic/farbtastic.js', array('jquery'));
+    wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . 
+        '/scripts/farbtastic/farbtastic.css' );
+    wp_enqueue_style( 'ArtPressOptionsStylesheet' );
+	
+}
 
 /**
  * Init plugin options to white list our options
@@ -109,6 +121,47 @@ function artpress_options_do_page() {
 					</td>
 				</tr>
 
+
+				<?php
+				/**
+				 * Color Pickers
+				 */
+				?>
+				
+				
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    jQuery('#primary-color').farbtastic('#artpress_theme_options[primarycolor]');
+    jQuery('#secondary-color').farbtastic('#artpress_colors_secondary');
+  });
+</script>
+    			
+    			<tr valign="top"><th scope="row"><?php _e( 'Colors' ); ?></th>
+    				<td>
+    					<!-- We insert divs into our admin page
+these will be converted into color wheels -->
+
+<div id = 'primary-color'></div>
+<div id = 'secondary-color'></div>
+
+<!-- And we place input fields to hold the value,
+the value is updated as the user plays around with the wheel -->
+
+<input id = 'artpress_theme_options[primarycolor]' type = 'text' 
+name = 'artpress_theme_options[primarycolor]' 
+value = "<?php esc_attr_e( $options['primarycolor'] ); ?>" />
+<label class="description" for="artpress_theme_options[primarycolor]"><?php _e( 'Primary Color' ); ?></label>
+<br />
+
+
+<input id = 'artpress_colors_secondary' type = 'text' 
+name = 'artpress_colors_secondary' 
+value = "<?php echo get_option('artpress_colors_secondary'); ?>" />	
+<label class="description" for="artpress_theme_options[secondarycolor]"><?php _e( 'Secondary Color' ); ?></label>
+				</td>
+    			</tr>
+
+				
 				<?php
 				/**
 				 * A sample select input option
