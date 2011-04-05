@@ -3,6 +3,8 @@
 <?php
 
     // TODO investigate alternatives to wp-load.php
+    
+    // Keith is a total legend
 	require_once('../../../wp-load.php');
 
     $options = get_option('artpress_theme_options');
