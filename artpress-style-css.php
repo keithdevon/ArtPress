@@ -2,27 +2,25 @@
 
 <?php
 
-// TODO investigate alternatives to wp-load.php
+    // TODO investigate alternatives to wp-load.php
+    
+	require_once('../../../wp-load.php');
 
-require_once('../../../wp-load.php');
-
-$options = get_option('artpress_theme_options');
-
-// LINK COLOR
-echo 'a:link, a:visited {color:'
-	.$options['radioinput'].
-	';}';
-	
-// FONT SIZE
-echo '#content {font-size:'
-	.$options['sometext'].
-	';}';
-	
-// BODY BACKGROUND
-  echo 'body {background:'
-	.$options['backgroundcolor'].
-	';}';
-	
+    $options = get_option('artpress_theme_options');
+    
+    // LINK COLOR
+    echo 'a:link, a:visited {color:'
+    	.$options['radioinput'].
+    	';}';
+    	
+    // FONT SIZE
+    echo 'body {font-size:' .$options['base_text_size']. 'em;}';
+    	
+    // BODY BACKGROUND
+      echo 'body {background:'
+    	.$options['backgroundcolor'].
+    	';}';
+    	
 // SITE COLORS
  
 $site_elements = array(
@@ -47,10 +45,10 @@ css_color("#site-title a", $options['logo-color']);
 				break;
 		}
 		echo ';}';
-    }
+    	}
     
-	
-// PAGE TITLE
+    	
+	// PAGE TITLE
 
 ?>	
 	.entry-title a:link, .entry-title a:visited {color:
