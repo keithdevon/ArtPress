@@ -512,3 +512,62 @@ endif;
 // ------ Add settings
 
 require_once ( get_template_directory() . '/theme-options.php' );
+
+
+/* For adding custom field to gallery popup */
+function artpress_attachment_height($image_height_form_fields, $post) {
+	// $form_fields is a an array of fields to include in the attachment form
+	// $post is nothing but attachment record in the database
+	//     $post->post_type == 'attachment'
+	// attachments are considered as posts in WordPress. So value of post_type in wp_posts table will be attachment
+	// now add our custom field to the $form_fields array
+	// input type="text" name/id="attachments[$attachment->ID][custom1]"
+	$image_height_form_fields["artpress_image_height"] = array(
+		"label" => __("Real Image Height (cm)"),
+		"input" => "text", // this is default if "input" is omitted
+		"value" => get_post_meta($post->ID, "_artpress_image_height", true),
+                "helps" => __("Enter the height of your original piece in cms."),
+	);
+   return $image_height_form_fields;
+}
+// now attach our function to the hook
+add_filter("attachment_fields_to_edit", "artpress_attachment_height", null, 2);
+
+function artpress_attachment_height_to_save($post, $attachment) {
+	// $attachment part of the form $_POST ($_POST[attachments][postID])
+        // $post['post_type'] == 'attachment'
+	if( isset($attachment['artpress_image_height']) ){
+		// update_post_meta(postID, meta_key, meta_value);
+		update_post_meta($post['ID'], '_artpress_image_height', $attachment['artpress_image_height']);
+	}
+	return $post;
+}
+// now attach our function to the hook.
+add_filter("attachment_fields_to_save", "artpress_attachment_height_to_save", null , 2);
+
+
+
+// ----- width
+function artpress_attachment_width($image_width_form_fields, $post) {
+	$image_width_form_fields["artpress_image_width"] = array(
+		"label" => __("Real Image Width (cm)"),
+		"input" => "text", // this is default if "input" is omitted
+		"value" => get_post_meta($post->ID, "_artpress_image_width", true),
+                "helps" => __("Enter the width of your original piece in cms."),
+	);
+   return $image_width_form_fields;
+}
+// now attach our function to the hook
+add_filter("attachment_fields_to_edit", "artpress_attachment_width", null, 2);
+
+function artpress_attachment_width_to_save($post, $attachment) {
+	// $attachment part of the form $_POST ($_POST[attachments][postID])
+        // $post['post_type'] == 'attachment'
+	if( isset($attachment['artpress_image_width']) ){
+		// update_post_meta(postID, meta_key, meta_value);
+		update_post_meta($post['ID'], '_artpress_image_width', $attachment['artpress_image_width']);
+	}
+	return $post;
+}
+// now attach our function to the hook.
+add_filter("attachment_fields_to_save", "artpress_attachment_width_to_save", null , 2);
