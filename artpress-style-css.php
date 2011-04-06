@@ -6,25 +6,23 @@
 
 require_once('../../../wp-load.php');
 
-$options = get_option('artpress_theme_options');
-
-// LINK COLOR
-echo 'a:link, a:visited {color:'
-	.$options['radioinput'].
-	';}';
-	
-// FONT SIZE
-echo '#content {font-size:'
-	.$options['sometext'].
-	';}';
-	
-// BODY BACKGROUND
-  echo 'body {background:'
-	.$options['backgroundcolor'].
-	';}';
-	
+    $options = get_option('artpress_theme_options');
+    
+    // LINK COLOR
+    echo 'a:link, a:visited {color:'
+    	.$options['radioinput'].
+    	';}';
+    	
+    // FONT SIZE
+    echo 'body {font-size:' .$options['base_text_size']. 'em;}';
+    	
+    // BODY BACKGROUND
+      echo 'body {background:'
+    	.$options['backgroundcolor'].
+    	';}';
+    	
 // SET SITE-WIDE COLORS
-
+ 
 $site_elements = array(
 	'logo' => "#site-title a",
 	'title' => "#content .entry-title"

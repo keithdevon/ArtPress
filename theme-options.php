@@ -9,10 +9,9 @@ function artpress_options_load_scripts() {
 
 	wp_enqueue_script('farbtastic', get_bloginfo('template_url') . 
         '/scripts/farbtastic/farbtastic.js', array('jquery'));
-        
-    wp_register_style( 'ArtPressFarbtasticStylesheet', get_bloginfo('template_url') . 
+    wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . 
         '/scripts/farbtastic/farbtastic.css' );
-    wp_enqueue_style( 'ArtPressFarbtasticStylesheet' );
+    wp_enqueue_style( 'ArtPressOptionsStylesheet' );
 	
 }
 
@@ -33,48 +32,49 @@ function theme_options_add_page() {
 /**
  * Create arrays for our select and radio options
  */
-$select_options = array(
-	'0' => array(
-		'value' =>	'0',
-		'label' => __( 'Zero' )
-	),
-	'1' => array(
-		'value' =>	'1',
-		'label' => __( 'One' )
-	),
-	'2' => array(
-		'value' => '2',
-		'label' => __( 'Two' )
-	),
-	'3' => array(
-		'value' => '3',
-		'label' => __( 'Three' )
-	),
-	'4' => array(
-		'value' => '4',
-		'label' => __( 'Four' )
-	),
-	'5' => array(
-		'value' => '3',
-		'label' => __( 'Five' )
-	)
-);
+$select_options = array('0' => array('value' =>	'0', 'label' => __( 'Zero'  )),
+			'1' => array('value' =>	'1', 'label' => __( 'One'   )),
+			'2' => array('value' => '2', 'label' => __( 'Two'   )),
+			'3' => array('value' => '3', 'label' => __( 'Three' )),
+			'4' => array('value' => '4', 'label' => __( 'Four'  )),
+			'5' => array('value' => '3', 'label' => __( 'Five'  )));
 
-$radio_options = array(
-	'blue' => array(
-		'value' => 'blue',
-		'label' => __( 'Blue' )
-	),
-	'red' => array(
-		'value' => 'red',
-		'label' => __( 'Red' )
-	),
-	'green' => array(
-		'value' => 'green',
-		'label' => __( 'Green' )
-	)
-);
+$radio_options = array(	'blue' => array('value' => 'blue', 'label' => __( 'Blue' )),
+			'red' => array('value' => 'red', 'label' => __( 'Red' )),
+			'green' => array('value' => 'green', 'label' => __( 'Green' )));
 
+//				<tr valign="top"><th scope="row"><?php _e( 'Some text' ); </th>
+//					<td>
+//						<input id="artpress_theme_options[sometext]" class="regular-text" type="text" name="artpress_theme_options[sometext]" value="<?php esc_attr_e( $options['sometext'] ); >" />
+//						<label class="description" for="artpress_theme_options[sometext]"><php _e( 'Sample text input' ); </label>
+//					</td>
+//				</tr>
+
+function attribute($name, $value) { return ' ' . $name . '="' . $value . '"'; }
+function bt($tag_name, $attributes) { return '<' . $tag_name . $attributes . ' />'; }
+function ot($tag_name, $attributes) { return '<' . $tag_name . $attributes . '>'; }
+function ct($tag_name)              { return '</' . $tag_name . '>'; }
+function attr_id ($value)         { return attribute('id', $value); }
+function attr_name ($value)       { return attribute('name', $value); }
+function attr_class ($value)      { return attribute('class', $value); }
+function attr_value ($value)      { return attribute('value', $value); }
+function attr_type ($value)       { return attribute('type', $value); }
+
+
+function label($class, $for, $text)    { return ot('label', attr_class($class)	. attribute('for', $for)) . $text . ct('label');}
+function th($value, $scope = "")       { return ot('th', attribute('scope', $scope)) . $value . ct('th'); }
+function td($content, $attributes ="") { return ot('td', $attributes) . $content . ct('td'); }
+
+function input_text ($id, $class, $value) {
+	return bt('input', attr_id($id) . attr_class($class) . attr_type('text') . attr_name($id) . attr_value($value) );	
+}
+function form_text_field($field_name, $id, $value, $field_blurb) {
+	echo '<tr valign="top">';
+	echo th($field_name, "row");
+	echo td( input_text($id, 'regular-text', $value) 
+			. label('description', 'inputid', $field_blurb));
+	echo ct('tr');
+}
 /**
  * Create the options page
  */
@@ -97,20 +97,9 @@ function artpress_options_do_page() {
 			<?php $options = get_option( 'artpress_theme_options' ); ?>
 
 			<table class="form-table">
-
-				<tr valign="top"><th scope="row"><?php _e( 'Base text size' ); ?></th>
-					<td>
-						<input 
-							id="artpress_theme_options[base_text_size]" 
-							name="artpress_theme_options[base_text_size]" 
-							type="text" 
-						
-							value="<?php esc_attr_e( $options['base_text_size'] ); ?>"
-							class="regular-text"
-							<?php checked( '1', $options['base_text_size'] ); ?> />
-						<label class="description" for="artpress_theme_options[base_text_size]"><?php _e( 'Base text size blurb label' ); ?></label>
-					</td>
-				</tr>
+				<?php form_text_field("fieldname", "id", "value", "field_blurb");?>
+				
+				<?php form_text_field('Base text size', 'artpress_theme_options[base_text_size]', esc_attr( $options['base_text_size']), __( 'Base text size blurb label' )); ?>
 				
 				<?php
 				/**
@@ -128,6 +117,7 @@ function artpress_options_do_page() {
 				/**
 				 * A sample text input option
 				 */
+				//create_text_field("artpress_theme_options[sometext]", "artpress_theme_options[sometext]", "text", esc_attr( $options['sometext'] ), $class)
 				?>
 				<tr valign="top"><th scope="row"><?php _e( 'Some text' ); ?></th>
 					<td>
@@ -137,30 +127,25 @@ function artpress_options_do_page() {
 				</tr>
 
 
-				<?php
-				/**
-				 * Color Pickers
-				 */
-				?>
-				
-				
-<script>
-jQuery(document).ready(function() {
-    var f = jQuery.farbtastic('#picker');
-    var p = jQuery('#picker').css('opacity', 0.25);
-    var selected;
-    jQuery('.colorwell')
-      .each(function () { f.linkTo(this); jQuery(this).css('opacity', 0.75); })
-      .focus(function() {
-        if (selected) {
-          jQuery(selected).css('opacity', 0.75).removeClass('colorwell-selected');
-        }
-        f.linkTo(this);
-        p.css('opacity', 1);
-        jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
-      });
-  });
- </script>
+				<?php /* Color Pickers */?>
+
+				<script>
+				jQuery(document).ready(function() {
+				    var f = jQuery.farbtastic('#picker');
+				    var p = jQuery('#picker').css('opacity', 0.25);
+				    var selected;
+				    jQuery('.colorwell')
+				      .each(function () { f.linkTo(this); jQuery(this).css('opacity', 0.75); })
+				      .focus(function() {
+				        if (selected) {
+				          jQuery(selected).css('opacity', 0.75).removeClass('colorwell-selected');
+				        }
+				        f.linkTo(this);
+				        p.css('opacity', 1);
+				        jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
+				      });
+				  });
+				 </script>
 
     			
 <tr valign="top"><th scope="row"><?php _e( 'Colors' ); ?></th>
@@ -403,13 +388,16 @@ function artpress_options_validate( $input ) {
 	//$input['base_text_size'] =  $input['base_text_size'];
 	
 	if ( ! isset( $input['primarycolor'] ) )
-		$input['primarycolor'] = 'red';
+		$input['primarycolor'] = '#ff0000';
 		
 	if ( ! isset( $input['secondarycolor'] ) )
-		$input['secondarycolor'] = 'blue';
+		$input['secondarycolor'] = '#0000ff';
 		
 	if ( ! isset( $input['tertiarycolor'] ) )
-		$input['tertiarycolor'] = 'orange';
+		$input['tertiarycolor'] = '#00ff00';
+		
+	if ( ! isset( $input['backgroundcolor'] ) )
+		$input['backgroundcolor'] = '#ffffff';
 	
 	// Our checkbox value is either 0 or 1
 	if ( ! isset( $input['option1'] ) )
