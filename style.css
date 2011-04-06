@@ -1354,3 +1354,10 @@ code {
 		border: none;
 	}
 }
+
+/* ARTPRESS ADDITIONS - move these to a fully controlled stylesheet at a later date */
+
+
+label.horiz {
+	float:left;
+	}

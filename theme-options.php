@@ -2,16 +2,17 @@
 
 add_action( 'admin_init', 'theme_options_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
-add_action('init', 'artpress_options_load_scripts');
+add_action('admin_init', 'artpress_options_load_scripts');
 
 // Load our scripts
 function artpress_options_load_scripts() {
 
 	wp_enqueue_script('farbtastic', get_bloginfo('template_url') . 
         '/scripts/farbtastic/farbtastic.js', array('jquery'));
-    wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . 
+        
+    wp_register_style( 'ArtPressFarbtasticStylesheet', get_bloginfo('template_url') . 
         '/scripts/farbtastic/farbtastic.css' );
-    wp_enqueue_style( 'ArtPressOptionsStylesheet' );
+    wp_enqueue_style( 'ArtPressFarbtasticStylesheet' );
 	
 }
 
@@ -162,50 +163,60 @@ jQuery(document).ready(function() {
  </script>
 
     			
-    			<tr valign="top"><th scope="row"><?php _e( 'Colors' ); ?></th>
-    				<td>
-    					<!-- We insert divs into our admin page
-these will be converted into color wheels -->
+<tr valign="top"><th scope="row"><?php _e( 'Colors' ); ?></th>
 
-<div id="picker" style="float: right;"></div>
-
-
-<!-- And we place input fields to hold the value,
-the value is updated as the user plays around with the wheel -->
-
-<input id = 'artpress_theme_options[primarycolor]' type = 'text' class='colorwell'
+<td>
+ 
+<table id="color-table">
+	<tr>
+	
+		<th>
+		Element
+		</th>
+	
+		<td>
+		<label class="description" for="artpress_theme_options[primarycolor]"><?php _e( 'Primary' ); ?></label>
+		<input id = 'artpress_theme_options[primarycolor]' type = 'text' class='colorwell'
 name = 'artpress_theme_options[primarycolor]' 
-value = "<?php esc_attr_e( $options['primarycolor'] ); ?>" />
-<label class="description" for="artpress_theme_options[primarycolor]"><?php _e( 'Primary Color' ); ?></label>
-<br />
+value = "<?php esc_attr_e( $options['primarycolor'] ); ?>" 
+size = "7" />
 
-
-<input id = 'artpress_theme_options[secondarycolor]' type = 'text' class='colorwell' 
+		</td>
+		
+		<td>
+		<label class="description" for="artpress_theme_options[secondarycolor]"><?php _e( 'Secondary' ); ?></label>
+		<input id = 'artpress_theme_options[secondarycolor]' type = 'text' class='colorwell' 
 name = 'artpress_theme_options[secondarycolor]' 
-value = "<?php esc_attr_e( $options['secondarycolor'] ); ?>" />	
-<label class="description" for="artpress_theme_options[secondarycolor]"><?php _e( 'Secondary Color' ); ?></label>
-<br />
+value = "<?php esc_attr_e( $options['secondarycolor'] ); ?>" 
+size = "7" />	
 
-
-<input id = 'artpress_theme_options[tertiarycolor]' type = 'text' class='colorwell'
+		</td>
+		
+		<td>
+		<label class="description" for="artpress_theme_options[tertiarycolor]"><?php _e( 'Tertiary' ); ?></label>
+		<input id = 'artpress_theme_options[tertiarycolor]' type = 'text' class='colorwell'
 name = 'artpress_theme_options[tertiarycolor]' 
-value = "<?php esc_attr_e( $options['tertiarycolor'] ); ?>" />	
-<label class="description" for="artpress_theme_options[tertiarycolor]"><?php _e( 'Tertiary Color' ); ?></label>
-<br />
+value = "<?php esc_attr_e( $options['tertiarycolor'] ); ?>" 
+size = "7" />	
 
-
-<input id = 'artpress_theme_options[backgroundcolor]' type = 'text' class='colorwell'
+		</td>
+		
+		<td>
+		<label class="description" for="artpress_theme_options[backgroundcolor]"><?php _e( 'Background' ); ?></label>
+		<input id = 'artpress_theme_options[backgroundcolor]' type = 'text' class='colorwell'
 name = 'artpress_theme_options[backgroundcolor]' 
-value = "<?php esc_attr_e( $options['backgroundcolor'] ); ?>" />	
-<label class="description" for="artpress_theme_options[backgroundcolor]"><?php _e( 'Background Color' ); ?></label>
-				</td>
-    			</tr>
-    			
-    			
-    				<?php
-				/**
-				 * Logo Color
-				 */
+value = "<?php esc_attr_e( $options['backgroundcolor'] ); ?>" 
+size = "7"  />	
+
+		</td>
+		
+	</tr>
+	
+	
+	    				<?php
+/**
+* Logo + Title Colors 
+*/
 				 
 $artpress_colors = array(
 	'primary' => array(
@@ -228,30 +239,73 @@ $artpress_colors = array(
 				 
 				 
 				?>
-				<tr valign="top"><th scope="row"><?php _e( 'Logo Color' ); ?></th>
-					<td>
-						<fieldset><legend class="screen-reader-text"><span><?php _e( 'Logo Color' ); ?></span></legend>
-						<?php
-							if ( ! isset( $checked ) )
-								$checked = '';
-							foreach ( $artpress_colors as $option ) {
-								$radio_setting = $options['logo-color'];
+<tr valign="top">
+	<th scope="row"><?php _e( 'Logo Color' ); ?></th>
+	<fieldset>
+			<legend class="screen-reader-text"><span><?php _e( 'Logo Color' ); ?></span></legend>
+	
+		
+			<?php
+			    if ( ! isset( $checked ) )
+			    	$checked = '';
+			    foreach ( $artpress_colors as $option ) {
+			    	$radio_setting = $options['logo-color'];
+			
+			    	if ( '' != $radio_setting ) {
+			    		if ( $options['logo-color'] == $option['value'] ) {
+			    			$checked = "checked=\"checked\"";
+			    		} else {
+			    			$checked = '';
+			    		}
+			    	}
+			    	?>
+					<td><label class="description horiz"><input type="radio" name="artpress_theme_options[logo-color]" value="<?php esc_attr_e( $option['value'] ); ?>" <?php echo $checked; ?> /> <?php echo $option['label']; ?></label></td>
+					
+								<?php
+				}
+						?>
+			
+	
+	</fieldset>
+</tr>
 
-								if ( '' != $radio_setting ) {
-									if ( $options['logo-color'] == $option['value'] ) {
-										$checked = "checked=\"checked\"";
-									} else {
-										$checked = '';
-									}
-								}
-								?>
-								<label class="description"><input type="radio" name="artpress_theme_options[logo-color]" value="<?php esc_attr_e( $option['value'] ); ?>" <?php echo $checked; ?> /> <?php echo $option['label']; ?></label><br />
+
+				
+<tr valign="top">
+	<th scope="row"><?php _e( 'Title Color' ); ?></th>
+	
+	<fieldset>
+		<legend class="screen-reader-text"><span><?php _e( 'Title Color' ); ?></span></legend>
+		    <?php
+		    	if ( ! isset( $checked ) )
+		    		$checked = '';
+		    	foreach ( $artpress_colors as $option ) {
+		    		$radio_setting = $options['title-color'];
+		
+		    		if ( '' != $radio_setting ) {
+		    			if ( $options['title-color'] == $option['value'] ) {
+		    				$checked = "checked=\"checked\"";
+		    			} else {
+		    				$checked = '';
+		    			}
+		    		}
+			?>
+					<td><label class="description"><input type="radio" name="artpress_theme_options[title-color]" value="<?php esc_attr_e( $option['value'] ); ?>" <?php echo $checked; ?> /> <?php echo $option['label']; ?></label></td>
 								<?php
 							}
 						?>
 						</fieldset>
-					</td>
+					
 				</tr>
+	
+	
+</table>   			
+
+</td>
+</tr>
+    			
+    			
+
 
 				
 				<?php
@@ -329,6 +383,10 @@ $artpress_colors = array(
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e( 'Save Options' ); ?>" />
 			</p>
+			
+			<div id="picker" style="float: right;"></div>
+			
+			
 		</form>
 	</div>
 	<?php

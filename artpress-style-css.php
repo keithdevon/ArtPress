@@ -23,20 +23,20 @@ echo '#content {font-size:'
 	.$options['backgroundcolor'].
 	';}';
 	
-// SITE COLORS
- 
+// SET SITE-WIDE COLORS
+
 $site_elements = array(
 	'logo' => "#site-title a",
-	'title' => ".entry-title a:link, .entry-title:visited"
+	'title' => "#content .entry-title"
 	);
  
-css_color("#site-title a", $options['logo-color']);
-	
 	function css_color( $css_el, $color ) {
     	global $options;
     
 		echo $css_el . '{color:' ;
-		switch ($color) {
+		
+		$element_color = $color.'-color';
+		switch ($options[$element_color]) {
 	        case "primary": echo $options['primarycolor'];
 				break;
 			case "secondary": echo $options['secondarycolor'];
@@ -48,32 +48,7 @@ css_color("#site-title a", $options['logo-color']);
 		}
 		echo ';}';
     }
-    
-	
-// PAGE TITLE
 
-?>	
-	.entry-title a:link, .entry-title a:visited {color:
-	<?php
-	
-	switch ($options['title-color'])
-	{
-		case "primary": echo $options['primarycolor'];
-			break;
-		case "secondary": echo $options['secondarycolor'];
-			break;
-		case "tertiary": echo $options['tertiarycolor'];
-			break;
-		case "background": echo $options['backgroundcolor'];
-			break;
-	}?>
-	
-	;}
-	<?php
-
-	
-	
-
-    	
+foreach ($site_elements as $key => $value)
+	css_color($value , $key);   	
 ?>
-
