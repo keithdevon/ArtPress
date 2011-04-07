@@ -43,38 +43,75 @@ $radio_options = array(	'blue' => array('value' => 'blue', 'label' => __( 'Blue'
 			'red' => array('value' => 'red', 'label' => __( 'Red' )),
 			'green' => array('value' => 'green', 'label' => __( 'Green' )));
 
-//				<tr valign="top"><th scope="row"><?php _e( 'Some text' ); </th>
-//					<td>
-//						<input id="artpress_theme_options[sometext]" class="regular-text" type="text" name="artpress_theme_options[sometext]" value="<?php esc_attr_e( $options['sometext'] ); >" />
-//						<label class="description" for="artpress_theme_options[sometext]"><php _e( 'Sample text input' ); </label>
-//					</td>
-//				</tr>
-
+/** Generic HTML generating functions */
+/* Generic HTML attribute functions */
 function attribute($name, $value) { return ' ' . $name . '="' . $value . '"'; }
-function bt($tag_name, $attributes) { return '<' . $tag_name . $attributes . ' />'; }
-function ot($tag_name, $attributes) { return '<' . $tag_name . $attributes . '>'; }
-function ct($tag_name)              { return '</' . $tag_name . '>'; }
 function attr_id ($value)         { return attribute('id', $value); }
 function attr_name ($value)       { return attribute('name', $value); }
 function attr_class ($value)      { return attribute('class', $value); }
 function attr_value ($value)      { return attribute('value', $value); }
 function attr_type ($value)       { return attribute('type', $value); }
+function attr_valign ($value)     { return attribute('valign', $value); }
+function attr_checked ($value)    {
+	// TODO include type checking
+	if($value == true) 
+		return attribute('checked', 'checked');
+	else 
+		//return attribute ('checked', '');
+		return '';
+}
 
+/* Generic HTML element functions */
+function bt($tag_name, $attributes) { return '<' . $tag_name . $attributes . ' />'; } // bacherlor tag eg: <tag />
+function ot($tag_name, $attributes) { return '<' . $tag_name . $attributes . '>'; }   // opening tag   eg: <tag>
+function ct($tag_name)              { return '</' . $tag_name . '>'; }                // closing tag   eg: </tag>
 
-function label($class, $for, $text)    { return ot('label', attr_class($class)	. attribute('for', $for)) . $text . ct('label');}
-function th($value, $scope = "")       { return ot('th', attribute('scope', $scope)) . $value . ct('th'); }
 function td($content, $attributes ="") { return ot('td', $attributes) . $content . ct('td'); }
 
-function input_text ($id, $class, $value) {
+/** Heart Theme specific functions */
+function ht_label($class, $for, $text) { 
+	return ot('label', attr_class($class)	. attribute('for', $for)) . $text . ct('label');
+}
+function ht_th($value, $scope = "")       { 
+	return ot('th', attribute('scope', $scope)) . $value . ct('th'); 
+}
+function ht_input_text ($id, $class, $value, $size) {
 	return bt('input', attr_id($id) . attr_class($class) . attr_type('text') . attr_name($id) . attr_value($value) );	
 }
-function form_text_field($field_name, $id, $value, $field_blurb) {
-	echo '<tr valign="top">';
-	echo th($field_name, "row");
-	echo td( input_text($id, 'regular-text', $value) 
-			. label('description', 'inputid', $field_blurb));
-	echo ct('tr');
+function ht_input_checkbox ($field_name, $id, $is_checked, $value, $field_blurb) {
+	return bt('input', attr_id($id) . attr_type('checkbox') . attr_name($id) . attr_value($value) . attr_checked($is_checked ) );
 }
+function ht_form_text_field($field_name, $id, $value, $field_blurb) {
+	echo  ot( 'tr', attr_valign('top') )
+		. ht_th($field_name, "row")
+	    . td(  ht_input_text($id, 'regular-text', $value) 
+			. ht_label('description', $id, $field_blurb) )
+		. ct('tr');
+}
+function ht_form_checkbox($field_name, $id, $value, $is_checked, $field_blurb) {
+	echo ot( 'tr', attr_valign('top') );
+	echo ht_th( $field_name, "row" );
+	echo td(  ht_input_checkbox($field_name, $id, $is_checked, $value, $field_blurb)
+			. ht_label ('description', $id, $field_blurb) );
+	echo ct( 'tr' );
+}
+//<td>
+//		<label class="description" for="artpress_theme_options[primarycolor]"><?php _e( 'Primary' ); ?/></label>
+//		<input id = 'artpress_theme_options[primarycolor]' 
+//				type = 'text' 
+//				class='colorwell'
+//				name = 'artpress_theme_options[primarycolor]' 
+//				value = "</?php esc_attr_e( $options['primarycolor'] ); ?/>" 
+//				size = "7" />
+//
+//</td>
+function ht_color_chooser_cell ( $id, $class, $value, $size, $field_blurb) {
+	echo td(  ht_label('description', $id, $field_blurb)
+			. bt('br')
+			. ht_input_text($id, $class, $value, $size)
+	);
+}
+
 /**
  * Create the options page
  */
@@ -95,24 +132,34 @@ function artpress_options_do_page() {
 		<form method="post" action="options.php">
 			<?php settings_fields( 'artpress_options' ); ?>
 			<?php $options = get_option( 'artpress_theme_options' ); ?>
+			
+			<p class="submit"><input type="submit" class="button-primary" value="<?php _e( 'Save Options' ); ?>" />	</p>
 
 			<table class="form-table">
-				<?php form_text_field("fieldname", "id", "value", "field_blurb");?>
+				<?php ht_form_text_field("fieldname", "id", "value", "field_blurb");?>
 				
-				<?php form_text_field('Base text size', 'artpress_theme_options[base_text_size]', esc_attr( $options['base_text_size']), __( 'Base text size blurb label' )); ?>
+				<?php ht_form_text_field('Base text size', 'artpress_theme_options[base_text_size]', esc_attr( $options['base_text_size']), __( 'Base text size blurb label' )); ?>
 				
 				<?php
 				/**
 				 * A sample checkbox option
 				 */
-				?>
+				?><!--
 				<tr valign="top"><th scope="row"><?php _e( 'A checkbox' ); ?></th>
 					<td>
 						<input id="artpress_theme_options[option1]" name="artpress_theme_options[option1]" type="checkbox" value="1" <?php checked( '1', $options['option1'] ); ?> />
 						<label class="description" for="artpress_theme_options[option1]"><?php _e( 'Sample checkbox' ); ?></label>
 					</td>
 				</tr>
-
+				--><?php 
+//							echo "<p>options['option1']: ". $options['option1'] . "</p>";
+//							echo "<p>checked(1 , options['option1'], FALSE): " . checked( '1', $options['option1'], true ) . "</p>";
+							echo ht_form_checkbox(	__( 'New Sample checkbox' ), 
+										"artpress_theme_options[option1]", 
+										"1", 
+										$options['option1'],
+										 "New Sample checkbox blurb"); 
+										?>
 				<?php
 				/**
 				 * A sample text input option
@@ -139,7 +186,7 @@ function artpress_options_do_page() {
 				</tr>
 
 
-				<?php /* Color Pickers */?>
+				<?php /* Color Pickers */ ?>
 
 				<script>
 				jQuery(document).ready(function() {
@@ -171,76 +218,63 @@ function artpress_options_do_page() {
 		Element
 		</th>
 	
-		<td>
-		<label class="description" for="artpress_theme_options[primarycolor]"><?php _e( 'Primary' ); ?></label>
+		<?php ht_color_chooser_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['primarycolor'] ), 7, __( 'Primary' )); ?>
+		<!--<td>
+		<label class="description" for="artpress_theme_options[primarycolor]"><\?php _e( 'Primary' ); ?></label>
 		<input id = 'artpress_theme_options[primarycolor]' type = 'text' class='colorwell'
 name = 'artpress_theme_options[primarycolor]' 
-value = "<?php esc_attr_e( $options['primarycolor'] ); ?>" 
+value = "<\?php esc_attr_e( $options['primarycolor'] ); ?>" 
 size = "7" />
 
-		</td>
-		
-		<td>
-		<label class="description" for="artpress_theme_options[secondarycolor]"><?php _e( 'Secondary' ); ?></label>
+		</td>-->
+		<?php ht_color_chooser_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['secondarycolor'] ), 7, __( 'Secondary' )); ?>		
+		<!--<td>
+		<label class="description" for="artpress_theme_options[secondarycolor]"></?php _e( 'Secondary' ); ?/></label>
 		<input id = 'artpress_theme_options[secondarycolor]' type = 'text' class='colorwell' 
 name = 'artpress_theme_options[secondarycolor]' 
-value = "<?php esc_attr_e( $options['secondarycolor'] ); ?>" 
+value = "</?php esc_attr_e( $options['secondarycolor'] ); ?/>" 
 size = "7" />	
 
-		</td>
-		
-		<td>
-		<label class="description" for="artpress_theme_options[tertiarycolor]"><?php _e( 'Tertiary' ); ?></label>
+		</td>-->
+		<?php ht_color_chooser_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['tertiarycolor'] ), 7, __( 'Tertiary' )); ?>			
+		<!--<td>
+		<label class="description" for="artpress_theme_options[tertiarycolor]"></?php _e( 'Tertiary' ); ?></label>
 		<input id = 'artpress_theme_options[tertiarycolor]' type = 'text' class='colorwell'
 name = 'artpress_theme_options[tertiarycolor]' 
-value = "<?php esc_attr_e( $options['tertiarycolor'] ); ?>" 
+value = "</?php esc_attr_e( $options['tertiarycolor'] ); ?>" 
 size = "7" />	
 
-		</td>
-		
+		</td>-->
+		<?php ht_color_chooser_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['backgroundcolor'] ), 7, __( 'Background' )); ?><!--			
 		<td>
-		<label class="description" for="artpress_theme_options[backgroundcolor]"><?php _e( 'Background' ); ?></label>
+		<label class="description" for="artpress_theme_options[backgroundcolor]"></?php _e( 'Background' ); ?></label>
 		<input id = 'artpress_theme_options[backgroundcolor]' type = 'text' class='colorwell'
 name = 'artpress_theme_options[backgroundcolor]' 
-value = "<?php esc_attr_e( $options['backgroundcolor'] ); ?>" 
+value = "</?php esc_attr_e( $options['backgroundcolor'] ); ?>" 
 size = "7"  />	
 
 		</td>
 		
-	</tr>
+	--></tr>
 	
 	
-	    				<?php
+<?php
 /**
 * Logo + Title Colors 
 */
 				 
 $artpress_colors = array(
-	'primary' => array(
-		'value' => 'primary',
-		'label' => __( 'Primary' )
-	),
-	'secondary' => array(
-		'value' => 'secondary',
-		'label' => __( 'Secondary' )
-	),
-	'tertiary' => array(
-		'value' => 'tertiary',
-		'label' => __( 'Tertiary' )
-	),
-	'background' => array(
-		'value' => 'background',
-		'label' => __( 'Background' )
-	)
-	);
-				 
-				 
-				?>
+	'primary' =>    array('value' => 'primary',    'label' => __( 'Primary' )),
+	'secondary' =>  array('value' => 'secondary',  'label' => __( 'Secondary' )),
+	'tertiary' =>   array('value' => 'tertiary',   'label' => __( 'Tertiary' )),
+	'background' => array('value' => 'background', 'label' => __( 'Background' ))
+	);				 				 
+?>
+
 <tr valign="top">
 	<th scope="row"><?php _e( 'Logo Color' ); ?></th>
 	<fieldset>
 			<legend class="screen-reader-text"><span><?php _e( 'Logo Color' ); ?></span></legend>
-	
 		
 			<?php
 			    if ( ! isset( $checked ) )
@@ -256,11 +290,15 @@ $artpress_colors = array(
 			    		}
 			    	}
 			    	?>
-					<td><label class="description horiz"><input type="radio" name="artpress_theme_options[logo-color]" value="<?php esc_attr_e( $option['value'] ); ?>" <?php echo $checked; ?> /> <?php echo $option['label']; ?></label></td>
-					
-								<?php
-				}
-						?>
+					<td><label class="description horiz">
+						<input 	type="radio" 
+								name="artpress_theme_options[logo-color]" 
+								value="<?php esc_attr_e( $option['value'] ); ?>" 
+								<?php echo $checked; ?> /> 
+						<?php echo $option['label']; ?>
+						</label>
+					</td>
+			<?php }	?>
 			
 	
 	</fieldset>
@@ -433,17 +471,17 @@ function artpress_options_validate( $input ) {
 		$input['base_text_size'] = 1;
 	//$input['base_text_size'] =  $input['base_text_size'];
 	
-	if ( ! isset( $input['primarycolor'] ) )
-		$input['primarycolor'] = '#ff0000';
-		
-	if ( ! isset( $input['secondarycolor'] ) )
-		$input['secondarycolor'] = '#0000ff';
-		
-	if ( ! isset( $input['tertiarycolor'] ) )
-		$input['tertiarycolor'] = '#00ff00';
-		
-	if ( ! isset( $input['backgroundcolor'] ) )
-		$input['backgroundcolor'] = '#ffffff';
+//	if ( ! isset( $input['primarycolor'] ) )
+//		$input['primarycolor'] = '#ff0000';
+//		
+//	if ( ! isset( $input['secondarycolor'] ) )
+//		$input['secondarycolor'] = '#0000ff';
+//		
+//	if ( ! isset( $input['tertiarycolor'] ) )
+//		$input['tertiarycolor'] = '#00ff00';
+//		
+//	if ( ! isset( $input['backgroundcolor'] ) )
+//		$input['backgroundcolor'] = '#ffffff';
 	
 	// Our checkbox value is either 0 or 1
 	if ( ! isset( $input['option1'] ) )
