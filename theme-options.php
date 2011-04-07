@@ -33,11 +33,11 @@ function theme_options_add_page() {
  * Create arrays for our select and radio options
  */
 $select_options = array('0' => array('value' =>	'0', 'label' => __( 'Zero'  )),
-			'1' => array('value' =>	'1', 'label' => __( 'One'   )),
+			'Baskerville' => array('value' =>	'Baskerville', 'label' => __( 'Baskerville__'   )),
 			'2' => array('value' => '2', 'label' => __( 'Two'   )),
 			'3' => array('value' => '3', 'label' => __( 'Three' )),
 			'4' => array('value' => '4', 'label' => __( 'Four'  )),
-			'5' => array('value' => '3', 'label' => __( 'Five'  )));
+			'5' => array('value' => '5', 'label' => __( 'Five'  )));
 
 $radio_options = array(	'blue' => array('value' => 'blue', 'label' => __( 'Blue' )),
 			'red' => array('value' => 'red', 'label' => __( 'Red' )),
@@ -119,10 +119,22 @@ function artpress_options_do_page() {
 				 */
 				//create_text_field("artpress_theme_options[sometext]", "artpress_theme_options[sometext]", "text", esc_attr( $options['sometext'] ), $class)
 				?>
-				<tr valign="top"><th scope="row"><?php _e( 'Some text' ); ?></th>
+				<tr valign="top"><th scope="row"><?php _e( 'Body Font' ); ?></th>
 					<td>
 						<input id="artpress_theme_options[sometext]" class="regular-text" type="text" name="artpress_theme_options[sometext]" value="<?php esc_attr_e( $options['sometext'] ); ?>" />
-						<label class="description" for="artpress_theme_options[sometext]"><?php _e( 'Sample text input' ); ?></label>
+						<label class="description" for="artpress_theme_options[sometext]"><?php _e( 'type the font family name here' ); ?></label>
+					</td>
+				</tr>
+				
+				
+				
+				<?php
+				/*  TITLE FONT */
+				?>
+				<tr valign="top"><th scope="row"><?php _e( 'Title Font' ); ?></th>
+					<td>
+						<input id="artpress_theme_options[title-font]" class="regular-text" type="text" name="artpress_theme_options[title-font]" value="<?php esc_attr_e( $options['title-font'] ); ?>" />
+						<label class="description" for="artpress_theme_options[title-font]"><?php _e( 'type the font family name here' ); ?></label>
 					</td>
 				</tr>
 
@@ -279,9 +291,36 @@ $artpress_colors = array(
 								<?php
 							}
 						?>
-						</fieldset>
-					
-				</tr>
+	</fieldset>					
+</tr>
+
+
+
+<tr valign="top">
+	<th scope="row"><?php _e( 'Page Background' ); ?></th>
+	
+	<fieldset>
+		<legend class="screen-reader-text"><span><?php _e( 'Page Background' ); ?></span></legend>
+		    <?php
+		    	if ( ! isset( $checked ) )
+		    		$checked = '';
+		    	foreach ( $artpress_colors as $option ) {
+		    		$radio_setting = $options['page-bg-color'];
+		
+		    		if ( '' != $radio_setting ) {
+		    			if ( $options['page-bg-color'] == $option['value'] ) {
+		    				$checked = "checked=\"checked\"";
+		    			} else {
+		    				$checked = '';
+		    			}
+		    		}
+			?>
+					<td><label class="description"><input type="radio" name="artpress_theme_options[page-bg-color]" value="<?php esc_attr_e( $option['value'] ); ?>" <?php echo $checked; ?> /> <?php echo $option['label']; ?></label></td>
+								<?php
+							}
+						?>
+	</fieldset>					
+</tr>
 	
 	
 </table>   			
@@ -316,9 +355,16 @@ $artpress_colors = array(
 								echo $p . $r;
 							?>
 						</select>
-						<label class="description" for="artpress_theme_options[selectinput]"><?php _e( 'Sample select input' ); ?></label>
+						<label class="description" for="artpress_theme_options[selectinput]"><?php _e( 'Current setting:' ); echo $options['selectinput'];?></label>
 					</td>
 				</tr>
+				
+				
+							
+				
+				
+				
+				
 
 				<?php
 				/**
@@ -424,4 +470,3 @@ function artpress_options_validate( $input ) {
 	return $input;
 }
 
-// adapted from http://planetozh.com/blog/2009/05/handling-plugins-options-in-wordpress-28-with-register_setting/
