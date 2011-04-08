@@ -409,6 +409,7 @@ $artpress_colors = array(
 						<label class="description" for="artpress_theme_options[sometextarea]"><?php _e( 'Sample text box' ); ?></label>
 					</td>
 				</tr>
+				
 			</table>
 
 			<p class="submit">

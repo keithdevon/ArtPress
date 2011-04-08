@@ -521,9 +521,10 @@ endif;
 
 //ArtPress Functions
 
-// ------ Add settings
+// ------ Add settings pages
 
 require_once ( get_template_directory() . '/theme-options.php' );
+
 
 
 /* For adding custom field to gallery popup */
