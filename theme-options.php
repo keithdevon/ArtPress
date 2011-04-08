@@ -7,7 +7,7 @@ add_action('admin_init', 'artpress_options_load_scripts');
 // Load our scripts
 function artpress_options_load_scripts() {
 
-        wp_enqueue_script('farbtastic', get_bloginfo('template_url') .
+    wp_enqueue_script('farbtastic', get_bloginfo('template_url') .
         '/scripts/farbtastic/farbtastic.js', array('jquery'));
     wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . 
         '/scripts/farbtastic/farbtastic.css' );
@@ -61,7 +61,7 @@ function attr_checked ($value)    {
 /* Generic HTML element functions */
 function bt($tag_name, $attributes='') { return '<' . $tag_name . $attributes . ' />'; } // bacherlor tag eg: <tag />
 function ot($tag_name, $attributes='') { return '<' . $tag_name . $attributes . '>'; }   // opening tag   eg: <tag>
-function ct($tag_name)              { return '</' . $tag_name . '>'; }                // closing tag   eg: </tag>
+function ct($tag_name)                 { return '</' . $tag_name . '>'; }                // closing tag   eg: </tag>
 
 function td($content, $attributes ="") { return ot('td', $attributes) . $content . ct('td'); }
 
@@ -78,12 +78,21 @@ function ht_input_text ($id, $class, $value, $size='') {
 function ht_input_checkbox ($field_name, $id, $is_checked, $value, $field_blurb) {
         return bt('input', attr_id($id) . attr_type('checkbox') . attr_name($id) . attr_value($value) . attr_checked($is_checked ) );
 }
-function ht_form_text_field($field_name, $id, $value, $field_blurb) {
-        echo  ot( 'tr', attr_valign('top') )
+function ht_form_field($field_name, $content, $field_blurb) {
+    return ot( 'tr', attr_valign('top') )
         . ht_th($field_name, "row")
-        . td(  ht_input_text($id, 'regular-text', $value)
-        . ht_label('description', $id, $field_blurb) )
+        . td($content)
         . ct('tr');
+}
+function ht_form_text_field($field_name, $id, $value, $field_blurb) {
+//        echo  ot( 'tr', attr_valign('top') )
+//        . ht_th($field_name, "row")
+//        . td(  ht_input_text($id, 'regular-text', $value)
+//        . ht_label('description', $id, $field_blurb) )
+//        . ct('tr');
+    echo ht_form_field($field_name,   ht_input_text($id, 'regular-text', $value)
+                                    . ht_label('description', $id, $field_blurb), 
+                       $field_blurb);
 }
 function ht_form_checkbox($field_name, $id, $value, $is_checked, $field_blurb) {
         echo ot( 'tr', attr_valign('top') );
@@ -92,13 +101,26 @@ function ht_form_checkbox($field_name, $id, $value, $is_checked, $field_blurb) {
         . ht_label ('description', $id, $field_blurb) );
         echo ct( 'tr' );
 }
-function ht_color_chooser_cell ( $id, $class, $value, $size, $field_blurb) {
+function ht_form_cell ( $id, $class, $value, $size, $field_blurb) {
         echo td(  ht_label('description', $id, $field_blurb)
         . bt('br')
         . ht_input_text($id, $class, $value, $size)
         );
 }
+//function ht_color_chooser_cell ( $id, $class, $value, $size, $field_blurb) {
+//        echo td(  ht_label('description', $id, $field_blurb)
+//        . bt('br')
+//        . ht_input_text($id, $class, $value, $size)
+//        );
+//}
 
+/** style element creator functions */
+function create_element_options($color, $background_color, $font_size, $font_family, $padding) {
+    
+}
+function create_style_element($element_name, $element_selector, $element_options) {
+    
+}
 /**
  * Create the options page
  */
@@ -124,13 +146,12 @@ function artpress_options_do_page() {
 
                         <table class="form-table">
         <?php
-        ht_form_text_field("fieldname", "id", "value", "field_blurb");
-        ht_form_text_field('Base text size', 'artpress_theme_options[base_text_size]', esc_attr( $options['base_text_size']), __( 'Base text size blurb label' ));
+        ht_form_text_field('Base text size', 'artpress_theme_options[base_text_size]', esc_attr( $options['base_text_size']), __( "example options: '16px', '1em' or '100%'" ));
         
         /**
          * A sample checkbox option
          */
-        echo ht_form_checkbox(  __( 'New Sample checkbox' ), "artpress_theme_options[option1]",         "1", $options['option1'], "New Sample checkbox blurb"); 
+       // echo ht_form_checkbox(  __( 'New Sample checkbox' ), "artpress_theme_options[option1]",         "1", $options['option1'], "New Sample checkbox blurb"); 
         
         echo ht_form_text_field(__( 'Body Font' ), "artpress_theme_options[sometext]", esc_attr( $options['sometext'] ), __( 'type the font family name here' ));                               
         ?>
@@ -169,10 +190,10 @@ function artpress_options_do_page() {
                 <table id="color-table">
                         <tr>
                                 <th>Element</th>
-                                <?php ht_color_chooser_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['primarycolor'] ), 7, __( 'Primary' )); ?>
-				<?php ht_color_chooser_cell('artpress_theme_options[secondarycolor]', 'colorwell', esc_attr( $options['secondarycolor'] ), 7, __( 'Secondary' )); ?>
-				<?php ht_color_chooser_cell('artpress_theme_options[tertiarycolor]', 'colorwell', esc_attr( $options['tertiarycolor'] ), 7, __( 'Tertiary' )); ?>
-				<?php ht_color_chooser_cell('artpress_theme_options[backgroundcolor]', 'colorwell', esc_attr( $options['backgroundcolor'] ), 7, __( 'Background' )); ?>
+                                <?php ht_form_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['primarycolor'] ), 7, __( 'Primary' )); ?>
+				<?php ht_form_cell('artpress_theme_options[secondarycolor]', 'colorwell', esc_attr( $options['secondarycolor'] ), 7, __( 'Secondary' )); ?>
+				<?php ht_form_cell('artpress_theme_options[tertiarycolor]', 'colorwell', esc_attr( $options['tertiarycolor'] ), 7, __( 'Tertiary' )); ?>
+				<?php ht_form_cell('artpress_theme_options[backgroundcolor]', 'colorwell', esc_attr( $options['backgroundcolor'] ), 7, __( 'Background' )); ?>
                         </tr>
 <?php
 /**
