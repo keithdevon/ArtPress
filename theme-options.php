@@ -362,7 +362,7 @@ function artpress_options_validate( $input ) {
 
 	// Our checkbox value is either 0 or 1
 	if ( ! isset( $input['option1'] ) )
-	$input['option1'] = null;
+		$input['option1'] = null;
 	$input['option1'] = ( $input['option1'] == 1 ? 1 : 0 );
 
 	// Say our text option must be safe text with no HTML tags
@@ -370,13 +370,13 @@ function artpress_options_validate( $input ) {
 
 	// Our select option must actually be in our array of select options
 	if ( ! array_key_exists( $input['selectinput'], $select_options ) )
-	$input['selectinput'] = null;
+		$input['selectinput'] = null;
 
 	// Our radio option must actually be in our array of radio options
 	if ( ! isset( $input['radioinput'] ) )
-	$input['radioinput'] = null;
+		$input['radioinput'] = null;
 	if ( ! array_key_exists( $input['radioinput'], $radio_options ) )
-	$input['radioinput'] = null;
+		$input['radioinput'] = null;
 
 
 	// Say our textarea option must be safe text with the allowed tags for posts

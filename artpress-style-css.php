@@ -14,7 +14,16 @@ require_once('../../../wp-load.php');
     	';}';
     	
     // FONT SIZE
-    echo 'body {font-size:' .$options['base_text_size']. 'em;}';
+    echo 'body {
+    	font-size:' .$options['base_text_size']. 'em;
+    	line-height: 150%;
+    	}';
+    	
+    // BODY FONT SIZE
+    echo '#content, #content input, #content textarea {
+    	font-size:1em;
+    	line-height:150%;
+    	}';
     
     //BASE FONT-FAMILY
     echo 'body {font-family:' .$options['sometext']. ';}';
