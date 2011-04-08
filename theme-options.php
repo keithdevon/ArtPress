@@ -59,8 +59,8 @@ function attr_checked ($value)    {
 }
 
 /* Generic HTML element functions */
-function bt($tag_name, $attributes) { return '<' . $tag_name . $attributes . ' />'; } // bacherlor tag eg: <tag />
-function ot($tag_name, $attributes) { return '<' . $tag_name . $attributes . '>'; }   // opening tag   eg: <tag>
+function bt($tag_name, $attributes='') { return '<' . $tag_name . $attributes . ' />'; } // bacherlor tag eg: <tag />
+function ot($tag_name, $attributes='') { return '<' . $tag_name . $attributes . '>'; }   // opening tag   eg: <tag>
 function ct($tag_name)              { return '</' . $tag_name . '>'; }                // closing tag   eg: </tag>
 
 function td($content, $attributes ="") { return ot('td', $attributes) . $content . ct('td'); }
@@ -72,7 +72,7 @@ function ht_label($class, $for, $text) {
 function ht_th($value, $scope = "")       {
 	return ot('th', attribute('scope', $scope)) . $value . ct('th');
 }
-function ht_input_text ($id, $class, $value, $size) {
+function ht_input_text ($id, $class, $value, $size='') {
 	return bt('input', attr_id($id) . attr_class($class) . attr_type('text') . attr_name($id) . attr_value($value) );
 }
 function ht_input_checkbox ($field_name, $id, $is_checked, $value, $field_blurb) {
@@ -170,9 +170,9 @@ function artpress_options_do_page() {
 			<tr>
 				<th>Element</th>
 				<?php ht_color_chooser_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['primarycolor'] ), 7, __( 'Primary' )); ?>
-				<?php ht_color_chooser_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['secondarycolor'] ), 7, __( 'Secondary' )); ?>
-				<?php ht_color_chooser_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['tertiarycolor'] ), 7, __( 'Tertiary' )); ?>
-				<?php ht_color_chooser_cell('artpress_theme_options[primarycolor]', 'colorwell', esc_attr( $options['backgroundcolor'] ), 7, __( 'Background' )); ?>
+				<?php ht_color_chooser_cell('artpress_theme_options[secondarycolor]', 'colorwell', esc_attr( $options['secondarycolor'] ), 7, __( 'Secondary' )); ?>
+				<?php ht_color_chooser_cell('artpress_theme_options[tertiarycolor]', 'colorwell', esc_attr( $options['tertiarycolor'] ), 7, __( 'Tertiary' )); ?>
+				<?php ht_color_chooser_cell('artpress_theme_options[backgroundcolor]', 'colorwell', esc_attr( $options['backgroundcolor'] ), 7, __( 'Background' )); ?>
 			</tr>
 <?php
 /**
