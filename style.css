@@ -93,7 +93,7 @@ DESCRIPTION: One centered column with no sidebar
 
 .one-column #content {
 	margin: 0;
-	width: 35em;
+	width: 5em;
 	max-width:600px;
 }
 
