@@ -20,7 +20,25 @@ function artpress_options_load_scripts() {
  * Init plugin options to white list our options
  */
 function theme_options_init(){
-        register_setting( 'artpress_options', 'artpress_theme_options', 'artpress_options_validate' );
+    register_setting( 'artpress_options', 'artpress_theme_options', 'artpress_options_validate' );
+    $options = get_option('artpress_theme_options');
+    $padded_with_default_options = artpress_options_validate($options);
+    update_option('artpress_theme_options', $padded_with_default_options);   
+}
+
+//        update_option('artpress_theme_options', get_default_options());
+
+function get_default_options() {
+    // TODO include theme version variable?
+    $options = array(
+    	'theme_version' => 0.1,
+    	'base_text_size' => '1em',
+        'color1' => '#ff0000',
+        'color2' => '#00ff00',
+        'color3' => '#0000ff',
+        'color4' => '#888888'
+                     );
+    return $options; 
 }
 
 /**
@@ -89,8 +107,8 @@ function artpress_options_do_page() {
                 echo ht_form_field('Colors',
                     table(
                         tr(
-                            $cells
-                            //. td(div('', attr_id('picker') . attr_style('float: right;')))
+                              td(div('', attr_id('picker') . attr_style('float: right;')))
+                            . $cells
                         ),    
                         attr_valign('top')
                     )
@@ -208,38 +226,71 @@ function artpress_options_do_page() {
         </div>
         <?php
 }
-
+function ends_with($str, $suffix) {
+    $suffix_start = strlen($str) - strlen($suffix);
+    return (substr($str, $suffix_start) == $suffix);
+}
+function get_prefix($str, $suffix) {
+    return substr($str, 0, strlen($str) - strlen($suffix));
+}
+function is_suffix_string($str, $suffix) {
+    if (ends_with($str, $suffix)) {
+        $prefix = get_prefix($str, $suffix);
+        return is_numeric($prefix);
+    }
+}
+function is_em_string($str) {
+    return is_suffix_string($str, 'em');
+}
+function is_px_string($str) {
+    return is_suffix_string($str, 'px');
+}
+function is_percent_string($str) {
+    return is_suffix_string($str, '%');
+}
+function is_valid_size_string($str) {
+    return (is_em_string($str) || is_px_string($str) || is_percent_string($str));
+}
 /**
  * Sanitize and validate input. Accepts an array, return a sanitized array.
  */
 function artpress_options_validate( $input ) {
-        global $select_options, $radio_options, $artpress_colors;
-
-        if ( ! isset( $input['base_text_size'] ) )
-        $input['base_text_size'] = 1;
-
-        // Our checkbox value is either 0 or 1
-        if ( ! isset( $input['option1'] ) )
-                $input['option1'] = null;
-        $input['option1'] = ( $input['option1'] == 1 ? 1 : 0 );
-
-        // Say our text option must be safe text with no HTML tags
-        $input['sometext'] = wp_filter_nohtml_kses( $input['sometext'] );
-
-        // Our select option must actually be in our array of select options
-        if ( ! array_key_exists( $input['selectinput'], $select_options ) )
-                $input['selectinput'] = null;
-
-        // Our radio option must actually be in our array of radio options
-        if ( ! isset( $input['radioinput'] ) )
-                $input['radioinput'] = null;
-        if ( ! array_key_exists( $input['radioinput'], $radio_options ) )
-                $input['radioinput'] = null;
-
-
-        // Say our textarea option must be safe text with the allowed tags for posts
-        $input['sometextarea'] = wp_filter_post_kses( $input['sometextarea'] );
-
-        return $input;
+    global $select_options, $radio_options, $artpress_colors;
+    
+    if (!(isset( $input['base_text_size']) 
+          && is_valid_size_string($input['base_text_size'])))      
+        $input['base_text_size'] = '1em'; 
+    
+    if ( !isset( $input['color1'] ) ) {
+        $input['color1'] = '#00ff00';        
+    }
+    
+    if ( !isset( $input['color2'] ) ) {
+        $input['color2'] = '#222222';        
+    }
+    
+//    // Our checkbox value is either 0 or 1
+//    if ( ! isset( $input['option1'] ) ) {
+//        $input['option1'] = null;
+//        $input['option1'] = ( $input['option1'] == 1 ? 1 : 0 );        
+//    }
+    
+    // Say our text option must be safe text with no HTML tags
+    $input['sometext'] = wp_filter_nohtml_kses( $input['sometext'] );
+    
+    // Our select option must actually be in our array of select options
+    if ( ! array_key_exists( $input['selectinput'], $select_options ) )
+        $input['selectinput'] = null;
+    
+    // Our radio option must actually be in our array of radio options
+    if ( ! isset( $input['radioinput'] ) )
+        $input['radioinput'] = null;
+    if ( ! array_key_exists( $input['radioinput'], $radio_options ) )
+        $input['radioinput'] = null;
+    
+    // Say our textarea option must be safe text with the allowed tags for posts
+    $input['sometextarea'] = wp_filter_post_kses( $input['sometextarea'] );
+    
+    return $input;
 }
 
