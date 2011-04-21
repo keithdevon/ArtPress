@@ -38,12 +38,28 @@ font-family:' .$options['title-font']. ';}';
         .$options['backgroundcolor'].
         ';}';
         
+    // MENU BG
+    
+    echo '#access {background: '
+        .$options['tertiarycolor'].
+        '}';
+        
+    // Featured Image border
+   
+    
+    echo '#branding img {border-top: 4px solid'
+    .$options['tertiarycolor'].
+    ';
+        border-bottom: 1px solid'
+        .$options['tertiarycolor'].';
+        }';
+        
 // SET SITE-WIDE COLORS
  
 // Text colors
  
 $site_elements = array(
-        'logo' => "#site-title a",
+        'logo' => "#site-title a, #site-info a, a:link, a:visited  ",
         'title' => "#content .entry-title"
         );
  
