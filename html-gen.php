@@ -11,9 +11,9 @@ function attr_style ($value)      { return attribute('style', $value); }
 function attr_valign ($value)     { return attribute('valign', $value); }
 function attr_size ($value)       { return attribute('size', $value); }
 function attr_checked ($value)    {
-        // TODO include type checking
-        if($value == true) return attribute('checked', 'checked');
-        else return '';
+    // TODO include type checking
+    if($value == true) return attribute('checked', 'checked');
+    else return '';
 }
 
 /* Generic HTML element functions */
