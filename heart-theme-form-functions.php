@@ -59,7 +59,7 @@ function ht_create_radio_row($options, $settings, $group, $css_field, $row_label
     $field_blurb_prefix = __($field_blurb_prefix);
     $checked = esc_attr( $settings['section_settings'][$group][$css_field]['value'] );
     $cells = '';
-    for ($i = 1; $i <= count($options); $i++) {
+    for ($i = 0; $i < count($options); $i++) {
         $cells .= ht_form_cell_radio($id, $i, ($i == $checked) ? $i : false, $field_blurb_prefix . ' ' . $i );
     }  
 	return ht_form_field($row_label, 
