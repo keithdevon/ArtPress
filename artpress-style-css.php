@@ -87,7 +87,7 @@ font-family:' .$options['title-font']. ';}';
     // BODY BACKGROUND
       echo 'body {background:'
         .$options['backgroundcolor'].
-        ';}';*/
+        ';}';
         
 // SET SITE-WIDE COLORS
  

@@ -1,5 +1,6 @@
 <?php
 require_once 'heart-theme-form-functions.php';
+//require_once 'background-image-uploader.php';//code to add image uploader - this will be used for background images and needs to be added to the ArtPress options page
 
 add_action( 'admin_init', 'theme_options_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
@@ -298,4 +299,3 @@ function artpress_options_validate( $input ) {
     
     return $input;
 }
-
