@@ -1,4 +1,4 @@
-<?php
+    <?php
 /**
  * TwentyTen functions and definitions
  *
@@ -528,6 +528,8 @@ require_once ( get_template_directory() . '/theme-options.php' );
 
 
 /* For adding custom field to gallery popup */
+
+// ----- Height
 function artpress_attachment_height($image_height_form_fields, $post) {
 	// $form_fields is a an array of fields to include in the attachment form
 	// $post is nothing but attachment record in the database
@@ -584,3 +586,99 @@ function artpress_attachment_width_to_save($post, $attachment) {
 }
 // now attach our function to the hook.
 add_filter("attachment_fields_to_save", "artpress_attachment_width_to_save", null , 2);
+
+
+
+// Image handling
+
+function attachment_toolbox($size = thumbnail) {
+
+	if($images = get_children(array(
+		'post_parent'    => get_the_ID(),
+		'post_type'      => 'attachment',
+		'numberposts'    => -1, // show all
+		'post_status'    => null,
+		'post_mime_type' => 'image',
+	))) {
+		foreach($images as $image) {
+			$attimg   = wp_get_attachment_image($image->ID,$size);
+			$atturl   = wp_get_attachment_url($image->ID);
+			$attlink  = get_attachment_link($image->ID);
+			$postlink = get_permalink($image->post_parent);
+			$atttitle = apply_filters('the_title',$image->post_title);
+
+			echo '<p><strong>wp_get_attachment_image()</strong><br />'.$attimg.'</p>';
+			echo '<p><strong>wp_get_attachment_url()</strong><br />'.$atturl.'</p>';
+			echo '<p><strong>get_attachment_link()</strong><br />'.$attlink.'</p>';
+			echo '<p><strong>get_permalink()</strong><br />'.$postlink.'</p>';
+			echo '<p><strong>Title of attachment</strong><br />'.$atttitle.'</p>';
+			echo '<p><strong>Image link to attachment page</strong><br /><a href="'.$attlink.'">'.$attimg.'</a></p>';
+			echo '<p><strong>Image link to attachment post</strong><br /><a href="'.$postlink.'">'.$attimg.'</a></p>';
+			echo '<p><strong>Image link to attachment file</strong><br /><a href="'.$atturl.'">'.$attimg.'</a></p>';
+		}
+	}
+}
+
+
+// Shortcodes
+
+//------Columns
+
+add_shortcode( '1of3', 'ht_col1of3_shortcode' );//add 3 column shortcode (for columns 1 and 2)
+
+function ht_col1of3_shortcode( $atts, $content = null ) {
+   return '<div style="width:100%; clear:both;"><div class="col1of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+}
+
+add_shortcode( '2of3', 'ht_col2of3_shortcode' );//add 3 column shortcode (for column 2)
+
+function ht_col2of3_shortcode( $atts, $content = null ) {
+   return '<div class="col2of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+}
+
+add_shortcode( '3of3', 'ht_col3of3_shortcode' );//add 3rd of 3 columns
+
+function ht_col3of3_shortcode( $atts, $content = null ) {
+   return '<div class="col3of3" style="width:30%; margin-right:0%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div></div><div style="clear:both;"></div>';
+}
+
+add_shortcode( '1of2', 'ht_col1of2_shortcode' );// add 2 column shotcode
+
+function ht_col1of2_shortcode( $atts, $content = null ) {
+   return '<div class="col1of2" style="width:47.5%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+}
+
+add_shortcode( '2of2', 'ht_col2of2_shortcode' );// 2nd of 2 columns
+
+function ht_col2of2_shortcode( $atts, $content = null ) {
+   return '<div class="col2of2" style="width:47.5%; margin-right:0%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div><div style="clear:both;"></div>';
+}
+
+add_shortcode( '1of4', 'ht_col1of4_shortcode' );// add 4 column shotcode
+
+function ht_col1of4_shortcode( $atts, $content = null ) {
+   return '<div class="col1of4" style="width:21.4%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+}
+
+add_shortcode( '4of4', 'ht_col4of4_shortcode' );// 4th of 4 columns
+
+function ht_col4of4_shortcode( $atts, $content = null ) {
+   return '<div class="col4of4" style="width:21.3%; margin-right:0%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div><div style="clear:both;"></div>';
+}
+
+//------Box outs
+
+add_shortcode( 'boxout', 'ht_boxout_shortcode' );
+
+function ht_boxout_shortcode( $atts, $content = null ) {
+    
+$options = get_option('artpress_theme_options');//extract this from the functions file before launch
+    extract( shortcode_atts( array(
+      'float' => 'boxout',
+      ), $atts ) );
+      $ht_opening = '<div class="box-out" style="width:30%; background-color: #eee; margin-bottom:1.5em; padding:1.5em; font-size:1.2em; line-height:1.5em; font-style:italic; color:'.$options['primarycolor'].';';
+      if(esc_attr($float) == 'right') $ht_middle = 'margin-left:1em;  float:' . esc_attr($float) . ';">';
+        else $ht_middle = 'margin-right:1.5em; float:left;">';
+        $ht_end =  $content . '</div>';
+        return $ht_opening . $ht_middle . $ht_end;
+}
