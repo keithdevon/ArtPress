@@ -7,7 +7,6 @@ add_action( 'admin_init', 'artpress_options_load_scripts' );
 
 // Load our scripts
 function artpress_options_load_scripts() {
-
     wp_enqueue_script('farbtastic', get_bloginfo('template_url') .
         '/scripts/farbtastic/farbtastic.js', array('jquery'));
     wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . 
@@ -53,33 +52,37 @@ function artpress_options_do_page() {
         <?php 
         screen_icon(); echo "<h2>" . get_current_theme() . __( ' Options' ) . "</h2>"; 
         if ( false !== $_REQUEST['updated'] ) : ?>
-                        <div class="updated fade"><p><strong><?php _e( 'Options saved' ); ?></strong></p></div>
+        	<div class="updated fade"><p><strong><?php _e( 'Options saved' ); ?></strong></p></div>
         <?php endif; ?>
 
         <form method="post" action="options.php">
             <?php 
             settings_fields( 'artpress_options' ); 
-            $settings = get_option( 'artpress_theme_options' ); 
+            $settings = get_option( 'artpress_theme_options' );
+            //echo '<h3>settings</h3><pre>'; var_dump($settings); echo '</pre>';
             $testsettings = array(
                 'colors' => array('#ff0000', '#00ff00', '#0000ff', '#999999'), 
                 'fonts' => array('georgia', 'arial', 'tahoma'),
                 'base_text_size' => '1em',
                 'page_width' => '1024px',
-                'body' => array(
-                    'css_selector'    => '',
-                    'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
-                    'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
-                    'background'      => array( 'row_label'=>'background color' , 'field_blurb_prefix' => 'Color' , 'value'=>'3'),
-                    'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
-                    'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' )
-                ),                
-                'page' => array(
-                    'css_selector'    => '' , 
-                    'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'2' ), 
-                    'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
-                    'background'      => array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '4' )
+                'section_settings' => array(
+                    'body' => array(
+                        'css_selector'    => 'body',
+                        'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
+                        'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
+                        'background'      => array( 'row_label'=>'background color' , 'field_blurb_prefix' => 'Color' , 'value'=>'3'),
+                        'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
+                        'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' )
+                    ),                
+                    'page' => array(
+                        'css_selector'    => '' , 
+                        'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'2' ), 
+                        'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
+                        'background'      => array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' )
+                    )
                 )
             );
+            //echo '<pre><h3>testsettings</h3>'; var_dump($testsettings); echo '</pre>';
             //$settings = $testsettings;
             ?>
             <h3>Global settings</h3>
@@ -88,26 +91,29 @@ function artpress_options_do_page() {
                 echo ht_form_text_field('Base text size', '[base_text_size]', esc_attr( $settings['base_text_size']), __( "example options: '16px', '1em' or '100%'" ), '5');
                 
                 // output the first color field and the td containing the color picker
-                $output = ht_th(__('Color 0'), "row");
-                $output .= td(ht_input_text('[colors][0]','colorwell', esc_attr( $settings['colors'][0] ), '7'));
-                $output .= td( div('', attr_id('picker')),
-                               attribute('rowspan', '6') . attr_valign('top'));
+                // $output = ht_th(__('Color 0'), "row");
+                // $output .= td(ht_input_text('[colors][0]','colorwell', esc_attr( $settings['colors'][0] ), '7'));
+
                 echo tr($output);
                 
                 // output the rest of the color fields
-                for ($i = 1; $i < count($settings['colors']); $i++) {
+                foreach (array_keys($settings['colors']) as $color ) {
                     $output = '';
-                    $id = '[colors][' . $i . ']';
-                    $output = ht_th(__('Color ' . $i), "row");
-                    $output .= td(ht_input_text('[colors][' . $i . ']','colorwell', esc_attr( $settings['colors'][$i] ), '7'));
+                    $id = '[colors][' . $color . ']';
+                    $output = ht_th(__('Color ' . $color), "row");
+                    $output .= td(ht_input_text('[colors][' . $color . ']','colorwell', esc_attr( $settings['colors'][$color] ), '7'));
+                    if ($color == '0') {
+                        $output .= td( div('', attr_id('picker')),
+                                       attribute('rowspan', '6') . attr_valign('top'));
+                    }
                     echo tr($output);
                 }
                 
                 // output the font selectors
                 $cells = '';
-                for ($i = 0; $i < count($settings['fonts']); $i++) {
-                    $id = '[fonts][' . $i . ']';
-                    $cells .= ht_form_cell($id,    'fontfamily', esc_attr( $settings['fonts'][$i] ), '7', __( 'Font ' . $i ));
+                foreach (array_keys($settings['fonts']) as $font) {
+                    $id = '[fonts][' . $font . ']';
+                    $cells .= ht_form_cell($id,    'fontfamily', esc_attr( $settings['fonts'][$font] ), '7', __( 'Font ' . $font ));
                 }              
                 echo ht_form_field('Fonts',
                     table(
@@ -142,7 +148,6 @@ function artpress_options_do_page() {
 
                 <?php echo ht_create_form($settings); ?>
 
-                <p class="submit"><input type="submit" class="button-primary" value="<?php _e( 'Save Options' ); ?>" /></p>
             </form>
         </div>
         <?php
@@ -184,6 +189,8 @@ function is_valid_color_string($str) {
 function artpress_options_validate( $input ) {
     global $select_options, $radio_options, $artpress_colors, $num_colors;
     
+    // GLOBAL SETTINGS CORRECTION
+    
     // correct the base text size
     if (!(isset( $input['base_text_size']) 
           && is_valid_size_string($input['base_text_size']))) {   
@@ -197,49 +204,76 @@ function artpress_options_validate( $input ) {
     }
     
     // correct the colors
-    for($i = 0; $i < count($input['colors']); $i++) {        
-        if (!(isset( $input['colors'][$i])
-            && is_valid_color_string($input['colors'][$i]))) {
-            $input['color'][$i] = '#999999';        
+    if ( ! isset( $input['colors'] ) ) $input['colors'] = array(null, null, null, null);
+    
+    foreach(array_keys($input['colors']) as $key) { // TODO need to properly validate the color value       
+        if (!(isset( $input['colors'][$key]))) {
+            $input['colors'][$key] = '#999999';        
+        }
+    } 
+    
+    // correct the fonts
+    if ( ! isset( $input['fonts'] ) ) $input['fonts'] = array(null, null, null);
+    
+    foreach(array_keys($input['fonts']) as $key) {        
+        if (!(isset( $input['fonts'][$key]))) {  // TODO need to properly validate the font 
+            $input['fonts'][$key] = 'Arial';        
         }
     }
     
-    // correct the fonts
-    for($i = 0; $i < count($input['fonts']); $i++) {        
-        if (!(isset( $input['fonts'][$i])
-            && is_valid_color_string($input['fonts'][$i]))) {
-            $input['fonts'][$i] = 'Arial';        
-        }
-    }    
+    // create sections and itialize css selectors         
+    if( ! isset($input['section_settings']['body']) ) 
+        $input['section_settings']['body'] = array('css_selector'=>'body',
+                                'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
+                                                'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
+                                                'background'      => array( 'row_label'=>'background color' , 'field_blurb_prefix' => 'Color' , 'value'=>'3'),
+                                                'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
+                                                'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
+    if( ! isset($input['section_settings']['page']) ) $input['section_settings']['page'] = array('css_selector'=>'');
     
     // SECTION CORRECTION
-    foreach(array_keys($input) as $section) {
-        foreach(array_keys($input[$section]) as $css_attr) {
+    foreach(array_keys($input['section_settings']) as $section) {
+        foreach(array_keys($input['section_settings'][$section]) as $css_attr) {
             switch ($css_attr) {
                 case 'font-family':
-                    if ( ! isset( $input[$section][$css_attr]['row_label'] ) )          $input[$section][$css_attr]['row_label'] = 'font';
-                    if ( ! isset( $input[$section][$css_attr]['field_blurb_prefix'] ) ) $input[$section][$css_attr]['field_blurb_prefix'] = 'Font';
-                    if ( ! isset( $input[$section][$css_attr]['value'] ) )              $input[$section][$css_attr]['value'] = '0';                
-                    break;
-                case 'color':
-                    if ( ! isset( $input[$section][$css_attr]['row_label'] ) )          $input[$section][$css_attr]['row_label'] = 'color';
-                    if ( ! isset( $input[$section][$css_attr]['field_blurb_prefix'] ) ) $input[$section][$css_attr]['field_blurb_prefix'] = 'Color';
-                    if ( ! isset( $input[$section][$css_attr]['value'] ) )              $input[$section][$css_attr]['value'] = '0';                
-                    break;
-                case 'background':
-                    if ( ! isset( $input[$section][$css_attr]['row_label'] ) )          $input[$section][$css_attr]['row_label'] = 'background color';
-                    if ( ! isset( $input[$section][$css_attr]['field_blurb_prefix'] ) ) $input[$section][$css_attr]['field_blurb_prefix'] = 'Color';
-                    if ( ! isset( $input[$section][$css_attr]['value'] ) )              $input[$section][$css_attr]['value'] = '0';                
-                    break; 
-                case 'padding':
-                    if ( ! isset( $input[$section][$css_attr]['row_label'] ) )          $input[$section][$css_attr]['row_label'] = 'padding';
-                    if ( ! isset( $input[$section][$css_attr]['field_blurb_suffix'] ) ) $input[$section][$css_attr]['field_blurb_suffix'] = 'Internal space between the element\'s content and its border';
-                    if ( ! isset( $input[$section][$css_attr]['value'] ) )              $input[$section][$css_attr]['value'] = '0.5em';                
-                    break;
-                case 'margin':
-                    if ( ! isset( $input[$section][$css_attr]['row_label'] ) )          $input[$section][$css_attr]['row_label'] = 'margin';
-                    if ( ! isset( $input[$section][$css_attr]['field_blurb_suffix'] ) ) $input[$section][$css_attr]['field_blurb_suffix'] = 'External space between the element\'s border and other elements';
-                    if ( ! isset( $input[$section][$css_attr]['value'] ) )              $input[$section][$css_attr]['value'] = '1em';                
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )          
+                                  $input['section_settings'][$section][$css_attr]['row_label'] = 'font';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['field_blurb_prefix'] ) ) 
+                                  $input['section_settings'][$section][$css_attr]['field_blurb_prefix'] = 'Font';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['value'] ) )              
+                                  $input['section_settings'][$section][$css_attr]['value'] = '0';                
+                    break;              
+                case 'color':           
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )          
+                                  $input['section_settings'][$section][$css_attr]['row_label'] = 'color';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['field_blurb_prefix'] ) ) 
+                                  $input['section_settings'][$section][$css_attr]['field_blurb_prefix'] = 'Color';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['value'] ) )              
+                                  $input['section_settings'][$section][$css_attr]['value'] = '0';                
+                    break;              
+                case 'background':      
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )          
+                                  $input['section_settings'][$section][$css_attr]['row_label'] = 'background color';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['field_blurb_prefix'] ) ) 
+                                  $input['section_settings'][$section][$css_attr]['field_blurb_prefix'] = 'Color';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['value'] ) )              
+                                  $input['section_settings'][$section][$css_attr]['value'] = '0';                
+                    break;              
+                case 'padding':         
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )          
+                                  $input['section_settings'][$section][$css_attr]['row_label'] = 'padding';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] ) ) 
+                                  $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] = 'Internal space between the element\'s content and its border';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['value'] ) )              
+                                  $input['section_settings'][$section][$css_attr]['value'] = '0.5em';                
+                    break;              
+                case 'margin':          
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )          
+                                  $input['section_settings'][$section][$css_attr]['row_label'] = 'margin';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] ) ) 
+                                  $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] = 'External space between the element\'s border and other elements';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['value'] ) )              
+                                  $input['section_settings'][$section][$css_attr]['value'] = '1em';                
                     break;                                                             
             }
         }

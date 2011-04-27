@@ -13,7 +13,7 @@ function ht_input($id, $type, $attributes) {
 }
 function ht_input_text ($id, $class, $value, $size='') {
     return ht_input($id, 'text', attr_size($size) . attr_class($class) . attr_value($value)  );
-}
+}#!/bin/sh\ncd ~/Dropbox/mysite/public_html/wp/wp-content/themes/artpress/
 //function ht_input_text ($id, $class, $value, $size='') {
 //        return bt('input', attr_id($id) . attr_size($size) . attr_class($class) . attr_type('text') . attr_name($id) . attr_value($value)  );
 //}
@@ -55,9 +55,9 @@ function ht_form_cell_radio ( $id, $value, $is_checked, $field_blurb) {
         );
 }
 function ht_create_radio_row($options, $settings, $group, $css_field, $row_label, $field_blurb_prefix) {
-    $id = '[' . $group . '][' . $css_field . '][value]';
+    $id = '[section_settings][' . $group . '][' . $css_field . '][value]';
     $field_blurb_prefix = __($field_blurb_prefix);
-    $checked = esc_attr( $settings[$group][$css_field]['value'] );
+    $checked = esc_attr( $settings['section_settings'][$group][$css_field]['value'] );
     $cells = '';
     for ($i = 1; $i <= count($options); $i++) {
         $cells .= ht_form_cell_radio($id, $i, ($i == $checked) ? $i : false, $field_blurb_prefix . ' ' . $i );
@@ -71,8 +71,8 @@ function ht_create_radio_row($options, $settings, $group, $css_field, $row_label
 }
 function ht_create_form_group($settings, $group) {
     $output = '';
-    foreach (array_keys($settings[$group]) as $css_attr) {
-        $css_attr_arr = $settings[$group][$css_attr];
+    foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
+        $css_attr_arr = $settings['section_settings'][$group][$css_attr];
         switch($css_attr) {
             case 'font-family':
                 $output .= ht_create_radio_row($settings['fonts'], 
@@ -94,10 +94,10 @@ function ht_create_form_group($settings, $group) {
             case 'font-size':
             case 'padding':
             case 'margin':
-                $output .= ht_form_text_field($settings[$group][$css_attr]['row_label'], 
-                							  '[' . $group . '][' . $css_attr . '][value]', 
-                                               esc_attr( $settings[$group][$css_attr]['value']),
-                                               __( $settings[$group][$css_attr]['field_blurb_suffix'] ), 
+                $output .= ht_form_text_field($settings['section_settings'][$group][$css_attr]['row_label'], 
+                							  '[section_settings][' . $group . '][' . $css_attr . '][value]', 
+                                               esc_attr( $settings['section_settings'][$group][$css_attr]['value']),
+                                               __( $settings['section_settings'][$group][$css_attr]['field_blurb_suffix'] ), 
                                                '5');                
                 break;
         }
@@ -106,16 +106,17 @@ function ht_create_form_group($settings, $group) {
 }
 function ht_create_form($settings) {
     $output = '';
-    foreach (array_keys($settings) as $group) {
-        switch ($group) { // eg body or page
+    foreach (array_keys($settings['section_settings']) as $section) {
+        switch ($section) { // eg body or page
             case 'body':
             case 'page':
-                $output .= ot('h3') . ucfirst($group) . ' settings' . ct('h3');
-                $table_contents = ht_create_form_group($settings, $group);
+                $output .= ot('h3') . ucfirst($section) . ' settings' . ct('h3');
+                $table_contents = ht_create_form_group($settings, $section);
                 $table = ot('table', attr_class('form-table'));
                 $table .= $table_contents;
                 $table .= ct('table');
-                $output .= $table; 
+                $output .= $table;
+                $output .= '<p class="submit"><input type="submit" class="button-primary" value="' . __( 'Save Options' ) . '" /></p>';
                 break;
             case 'header':
                 break;
