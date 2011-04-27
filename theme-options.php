@@ -142,7 +142,19 @@ function artpress_options_do_page() {
                           });
                       });
                  </script>
-
+                 
+                <?php 
+                // thumbnail shadow
+                //  left offset
+                //  top offset - 
+                //  size - px
+                //  color - rgb(0,0,0);
+                /*echo ht_form_text_field($settings['section_settings'][$group][$css_attr]['row_label'], 
+                							  '[section_settings][' . $group . '][' . $css_attr . '][value]', 
+                                               esc_attr( $settings['section_settings'][$group][$css_attr]['value']),
+                                               __( $settings['section_settings'][$group][$css_attr]['field_blurb_suffix'] ), 
+                                               '5');*/ 
+                ?>
                 </table>
                 <p class="submit"><input type="submit" class="button-primary" value="<?php _e( 'Save Options' ); ?>" /></p>
 
@@ -223,20 +235,38 @@ function artpress_options_validate( $input ) {
     
     // create sections and itialize css selectors         
     if( ! isset($input['section_settings']['body']) ) 
-        $input['section_settings']['body'] = array('css_selector'=>'body',
-                                'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
-                                                'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
-                                                'background'      => array( 'row_label'=>'background color' , 'field_blurb_prefix' => 'Color' , 'value'=>'3'),
-                                                'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
-                                                'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
-    if( ! isset($input['section_settings']['page']) ) $input['section_settings']['page'] = array('css_selector'=>'');
+        $input['section_settings']['body'] = array(
+        	'css_selector'=>'body',
+            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
+            'background'      => array( 'row_label'=>'background color' , 'field_blurb_prefix' => 'Color' , 'value'=>'3'),
+            'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
+            'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
+    
+    if( ! isset($input['section_settings']['site title']) ) 
+        $input['section_settings']['site title'] = array(	
+            'css_selector'    => '#site-title' , 
+            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'2' ), 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
+            'background'      => array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
+            'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
+            'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
+        
+    if( ! isset($input['section_settings']['widget title']) ) 
+        $input['section_settings']['widget title'] = array(	
+            'css_selector'    => '#widget-title' , 
+            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'2' ), 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
+            'background'      => array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
+            'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
+            'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
     
     // SECTION CORRECTION
     foreach(array_keys($input['section_settings']) as $section) {
         foreach(array_keys($input['section_settings'][$section]) as $css_attr) {
             switch ($css_attr) {
                 case 'font-family':
-                    if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )          
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )       
                                   $input['section_settings'][$section][$css_attr]['row_label'] = 'font';
                     if ( ! isset( $input['section_settings'][$section][$css_attr]['field_blurb_prefix'] ) ) 
                                   $input['section_settings'][$section][$css_attr]['field_blurb_prefix'] = 'Font';

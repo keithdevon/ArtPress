@@ -107,22 +107,13 @@ function ht_create_form_group($settings, $group) {
 function ht_create_form($settings) {
     $output = '';
     foreach (array_keys($settings['section_settings']) as $section) {
-        switch ($section) { // eg body or page
-            case 'body':
-            case 'page':
-                $output .= ot('h3') . ucfirst($section) . ' settings' . ct('h3');
-                $table_contents = ht_create_form_group($settings, $section);
-                $table = ot('table', attr_class('form-table'));
-                $table .= $table_contents;
-                $table .= ct('table');
-                $output .= $table;
-                $output .= '<p class="submit"><input type="submit" class="button-primary" value="' . __( 'Save Options' ) . '" /></p>';
-                break;
-            case 'header':
-                break;
-            case 'content':
-                break;
-        }
+        $output .= ot('h3') . ucfirst($section) . ' settings' . ct('h3');
+        $table_contents = ht_create_form_group($settings, $section);
+        $table = ot('table', attr_class('form-table'));
+        $table .= $table_contents;
+        $table .= ct('table');
+        $output .= $table;
+        $output .= '<p class="submit"><input type="submit" class="button-primary" value="' . __( 'Save Options' ) . '" /></p>';
     }
     return $output;
 }
