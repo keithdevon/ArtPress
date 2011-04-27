@@ -2,6 +2,50 @@
 
 <?php
 
+/* 
+Keith's Layout Option Blocks 
+*/
+
+//Centered Logo with description beneath
+
+echo '
+    #site-title {
+        float: left;
+        text-align: center;
+        margin: 0 0 18px 0;
+        width: 100%;
+        }
+        
+    #site-description {
+        clear: both;
+        float: left;
+        text-align: center;
+        margin: 15px 0 18px 0;
+        width: 100%;
+        }';
+        
+//Menu at top of page - uncomment this block to enable top navs - TODO - this still needs work.
+
+/*echo '
+    #access {
+        display: block;
+        position:absolute;
+        top:24px;
+        margin: 0 auto;
+        width: 940px;
+        }
+    #header {
+        padding-top:96px;
+        }
+    #wrapper {
+        margin-top:0px;
+        }';
+*/
+
+/*
+end Keith's Layout Option Blocks
+*/
+
 /** css declaration */
 function dec($property, $value) { // TODO include validation
     return $property . ': ' . $value . ';\n';
@@ -148,5 +192,10 @@ $background_elements = array(
 
 foreach ($background_elements as $key => $value)
         css_bg_color($value , $key);  
-*/                
+*/ 
+
+
+               
 ?>
+
+
