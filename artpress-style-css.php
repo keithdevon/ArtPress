@@ -4,11 +4,11 @@
 
 /** css declaration */
 function dec($property, $value) { // TODO include validation
-    return $property . ': ' . $value . ';\n';
+    return $property . ": " . $value . ";";
 }
 /** css declaration block */
 function decblock($declarations) {
-    return '{' . $declarations . '}';
+    return "{" . $declarations . "}\n";
 }
 /** css rule */
 function rule($selectors, $declaration_block) { // TODO validate selector
@@ -19,47 +19,42 @@ function rule($selectors, $declaration_block) { // TODO validate selector
 
 require_once('../../../wp-load.php');
 
-    $options = get_option('artpress_theme_options');
+$options = get_option('artpress_theme_options');
 
-    $output = '';
-        // SECTION CORRECTION
-    foreach(array_keys($options['section_settings']) as $section) { // body, page etc
-        $section_arr = $options['section_settings'][$section];
-        foreach(array_keys($section_arr) as $css_group) { // css-selector, font-family, color etc 
-            $css_group_arr = $section_arr[$css_group];
-            switch ($css_group) {
-                case 'font-family':
-                    $output .= rule(
-                        $section_arr['css_selector'], 
-                        decblock( dec($css_group, $options['fonts'][$css_group_arr['value']]) )
-                    );       
-                    break;
-                case 'color':
-                    $output .= rule(
-                        $section_arr['css_selector'], 
-                        decblock( dec($css_group, $options['colors'][$css_group_arr['value']]) )
-                    );                
-                    break;
-                case 'background':
-                    if ( ! isset( $input['section_settings'][$section][$css_group]['row_label'] ) )          $input['section_settings'][$section][$css_group]['row_label'] = 'background color';
-                    if ( ! isset( $input['section_settings'][$section][$css_group]['field_blurb_prefix'] ) ) $input['section_settings'][$section][$css_group]['field_blurb_prefix'] = 'Color';
-                    if ( ! isset( $input['section_settings'][$section][$css_group]['value'] ) )              $input['section_settings'][$section][$css_group]['value'] = '0';                
-                    break; 
-                case 'padding':
-                    if ( ! isset( $input['section_settings'][$section][$css_group]['row_label'] ) )          $input['section_settings'][$section][$css_group]['row_label'] = 'padding';
-                    if ( ! isset( $input['section_settings'][$section][$css_group]['field_blurb_suffix'] ) ) $input['section_settings'][$section][$css_group]['field_blurb_suffix'] = 'Internal space between the element\'s content and its border';
-                    if ( ! isset( $input['section_settings'][$section][$css_group]['value'] ) )              $input['section_settings'][$section][$css_group]['value'] = '0.5em';                
-                    break;
-                case 'margin':
-                    if ( ! isset( $input['section_settings'][$section][$css_group]['row_label'] ) )          $input['section_settings'][$section][$css_group]['row_label'] = 'margin';
-                    if ( ! isset( $input['section_settings'][$section][$css_group]['field_blurb_suffix'] ) ) $input['section_settings'][$section][$css_group]['field_blurb_suffix'] = 'External space between the element\'s border and other elements';
-                    if ( ! isset( $input['section_settings'][$section][$css_group]['value'] ) )              $input['section_settings'][$section][$css_group]['value'] = '1em';                
-                    break;                                                             
-            }
+$output = "";
+
+foreach(array_keys($options['section_settings']) as $section) { // body, page etc
+    $section_arr = $options['section_settings'][$section];
+    foreach(array_keys($section_arr) as $css_group) { // css-selector, font-family, color etc 
+        $css_group_arr = $section_arr[$css_group];
+        switch ($css_group) {
+            case 'font-family':
+                $output .= rule(
+                    $section_arr['css_selector'], 
+                    decblock( dec($css_group, $options['fonts'][$css_group_arr['value']]) )
+                );       
+                break;
+            case 'color':
+            case 'background-color':
+                $output .= rule(
+                    $section_arr['css_selector'], 
+                    decblock( dec($css_group, $options['colors'][$css_group_arr['value']]) )
+                );                
+                break;
+            case 'padding':
+            case 'margin':
+                $output .= rule(
+                    $section_arr['css_selector'],
+                    decblock( dec($css_group, $css_group_arr['value']) )
+                );
+                break;                                                             
         }
     }
+}
+
+echo $output;
         
-/*    // LINK COLOR
+/*   // LINK COLOR
     echo 'a:link, a:visited {color:'
         .$options['radioinput'].
         ';}';
@@ -87,7 +82,7 @@ font-family:' .$options['title-font']. ';}';
     // BODY BACKGROUND
       echo 'body {background:'
         .$options['backgroundcolor'].
-        ';}';*/
+        ';}';
         
 // SET SITE-WIDE COLORS
  
