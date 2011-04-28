@@ -48,7 +48,7 @@ function ht_form_cell_radio ( $id, $value, $is_checked, $field_blurb) {
         . ht_input_radio($id, $is_checked, $value)
         );
 }
-function ht_create_radio_row($options, $settings, $group, $css_field, $row_label, $field_blurb_prefix) {
+function ht_create_radio_row($options, $settings, $group, $css_field, $row_label, $field_blurb_prefix, $misc_cell='') {
     $id = '[section_settings][' . $group . '][' . $css_field . '][value]';
     $field_blurb_prefix = __($field_blurb_prefix);
     $checked = esc_attr( $settings['section_settings'][$group][$css_field]['value'] );
@@ -58,44 +58,50 @@ function ht_create_radio_row($options, $settings, $group, $css_field, $row_label
     }  
 	return ht_form_field($row_label, 
         table(
-            tr($cells),    
+            tr($cells . $misc_cell),    
             attr_valign('top')
         )
     ); 
 }
 function ht_create_form_group($settings, $group) {
     $output = '';
-    foreach (array_keys($settings['section_settings'][$group]) as $css_selector) {
-        $css_selector_arr = $settings['section_settings'][$group][$css_selector];
-        switch($css_selector) {
+    foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
+        $misc_cell = '';
+        $css_attr_arr = $settings['section_settings'][$group][$css_attr];
+        switch($css_attr) {
             case 'css_selector':
                 $output .= ht_input_hidden('[section_settings]['. $group . '][css_selector]', 
-                                            $settings['section_settings'][$group][$css_selector]);
+                                            $settings['section_settings'][$group]['css_selector']);
                 break;
             case 'font-family':
                 $output .= ht_create_radio_row($settings['fonts'], 
                                                 $settings, 
                                                 $group, 
-                                                $css_selector, 
-                                                $css_selector_arr['row_label'], 
-                                                $css_selector_arr['field_blurb_prefix']);
+                                                $css_attr, 
+                                                $css_attr_arr['row_label'], 
+                                                $css_attr_arr['field_blurb_prefix']);
                 break;
-            case 'color':
             case 'background-color':
+                $misc_cell .= ht_form_cell_radio('[section_settings][' . $group . '][background-color][value]',
+                                                 'transparent', 
+                                                 ($css_attr_arr['value'] == 'transparent') ? true : false, 
+                                                 'Transparent');
+            case 'color':
                 $output .= ht_create_radio_row($settings['colors'], 
                                                 $settings, 
                                                 $group, 
-                                                $css_selector, 
-                                                $css_selector_arr['row_label'], 
-                                                $css_selector_arr['field_blurb_prefix']);
+                                                $css_attr, 
+                                                $css_attr_arr['row_label'], 
+                                                $css_attr_arr['field_blurb_prefix'],
+                                                $misc_cell);
                 break;
             case 'font-size':
             case 'padding':
             case 'margin':
-                $output .= ht_form_text_field($settings['section_settings'][$group][$css_selector]['row_label'], 
-                							  '[section_settings][' . $group . '][' . $css_selector . '][value]', 
-                                               esc_attr( $settings['section_settings'][$group][$css_selector]['value']),
-                                               __( $settings['section_settings'][$group][$css_selector]['field_blurb_suffix'] ), 
+                $output .= ht_form_text_field($css_attr_arr['row_label'], 
+                							  $css_attr_arr[value], 
+                                               esc_attr( $css_attr_arr['value'] ),
+                                               __( $css_attr_arr['field_blurb_suffix'] ), 
                                                '5');                
                 break;
         }
