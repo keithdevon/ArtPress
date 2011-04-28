@@ -1,0 +1,463 @@
+/* ============================== */
+/* ! Layout for desktop version   */
+/* ============================== 
+
+colors
+
+red #CD0202
+grey #3d3d3d
+blue #11659A
+green #008024
+yellow #D5D317
+
+*/
+
+
+/*------------------------------------*\
+  RESET
+\*------------------------------------*/
+body, div, dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6,
+pre, form, fieldset, input, textarea,
+p, blockquote, th, td {
+  margin: 0;
+  padding: 0;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+fieldset, img {
+  border: 0;
+}
+address, caption, cite, dfn, th, var {
+  font-style: normal;
+  font-weight: normal;
+}
+caption, th {
+  text-align: left;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+q:before, q:after {
+  content: '';
+}
+abbr, acronym {
+  border: 0;
+}
+
+/*------------------------------------*\
+  MAIN
+\*------------------------------------*/
+
+html {
+  font-family: Cambria, Georgia, "Times New Roman", Times, serif;
+  color: #3d3d3d;
+  line-height:1.5em;
+  /*background: url(../images/grid.png) center top repeat #fff;*/
+}
+
+body {
+    }
+    
+#content {
+    position:relative;
+    z-index:1;
+    }
+    
+#header {
+    position:relative;
+    z-index:9999;
+    padding-top:54px;
+    padding-bottom:24px;
+    }
+    
+.container {
+    padding-top:48px;
+    }
+    
+.alternate-bg {
+    background:#eee;
+    border-top:1px solid #f6f6f6;
+    }
+    
+/*------------------------------------*\
+  TYPE
+\*------------------------------------*/
+/*--- HEADINGS ---*/
+
+h1, h2, h3, h4, h5, h6, div#site-title {
+  margin-bottom: 24px;
+  font-weight: bold;
+}
+
+h2, h3, div#site-title, #access {
+    font-family:sans-serif;
+    }
+
+h1, div#site-title {
+    font-size: 1.5em; /* 24px --> 24 Ö 16 = 1.5 */
+    line-height: 1em; /* 24px --> 24 Ö 24 = 1 */
+}
+
+h2 {
+  font-size: 1.375em; /* 22px --> 22 Ö 16 = 1.375 */
+  line-height: 1.0909em; /* 24px --> 24 Ö 22 = 1.090909(09) */
+}
+
+h3 {
+  font-size: 1.25em; /* 20px --> 20 Ö 16 = 1.25 */
+  line-height: 1.2em; /* 24px --> 24 Ö 20 = 1.2 */
+}
+
+h4 {
+  font-size: 1.125em; /* 18px --> 18 Ö 16 = 1.125 */
+  line-height: 1.333em; /* 24px --> 24 Ö 18 = 1.3333333(3) */
+}
+
+h5, h6 {
+  font-size: 1em; /* 16px --> 16 Ö 16 = 1 */
+  line-height: 1.5em; /* 24px --> 24 Ö 16 = 1.5 */
+}
+
+#site-description {
+    font-size: 1em;
+    line-height:1.5em;
+    }
+
+
+/*--- PARAGRAPHS ---*/
+
+p {
+  margin-bottom: 24px;
+}
+
+.headline p {
+    font-size: 2em;
+    line-height: 1.5em;
+    }
+
+body > p:first-of-type {
+  font-size: 1.125em;
+    /* 18px ? 18 Ö 16 = 1.125 */
+
+  line-height: 1.333em;
+    /* 24px ? 24 Ö 18 = 1.3333(3) */
+}
+
+/*----- TEXT SHADOWS -----*/
+
+h1, h2, h3, #access {
+    text-shadow: 1px 1px 0px #fff;
+    }
+
+/*--- LISTS ---*/
+ul, ol {
+  margin-bottom: 24px;
+    /* Remember, if your magic number is
+    different to this, use your own. */
+}
+
+ul {
+  list-style: square outside;
+}
+
+ul li {
+    margin-left:17px;
+    }
+
+ul ul,
+ol ol {
+  margin: 0;
+}
+
+/*--- QUOTES ---*/
+blockquote {
+  margin: 0 60px 0 45px;
+  border-left: 5px solid #ccc;
+  padding-left: 10px;
+  text-indent: -0.4em;
+}
+
+blockquote b {
+  display: block;
+  text-indent: 0;
+}
+
+/*--- LINKS ---*/
+a {
+  color: #CD0202;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active,
+a:focus {
+  position: relative;
+  top: 1px;
+}
+
+.read-more:after {
+  content: "\00A0\000BB"; /* Insert a space then right angled-quote */
+}
+
+
+
+/* =ACCESS -------*/
+	
+#access {
+	background: transparent;
+	display: block;
+	clear:right;
+	float:right;
+	margin: 24px 0px 0 0;
+}
+#access .menu-header,
+div.menu {
+	font-size: 1em;
+	margin-left: 12px;
+}
+#access .menu-header ul,
+div.menu ul {
+	list-style: none;
+	margin: 0;
+}
+#access .menu-header li,
+div.menu li {
+	float: left;
+	position: relative;
+}
+#access a {
+	color: #999;
+	display: block;
+	line-height: 1.5em;
+	padding: 0 10px;
+	text-decoration: none;
+}
+#access ul ul {
+	box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	-webkit-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	display: none;
+	position: absolute;
+	top: 24px;
+	left: 0;
+	float: left;
+	width: 180px;
+	z-index: 99999;
+}
+#access ul ul li {
+	min-width: 180px;
+}
+#access ul ul ul {
+	left: 100%;
+	top: 0;
+}
+#access ul ul a {
+	background: #fff;
+	line-height: 1em;
+	padding: 10px;
+	width: 160px;
+	height: auto;
+}
+#access li:hover > a,
+#access ul ul :hover > a {
+	background: transparent;
+	color: #3d3d3d;
+}
+#access ul ul :hover > a {
+    background: #fff;
+    }
+#access ul li:hover > ul {
+	display: block;
+}
+#access ul li.current_page_item > a,
+#access ul li.current-menu-ancestor > a,
+#access ul li.current-menu-item > a,
+#access ul li.current-menu-parent > a {
+	color: #3d3d3d;
+}
+* html #access ul li.current_page_item a,
+* html #access ul li.current-menu-ancestor a,
+* html #access ul li.current-menu-item a,
+* html #access ul li.current-menu-parent a,
+* html #access ul li a:hover {
+	color: #fff;
+}
+
+.screen-reader-text {
+position: absolute;
+left: -9000px;
+}
+
+
+/* =SEARCH */
+
+#searchform {
+    float:right;
+    }
+
+
+/* =SIDEBAR */
+
+li.widget-container {
+    margin-bottom:48px;
+    }
+    
+/* GRID -------*/
+
+.grid {
+    margin: 24px 0;
+    /*border: 0.5em solid #ddd;*/
+    height:8em;
+    box-shadow: 2px 2px 6px rgba(0,0,0,.3);
+    background: white;
+    position: relative;
+    }
+    
+.grid:hover {
+    top:-3px;
+    left:-3px;
+    box-shadow: 8px 8px 10px rgba(0,0,0,.1);
+    }
+    
+/*.grid:hover .post-date {
+    display:none;
+    }*/
+    
+.grid h3 {
+    font-family: sans-serif;
+    font-size: 2em;
+    line-height:1.1em;
+    font-weight: normal;
+    margin:0em;
+    max-width:10em;
+    }
+    
+.grid span.grid-title, .grid .post-date {
+    background: #fff;
+    color:#3d3d3d;
+    box-shadow: .4em 0px 0px #fff;
+    }
+    
+/*.solo {
+    border: 0.5em solid #CD0202;
+    }
+    
+.solo span.grid-title, .solo .post-date {
+    background: #CD0202;
+    color:white;
+    box-shadow: .4em 0px 0px #CD0202;
+    }
+    
+.agency {
+    border: 0.5em solid #11659A;
+    }
+    
+.agency span.grid-title, .agency .post-date {
+    background: #11659A;
+    color:white;
+    box-shadow: .4em 0px 0px #11659A;
+    }
+    
+.stuff {
+    border: 0.5em solid green;
+    }
+    
+.stuff span.grid-title, .stuff .post-date {
+    background: green;
+    color:white;
+    box-shadow: .4em 0px 0px green;
+    }*/
+    
+.agency .post-date, .solo .post-date, .grid .post-date, .stuff .post-date {
+    font-family: sans-serif;
+    font-size: .8em;
+    line-height:1em;
+    color:white;
+    width:4em;
+    height:4em;
+    text-align: center;
+    position:absolute;
+    bottom:0em;
+    right:0em;
+    border-radius: 2em;
+    box-shadow:2px 2px 0px #000;
+    }
+    
+.day {
+    padding-top:.5em;
+    }
+    
+.grid p {
+    margin: 1em 1em 1em 1em;
+    font-size:.8em;
+    line-height:1.2em;
+    }
+    
+.grid p a {
+    color:#3d3d3d;
+    }
+    
+/* All borders to grey */
+
+.grid .post-date {
+    background: #3d3d3d;
+    color:white;
+    box-shadow: 2px 2px 0px black;
+    }
+
+.solo .post-date {
+    background: #CD0202;
+    color:white;
+    }
+    
+.agency .post-date {
+    background: #11659A;
+    color:white;
+    }
+    
+.stuff .post-date {
+    background: green;
+    color:white;
+    }
+    
+.tuts .post-date {
+    background: #D5D317;
+    color:black;
+    }
+    
+
+
+	
+
+/* ============================= */
+/* ! Layout for mobile version   */
+/* ============================= */
+
+@media handheld, only screen and (max-width: 767px) {
+
+	body {
+		
+	}
+
+}
+
+
+/* ========================================== */
+/* ! Provide higher res assets for iPhone 4   */
+/* ========================================== */
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) { 
+
+/*	.logo {
+		background: url(logo2x.jpg) no-repeat;
+		background-size: 212px 303px;
+	}*/
+
+}
