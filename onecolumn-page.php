@@ -14,8 +14,8 @@
 
 get_header(); ?>
 
-		<div id="container" class="one-column">
-			<div id="content" role="main">
+		<div id="container" class="one-column row">
+			<div id="content" class="twelvecol last" role="main">
 
 			<?php
 			/* Run the loop to output the page.

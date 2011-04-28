@@ -2,6 +2,111 @@
 
 <?php
 
+/* 
+Keith's Layout Option Blocks 
+*/
+
+//Centered Logo with description beneath
+
+/*echo '
+    #site-title {
+        float: left;
+        text-align: center;
+        margin: 0 0 18px 0;
+        width: 100%;
+        }
+        
+    #site-description {
+        clear: both;
+        float: left;
+        text-align: center;
+        margin: 15px 0 18px 0;
+        width: 100%;
+        }';*/
+        
+//Menu at top of page - uncomment this block to enable top navs - TODO - this still needs work.
+
+/*echo '
+    #access {
+        display: block;
+        position:absolute;
+        top:24px;
+        margin: 0 auto;
+        width: 940px;
+        }
+    #header {
+        padding-top:96px;
+        }
+    #wrapper {
+        margin-top:0px;
+        }';
+*/
+
+/* Add vertical navigation. Copy and paste this into it's own file */
+
+/*#header {
+    width:160px;
+    }
+    
+#access {
+	display: block;
+	float: left;
+	margin: 0 auto;
+	width: 160px;
+}
+#access .menu-header,
+div.menu {
+	margin-left: 12px;
+	width: 140px;
+}
+#access .menu-header ul,
+div.menu ul {
+	list-style: none;
+	margin: 0;
+}
+#access .menu-header li,
+div.menu li {
+	float: none;
+	position: relative;
+}
+#access a {
+	color: #aaa;
+	display: block;
+	line-height: 38px;
+	padding: 0 10px;
+	text-decoration: none;
+}
+#access ul ul {
+	box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	-webkit-box-shadow: 0px 3px 3px rgba(0,0,0,0.2);
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 140px;
+	float: left;
+	width: 180px;
+	z-index: 99999;
+}
+#access ul ul li {
+	min-width: 140px;
+}
+#access ul ul ul {
+	left: 100%;
+	top: 0;
+}
+#access ul ul a {
+	background: #333;
+	line-height: 1em;
+	padding: 10px;
+	width: 160px;
+	height: auto;
+}*/
+
+/*
+end Keith's Layout Option Blocks
+*/
+
 /** css declaration */
 function dec($property, $value) { // TODO include validation
     return $property . ": " . $value . ";";
@@ -143,5 +248,10 @@ $background_elements = array(
 
 foreach ($background_elements as $key => $value)
         css_bg_color($value , $key);  
-*/                
+*/ 
+
+
+               
 ?>
+
+

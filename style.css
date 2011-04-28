@@ -2,7 +2,8 @@
 Theme Name: ArtPress
 Theme URI: http://keithdevon.com
 Description: ArtPress has been built specifically for artists. It is a theme that includes advanced image handling and support for popular e-commerce plugins.
-Author: ThemeTown
+Tags: buddypress
+Author: Heart Themes
 Version: 0.1
 License: GNU General Public License
 License URI: license.txt
@@ -64,26 +65,26 @@ LAYOUT: Two columns
 DESCRIPTION: Two-column fixed layout with one sidebar right of content
 */
 
-#container {
-	float: left;
-	margin: 0 -240px 0 0;
-	width: 100%;
+.container {
+	padding-top:1.5em;
 }
+.row {
+    padding-top:1.5em;
+    }
+
+
 #content {
-	margin: 0 280px 0 20px;
+
 }
 #primary,
 #secondary {
-	float: right;
-	overflow: hidden;
-	width: 220px;
+	
 }
 #secondary {
 	clear: right;
 }
 #footer {
-	clear: both;
-	width: 100%;
+    background: #ddd;
 }
 
 /*
@@ -93,7 +94,7 @@ DESCRIPTION: One centered column with no sidebar
 
 .one-column #content {
 	margin: 0;
-	width: 5em;
+	width:40em;
 	max-width:600px;
 }
 
@@ -159,15 +160,7 @@ code {
 -------------------------------------------------------------- */
 
 /* The main theme structure */
-#access .menu-header,
-div.menu,
-#colophon,
-#branding,
-#main,
-#wrapper {
-	margin: 0 auto;
-	width: 940px;
-}
+
 #wrapper {
 	background: #fff;
 	margin-top: 20px;
@@ -179,12 +172,10 @@ div.menu,
 	overflow: hidden;
 }
 #footer-widget-area .widget-area {
-	float: left;
-	margin-right: 20px;
-	width: 220px;
+	
 }
 #footer-widget-area #fourth {
-	margin-right: 0;
+	
 }
 #site-info {
 	float: left;
@@ -203,14 +194,12 @@ div.menu,
 
 /* Main global 'theme' and typographic styles */
 body {
-	background: #f1f1f1;
+	background: #fff;
 }
 body,
 input,
 textarea {
 	color: #666;
-	font-size: 12px;
-	line-height: 18px;
 }
 hr {
 	background-color: #e7e7e7;
@@ -336,7 +325,6 @@ a:hover {
 -------------------------------------------------------------- */
 
 #header {
-	padding: 30px 0 0 0;
 }
 #site-title {
 	float: left;
@@ -351,11 +339,7 @@ a:hover {
 	text-decoration: none;
 }
 #site-description {
-	clear: right;
-	float: right;
 	font-style: italic;
-	margin: 15px 0 18px 0;
-	width: 220px;
 }
 
 /* This is the custom header image */
@@ -374,14 +358,10 @@ a:hover {
 	background: #000;
 	display: block;
 	float: left;
-	margin: 0 auto;
-	width: 940px;
 }
 #access .menu-header,
 div.menu {
-	font-size: 13px;
 	margin-left: 12px;
-	width: 928px;
 }
 #access .menu-header ul,
 div.menu ul {
@@ -453,9 +433,7 @@ div.menu li {
 -------------------------------------------------------------- */
 
 #main {
-	clear: both;
-	overflow: hidden;
-	padding: 40px 0 0 0;
+	
 }
 #content {
 	margin-bottom: 36px;
@@ -464,8 +442,6 @@ div.menu li {
 #content input,
 #content textarea {
 	color: #333;
-	font-size: 16px;
-	line-height: 24px;
 }
 #content p,
 #content ul,
@@ -473,7 +449,7 @@ div.menu li {
 #content dd,
 #content pre,
 #content hr {
-	margin-bottom: 24px;
+	margin-bottom: 1.5em;
 }
 #content ul ul,
 #content ol ol,
@@ -1198,7 +1174,9 @@ h3#reply-title {
 	margin-left: 1.3em;
 	padding: 0;
 }
-#primary {
+#primary, #secondary {
+    background: #ddd;
+    padding:1.5em;
 }
 #secondary {
 }
@@ -1212,13 +1190,10 @@ h3#reply-title {
 -------------------------------------------------------------- */
 
 #footer {
-	margin-bottom: 20px;
+	padding-bottom:3em;
 }
 #colophon {
-	border-top: 4px solid #000;
-	margin-top: -4px;
-	overflow: hidden;
-	padding: 18px 0;
+
 }
 #site-info {
 	font-weight: bold;
@@ -1362,3 +1337,12 @@ code {
 label.horiz {
 	float:left;
 	}
+	
+#header-widgets li {
+    float:right;
+    width:33%;
+    }
+    
+#header-widgets li.widget_search input#searchsubmit {
+    float:right;
+    }
