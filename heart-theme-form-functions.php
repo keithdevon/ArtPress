@@ -65,37 +65,37 @@ function ht_create_radio_row($options, $settings, $group, $css_field, $row_label
 }
 function ht_create_form_group($settings, $group) {
     $output = '';
-    foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
-        $css_attr_arr = $settings['section_settings'][$group][$css_attr];
-        switch($css_attr) {
+    foreach (array_keys($settings['section_settings'][$group]) as $css_selector) {
+        $css_selector_arr = $settings['section_settings'][$group][$css_selector];
+        switch($css_selector) {
             case 'css_selector':
-                $output .= ht_input_hidden('[section_settings]['. $group . '][$css_attr]', 
-                                            $settings['section_settings'][$group][$css_attr]);
+                $output .= ht_input_hidden('[section_settings]['. $group . '][css_selector]', 
+                                            $settings['section_settings'][$group][$css_selector]);
                 break;
             case 'font-family':
                 $output .= ht_create_radio_row($settings['fonts'], 
                                                 $settings, 
                                                 $group, 
-                                                $css_attr, 
-                                                $css_attr_arr['row_label'], 
-                                                $css_attr_arr['field_blurb_prefix']);
+                                                $css_selector, 
+                                                $css_selector_arr['row_label'], 
+                                                $css_selector_arr['field_blurb_prefix']);
                 break;
             case 'color':
             case 'background-color':
                 $output .= ht_create_radio_row($settings['colors'], 
                                                 $settings, 
                                                 $group, 
-                                                $css_attr, 
-                                                $css_attr_arr['row_label'], 
-                                                $css_attr_arr['field_blurb_prefix']);
+                                                $css_selector, 
+                                                $css_selector_arr['row_label'], 
+                                                $css_selector_arr['field_blurb_prefix']);
                 break;
             case 'font-size':
             case 'padding':
             case 'margin':
-                $output .= ht_form_text_field($settings['section_settings'][$group][$css_attr]['row_label'], 
-                							  '[section_settings][' . $group . '][' . $css_attr . '][value]', 
-                                               esc_attr( $settings['section_settings'][$group][$css_attr]['value']),
-                                               __( $settings['section_settings'][$group][$css_attr]['field_blurb_suffix'] ), 
+                $output .= ht_form_text_field($settings['section_settings'][$group][$css_selector]['row_label'], 
+                							  '[section_settings][' . $group . '][' . $css_selector . '][value]', 
+                                               esc_attr( $settings['section_settings'][$group][$css_selector]['value']),
+                                               __( $settings['section_settings'][$group][$css_selector]['field_blurb_suffix'] ), 
                                                '5');                
                 break;
         }
