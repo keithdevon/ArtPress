@@ -9,8 +9,8 @@
 
 get_header(); ?>
 
-		<div id="container" class="single-attachment">
-			<div id="content" role="main">
+		<div id="container" class="single-attachment row">
+			<div id="content" class="twelvecol last" role="main">
 
 			<?php
 			/* Run the loop to output the attachment.

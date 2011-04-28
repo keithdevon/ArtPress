@@ -45,7 +45,7 @@
  * is designed for, generally via the style.css stylesheet.
  */
 if ( ! isset( $content_width ) )
-	$content_width = 640;
+	$content_width = 1140;
 
 /** Tell WordPress to run twentyten_setup() when the 'after_setup_theme' hook is run. */
 add_action( 'after_setup_theme', 'twentyten_setup' );
@@ -98,6 +98,7 @@ function twentyten_setup() {
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
 		'primary' => __( 'Primary Navigation', 'twentyten' ),
+		'secondary' => 'Secondary Menu',
 	) );
 
 	// This theme allows users to set a custom background
@@ -113,8 +114,8 @@ function twentyten_setup() {
 
 	// The height and width of your custom header. You can hook into the theme's own filters to change these values.
 	// Add a filter to twentyten_header_image_width and twentyten_header_image_height to change these values.
-	define( 'HEADER_IMAGE_WIDTH', apply_filters( 'twentyten_header_image_width', 940 ) );
-	define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'twentyten_header_image_height', 198 ) );
+	define( 'HEADER_IMAGE_WIDTH', apply_filters( 'twentyten_header_image_width', 1140 ) );
+	define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'twentyten_header_image_height', 200 ) );
 
 	// We'll be using post thumbnails for custom header images on posts and pages.
 	// We want them to be 940 pixels wide by 198 pixels tall.
@@ -431,6 +432,17 @@ function twentyten_widgets_init() {
 		'name' => __( 'Fourth Footer Widget Area', 'twentyten' ),
 		'id' => 'fourth-footer-widget-area',
 		'description' => __( 'The fourth footer widget area', 'twentyten' ),
+		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
+		'after_widget' => '</li>',
+		'before_title' => '<h3 class="widget-title">',
+		'after_title' => '</h3>',
+	) );
+	
+	// Area 7, located in the header. Empty by default.
+	register_sidebar( array(
+		'name' => __( 'Header Widget Area', 'twentyten' ),
+		'id' => 'header-widget-area',
+		'description' => __( 'The header widget area', 'twentyten' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
 		'after_widget' => '</li>',
 		'before_title' => '<h3 class="widget-title">',

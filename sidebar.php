@@ -9,6 +9,7 @@
 ?>
 
 		<div id="primary" class="widget-area" role="complementary">
+		
 			<ul class="xoxo">
 
 <?php

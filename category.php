@@ -9,8 +9,8 @@
 
 get_header(); ?>
 
-		<div id="container">
-			<div id="content" role="main">
+		<div id="container" class="row">
+			<div id="content" class="eightcol" role="main">
 
 				<h1 class="page-title"><?php
 					printf( __( 'Category Archives: %s', 'twentyten' ), '<span>' . single_cat_title( '', false ) . '</span>' );
@@ -28,7 +28,12 @@ get_header(); ?>
 				?>
 
 			</div><!-- #content -->
+			
+			<div class="fourcol last">
+			 <?php get_sidebar(); ?>
+            </div>
+			
 		</div><!-- #container -->
 
-<?php get_sidebar(); ?>
+
 <?php get_footer(); ?>

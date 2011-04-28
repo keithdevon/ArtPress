@@ -33,10 +33,15 @@
 		echo ' | ' . sprintf( __( 'Page %s', 'twentyten' ), max( $paged, $page ) );
 
 	?></title>
+	
+
+	
 <link rel="profile" href="http://gmpg.org/xfn/11" />
-<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
-<link type="text/css" rel="stylesheet" href="<?php bloginfo( 'stylesheet_directory' ); ?>/artpress-style-css.php" media="screen" />
+
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
+
+<?php get_template_part( 'cssgrid' );           // CSS Grid files (cssgrid.php) ?>
+
 <?php
 	/* We add some JavaScript to pages with the comment form
 	 * to support sites with threaded comments (when in use).
@@ -54,19 +59,52 @@
 </head>
 
 <body <?php body_class(); ?>>
-<div id="wrapper" class="hfeed">
-	<div id="header">
-		<div id="masthead">
-			<div id="branding" role="banner">
+	<div id="header" class="container hfeed" style="background:#ddd;">
+		<div id="masthead" class="row">
+			<div id="branding" class="fourcol" role="banner">
 				<?php $heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div'; ?>
 				<<?php echo $heading_tag; ?> id="site-title">
 					<span>
 						<a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
 					</span>
 				</<?php echo $heading_tag; ?>>
+				
 				<div id="site-description"><?php bloginfo( 'description' ); ?></div>
-
+				
+            </div><!-- #branding -->
+            
+            <div class="eightcol last">
+				
 				<?php
+	// A second sidebar for widgets, just because.
+	if ( is_active_sidebar( 'header-widget-area' ) ) : ?>
+
+		<div id="header-widgets" class="widget-area" role="complementary">
+			<ul class="xoxo">
+				<?php dynamic_sidebar( 'header-widget-area' ); ?>
+			</ul>
+		</div><!-- #header-widgets .widget-area -->
+
+    <?php endif; ?>
+    
+    <div id="access" role="navigation">
+			  <?php /*  Allow screen readers / text browsers to skip the navigation menu and get right to the good stuff */ ?>
+				<div class="skip-link screen-reader-text"><a href="#content" title="<?php esc_attr_e( 'Skip to content', 'twentyten' ); ?>"><?php _e( 'Skip to content', 'twentyten' ); ?></a></div>
+				<?php /* Our navigation menu.  If one isn't filled out, wp_nav_menu falls back to wp_page_menu.  The menu assiged to the primary position is the one used.  If none is assigned, the menu with the lowest ID is used.  */ ?>
+				<?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' ) ); ?>
+			</div><!-- #access -->
+    
+            </div><!-- eightcol last -->
+			
+
+			
+		</div><!-- #masthead -->
+	</div><!-- #header -->
+
+	<div id="main" class="container">
+	   <div class="row">
+	
+	<?php
 					// Check if this is a post or page, if it has a thumbnail, and if it's a big one
 					if ( is_singular() && current_theme_supports( 'post-thumbnails' ) &&
 							has_post_thumbnail( $post->ID ) &&
@@ -77,15 +115,4 @@
 					elseif ( get_header_image() ) : ?>
 						<img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
 					<?php endif; ?>
-			</div><!-- #branding -->
-
-			<div id="access" role="navigation">
-			  <?php /*  Allow screen readers / text browsers to skip the navigation menu and get right to the good stuff */ ?>
-				<div class="skip-link screen-reader-text"><a href="#content" title="<?php esc_attr_e( 'Skip to content', 'twentyten' ); ?>"><?php _e( 'Skip to content', 'twentyten' ); ?></a></div>
-				<?php /* Our navigation menu.  If one isn't filled out, wp_nav_menu falls back to wp_page_menu.  The menu assiged to the primary position is the one used.  If none is assigned, the menu with the lowest ID is used.  */ ?>
-				<?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' ) ); ?>
-			</div><!-- #access -->
-		</div><!-- #masthead -->
-	</div><!-- #header -->
-
-	<div id="main">
+        </div><!-- row -->
