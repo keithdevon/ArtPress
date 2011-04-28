@@ -12,20 +12,14 @@ function ht_input($id, $type, $attributes) {
     return bt('input', attr_type($type) . attr_id('artpress_theme_options' . $id) . attr_name('artpress_theme_options' . $id) . $attributes );
 }
 function ht_input_text ($id, $class, $value, $size='') {
-    return ht_input($id, 'text', attr_size($size) . attr_class($class) . attr_value($value)  );
-}#!/bin/sh\ncd ~/Dropbox/mysite/public_html/wp/wp-content/themes/artpress/
-//function ht_input_text ($id, $class, $value, $size='') {
-//        return bt('input', attr_id($id) . attr_size($size) . attr_class($class) . attr_type('text') . attr_name($id) . attr_value($value)  );
-//}
-//function ht_input_checkbox ($id, $is_checked, $value, $field_blurb) {
-//        return bt('input', attr_id($id) . attr_type('checkbox') . attr_name($id) . attr_value($value) . attr_checked($is_checked ) );
-//}
+    return ht_input($id, 'text', attr_size($size) . attr_class($class) . attr_value($value) );
+}
+function ht_input_hidden ($id, $value) { // TODO not great having to do this. DB interaction needs re-written
+    return ht_input($id, 'hidden', attr_value($value) );
+}
 function ht_input_radio ($id, $is_checked, $value) {
         return ht_input( $id, 'radio',  attr_value($value) . attr_checked($is_checked ) );
 }
-//function ht_input_radio ($id, $name, $is_checked, $value) {
-//        return bt('input', attr_id($id) . attr_type('radio') . attr_name($name) . attr_value($value) . attr_checked($is_checked ) );
-//}
 function ht_form_field($field_name, $content) {
     return ot( 'tr', attr_valign('top') )
         . ht_th(__($field_name), "row")
@@ -60,7 +54,7 @@ function ht_create_radio_row($options, $settings, $group, $css_field, $row_label
     $checked = esc_attr( $settings['section_settings'][$group][$css_field]['value'] );
     $cells = '';
     for ($i = 0; $i < count($options); $i++) {
-        $cells .= ht_form_cell_radio($id, $i, ($i == $checked) ? $i : false, $field_blurb_prefix . ' ' . $i );
+        $cells .= ht_form_cell_radio($id, $i, ($i == $checked) ? true : false, $field_blurb_prefix . ' ' . $i );
     }  
 	return ht_form_field($row_label, 
         table(
@@ -74,6 +68,10 @@ function ht_create_form_group($settings, $group) {
     foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
         $css_attr_arr = $settings['section_settings'][$group][$css_attr];
         switch($css_attr) {
+            case 'css_selector':
+                $output .= ht_input_hidden('[section_settings]['. $group . '][$css_attr]', 
+                                            $settings['section_settings'][$group][$css_attr]);
+                break;
             case 'font-family':
                 $output .= ht_create_radio_row($settings['fonts'], 
                                                 $settings, 
@@ -83,7 +81,7 @@ function ht_create_form_group($settings, $group) {
                                                 $css_attr_arr['field_blurb_prefix']);
                 break;
             case 'color':
-            case 'background':
+            case 'background-color':
                 $output .= ht_create_radio_row($settings['colors'], 
                                                 $settings, 
                                                 $group, 
