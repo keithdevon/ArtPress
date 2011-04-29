@@ -15,8 +15,8 @@
 
 get_header(); ?>
 
-		<div id="container">
-			<div id="content" role="main">
+		<div id="container" class="row">
+			<div id="content" class="eightcol" role="main">
 
 			<?php
 			/* Run the loop to output the posts.
@@ -26,7 +26,9 @@ get_header(); ?>
 			 get_template_part( 'loop', 'index' );
 			?>
 			</div><!-- #content -->
+			
+			<div class="fourcol last"><?php get_sidebar(); ?></div>
+			
 		</div><!-- #container -->
 
-<?php get_sidebar(); ?>
 <?php get_footer(); ?>

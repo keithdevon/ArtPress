@@ -115,7 +115,7 @@ function twentyten_setup() {
 	// The height and width of your custom header. You can hook into the theme's own filters to change these values.
 	// Add a filter to twentyten_header_image_width and twentyten_header_image_height to change these values.
 	define( 'HEADER_IMAGE_WIDTH', apply_filters( 'twentyten_header_image_width', 1140 ) );
-	define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'twentyten_header_image_height', 200 ) );
+	define( 'HEADER_IMAGE_HEIGHT', apply_filters( 'twentyten_header_image_height', 400 ) );
 
 	// We'll be using post thumbnails for custom header images on posts and pages.
 	// We want them to be 940 pixels wide by 198 pixels tall.
@@ -372,6 +372,18 @@ endif;
  * @uses register_sidebar
  */
 function twentyten_widgets_init() {
+
+    // Area 7, located in the header. Empty by default.
+	register_sidebar( array(
+		'name' => __( 'Header Widget Area', 'twentyten' ),
+		'id' => 'header-widget-area',
+		'description' => __( 'The header widget area', 'twentyten' ),
+		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
+		'after_widget' => '</li>',
+		'before_title' => '<h3 class="widget-title">',
+		'after_title' => '</h3>',
+	) );
+    
 	// Area 1, located at the top of the sidebar.
 	register_sidebar( array(
 		'name' => __( 'Primary Widget Area', 'twentyten' ),
@@ -438,16 +450,6 @@ function twentyten_widgets_init() {
 		'after_title' => '</h3>',
 	) );
 	
-	// Area 7, located in the header. Empty by default.
-	register_sidebar( array(
-		'name' => __( 'Header Widget Area', 'twentyten' ),
-		'id' => 'header-widget-area',
-		'description' => __( 'The header widget area', 'twentyten' ),
-		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h3 class="widget-title">',
-		'after_title' => '</h3>',
-	) );
 }
 /** Register sidebars by running twentyten_widgets_init() on the widgets_init hook. */
 add_action( 'widgets_init', 'twentyten_widgets_init' );
@@ -688,7 +690,7 @@ $options = get_option('artpress_theme_options');//extract this from the function
     extract( shortcode_atts( array(
       'float' => 'boxout',
       ), $atts ) );
-      $ht_opening = '<div class="box-out" style="width:30%; background-color: #eee; margin-bottom:1.5em; padding:1.5em; font-size:1.2em; line-height:1.5em; font-style:italic; color:'.$options['primarycolor'].';';
+      $ht_opening = '<div class="box-out" style="width:30%; background-color: #eee; margin-bottom:1.5em; padding:1.5em; font-size:1.2em; line-height:1.5em; font-style:italic;';
       if(esc_attr($float) == 'right') $ht_middle = 'margin-left:1em;  float:' . esc_attr($float) . ';">';
         else $ht_middle = 'margin-right:1.5em; float:left;">';
         $ht_end =  $content . '</div>';

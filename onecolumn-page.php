@@ -26,6 +26,12 @@ get_header(); ?>
 			?>
 
 			</div><!-- #content -->
+			
 		</div><!-- #container -->
+		
+		<div class="row">
+		  <div class="fourcol"><?php get_sidebar();?></div>
+		  <div class="fourcol"><?php get_template_part( 'second-sidebar' );?></div>
+		</div>
 
 <?php get_footer(); ?>

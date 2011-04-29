@@ -29,7 +29,8 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	vertical-align: baseline;
 }
 body {
-	line-height: 1;
+    background: url(images/grid.png);
+	
 }
 h1, h2, h3, h4, h5, h6 {
 	clear: both;
@@ -67,6 +68,7 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 
 .container {
 	padding-top:1.5em;
+	padding-bottom: 1.5em;
 }
 .row {
     padding-top:1.5em;
@@ -84,18 +86,7 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 	clear: right;
 }
 #footer {
-    background: #ddd;
-}
-
-/*
-LAYOUT: One column, no sidebar
-DESCRIPTION: One centered column with no sidebar
-*/
-
-.one-column #content {
-	margin: 0;
-	width:40em;
-	max-width:600px;
+    background: rgba(0,0,0,0.1);;
 }
 
 /*
@@ -105,7 +96,6 @@ DESCRIPTION: Full width content with no sidebar; used for attachment pages
 
 .single-attachment #content {
 	margin: 0 auto;
-	width: 900px;
 }
 
 
@@ -194,7 +184,7 @@ code {
 
 /* Main global 'theme' and typographic styles */
 body {
-	background: #fff;
+	line-height:150%;
 }
 body,
 input,
@@ -210,16 +200,36 @@ hr {
 }
 
 /* Text elements */
-p {
-	margin-bottom: 18px;
+
+h1 {
+    font-size:4.236em;
+    line-height:1.062em;
+    margin-bottom:.354em;
+    }
+    
+h2 {
+    font-size:2.618em;
+    line-height:1.145em;
+    margin-bottom: .573em;
+    }
+    
+h3 {
+    font-size:1.618em;
+    line-height:1.854em;
+    margin-bottom: .927em;
+    }
+
+h4, h5, p {
+    font-size: 100%;
+	margin-bottom: 1.5em;
 }
 ul {
 	list-style: square;
-	margin: 0 0 18px 1.5em;
+	margin: 0 0 1.5em 1.5em;
 }
 ol {
 	list-style: decimal;
-	margin: 0 0 18px 1.5em;
+	margin: 0 0 1.5em 1.5em;
 }
 ol ol {
 	list-style: upper-alpha;
@@ -325,21 +335,24 @@ a:hover {
 -------------------------------------------------------------- */
 
 #header {
+    background: rgba(0,0,0,0.1);
+    margin-top:0px;
 }
 #site-title {
 	float: left;
-	font-size: 30px;
-	line-height: 36px;
-	margin: 0 0 18px 0;
-	width: 700px;
+	margin: 0 0 0.354em 0;
+	font-size:4.236em;
+	font-weight:bold;
+	line-height: 1.062em;
+	width:100%;
 }
 #site-title a {
-	color: #000;
-	font-weight: bold;
 	text-decoration: none;
 }
 #site-description {
 	font-style: italic;
+	float:left;
+	line-height:1.5em;
 }
 
 /* This is the custom header image */
@@ -355,7 +368,7 @@ a:hover {
 -------------------------------------------------------------- */
 
 #access {
-	background: #000;
+	background: transparent;
 	display: block;
 	float: left;
 }
@@ -437,6 +450,7 @@ div.menu li {
 }
 #content {
 	margin-bottom: 36px;
+	padding-top:12px;
 }
 #content,
 #content input,
@@ -471,16 +485,7 @@ div.menu li {
 #content th {
 	color: #000;
 }
-#content h1,
-#content h2,
-#content h3,
-#content h4,
-#content h5,
-#content h6 {
-	color: #000;
-	line-height: 1.5em;
-	margin: 0 0 20px 0;
-}
+
 #content table {
 	border: 1px solid #e7e7e7;
 	margin: 0 -1px 24px 0;
@@ -538,10 +543,10 @@ div.menu li {
 }
 #content .entry-title {
 	color: #000;
-	font-size: 21px;
 	font-weight: bold;
-	line-height: 1.3em;
-	margin-bottom: 0;
+	margin-bottom: .573em;
+	font-size: 2.618em;
+	line-height: 1.145em;
 }
 .entry-title a:link,
 .entry-title a:visited {
@@ -718,8 +723,7 @@ body.page .edit-link {
 }
 .format-gallery .gallery-thumb,
 .category-gallery .gallery-thumb {
-	float: left;
-	margin-right: 20px;
+	text-align: center;
 	margin-top: -4px;
 }
 .home #content .format-gallery .entry-utility,
@@ -727,6 +731,20 @@ body.page .edit-link {
 	padding-top: 4px;
 }
 
+/* ArtPress Gallery format styling */
+
+/*body.archive*/ div.format-gallery {
+    width:33%;
+    float:left;
+    }
+    
+div.format-gallery .entry-content p, div.format-gallery .entry-meta, div.format-gallery .entry-utility {
+    display:none;
+    }
+    
+/*body.archive*/ div.format-gallery .entry-title {
+    text-align: center;
+    }
 
 /* =Attachment pages
 -------------------------------------------------------------- */
@@ -1019,7 +1037,6 @@ input[type=submit] {
 	color: #333;
 }
 #respond {
-	border-top: 1px solid #e7e7e7;
 	margin: 24px 0;
 	overflow: hidden;
 	position: relative;
@@ -1175,7 +1192,7 @@ h3#reply-title {
 	padding: 0;
 }
 #primary, #secondary {
-    background: #ddd;
+    background: rgba(0,0,0,0.1);
     padding:1.5em;
 }
 #secondary {
@@ -1345,4 +1362,8 @@ label.horiz {
     
 #header-widgets li.widget_search input#searchsubmit {
     float:right;
+    }
+    
+img {
+    box-shadow: 0px 3px 7px rgba(0,0,0,0.2);
     }

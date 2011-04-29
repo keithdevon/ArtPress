@@ -246,7 +246,7 @@ function artpress_options_validate( $input ) {
     
     if( ! isset($input['section_settings']['site title']) ) 
         $input['section_settings']['site title'] = array(	
-            'css_selector'    => '#site-title' , 
+            'css_selector'    => '#site-title a' , 
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'2' ), 
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),

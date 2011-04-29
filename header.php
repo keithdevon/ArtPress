@@ -59,7 +59,7 @@
 </head>
 
 <body <?php body_class(); ?>>
-	<div id="header" class="container hfeed" style="background:#ddd;">
+	<div id="header" class="container hfeed">
 		<div id="masthead" class="row">
 			<div id="branding" class="fourcol" role="banner">
 				<?php $heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div'; ?>
@@ -102,7 +102,9 @@
 	</div><!-- #header -->
 
 	<div id="main" class="container">
-	   <div class="row">
+	   <div class="row" style="display:none;">
+	       <div class="twocol"></div>
+	       <div class="eightcol">
 	
 	<?php
 					// Check if this is a post or page, if it has a thumbnail, and if it's a big one
@@ -115,4 +117,6 @@
 					elseif ( get_header_image() ) : ?>
 						<img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
 					<?php endif; ?>
+            </div>
+            <div class="twocol last"></div>
         </div><!-- row -->
