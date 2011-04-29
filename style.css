@@ -202,24 +202,34 @@ hr {
 /* Text elements */
 
 h1 {
-    font-size:4.236em;
-    line-height:1.062em;
-    margin-bottom:.354em;
+    font-size: 2.25em;
+    line-height: 1.334em;
+    margin-bottom: .54em;
+	padding-top:.14em;
     }
     
 h2 {
-    font-size:2.618em;
-    line-height:1.145em;
-    margin-bottom: .573em;
+    font-size:2.25em;
+    line-height:1.3333em;
+    margin-bottom: 0.54em;
+    padding-top:0.14em;
     }
     
 h3 {
-    font-size:1.618em;
-    line-height:1.854em;
-    margin-bottom: .927em;
+    font-size:1.5em;
+    line-height:1em;
+    margin-bottom: 1.2em;
+    padding-top:.85em;
     }
 
-h4, h5, p {
+h4 {
+    font-size: 1.333em;
+    line-height: 1.143em;
+    margin-bottom:0.943em;
+    padding-top:.2em;
+    }
+
+h5, p {
     font-size: 100%;
 	margin-bottom: 1.5em;
 }
@@ -389,7 +399,7 @@ div.menu li {
 #access a {
 	color: #aaa;
 	display: block;
-	line-height: 38px;
+	line-height: 48px;
 	padding: 0 10px;
 	text-decoration: none;
 }
@@ -449,8 +459,8 @@ div.menu li {
 	
 }
 #content {
-	margin-bottom: 36px;
-	padding-top:12px;
+	margin-bottom: 24px;
+	padding-top:6px;
 }
 #content,
 #content input,
@@ -544,9 +554,10 @@ div.menu li {
 #content .entry-title {
 	color: #000;
 	font-weight: bold;
-	margin-bottom: .573em;
-	font-size: 2.618em;
-	line-height: 1.145em;
+	font-size: 2.25em;
+	line-height: 1.334em;
+	margin-bottom: .58em;
+	padding-top:.12em;
 }
 .entry-title a:link,
 .entry-title a:visited {
@@ -572,7 +583,7 @@ div.menu li {
 .entry-content,
 .entry-summary {
 	clear: both;
-	padding: 12px 0 0 0;
+	padding:0;
 }
 #content .entry-summary p:last-child {
 	margin-bottom: 12px;
@@ -1120,11 +1131,12 @@ h3#reply-title {
 	display: none;
 }
 .widget-container {
-	margin: 0 0 18px 0;
+	margin: 0 0 24px 0;
 }
 .widget-title {
 	color: #222;
 	font-weight: bold;
+	margin-bottom:24px;
 }
 .widget-area a:link,
 .widget-area a:visited {
@@ -1193,7 +1205,7 @@ h3#reply-title {
 }
 #primary, #secondary {
     background: rgba(0,0,0,0.1);
-    padding:1.5em;
+    padding:30px 1.5em 24px;
 }
 #secondary {
 }
