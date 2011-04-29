@@ -61,7 +61,7 @@
 <body <?php body_class(); ?>>
 	<div id="header" class="container hfeed">
 		<div id="masthead" class="row">
-			<div id="branding" class="fourcol" role="banner">
+			<div id="branding" role="banner">
 				<?php $heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div'; ?>
 				<<?php echo $heading_tag; ?> id="site-title">
 					<span>
@@ -72,8 +72,6 @@
 				<div id="site-description"><?php bloginfo( 'description' ); ?></div>
 				
             </div><!-- #branding -->
-            
-            <div class="eightcol last">
 				
 				<?php
 	// A second sidebar for widgets, just because.
@@ -94,7 +92,7 @@
 				<?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' ) ); ?>
 			</div><!-- #access -->
     
-            </div><!-- eightcol last -->
+            
 			
 
 			
