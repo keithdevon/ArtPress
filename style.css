@@ -29,7 +29,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	vertical-align: baseline;
 }
 body {
-    /*background: url(images/grid.png);*/
+    background: url(images/grid.png);
 	
 }
 h1, h2, h3, h4, h5, h6 {
@@ -353,7 +353,7 @@ a:hover {
 
 #header {
     background: rgba(0,0,0,0.1);
-    padding-bottom:16px;
+    padding-bottom:18px;
     padding-top:24px;
     /*margin-top:16px; */
 }
@@ -363,7 +363,7 @@ a:hover {
     }
 h1#site-title, #site-title {
 	float: left;
-	margin: 0 0 0.34em 0;
+	margin: 0 0 0.31em 0;
 	font-size:4.236em;
 	font-weight:bold;
 	line-height: 1.062em;
@@ -378,6 +378,7 @@ h1#site-title, #site-title {
 	font-style: italic;
 	float:left;
 	line-height:1.5em;
+	margin-bottom:0;
 }
 
 /* This is the custom header image */
@@ -396,6 +397,9 @@ h1#site-title, #site-title {
 	background: transparent;
 	display: block;
 	float: right;
+	font-size:1em;
+	line-height:1.5em;
+	margin-top:1.83em;
 }
 #access .menu-header,
 div.menu {
@@ -544,18 +548,7 @@ div.menu li {
 .single .hentry {
 	margin: 0 0 36px 0;
 }
-.page-title {
-	color: #000;
-	font-size: 14px;
-	font-weight: bold;
-	margin: 0 0 36px 0;
-}
-.page-title span {
-	color: #333;
-	font-size: 16px;
-	font-style: italic;
-	font-weight: normal;
-}
+
 .page-title a:link,
 .page-title a:visited {
 	color: #888;
@@ -565,7 +558,7 @@ div.menu li {
 .page-title a:hover {
 	color: #ff4b33;
 }
-#content .entry-title {
+#content .entry-title, .page-title {
 	color: #333;
 	font-weight: bold;
 	font-size: 2.25em;
@@ -770,6 +763,7 @@ div.format-gallery .entry-content p, div.format-gallery .entry-meta, div.format-
 body.category-galleries #content div.format-gallery .entry-title {
     text-align: center;
     font-size:1em;
+    border: none;
     }
     
 div.format-gallery {
@@ -1245,7 +1239,7 @@ h3#reply-title {
 	padding-bottom:3em;
 }
 #colophon {
-
+    padding-top:1.88em;
 }
 #site-info {
 	font-weight: bold;
@@ -1391,9 +1385,7 @@ label.horiz {
 	}
 	
 #header-widgets li {
-    position:absolute;
-    top:0px;
-    right:0px;
+    float:right;
     width:200px;
     }
     

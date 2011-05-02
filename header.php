@@ -61,7 +61,8 @@
 <body <?php body_class(); ?>>
 	<div id="header" class="container hfeed">
 		<div id="masthead" class="row">
-			<div id="branding" role="banner">
+		  <div class="fourcol">
+		      <div id="branding" role="banner">
 				<?php $heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div'; ?>
 				<<?php echo $heading_tag; ?> id="site-title">
 					<span>
@@ -71,8 +72,11 @@
 				
 				<div id="site-description"><?php bloginfo( 'description' ); ?></div>
 				
-            </div><!-- #branding -->
-				
+                </div><!-- #branding -->
+                
+                </div><!-- fourcol -->
+            
+				<div class="eightcol last" style="position:relative;">
 				<?php
 	// A second sidebar for widgets, just because.
 	if ( is_active_sidebar( 'header-widget-area' ) ) : ?>
@@ -91,10 +95,8 @@
 				<?php /* Our navigation menu.  If one isn't filled out, wp_nav_menu falls back to wp_page_menu.  The menu assiged to the primary position is the one used.  If none is assigned, the menu with the lowest ID is used.  */ ?>
 				<?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' ) ); ?>
 			</div><!-- #access -->
-    
-            
-			
-
+       
+            </div><!-- fourcol  --> 
 			
 		</div><!-- #masthead -->
 	</div><!-- #header -->
