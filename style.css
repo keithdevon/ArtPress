@@ -97,6 +97,10 @@ DESCRIPTION: Full width content with no sidebar; used for attachment pages
 	margin: 0 auto;
 }
 
+.entry-attachment {
+    margin:3em 0;
+    }
+
 
 /* =Fonts
 -------------------------------------------------------------- */
@@ -197,6 +201,11 @@ hr {
 
 /* Text elements */
 
+h1, h2, h3, h4, h5, #access {
+    color: #333;
+    text-shadow: 1px 1px 1px rgba(256,256,256,.5);
+    }
+
 h1 {
     font-size: 2.25em;
     line-height: 1.334em;
@@ -209,6 +218,8 @@ h2 {
     line-height:1.3333em;
     margin-bottom: 0.54em;
     padding-top:.81em;
+    font-weight:bold;
+    border-bottom: 2px dotted #ddd;
     }
     
 h3 {
@@ -359,6 +370,7 @@ h1#site-title, #site-title {
 	width:100%;
 	padding-top:.15em;
 }
+
 #site-title a {
 	text-decoration: none;
 }
@@ -383,8 +395,7 @@ h1#site-title, #site-title {
 #access {
 	background: transparent;
 	display: block;
-	float: left;
-	margin-top:24px;
+	float: right;
 }
 #access .menu-header,
 div.menu {
@@ -756,9 +767,20 @@ div.format-gallery .entry-content p, div.format-gallery .entry-meta, div.format-
     display:none;
     }
     
-/*body.archive*/ div.format-gallery .entry-title {
+body.category-galleries #content div.format-gallery .entry-title {
     text-align: center;
+    font-size:1em;
     }
+    
+div.format-gallery {
+    min-height:10em;
+    }
+    
+body.single-format-gallery div.format-gallery {
+    width:100%;
+    float:none;
+    } 
+    
 
 /* =Attachment pages
 -------------------------------------------------------------- */
@@ -872,6 +894,7 @@ img.aligncenter {
 }
 .gallery img {
 	border: 10px solid #f1f1f1;
+	margin-bottom:1.5em;
 }
 .gallery br+br {
 	display: none;
@@ -1381,3 +1404,4 @@ label.horiz {
 img {
     box-shadow: 0px 3px 7px rgba(0,0,0,0.2);
     }
+    

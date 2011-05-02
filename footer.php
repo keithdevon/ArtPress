@@ -14,7 +14,6 @@
 
 	<div id="footer" class="container" role="contentinfo">
 		<div id="colophon" class="row">
-		<h2 style="margin-bottom:24px;">Footer</h2>
 
 <?php
 	/* A sidebar in the footer? Yep. You can can customize
