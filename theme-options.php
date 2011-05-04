@@ -18,6 +18,12 @@ function artpress_options_load_scripts() {
  */
 function theme_options_init(){
     register_setting( 'artpress_options', 'artpress_theme_options', 'artpress_options_validate' );
+    
+    register_setting( 'artpress_options_bi', 'ap_background_image_settings', 'ap_bi_validate' );
+    add_settings_section( 'ap_bi_section', 'Background Images', 'background_images_form', 'ap_bi_page' );
+    add_settings_field('ap_bi_1', 'Background Image 1', 'ap_bi_html', 'ap_bi_page', 'ap_bi_section', '1');
+    add_settings_field('ap_bi_2', 'Background Image 2', 'ap_bi_html', 'ap_bi_page', 'ap_bi_section', '2');
+        
     $options = get_option('artpress_theme_options');
     $padded_with_default_options = artpress_options_validate($options);
     update_option('artpress_theme_options', $padded_with_default_options);   
@@ -26,14 +32,12 @@ function theme_options_init(){
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_theme_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options', 'artpress_options_do_page' );
+        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options', 'artpress_options_do_page' );
 }
-/** style element creator functions */
-function create_element_options($color, $background_color, $font_size, $font_family, $padding) {
-    
-}
-function create_style_element($element_name, $element_selector, $element_options) {
-    
+
+function ap_bi_html($number) {
+    echo "<input type='file' name='ap_bi_{$number}' size='40' />";
+    echo "<img src='ap_bi_{$number}' height='40' />";
 }
 /**
  * Create the options page
@@ -49,18 +53,30 @@ function artpress_options_do_page() {
 
     ?>
     <div class="wrap">
+	    <h3>Upload background images</h3>
+   	    <p>You can upload a file. It'll go in the uploads directory.</p>
+        <form method="post" enctype="multipart/form-data" action="options.php">
+   	        <?php settings_fields('artpress_options_bi'); ?>
+            <?php do_settings_sections('ap_bi_page'); ?>
+            <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Upload Images') ?>" /></p>
+        </form>
+    </div>
+    
+    <div class="wrap">
         <?php 
         screen_icon(); echo "<h2>" . get_current_theme() . __( ' Options' ) . "</h2>"; 
         if ( false !== $_REQUEST['updated'] ) : ?>
         	<div class="updated fade"><p><strong><?php _e( 'Options saved' ); ?></strong></p></div>
         <?php endif; ?>
+        
+        
 
         <form method="post" action="options.php">
             <?php 
             settings_fields( 'artpress_options' ); 
             $settings = get_option( 'artpress_theme_options' );
             //echo '<h3>settings</h3><pre>'; var_dump($settings); echo '</pre>';
-            $testsettings = array(
+            /*$testsettings = array(
                 'colors' => array('#ff0000', '#00ff00', '#0000ff', '#999999'), 
                 'fonts' => array('georgia', 'arial', 'tahoma'),
                 'base_text_size' => '1em',
@@ -81,7 +97,7 @@ function artpress_options_do_page() {
                         'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' )
                     )
                 )
-            );
+            );*/
             //echo '<pre><h3>testsettings</h3>'; var_dump($testsettings); echo '</pre>';
             //$settings = $testsettings;
             ?>
@@ -327,5 +343,11 @@ function artpress_options_validate( $input ) {
     //$input['sometextarea'] = wp_filter_post_kses( $input['sometextarea'] );
     
     return $input;
+}
+
+function ap_bi_validate($input) {
+    foreach(array_keys($_FILES) as $file_name) {
+        //if $file_name
+    }
 }
 
