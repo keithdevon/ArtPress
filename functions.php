@@ -593,7 +593,7 @@ endif;
 // ------ Add settings pages
 
 require_once ( get_template_directory() . '/theme-options.php' );
-
+require_once ( get_template_directory() . '/background-images.php' );
 
 
 /* For adding custom field to gallery popup */
