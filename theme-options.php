@@ -312,23 +312,6 @@ function artpress_options_validate( $input ) {
         }
     }
     
-    
-    // Say our text option must be safe text with no HTML tags
-    //$input['sometext'] = wp_filter_nohtml_kses( $input['sometext'] );
-    
-    // Our select option must actually be in our array of select options
-    //if ( ! array_key_exists( $input['selectinput'], $select_options ) )
-       // $input['selectinput'] = null;
-    
-    // Our radio option must actually be in our array of radio options
-    /*if ( ! isset( $input['radioinput'] ) )
-        $input['radioinput'] = null;
-    if ( ! array_key_exists( $input['radioinput'], $radio_options ) )
-        $input['radioinput'] = null;*/
-    
-    // Say our textarea option must be safe text with the allowed tags for posts
-    //$input['sometextarea'] = wp_filter_post_kses( $input['sometextarea'] );
-    
     return $input;
 }
 
