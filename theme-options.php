@@ -40,7 +40,7 @@ function theme_options_add_page() {
 }
 
 function ap_bi_section_html() {
-    echo "<h3>Background Image Section</h3>";
+    //echo "<h3>Background Image Section</h3>";
 }
 
 function ap_bi_html($number) {
@@ -48,6 +48,7 @@ function ap_bi_html($number) {
     $file_id = $background_image_prefix . $number;
     $file_paths = get_option('ap_background_image_settings');
     $label = "<p>not set</p>";
+    $path = ''; $image = '';
     if (isset($file_paths[$file_id]['url'])) {
         $url = $file_paths[$file_id]['url'];
         $path = $file_paths[$file_id]['file'];
@@ -71,8 +72,6 @@ function artpress_options_do_page() {
 
     ?>
     <div class="wrap">
-	    <h3>Upload background images</h3>
-   	    <p>You can upload a file. It'll go in the uploads directory.</p>
         <form method="post" enctype="multipart/form-data" action="options.php">
    	        <?php settings_fields('artpress_options_bi'); ?>
             <?php do_settings_sections('theme_options_slug'); ?>
@@ -103,7 +102,7 @@ function artpress_options_do_page() {
                 // $output = ht_th(__('Color 0'), "row");
                 // $output .= td(ht_input_text('[colors][0]','colorwell', esc_attr( $settings['colors'][0] ), '7'));
 
-                echo tr($output);
+                //echo tr($output);
                 
                 // output the rest of the color fields
                 foreach (array_keys($settings['colors']) as $color ) {
