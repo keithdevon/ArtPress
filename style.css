@@ -29,7 +29,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	vertical-align: baseline;
 }
 body {
-    /*background: url(images/grid.png);*/
+    background: url(images/grid.png);
 	
 }
 h1, h2, h3, h4, h5, h6 {
@@ -71,7 +71,10 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 }
 .row {
     padding-top:1.5em;
-    overflow: visible;/* added to allow nav dropdowns */
+    overflow: hidden;
+    }
+#masthead {
+    overflow: visible;
     }
 
 #content {
@@ -541,9 +544,9 @@ div.menu li {
 #content tr.odd td {
 	background: #f2f7fc;
 }
-.hentry {
+/*.hentry {
 	margin: 0 0 48px 0;
-}
+} removed to allow  the grid system to do it's thang - kdev */
 .home .sticky {
 	background: #f2f7fc;
 	border-top: 4px solid #000;
@@ -551,9 +554,9 @@ div.menu li {
 	margin-right: -20px;
 	padding: 18px 20px;
 }
-.single .hentry {
+/*.single .hentry {
 	margin: 0 0 36px 0;
-}
+} removed to allow  the grid system to do it's thang - kdev */
 
 .page-title a:link,
 .page-title a:visited {
@@ -571,6 +574,14 @@ div.menu li {
 	line-height: 1.334em;
 	margin-bottom: .58em;
 	padding-top:.12em;
+}
+#content .entry-title {
+	color: #333;
+	font-weight: bold;
+	font-size:1.5em;
+    line-height:1em;
+    margin-bottom: 1.2em;
+    padding-top:.85em;
 }
 .entry-title a:link,
 .entry-title a:visited {
@@ -745,7 +756,7 @@ body.page .edit-link {
 	border: 10px solid #f1f1f1;
 	margin-bottom: 0;
 }
-.format-gallery .gallery-thumb,
+
 .category-gallery .gallery-thumb {
 	text-align: center;
 	margin-top: -4px;
@@ -758,8 +769,11 @@ body.page .edit-link {
 /* ArtPress Gallery format styling */
 
 body.category-galleries div.format-gallery {
-    width:33%;
-    float:left;
+    text-align:center;
+    }
+    
+body.category-galleries #content div.format-gallery .entry-title {
+    font-size: 1em;
     }
     
 body.category-galleries div.format-gallery .entry-content p, body.category-galleries div.format-gallery .entry-meta, body.category-galleries div.format-gallery .entry-utility {
@@ -780,6 +794,10 @@ body.single-format-gallery div.format-gallery {
     width:100%;
     float:none;
     } 
+    
+div.gallery-thumb {
+    height:170px;
+    }
     
 
 /* =Attachment pages
@@ -865,14 +883,17 @@ img.aligncenter {
 	float: left;
 	margin-top: 0;
 	text-align: center;
-	width: 33%;
+	/*width: 33%; removed to allow col classes to take over layout*/
 }
+/*
+These are now being handled by our column divs - kdev
+
 .gallery-columns-2 .gallery-item {
 	width: 50%;
 }
 .gallery-columns-4 .gallery-item {
 	width: 25%;
-}
+}*/
 .gallery img {
 	border: 2px solid #cfcfcf;
 }
