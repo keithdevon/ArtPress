@@ -98,12 +98,6 @@ function artpress_options_do_page() {
                 <?php 
                 echo ht_form_text_field('Base text size', '[base_text_size]', esc_attr( $settings['base_text_size']), __( "example options: '16px', '1em' or '100%'" ), '5');
                 
-                // output the first color field and the td containing the color picker
-                // $output = ht_th(__('Color 0'), "row");
-                // $output .= td(ht_input_text('[colors][0]','colorwell', esc_attr( $settings['colors'][0] ), '7'));
-
-                //echo tr($output);
-                
                 // output the rest of the color fields
                 foreach (array_keys($settings['colors']) as $color ) {
                     $output = '';
