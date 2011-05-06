@@ -23,10 +23,11 @@ function theme_options_init(){
     register_setting( 'artpress_options', 'artpress_theme_options', 'artpress_options_validate' );
     
     register_setting( 'artpress_options_bi', 'ap_background_image_settings', 'ap_bi_validate' );
-    add_settings_section( 'ap_bi_section', 'Background Images', 'background_images_form', 'theme_options_slug' );
+    add_settings_section( 'ap_bi_section', 'Background Images', 'ap_bi_section_html', 'theme_options_slug' );
     add_settings_field( $background_image_prefix . '1', 'Background Image 1', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '1');
     add_settings_field( $background_image_prefix . '2', 'Background Image 2', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '2');
-        
+    add_settings_field( $background_image_prefix . '3', 'Background Image 3', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '3');
+            
     $options = get_option('artpress_theme_options');
     $padded_with_default_options = artpress_options_validate($options);
     update_option('artpress_theme_options', $padded_with_default_options);   
@@ -38,11 +39,16 @@ function theme_options_add_page() {
         add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'artpress_options_do_page' );
 }
 
+function ap_bi_section_html() {
+    //echo "<h3>Background Image Section</h3>";
+}
+
 function ap_bi_html($number) {
     global $background_image_prefix;
     $file_id = $background_image_prefix . $number;
     $file_paths = get_option('ap_background_image_settings');
     $label = "<p>not set</p>";
+    $path = ''; $image = '';
     if (isset($file_paths[$file_id]['url'])) {
         $url = $file_paths[$file_id]['url'];
         $path = $file_paths[$file_id]['file'];
@@ -66,8 +72,6 @@ function artpress_options_do_page() {
 
     ?>
     <div class="wrap">
-	    <h3>Upload background images</h3>
-   	    <p>You can upload a file. It'll go in the uploads directory.</p>
         <form method="post" enctype="multipart/form-data" action="options.php">
    	        <?php settings_fields('artpress_options_bi'); ?>
             <?php do_settings_sections('theme_options_slug'); ?>
@@ -88,31 +92,6 @@ function artpress_options_do_page() {
             <?php 
             settings_fields( 'artpress_options' ); 
             $settings = get_option( 'artpress_theme_options' );
-            //echo '<h3>settings</h3><pre>'; var_dump($settings); echo '</pre>';
-            /*$testsettings = array(
-                'colors' => array('#ff0000', '#00ff00', '#0000ff', '#999999'), 
-                'fonts' => array('georgia', 'arial', 'tahoma'),
-                'base_text_size' => '1em',
-                'page_width' => '1024px',
-                'section_settings' => array(
-                    'body' => array(
-                        'css_selector'    => 'body',
-                        'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
-                        'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
-                        'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix' => 'Color' , 'value'=>'3'),
-                        'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
-                        'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' )
-                    ),                
-                    'page' => array(
-                        'css_selector'    => '' , 
-                        'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'2' ), 
-                        'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
-                        'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' )
-                    )
-                )
-            );*/
-            //echo '<pre><h3>testsettings</h3>'; var_dump($testsettings); echo '</pre>';
-            //$settings = $testsettings;
             ?>
             <h3>Global settings</h3>
             <table class="form-table">
@@ -123,7 +102,7 @@ function artpress_options_do_page() {
                 // $output = ht_th(__('Color 0'), "row");
                 // $output .= td(ht_input_text('[colors][0]','colorwell', esc_attr( $settings['colors'][0] ), '7'));
 
-                echo tr($output);
+                //echo tr($output);
                 
                 // output the rest of the color fields
                 foreach (array_keys($settings['colors']) as $color ) {
@@ -268,7 +247,8 @@ function artpress_options_validate( $input ) {
         	'css_selector'=>'body',
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix' => 'Color' , 'value'=>'3'),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
+            'background-image'=> array( 'row_label'=>'background image', 'field_blurb_suffix'=>'tick to use a background image' ),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
     

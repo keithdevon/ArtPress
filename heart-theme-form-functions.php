@@ -81,6 +81,9 @@ function ht_create_form_group($settings, $group) {
                                                 $css_attr_arr['row_label'], 
                                                 $css_attr_arr['field_blurb_prefix']);
                 break;
+            case 'background-image':
+                $output .= ht_create_checkbox();
+                
             case 'background-color':
                 $misc_cell .= ht_form_cell_radio('[section_settings][' . $group . '][background-color][value]',
                                                  'transparent', 
