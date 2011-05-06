@@ -29,7 +29,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	vertical-align: baseline;
 }
 body {
-    background: url(images/grid.png);
+    /*background: url(images/grid.png);*/
 	
 }
 h1, h2, h3, h4, h5, h6 {
@@ -72,7 +72,6 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 .row {
     padding-top:1.5em;
     }
-
 
 #content {
 
@@ -205,6 +204,10 @@ h1, h2, h3, h4, h5, #access {
     color: #333;
     text-shadow: 1px 1px 1px rgba(256,256,256,.5);
     }
+    
+#site-title, h1, h2, h3, h4 {
+	text-rendering: optimizeLegibility; 
+	}
 
 h1 {
     font-size: 2.25em;
@@ -448,8 +451,8 @@ div.menu li {
 }
 #access li:hover > a,
 #access ul ul :hover > a {
-	background: #333;
-	color: #fff;
+	background: #ddd;
+	color: #111;
 }
 #access ul li:hover > ul {
 	display: block;
