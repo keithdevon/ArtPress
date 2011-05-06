@@ -16,13 +16,16 @@ function artpress_options_load_scripts() {
 /**
  * Init plugin options to white list our options
  */
+$background_image_prefix = 'ap_bi_';
+
 function theme_options_init(){
+    global $background_image_prefix;
     register_setting( 'artpress_options', 'artpress_theme_options', 'artpress_options_validate' );
     
     register_setting( 'artpress_options_bi', 'ap_background_image_settings', 'ap_bi_validate' );
-    add_settings_section( 'ap_bi_section', 'Background Images', 'background_images_form', 'ap_bi_page' );
-    add_settings_field('ap_bi_1', 'Background Image 1', 'ap_bi_html', 'ap_bi_page', 'ap_bi_section', '1');
-    add_settings_field('ap_bi_2', 'Background Image 2', 'ap_bi_html', 'ap_bi_page', 'ap_bi_section', '2');
+    add_settings_section( 'ap_bi_section', 'Background Images', 'background_images_form', 'theme_options_slug' );
+    add_settings_field( $background_image_prefix . '1', 'Background Image 1', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '1');
+    add_settings_field( $background_image_prefix . '2', 'Background Image 2', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '2');
         
     $options = get_option('artpress_theme_options');
     $padded_with_default_options = artpress_options_validate($options);
@@ -32,12 +35,22 @@ function theme_options_init(){
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options', 'artpress_options_do_page' );
+        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'artpress_options_do_page' );
 }
 
 function ap_bi_html($number) {
-    echo "<input type='file' name='ap_bi_{$number}' size='40' />";
-    echo "<img src='ap_bi_{$number}' height='40' />";
+    global $background_image_prefix;
+    $file_id = $background_image_prefix . $number;
+    $file_paths = get_option('ap_background_image_settings');
+    $label = "<p>not set</p>";
+    if (isset($file_paths[$file_id]['url'])) {
+        $url = $file_paths[$file_id]['url'];
+        $path = $file_paths[$file_id]['file'];
+        $image = "<img src='{$url}' height='40' />";
+        $label = "<p>{$path}</p>";
+    }
+    $input = "<input type='file' name='{$file_id}' size='40' value='{$path}'/>";
+    echo $image. $label . $input;
 }
 /**
  * Create the options page
@@ -57,7 +70,7 @@ function artpress_options_do_page() {
    	    <p>You can upload a file. It'll go in the uploads directory.</p>
         <form method="post" enctype="multipart/form-data" action="options.php">
    	        <?php settings_fields('artpress_options_bi'); ?>
-            <?php do_settings_sections('ap_bi_page'); ?>
+            <?php do_settings_sections('theme_options_slug'); ?>
             <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Upload Images') ?>" /></p>
         </form>
     </div>
@@ -346,8 +359,18 @@ function artpress_options_validate( $input ) {
 }
 
 function ap_bi_validate($input) {
+    global $background_image_prefix;
+    $override_defaults = array('test_form' => false); 
+    $options = get_option('ap_background_image_settings');
+    
     foreach(array_keys($_FILES) as $file_name) {
-        //if $file_name
+        $prefix = substr($file_name, 0, strlen($background_image_prefix)); 
+        if ( $prefix == $background_image_prefix // make sure the file is named correctly 
+             && $_FILES[$file_name]['name'] != "" ) {    // make sure that it isn't empty TODO how do we handle deleting a file?
+            $file = wp_handle_upload($_FILES[$file_name], $override_defaults); // store the file in the database
+            $options[$file_name] = $file;
+        }
     }
+    return $options;
 }
 
