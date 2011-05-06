@@ -71,6 +71,7 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 }
 .row {
     padding-top:1.5em;
+    overflow: visible;/* added to allow nav dropdowns */
     }
 
 #content {
@@ -86,6 +87,9 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 #footer {
     background: rgba(0,0,0,0.1);;
 }
+.clear {
+    clear:both;
+    }
 
 /*
 LAYOUT: Full width, no sidebar
@@ -753,16 +757,16 @@ body.page .edit-link {
 
 /* ArtPress Gallery format styling */
 
-/*body.archive*/ div.format-gallery {
+body.category-galleries div.format-gallery {
     width:33%;
     float:left;
     }
     
-div.format-gallery .entry-content p, div.format-gallery .entry-meta, div.format-gallery .entry-utility {
+body.category-galleries div.format-gallery .entry-content p, body.category-galleries div.format-gallery .entry-meta, body.category-galleries div.format-gallery .entry-utility {
     display:none;
     }
     
-body.category-galleries #content div.format-gallery .entry-title {
+body.category-galleries body.category-galleries #content div.format-gallery .entry-title {
     text-align: center;
     font-size:1em;
     border: none;

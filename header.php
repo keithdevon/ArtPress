@@ -81,7 +81,7 @@
                 <?php get_template_part( 'main-nav' );           // Main Nav file (main-nav.php) ?>
        
             </div><!-- eightcol  --> 
-			
+			<div class="clear"></div>
 		</div><!-- #masthead -->
 	</div><!-- #header -->
 

@@ -10,6 +10,7 @@
  * @since Twenty Ten 1.0
  */
 ?>
+    <div class="clear"></div>
 	</div><!-- #main -->
 
 	<div id="footer" class="container" role="contentinfo">
@@ -34,6 +35,7 @@
 			</div><!-- #site-generator -->
 
 		</div><!-- #colophon -->
+		<div class="clear"></div>
 	</div><!-- #footer -->
 
 <?php
