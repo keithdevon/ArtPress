@@ -89,7 +89,7 @@ function ht_create_form_group($settings, $group) {
             case 'background-image':
                 $output .= ht_form_checkbox($css_attr_arr['row_label'],
                                             "[section_settings][{$group}][{$css_attr}][value]",
-                                            "[section_settings][{$group}][{$css_attr}][checked]", 
+                                            $css_attr_arr['value'],
                                             $css_attr_arr['checked'], 
                                             __( $css_attr_arr['field_blurb_suffix'] ));
                 break;

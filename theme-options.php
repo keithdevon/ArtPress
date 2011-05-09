@@ -315,7 +315,7 @@ function artpress_options_validate( $input ) {
                     if ( ! isset( $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] ) ) 
                                   $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] = 'tick to use a background image';
                     if ( ! isset( $input['section_settings'][$section][$css_attr]['value'] ) )              
-                                  $input['section_settings'][$section][$css_attr]['value'] = 'reset';                                              
+                                  $input['section_settings'][$section][$css_attr]['value'] = 'use_background_image';                                              
                     if ( ! isset( $input['section_settings'][$section][$css_attr]['checked'] ) ) {             
                                   $input['section_settings'][$section][$css_attr]['checked'] = '';
                     }                                                  
