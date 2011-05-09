@@ -1,7 +1,10 @@
 <?php
 /** Generic HTML generating functions */
 /* Generic HTML attribute functions */
-function attribute($name, $value) { return ' ' . $name . '="' . $value . '"'; }
+function attribute($name, $value) { 
+    if ( $value == '' ) return null;
+    else return ' ' . $name . '="' . $value . '"'; } 
+// TODO if $value is null should this function return null? 
 function attr_id ($value)         { return attribute('id', $value); }
 function attr_name ($value)       { return attribute('name', $value); }
 function attr_class ($value)      { return attribute('class', $value); }

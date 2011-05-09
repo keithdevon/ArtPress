@@ -103,7 +103,7 @@ function artpress_options_do_page() {
 
                 <table class="form-table">
                     <?php 
-                    echo ht_form_checkbox("Reset", '[ap_reset]', 'reset', false, "check this box and hit reset to reset all options");
+                    echo ht_form_checkbox("Reset", '[ap_reset]', false, "check this box and hit reset to reset all options", 'reset');
                     
                     echo ht_form_text_field('Base text size', '[base_text_size]', esc_attr( $settings['base_text_size']), __( "example options: '16px', '1em' or '100%'" ), '5');
                     
@@ -259,7 +259,7 @@ function artpress_options_validate( $input ) {
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
-            'background-image'=> array( 'row_label'=>'background image', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'use_background_image', 'checked'=>''),
+            'background-image'=> array( 'row_label'=>'background image', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
     
@@ -315,10 +315,9 @@ function artpress_options_validate( $input ) {
                     if ( ! isset( $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] ) ) 
                                   $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] = 'tick to use a background image';
                     if ( ! isset( $input['section_settings'][$section][$css_attr]['value'] ) )              
-                                  $input['section_settings'][$section][$css_attr]['value'] = 'use_background_image';                                              
-                    if ( ! isset( $input['section_settings'][$section][$css_attr]['checked'] ) ) {             
-                                  $input['section_settings'][$section][$css_attr]['checked'] = '';
-                    }                                                  
+                                  $input['section_settings'][$section][$css_attr]['value'] = 'off';
+                    if ( $input['section_settings'][$section][$css_attr]['value'] != 'on') 
+                                  $input['section_settings'][$section][$css_attr]['value'] = 'off';                                                                                                
                     break;                                  
                 case 'padding':         
                     if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )          

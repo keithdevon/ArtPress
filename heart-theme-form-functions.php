@@ -20,7 +20,7 @@ function ht_input_hidden ($id, $value) { // TODO not great having to do this. DB
 function ht_input_radio ($id, $is_checked, $value) {
         return ht_input( $id, 'radio',  attr_value($value) . attr_checked($is_checked ) );
 }
-function ht_input_checkbox ($id, $value, $is_checked) {
+function ht_input_checkbox ($id, $is_checked, $value='') {
         return ht_input( $id, 'checkbox', attr_value($value) . attr_checked($is_checked ) );
 }
 function ht_form_field($field_name, $content) {
@@ -34,10 +34,10 @@ function ht_form_text_field($field_name, $id, $value, $field_blurb, $size="5") {
                                     . ht_label('description', $id, $field_blurb), 
                        $field_blurb);
 }
-function ht_form_checkbox($field_name, $id, $value, $is_checked, $field_blurb) {
+function ht_form_checkbox($field_name, $id, $is_checked, $field_blurb, $value='') {
     $output = ot( 'tr', attr_valign('top') )
         . ht_th( $field_name, "row" )
-        . td( ht_input_checkbox( $id, $value, $is_checked )
+        . td( ht_input_checkbox( $id, $is_checked, $value )
         . ht_label ('description', $id, $field_blurb) )
         . ct( 'tr' );
     return $output;
@@ -89,9 +89,9 @@ function ht_create_form_group($settings, $group) {
             case 'background-image':
                 $output .= ht_form_checkbox($css_attr_arr['row_label'],
                                             "[section_settings][{$group}][{$css_attr}][value]",
-                                            $css_attr_arr['value'],
-                                            $css_attr_arr['checked'], 
-                                            __( $css_attr_arr['field_blurb_suffix'] ));
+                                            ( $css_attr_arr['value'] == 'on' ) ? true : false, 
+                                            __( $css_attr_arr['field_blurb_suffix']),
+                                            'on' );
                 break;
                 
             case 'background-color':
