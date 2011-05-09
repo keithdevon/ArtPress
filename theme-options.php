@@ -21,9 +21,10 @@ $background_image_prefix = 'ap_bi_';
 function theme_options_init(){
     global $background_image_prefix;
     register_setting( 'artpress_options', 'artpress_theme_options', 'artpress_options_validate' );
-    
     register_setting( 'artpress_options_bi', 'ap_background_image_settings', 'ap_bi_validate' );
+    
     add_settings_section( 'ap_bi_section', 'Background Images', 'ap_bi_section_html', 'theme_options_slug' );
+
     add_settings_field( $background_image_prefix . '1', 'Background Image 1', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '1');
     add_settings_field( $background_image_prefix . '2', 'Background Image 2', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '2');
     add_settings_field( $background_image_prefix . '3', 'Background Image 3', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '3');
@@ -40,8 +41,15 @@ function theme_options_add_page() {
 }
 
 function ap_bi_section_html() {
-    //echo "<h3>Background Image Section</h3>";
+    echo "<p>Upload background images here, blah, blah ...</p>";
 }
+
+function ap_reset_html() { ?>    
+    <form method="post" action="options.php"> <?php 
+        settings_fields( 'artpress_options' ); 
+        $settings = get_option( 'artpress_theme_options' );
+    ?> </form>
+<?php }
 
 function ap_bi_html($number) {
     global $background_image_prefix;
@@ -85,79 +93,80 @@ function artpress_options_do_page() {
         if ( false !== $_REQUEST['updated'] ) : ?>
         	<div class="updated fade"><p><strong><?php _e( 'Options saved' ); ?></strong></p></div>
         <?php endif; ?>
-        
-        
-
+          
         <form method="post" action="options.php">
             <?php 
             settings_fields( 'artpress_options' ); 
             $settings = get_option( 'artpress_theme_options' );
             ?>
             <h3>Global settings</h3>
-            <table class="form-table">
-                <?php 
-                echo ht_form_text_field('Base text size', '[base_text_size]', esc_attr( $settings['base_text_size']), __( "example options: '16px', '1em' or '100%'" ), '5');
-                
-                // output the rest of the color fields
-                foreach (array_keys($settings['colors']) as $color ) {
-                    $output = '';
-                    $id = '[colors][' . $color . ']';
-                    $output = ht_th(__('Color ' . $color), "row");
-                    $output .= td(ht_input_text('[colors][' . $color . ']','colorwell', esc_attr( $settings['colors'][$color] ), '7'));
-                    if ($color == '0') {
-                        $output .= td( div('', attr_id('picker')),
-                                       attribute('rowspan', '6') . attr_valign('top'));
+
+                <table class="form-table">
+                    <?php 
+                    echo ht_form_checkbox("Reset", '[ap_reset]', 'reset', false, "check this box and hit reset to reset all options");
+                    
+                    echo ht_form_text_field('Base text size', '[base_text_size]', esc_attr( $settings['base_text_size']), __( "example options: '16px', '1em' or '100%'" ), '5');
+                    
+                    // output the rest of the color fields
+                    foreach (array_keys($settings['colors']) as $color ) {
+                        $output = '';
+                        $id = '[colors][' . $color . ']';
+                        $output = ht_th(__('Color ' . $color), "row");
+                        $output .= td(ht_input_text('[colors][' . $color . ']','colorwell', esc_attr( $settings['colors'][$color] ), '7'));
+                        if ($color == '0') {
+                            $output .= td( div('', attr_id('picker')),
+                                           attribute('rowspan', '6') . attr_valign('top'));
+                        }
+                        echo tr($output);
                     }
-                    echo tr($output);
-                }
-                
-                // output the font selectors
-                $cells = '';
-                foreach (array_keys($settings['fonts']) as $font) {
-                    $id = '[fonts][' . $font . ']';
-                    $cells .= ht_form_cell($id,    'fontfamily', esc_attr( $settings['fonts'][$font] ), '7', __( 'Font ' . $font ));
-                }              
-                echo ht_form_field('Fonts',
-                    table(
-                        tr($cells),    
-                        attr_valign('top')
-                    )
-                );
-           
-                // output the page width selector
-                echo ht_form_text_field('Page Width', '[page_width]', esc_attr( $settings['page_width']), __( "example options: '1000px', '30em' or '100%'" ), '6');
-                                /* Color Pickers */ ?>
-                        <script>
-                    jQuery(document).ready(function() {
-                        var f = jQuery.farbtastic('#picker');
-                        var p = jQuery('#picker').css('opacity', 0.25);
-                        var selected;
-                        jQuery('.colorwell')
-                          .each(function () { f.linkTo(this); jQuery(this).css('opacity', 0.75); })
-                          .focus(function() {
-                            if (selected) {
-                              jQuery(selected).css('opacity', 0.75).removeClass('colorwell-selected');
-                            }
-                            f.linkTo(this);
-                            p.css('opacity', 1);
-                            jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
+                    
+                    // output the font selectors
+                    $cells = '';
+                    foreach (array_keys($settings['fonts']) as $font) {
+                        $id = '[fonts][' . $font . ']';
+                        $cells .= ht_form_cell($id,    'fontfamily', esc_attr( $settings['fonts'][$font] ), '7', __( 'Font ' . $font ));
+                    }              
+                    echo ht_form_field('Fonts',
+                        table(
+                            tr($cells),    
+                            attr_valign('top')
+                        )
+                    );
+               
+                    // output the page width selector
+                    echo ht_form_text_field('Page Width', '[page_width]', esc_attr( $settings['page_width']), __( "example options: '1000px', '30em' or '100%'" ), '6');
+                                    /* Color Pickers */ ?>
+                            <script>
+                        jQuery(document).ready(function() {
+                            var f = jQuery.farbtastic('#picker');
+                            var p = jQuery('#picker').css('opacity', 0.25);
+                            var selected;
+                            jQuery('.colorwell')
+                              .each(function () { f.linkTo(this); jQuery(this).css('opacity', 0.75); })
+                              .focus(function() {
+                                if (selected) {
+                                  jQuery(selected).css('opacity', 0.75).removeClass('colorwell-selected');
+                                }
+                                f.linkTo(this);
+                                p.css('opacity', 1);
+                                jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
+                              });
                           });
-                      });
-                 </script>
-                 
-                <?php 
-                // thumbnail shadow
-                //  left offset
-                //  top offset - 
-                //  size - px
-                //  color - rgb(0,0,0);
-                /*echo ht_form_text_field($settings['section_settings'][$group][$css_attr]['row_label'], 
-                							  '[section_settings][' . $group . '][' . $css_attr . '][value]', 
-                                               esc_attr( $settings['section_settings'][$group][$css_attr]['value']),
-                                               __( $settings['section_settings'][$group][$css_attr]['field_blurb_suffix'] ), 
-                                               '5');*/ 
-                ?>
-                </table>
+                     </script>
+                     
+                    <?php 
+                    // thumbnail shadow
+                    //  left offset
+                    //  top offset - 
+                    //  size - px
+                    //  color - rgb(0,0,0);
+                    /*echo ht_form_text_field($settings['section_settings'][$group][$css_attr]['row_label'], 
+                    							  '[section_settings][' . $group . '][' . $css_attr . '][value]', 
+                                                   esc_attr( $settings['section_settings'][$group][$css_attr]['value']),
+                                                   __( $settings['section_settings'][$group][$css_attr]['field_blurb_suffix'] ), 
+                                                   '5');*/ 
+                    ?>
+                    </table>
                 <p class="submit"><input type="submit" class="button-primary" value="<?php _e( 'Save Options' ); ?>" /></p>
 
                 <?php echo ht_create_form($settings); ?>
@@ -203,6 +212,14 @@ function is_valid_color_string($str) {
 function artpress_options_validate( $input ) {
     global $select_options, $radio_options, $artpress_colors, $num_colors;
     
+    if (!(isset( $input['ap_reset'] ))) { 
+        $input['ap_reset'] = '';
+    }
+    
+    if ( $input['ap_reset'] == 'reset' ) {
+        $input = array();
+    }
+    
     // GLOBAL SETTINGS CORRECTION
     
     // correct the base text size
@@ -242,7 +259,7 @@ function artpress_options_validate( $input ) {
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
-            'background-image'=> array( 'row_label'=>'background image', 'field_blurb_suffix'=>'tick to use a background image' ),
+            'background-image'=> array( 'row_label'=>'background image', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'use_background_image', 'checked'=>''),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
     
@@ -291,7 +308,18 @@ function artpress_options_validate( $input ) {
                                   $input['section_settings'][$section][$css_attr]['field_blurb_prefix'] = 'Color';
                     if ( ! isset( $input['section_settings'][$section][$css_attr]['value'] ) )              
                                   $input['section_settings'][$section][$css_attr]['value'] = '0';                
-                    break;              
+                    break; 
+                case 'background-image':      
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )          
+                                  $input['section_settings'][$section][$css_attr]['row_label'] = 'background image';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] ) ) 
+                                  $input['section_settings'][$section][$css_attr]['field_blurb_suffix'] = 'tick to use a background image';
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['value'] ) )              
+                                  $input['section_settings'][$section][$css_attr]['value'] = 'reset';                                              
+                    if ( ! isset( $input['section_settings'][$section][$css_attr]['checked'] ) ) {             
+                                  $input['section_settings'][$section][$css_attr]['checked'] = '';
+                    }                                                  
+                    break;                                  
                 case 'padding':         
                     if ( ! isset( $input['section_settings'][$section][$css_attr]['row_label'] ) )          
                                   $input['section_settings'][$section][$css_attr]['row_label'] = 'padding';

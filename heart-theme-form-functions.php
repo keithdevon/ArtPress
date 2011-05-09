@@ -20,6 +20,9 @@ function ht_input_hidden ($id, $value) { // TODO not great having to do this. DB
 function ht_input_radio ($id, $is_checked, $value) {
         return ht_input( $id, 'radio',  attr_value($value) . attr_checked($is_checked ) );
 }
+function ht_input_checkbox ($id, $value, $is_checked) {
+        return ht_input( $id, 'checkbox', attr_value($value) . attr_checked($is_checked ) );
+}
 function ht_form_field($field_name, $content) {
     return ot( 'tr', attr_valign('top') )
         . ht_th(__($field_name), "row")
@@ -32,11 +35,12 @@ function ht_form_text_field($field_name, $id, $value, $field_blurb, $size="5") {
                        $field_blurb);
 }
 function ht_form_checkbox($field_name, $id, $value, $is_checked, $field_blurb) {
-    return ot( 'tr', attr_valign('top') )
+    $output = ot( 'tr', attr_valign('top') )
         . ht_th( $field_name, "row" )
-        . td( ht_input_checkbox($id, $is_checked, $value, $field_blurb)
+        . td( ht_input_checkbox( $id, $value, $is_checked )
         . ht_label ('description', $id, $field_blurb) )
         . ct( 'tr' );
+    return $output;
 }
 function ht_form_cell ( $id, $class, $value, $size, $field_blurb) {
     return td(  ht_label('description', $id, $field_blurb)
@@ -81,11 +85,17 @@ function ht_create_form_group($settings, $group) {
                                                 $css_attr_arr['row_label'], 
                                                 $css_attr_arr['field_blurb_prefix']);
                 break;
+                
             case 'background-image':
-                $output .= ht_create_checkbox();
+                $output .= ht_form_checkbox($css_attr_arr['row_label'],
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            "[section_settings][{$group}][{$css_attr}][checked]", 
+                                            $css_attr_arr['checked'], 
+                                            __( $css_attr_arr['field_blurb_suffix'] ));
+                break;
                 
             case 'background-color':
-                $misc_cell .= ht_form_cell_radio('[section_settings][' . $group . '][background-color][value]',
+                $misc_cell .= ht_form_cell_radio("[section_settings][{$group}][{$css_attr}][value]",
                                                  'transparent', 
                                                  ($css_attr_arr['value'] == 'transparent') ? true : false, 
                                                  'Transparent');
@@ -102,7 +112,7 @@ function ht_create_form_group($settings, $group) {
             case 'padding':
             case 'margin':
                 $output .= ht_form_text_field($css_attr_arr['row_label'], 
-                							  $css_attr_arr[value], 
+                							  "[section_settings][{$group}][{$css_attr}][value]", 
                                                esc_attr( $css_attr_arr['value'] ),
                                                __( $css_attr_arr['field_blurb_suffix'] ), 
                                                '5');                
