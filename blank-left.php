@@ -27,7 +27,7 @@ get_header(); ?>
 			?>
 
 			</div><!-- #content -->
-			
+			<div class="clear"></div>
 		</div><!-- #container -->
 
 <?php get_footer(); ?>

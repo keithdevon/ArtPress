@@ -78,29 +78,9 @@
 
                 <?php endif; ?>
     
-                <?php get_template_part( 'main-nav' );           // Main Nav file (main-nav.php) ?>
+                <?php get_template_part( 'main-nav' );   // Main Nav file (main-nav.php) ?>
        
             </div><!-- eightcol  --> 
 			<div class="clear"></div>
 		</div><!-- #masthead -->
 	</div><!-- #header -->
-
-	<div id="main" class="container">
-	   <div class="row" style="display:block;">
-	       <div class="twocol"></div>
-	       <div class="eightcol">
-	
-	<?php
-					// Check if this is a post or page, if it has a thumbnail, and if it's a big one
-					if ( is_singular() && current_theme_supports( 'post-thumbnails' ) &&
-							has_post_thumbnail( $post->ID ) &&
-							( /* $src, $width, $height */ $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'post-thumbnail' ) ) &&
-							$image[1] >= HEADER_IMAGE_WIDTH ) :
-						// Houston, we have a new header image!
-						echo get_the_post_thumbnail( $post->ID );
-					elseif ( get_header_image() ) : ?>
-						<img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
-					<?php endif; ?>
-            </div>
-            <div class="twocol last"></div>
-        </div><!-- row -->

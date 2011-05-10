@@ -696,43 +696,43 @@ function attachment_toolbox($size = thumbnail) {
 add_shortcode( '1of3', 'ht_col1of3_shortcode' );//add 3 column shortcode (for columns 1 and 2)
 
 function ht_col1of3_shortcode( $atts, $content = null ) {
-   return '<div style="width:100%; clear:both;"><div class="col1of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+   return '<div style="width:100%; clear:both;"><div class="col1of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; ">' . $content . '</div>';
 }
 
 add_shortcode( '2of3', 'ht_col2of3_shortcode' );//add 3 column shortcode (for column 2)
 
 function ht_col2of3_shortcode( $atts, $content = null ) {
-   return '<div class="col2of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+   return '<div class="col2of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; ">' . $content . '</div>';
 }
 
 add_shortcode( '3of3', 'ht_col3of3_shortcode' );//add 3rd of 3 columns
 
 function ht_col3of3_shortcode( $atts, $content = null ) {
-   return '<div class="col3of3" style="width:30%; margin-right:0%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div></div><div style="clear:both;"></div>';
+   return '<div class="col3of3" style="width:30%; margin-right:0%; margin-bottom:1.5em; float:left; ">' . $content . '</div></div><div style="clear:both;"></div>';
 }
 
 add_shortcode( '1of2', 'ht_col1of2_shortcode' );// add 2 column shotcode
 
 function ht_col1of2_shortcode( $atts, $content = null ) {
-   return '<div class="col1of2" style="width:47.5%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+   return '<div class="col1of2" style="width:47.5%; margin-right:5%; margin-bottom:1.5em; float:left; ">' . $content . '</div>';
 }
 
 add_shortcode( '2of2', 'ht_col2of2_shortcode' );// 2nd of 2 columns
 
 function ht_col2of2_shortcode( $atts, $content = null ) {
-   return '<div class="col2of2" style="width:47.5%; margin-right:0%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div><div style="clear:both;"></div>';
+   return '<div class="col2of2" style="width:47.5%; margin-right:0%; margin-bottom:1.5em; float:left; ">' . $content . '</div><div style="clear:both;"></div>';
 }
 
 add_shortcode( '1of4', 'ht_col1of4_shortcode' );// add 4 column shotcode
 
 function ht_col1of4_shortcode( $atts, $content = null ) {
-   return '<div class="col1of4" style="width:21.4%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+   return '<div class="col1of4" style="width:21.3%; margin-right:5%; margin-bottom:1.5em; float:left; ">' . $content . '</div>';
 }
 
 add_shortcode( '4of4', 'ht_col4of4_shortcode' );// 4th of 4 columns
 
 function ht_col4of4_shortcode( $atts, $content = null ) {
-   return '<div class="col4of4" style="width:21.3%; margin-right:0%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div><div style="clear:both;"></div>';
+   return '<div class="col4of4" style="width:21.3%; margin-right:0%; margin-bottom:1.5em; float:left; ">' . $content . '</div><div style="clear:both;"></div>';
 }
 
 //------Box outs
@@ -803,8 +803,7 @@ add_shortcode('gallery', 'ht_gallery_shortcode');
 /**
  * The Gallery shortcode.
  *
- * This implements the functionality of the Gallery Shortcode for displaying
- * WordPress images on a post.
+ * This overwrites the core WP gallery shortcode and spits out all the images in rows and columns. Yum!
  *
  * @since 2.5.0
  *
@@ -834,9 +833,8 @@ function ht_gallery_shortcode($attr) {
 		'orderby'    => 'menu_order ID',
 		'id'         => $post->ID,
 		'itemcol'    => 'div',
-		'itemtag'    => 'dl',
-		'icontag'    => 'dt',
-		'captiontag' => 'dd',
+		'icontag'    => 'div',
+		'captiontag' => 'div',
 		'columns'    => 3,
 		'size'       => 'thumbnail',
 		'include'    => '',
@@ -872,7 +870,6 @@ function ht_gallery_shortcode($attr) {
 		return $output;
 	}
 
-	$itemtag = tag_escape($itemtag);
 	$captiontag = tag_escape($captiontag);
 	$columns = intval($columns);
 	$itemwidth = $columns > 0 ? floor(100/$columns) : 100;
@@ -904,50 +901,49 @@ function ht_gallery_shortcode($attr) {
 	$size_class = sanitize_html_class( $size );
 	$gallery_div = "<div id='$selector' class='gallery galleryid-{$id} gallery-columns-{$columns} gallery-size-{$size_class}'>";
 	$output = apply_filters( 'gallery_style', $gallery_style . "\n\t\t" . $gallery_div );
-	$output .= "<div class='row'>";
+	$output .= "<div class='row gallery-row'>";
 
 	$i = 0;
 	foreach ( $attachments as $id => $attachment ) {
 		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $size, false, false) : wp_get_attachment_link($id, $size, true, false); 
 	   $break = '';
         $i++;
-        $output .= "<{$itemcol} class='";
+        $output .= "<{$itemcol} class='gallery-item ";
         switch ($columns) {
         case 1:
             $col_class = "twelvecol ";
-            $break = "</div><!-- .row --><div class='row'>";
+            $break = "</div><!-- .row --><div class='row gallery-row'>";
             break;
         case 2:
             $col_class = "sixcol ";
             if(( $i % 2 )==0) {
                 $col_class .= "last";
-                $break = "</div><!-- .row --><div class='row'>";
+                $break = "</div><!-- .row --><div class='row gallery-row'>";
                 }
             break;
         case 3:
             $col_class = "fourcol ";
             if(( $i % 3 )==0) {
                 $col_class .= "last";
-                $break = "</div><!-- .row --><div class='row'>";
+                $break = "</div><!-- .row --><div class='row gallery-row'>";
                 }
             break;
         case 4:
             $col_class = "threecol ";
             if(( $i % 4 )==0) {
                 $col_class .= "last";
-                $break = "</div><!-- .row --><div class='row'>";
+                $break = "</div><!-- .row --><div class='row gallery-row'>";
                 }
             break;
         case 6:
             $col_class = "twocol ";
             if(( $i % 6 )==0) {
                 $col_class .= "last";
-                $break = "</div><!-- .row --><div class='row'>";
+                $break = "</div><!-- .row --><div class='row gallery-row'>";
                 }
             break;
         }
         $output .= $col_class . " '>";
-		$output .= "<{$itemtag} class='gallery-item'>";
 		$output .= "
 			<{$icontag} class='gallery-icon'>
 				$link
@@ -958,7 +954,6 @@ function ht_gallery_shortcode($attr) {
 				" . wptexturize($attachment->post_excerpt) . "
 				</{$captiontag}>";
 		}
-		$output .= "</{$itemtag}>";
 		$output .= "</{$itemcol}>";
 		$output .= $break;
 		/*if ( $columns > 0 && ++$i % $columns == 0 )
@@ -973,3 +968,17 @@ function ht_gallery_shortcode($attr) {
 	return $output;
 }
 
+// Remove height and width from images
+
+add_filter( 'post_thumbnail_html', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'image_send_to_editor', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'the_content', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'wp_get_attachment_link', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'wp_get_attachment_image', 'remove_thumbnail_dimensions', 10 );
+
+
+
+function remove_thumbnail_dimensions( $html ) {
+    $html = preg_replace( '/(width|height)=\"\d*\"\s/', "", $html );
+    return $html;
+}

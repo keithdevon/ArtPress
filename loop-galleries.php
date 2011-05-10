@@ -20,6 +20,7 @@
 ?>
 
 <?php /* Display navigation to next/previous pages when applicable */ ?>
+<div class="row">
 <?php if ( $wp_query->max_num_pages > 1 ) : ?>
 	<div id="nav-above" class="navigation">
 		<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older posts', 'twentyten' ) ); ?></div>
@@ -37,6 +38,7 @@
 		</div><!-- .entry-content -->
 	</div><!-- #post-0 -->
 <?php endif; ?>
+</div>
 
 <?php
 	/* Start the Loop.
@@ -62,6 +64,7 @@
 <?php /* How to display posts of the Gallery format. The gallery category is the old way. */ ?>
 
 	<?php if ( ( function_exists( 'get_post_format' ) && 'gallery' == get_post_format( $post->ID ) ) || in_category( _x( 'gallery', 'gallery category slug', 'twentyten' ) ) ) : ?>
+	<?php if($post_count == 1) echo '<div class="row">';?>
 	<div class="twocol <?php if($post_count == 6) echo ' last';?>">
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<div class="entry-meta">
@@ -78,6 +81,7 @@
 						$total_images = count( $images );
 						$image = array_shift( $images );
 						$image_img_tag = wp_get_attachment_image( $image->ID, 'thumbnail' );
+						$image_img_tag = preg_replace( '/(width|height)=\"\d*\"\s/', "", $image_img_tag );
 				?>
 						<div class="gallery-thumb">
 							<a class="size-thumbnail" href="<?php the_permalink(); ?>"><?php echo $image_img_tag; ?></a>
@@ -90,7 +94,7 @@
 						<?php the_excerpt(); ?>
 <?php endif; ?>
 
-                <h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
+                <h2 class="gallery-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
                 
 			</div><!-- .entry-content -->
 			
@@ -107,7 +111,8 @@
 				<?php edit_post_link( __( 'Edit', 'twentyten' ), '<span class="meta-sep">|</span> <span class="edit-link">', '</span>' ); ?>
 			</div><!-- .entry-utility -->
 		</div><!-- #post-## -->
-    </div>
+    </div><!-- .twocol -->
+    <?php if($post_count == 6) echo ' <div class="clear"></div></div>';?>
 
 
 
@@ -123,4 +128,7 @@
 					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older posts', 'twentyten' ) ); ?></div>
 					<div class="nav-next"><?php previous_posts_link( __( 'Newer posts <span class="meta-nav">&rarr;</span>', 'twentyten' ) ); ?></div>
 				</div><!-- #nav-below -->
+</div>
 <?php endif; ?>
+    <div class="clear"></div>
+</div><!-- row of .twocols -->

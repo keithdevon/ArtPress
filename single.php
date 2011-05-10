@@ -15,9 +15,7 @@ get_header(); ?>
 		
 		  global $post;
             $post_id = $post->ID;
-		  if(get_post_format( $post_id ) != 'gallery') echo '<div id="content" class="eightcol single-php" role="main">'; ?>
-
-			
+		  if(get_post_format( $post_id ) != 'gallery') { ?>
 
 			<?php
 			/* Run the loop to output the post.
@@ -27,15 +25,19 @@ get_header(); ?>
 			get_template_part( 'loop', 'single' );
 			?>
 
-			<?php if(get_post_format( $post_id ) != 'gallery') { ?>
-			     </div> 
 			
 			         <div class="fourcol last">
 			             <?php get_sidebar(); ?>
 			         </div>
-			 <?php }; ?>
+			         
+			         <div class="clear"></div>
 			
-			
-		
+                </div><!-- row -->
+                </div><!-- container -->
+                
+            <?php }
+            else { get_template_part( 'gallery-layout' );} ?>
+            
+            
 
 <?php get_footer(); ?>

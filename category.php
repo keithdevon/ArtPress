@@ -32,6 +32,8 @@ get_header(); ?>
 			<div class="fourcol last">
 			 <?php get_sidebar(); ?>
             </div>
+            
+            <div class="clear"></div>
 			
 		</div><!-- #container -->
 

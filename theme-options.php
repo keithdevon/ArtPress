@@ -251,6 +251,13 @@ function artpress_options_validate( $input ) {
             'background-image'=> array( 'row_label'=>'background image', 'field_blurb_suffix'=>'tick to use a background image' ),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
+            
+    if( ! isset($input['section_settings']['header']) ) 
+        $input['section_settings']['header'] = array(
+        	'css_selector'=>'#header',
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
+            'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
+            'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
     
     if( ! isset($input['section_settings']['site title']) ) 
         $input['section_settings']['site title'] = array(	
@@ -269,7 +276,27 @@ function artpress_options_validate( $input ) {
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
-    
+            
+    if( ! isset($input['section_settings']['widget links']) ) 
+        $input['section_settings']['widget links'] = array(	
+            'css_selector'    => '.xoxo a:link, .xoxo a:visited' , 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ));
+            
+    if( ! isset($input['section_settings']['links']) ) 
+        $input['section_settings']['links'] = array(	
+            'css_selector'    => 'a:link, a:visited' , 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ));
+            
+                        
+    if( ! isset($input['section_settings']['link hover']) ) 
+        $input['section_settings']['link hover'] = array(	
+            'css_selector'    => 'a:hover, a:active' , 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ));
+            
+   
     // SECTION CORRECTION
     foreach(array_keys($input['section_settings']) as $section) {
         foreach(array_keys($input['section_settings'][$section]) as $css_attr) {

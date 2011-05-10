@@ -9,16 +9,19 @@
 
 get_header(); ?>
 
-		<div id="container" class="row">
-			<div id="content" class="twelvecol" role="main">
-
+		<div id="content container" class="container" role="main">
+            <div class="row">
+                <div class="twelvecol last">
 				<h1 class="page-title"><?php
 					printf( __( '%s', 'twentyten' ), single_cat_title( '', false ) );
 				?></h1>
+				</div>
+				<div class="clear"></div>
+            </div>
 				<?php
 					$category_description = category_description();
 					if ( ! empty( $category_description ) )
-						echo '<div class="archive-meta">' . $category_description . '</div>';
+						echo '<div class="archive-meta row">' . $category_description . '</div>';
 
 				/* Run the loop for the category page to output the posts.
 				 * If you want to overload this in a child theme then include a file
@@ -27,7 +30,6 @@ get_header(); ?>
 				get_template_part( 'loop', 'galleries' );
 				?>
 
-			</div><!-- #content -->
 			
 		</div><!-- #container -->
 

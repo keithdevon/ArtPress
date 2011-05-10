@@ -14,8 +14,9 @@
 
 get_header(); ?>
 
-		<div id="container" class="one-column row">
-			<div id="content" class="twelvecol last" role="main">
+		<div id="container" class="one-column container">
+            <div class="row">
+                <div id="content" class="twelvecol last" role="main">
 
 			<?php
 			/* Run the loop to output the page.
@@ -24,14 +25,19 @@ get_header(); ?>
 			 */
 			 get_template_part( 'loop', 'page' );
 			?>
-
-			</div><!-- #content -->
-			
-		</div><!-- #container -->
+                
+                </div><!-- #content -->
+                <div class="clear"></div>
+            </div><!-- row -->
 		
 		<div class="row">
 		  <div class="sixcol"><?php get_sidebar();?></div>
 		  <div class="sixcol last"><?php get_template_part( 'second-sidebar' );?></div>
+		  <div class="clear"></div>
 		</div>
+		
+		
+		</div>
+		
 
 <?php get_footer(); ?>

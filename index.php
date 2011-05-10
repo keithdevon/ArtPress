@@ -28,6 +28,7 @@ get_header(); ?>
 			</div><!-- #content -->
 			
 			<div class="fourcol last"><?php get_sidebar(); ?></div>
+			<div class="clear"></div>
 			
 		</div><!-- #container -->
 

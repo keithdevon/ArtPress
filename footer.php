@@ -10,9 +10,6 @@
  * @since Twenty Ten 1.0
  */
 ?>
-    <div class="clear"></div>
-	</div><!-- #main -->
-
 	<div id="footer" class="container" role="contentinfo">
 		<div id="colophon" class="row">
 
@@ -23,13 +20,13 @@
 	get_sidebar( 'footer' );
 ?>
 
-			<div id="site-info">
+			<div id="site-info" class="sixcol">
 				<a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home">
 					<?php bloginfo( 'name' ); ?>
 				</a>
 			</div><!-- #site-info -->
 
-			<div id="site-generator">
+			<div id="site-generator" class="sixcol last">
 				<?php do_action( 'twentyten_credits' ); ?>
 				<a href="<?php echo esc_url( __( 'http://wordpress.org/', 'twentyten' ) ); ?>" title="<?php esc_attr_e( 'Semantic Personal Publishing Platform', 'twentyten' ); ?>" rel="generator"><?php printf( __( 'Proudly powered by %s.', 'twentyten' ), 'WordPress' ); ?></a>
 			</div><!-- #site-generator -->
