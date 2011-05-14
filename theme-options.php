@@ -7,11 +7,12 @@ add_action( 'admin_init', 'artpress_options_load_scripts' );
 
 // Load our scripts
 function artpress_options_load_scripts() {
-    wp_enqueue_script('farbtastic', get_bloginfo('template_url') .
-        '/scripts/farbtastic/farbtastic.js', array('jquery'));
-    wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . 
-        '/scripts/farbtastic/farbtastic.css' );
+    wp_enqueue_script('farbtastic', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.js', array('jquery'));
+    wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.css' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
+   
+ 
+add_action('init', 'ht_init_method');
 }
 /**
  * Init plugin options to white list our options
@@ -293,6 +294,12 @@ function artpress_options_validate( $input ) {
     if( ! isset($input['section_settings']['link hover']) ) 
         $input['section_settings']['link hover'] = array(	
             'css_selector'    => 'a:hover, a:active' , 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ));
+            
+    if( ! isset($input['section_settings']['top menu']) ) 
+        $input['section_settings']['top menu'] = array(	
+            'css_selector'    => '#top-menu' , 
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ));
             

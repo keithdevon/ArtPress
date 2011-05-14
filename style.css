@@ -73,6 +73,9 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
     padding-top:1.5em;
     overflow: visible;
     }
+.internal-col {
+    margin-bottom:1.5em;
+    }
 #masthead {
     overflow: visible;
     }
@@ -210,7 +213,6 @@ hr {
 
 h1, h2, h3, h4, h5, #access {
     color: #333;
-    text-shadow: 1px 1px 1px rgba(256,256,256,.5);
     }
     
 #site-title, h1, h2, h3, h4 {
@@ -406,11 +408,13 @@ h1#site-title, #site-title {
 #access {
 	background: transparent;
 	display: block;
-	float: right;
 	font-size:1em;
 	line-height:1.5em;
 	margin-top:1.83em;
 	width:100%;
+}
+#top-menu #access {  
+    margin-top:0.5em;
 }
 #access .menu-header,
 div.menu {
@@ -482,6 +486,10 @@ div.menu li {
 * html #access ul li a:hover {
 	color: #fff;
 }
+
+#access ul#menu-main-menu {
+    margin-left:-10px;
+    }
 
 
 /* =Content
@@ -760,8 +768,9 @@ h2.gallery-title {
     font-size:1em;
     }
     
-h2.gallery-title a:link { 
+h2.gallery-title a:link, h2.gallery-title a:visited { 
     text-decoration: none;
+    color:#333;
     }
 /* ArtPress Gallery format styling */
 

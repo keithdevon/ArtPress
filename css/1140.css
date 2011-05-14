@@ -126,5 +126,10 @@ img {
 	padding-left: 20px;
 	padding-right: 20px;
 	}
+	
+	.row .internal-col {
+    padding:0px;
+    clear:both;
+    }
 
 }

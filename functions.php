@@ -696,43 +696,43 @@ function attachment_toolbox($size = thumbnail) {
 add_shortcode( '1of3', 'ht_col1of3_shortcode' );//add 3 column shortcode (for columns 1 and 2)
 
 function ht_col1of3_shortcode( $atts, $content = null ) {
-   return '<div style="width:100%; clear:both;"><div class="col1of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; ">' . $content . '</div>';
+   return '<div style="width:100%; clear:both;"></div><div class="fourcol internal-col">' . $content . '</div>';
 }
 
 add_shortcode( '2of3', 'ht_col2of3_shortcode' );//add 3 column shortcode (for column 2)
 
 function ht_col2of3_shortcode( $atts, $content = null ) {
-   return '<div class="col2of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; ">' . $content . '</div>';
+   return '<div class="fourcol internal-col" >' . $content . '</div>';
 }
 
 add_shortcode( '3of3', 'ht_col3of3_shortcode' );//add 3rd of 3 columns
 
 function ht_col3of3_shortcode( $atts, $content = null ) {
-   return '<div class="col3of3" style="width:30%; margin-right:0%; margin-bottom:1.5em; float:left; ">' . $content . '</div></div><div style="clear:both;"></div>';
+   return '<div class="fourcol internal-col last">' . $content . '</div><div style="clear:both;"></div>';
 }
 
 add_shortcode( '1of2', 'ht_col1of2_shortcode' );// add 2 column shotcode
 
 function ht_col1of2_shortcode( $atts, $content = null ) {
-   return '<div class="col1of2" style="width:47.5%; margin-right:5%; margin-bottom:1.5em; float:left; ">' . $content . '</div>';
+   return '<div class="sixcol internal-col">' . $content . '</div>';
 }
 
 add_shortcode( '2of2', 'ht_col2of2_shortcode' );// 2nd of 2 columns
 
 function ht_col2of2_shortcode( $atts, $content = null ) {
-   return '<div class="col2of2" style="width:47.5%; margin-right:0%; margin-bottom:1.5em; float:left; ">' . $content . '</div><div style="clear:both;"></div>';
+   return '<div class="sixcol internal-col last" >' . $content . '</div><div style="clear:both;"></div>';
 }
 
 add_shortcode( '1of4', 'ht_col1of4_shortcode' );// add 4 column shotcode
 
 function ht_col1of4_shortcode( $atts, $content = null ) {
-   return '<div class="col1of4" style="width:21.3%; margin-right:5%; margin-bottom:1.5em; float:left; ">' . $content . '</div>';
+   return '<div class="threecol internal-col">' . $content . '</div>';
 }
 
 add_shortcode( '4of4', 'ht_col4of4_shortcode' );// 4th of 4 columns
 
 function ht_col4of4_shortcode( $atts, $content = null ) {
-   return '<div class="col4of4" style="width:21.3%; margin-right:0%; margin-bottom:1.5em; float:left; ">' . $content . '</div><div style="clear:both;"></div>';
+   return '<div class="threecol internal-col last" >' . $content . '</div><div style="clear:both;"></div>';
 }
 
 //------Box outs
