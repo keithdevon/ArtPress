@@ -227,13 +227,15 @@ function ht_create_form_group($settings, $group) {
 function ht_create_form($settings) {
     $output = '';
     foreach (array_keys($settings['section_settings']) as $section) {
-        $output .= ot('h3') . ucfirst($section) . ' settings' . ct('h3');
+        $output .= ot('h3')  .ucfirst($section) . ' settings'  . ct('h3');
+        $output .= ot('div');
         $table_contents = ht_create_form_group($settings, $section);
         $table = ot('table', attr_class('form-table'));
         $table .= $table_contents;
         $table .= ct('table');
         $output .= $table;
         $output .= '<p class="submit"><input type="submit" class="button-primary" value="' . __( 'Save Options' ) . '" /></p>';
+        $output .= ct('div');
     }
     return $output;
 }

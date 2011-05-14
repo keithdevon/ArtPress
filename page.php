@@ -14,22 +14,31 @@
 
 get_header(); ?>
 
-		<div id="container" class="row">
-			<div id="content" class="eightcol" role="main">
+        <div id="content" class="container" role="main">
+        
+            <div class="row">
+            
+                <div class="eightcol">
 
-			<?php
-			/* Run the loop to output the page.
-			 * If you want to overload this in a child theme then include a file
-			 * called loop-page.php and that will be used instead.
-			 */
-			get_template_part( 'loop', 'page' );
-			?>
-
-			</div><!-- #content -->
-		
-
-            <div class="fourcol last"> 
-                <?php get_sidebar(); ?>
+			       <?php
+			       /* Run the loop to output the page.
+			        * If you want to overload this in a child theme then include a file
+			        * called loop-page.php and that will be used instead.
+			        */
+			       get_template_part( 'loop', 'page' );
+			       ?>
+                   
+                </div>
+		        
+                
+                <div class="fourcol last"> 
+                    <?php get_sidebar(); ?>
+                </div>
+                
+                <div class="clear"></div>
+            
             </div>
-        </div><!-- #container -->
+            
+        </div><!-- .container -->
+        
 <?php get_footer(); ?>

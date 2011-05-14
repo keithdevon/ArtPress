@@ -71,7 +71,13 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 }
 .row {
     padding-top:1.5em;
-    overflow: visible;/* added to allow nav dropdowns */
+    overflow: visible;
+    }
+.internal-col {
+    margin-bottom:1.5em;
+    }
+#masthead {
+    overflow: visible;
     }
 
 #content {
@@ -114,6 +120,7 @@ textarea,
 .pingback a.url {
 	font-family: Georgia, "Bitstream Charter", serif;
 }
+h2,
 h3#comments-title,
 h3#reply-title,
 #access .menu,
@@ -206,7 +213,6 @@ hr {
 
 h1, h2, h3, h4, h5, #access {
     color: #333;
-    text-shadow: 1px 1px 1px rgba(256,256,256,.5);
     }
     
 #site-title, h1, h2, h3, h4 {
@@ -221,18 +227,18 @@ h1 {
     }
     
 h2 {
-    font-size:2.25em;
-    line-height:1.3333em;
-    margin-bottom: 0.54em;
-    padding-top:.81em;
-    font-weight:bold;
-    }
-    
-h3 {
     font-size:1.5em;
     line-height:1em;
     margin-bottom: 1.2em;
     padding-top:.85em;
+    font-weight: bold;
+    }
+    
+h3 {
+    font-size: 1.333em;
+    line-height: 1.143em;
+    margin-bottom:0.943em;
+    padding-top:.2em;
     }
 
 h4 {
@@ -402,10 +408,13 @@ h1#site-title, #site-title {
 #access {
 	background: transparent;
 	display: block;
-	float: right;
 	font-size:1em;
 	line-height:1.5em;
 	margin-top:1.83em;
+	width:100%;
+}
+#top-menu #access {  
+    margin-top:0.5em;
 }
 #access .menu-header,
 div.menu {
@@ -453,10 +462,12 @@ div.menu li {
 	width: 160px;
 	height: auto;
 }
-#access li:hover > a,
+#access li:hover > a {
+    background: transparent;
+    }
 #access ul ul :hover > a {
 	background: #ddd;
-	color: #111;
+	color: #888;
 }
 #access ul li:hover > ul {
 	display: block;
@@ -466,6 +477,7 @@ div.menu li {
 #access ul li.current-menu-item > a,
 #access ul li.current-menu-parent > a {
 	color: #fff;
+	text-shadow: none;
 }
 * html #access ul li.current_page_item a,
 * html #access ul li.current-menu-ancestor a,
@@ -474,6 +486,10 @@ div.menu li {
 * html #access ul li a:hover {
 	color: #fff;
 }
+
+#access ul#menu-main-menu {
+    margin-left:-10px;
+    }
 
 
 /* =Content
@@ -541,9 +557,9 @@ div.menu li {
 #content tr.odd td {
 	background: #f2f7fc;
 }
-.hentry {
+/*.hentry {
 	margin: 0 0 48px 0;
-}
+} removed to allow  the grid system to do it's thang - kdev */
 .home .sticky {
 	background: #f2f7fc;
 	border-top: 4px solid #000;
@@ -551,9 +567,9 @@ div.menu li {
 	margin-right: -20px;
 	padding: 18px 20px;
 }
-.single .hentry {
+/*.single .hentry {
 	margin: 0 0 36px 0;
-}
+} removed to allow  the grid system to do it's thang - kdev */
 
 .page-title a:link,
 .page-title a:visited {
@@ -564,14 +580,7 @@ div.menu li {
 .page-title a:hover {
 	color: #ff4b33;
 }
-#content .entry-title, .page-title {
-	color: #333;
-	font-weight: bold;
-	font-size: 2.25em;
-	line-height: 1.334em;
-	margin-bottom: .58em;
-	padding-top:.12em;
-}
+
 .entry-title a:link,
 .entry-title a:visited {
 	color: #000;
@@ -742,10 +751,10 @@ body.page .edit-link {
 
 .format-gallery .size-thumbnail img,
 .category-gallery .size-thumbnail img {
-	border: 10px solid #f1f1f1;
+	border: none;
 	margin-bottom: 0;
 }
-.format-gallery .gallery-thumb,
+
 .category-gallery .gallery-thumb {
 	text-align: center;
 	margin-top: -4px;
@@ -755,11 +764,22 @@ body.page .edit-link {
 	padding-top: 4px;
 }
 
+h2.gallery-title {
+    font-size:1em;
+    }
+    
+h2.gallery-title a:link, h2.gallery-title a:visited { 
+    text-decoration: none;
+    color:#333;
+    }
 /* ArtPress Gallery format styling */
 
 body.category-galleries div.format-gallery {
-    width:33%;
-    float:left;
+    text-align:center;
+    }
+    
+body.category-galleries #content div.format-gallery .entry-title {
+    font-size: 1em;
     }
     
 body.category-galleries div.format-gallery .entry-content p, body.category-galleries div.format-gallery .entry-meta, body.category-galleries div.format-gallery .entry-utility {
@@ -772,14 +792,24 @@ body.category-galleries body.category-galleries #content div.format-gallery .ent
     border: none;
     }
     
-div.format-gallery {
-    min-height:10em;
+.archive div.format-gallery {
+    border:1px solid #eee;
+    margin-bottom: 1.5em;
+    padding:1.5em;
+    }
+        
+body.category-galleries div.format-gallery {
+    margin-bottom: 0px;
+    border: none;
+    padding: 0px;
     }
     
-body.single-format-gallery div.format-gallery {
-    width:100%;
-    float:none;
-    } 
+div.gallery-thumb {
+    }
+    
+.gallery-row {
+    clear: both;
+    }
     
 
 /* =Attachment pages
@@ -865,24 +895,22 @@ img.aligncenter {
 	float: left;
 	margin-top: 0;
 	text-align: center;
-	width: 33%;
+	/*width: 33%; removed to allow col classes to take over layout*/
 }
+/*
+These are now being handled by our column divs - kdev
+
 .gallery-columns-2 .gallery-item {
 	width: 50%;
 }
 .gallery-columns-4 .gallery-item {
 	width: 25%;
-}
+}*/
 .gallery img {
-	border: 2px solid #cfcfcf;
 }
 .gallery-columns-2 .attachment-medium {
-	max-width: 92%;
-	height: auto;
 }
 .gallery-columns-4 .attachment-thumbnail {
-	max-width: 84%;
-	height: auto;
 }
 .gallery .gallery-caption {
 	color: #888;
@@ -893,7 +921,6 @@ img.aligncenter {
 	margin: 0;
 }
 .gallery img {
-	border: 10px solid #f1f1f1;
 	margin-bottom:1.5em;
 }
 .gallery br+br {
@@ -943,7 +970,6 @@ img.aligncenter {
 	display: block;
 }
 #nav-below {
-	margin: -18px 0 0 0;
 }
 
 

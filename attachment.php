@@ -9,7 +9,8 @@
 
 get_header(); ?>
 
-		<div id="container" class="single-attachment row">
+		<div id="container" class="single-attachment container">
+		  <div class="row">
 			<div id="content" class="twelvecol last" role="main">
 
 			<?php
@@ -21,6 +22,8 @@ get_header(); ?>
 			?>
 
 			</div><!-- #content -->
+			<div class="clear"></div>
+			</div><!-- row -->
 		</div><!-- #container -->
 
 <?php get_footer(); ?>

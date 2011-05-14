@@ -30,6 +30,8 @@ get_header(); ?>
 			
 			<div class="threecol last"><?php get_template_part( 'second-sidebar' );?></div>
 			
+			<div class="clear"></div>
+			
 		</div><!-- #container -->
 
 <?php get_footer(); ?>
