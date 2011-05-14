@@ -9,7 +9,8 @@
 
 get_header(); ?>
 
-		<div id="container" class="row">
+		<div id="container" class="container">
+		  <div class="row">
 			<div id="content" class="eightcol" role="main">
 
 <?php
@@ -58,7 +59,8 @@ if ( get_the_author_meta( 'description' ) ) : ?>
 			<div class="fourcol last">
 			 <?php get_sidebar(); ?>
             </div>
-			
+            <div class="clear"></div>
+			</div><!-- row -->
 		</div><!-- #container -->
 
 <?php get_sidebar(); ?>

@@ -8,11 +8,12 @@ add_action( 'admin_init', 'artpress_options_load_scripts' );
 
 // Load our scripts
 function artpress_options_load_scripts() {
-    wp_enqueue_script('farbtastic', get_bloginfo('template_url') .
-        '/scripts/farbtastic/farbtastic.js', array('jquery'));
-    wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . 
-        '/scripts/farbtastic/farbtastic.css' );
+    wp_enqueue_script('farbtastic', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.js', array('jquery'));
+    wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.css' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
+   
+ 
+add_action('init', 'ht_init_method');
 }
 /**
  * Init plugin options to white list our options
@@ -263,6 +264,13 @@ function artpress_options_validate( $new_settings ) {
             //'background-image:repeat'
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
+            
+    if( ! isset($input['section_settings']['header']) ) 
+        $input['section_settings']['header'] = array(
+        	'css_selector'=>'#header',
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
+            'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
+            'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
     
     if( ! isset($settings['section_settings']['site title']) ) 
         $settings['section_settings']['site title'] = array(	
@@ -291,7 +299,33 @@ function artpress_options_validate( $new_settings ) {
             'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('top', 'left') ),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'0.5em' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
-    
+            
+    if( ! isset($input['section_settings']['widget links']) ) 
+        $input['section_settings']['widget links'] = array(	
+            'css_selector'    => '.xoxo a:link, .xoxo a:visited' , 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ));
+            
+    if( ! isset($input['section_settings']['links']) ) 
+        $input['section_settings']['links'] = array(	
+            'css_selector'    => 'a:link, a:visited' , 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ));
+            
+                        
+    if( ! isset($input['section_settings']['link hover']) ) 
+        $input['section_settings']['link hover'] = array(	
+            'css_selector'    => 'a:hover, a:active' , 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ));
+            
+    if( ! isset($input['section_settings']['top menu']) ) 
+        $input['section_settings']['top menu'] = array(	
+            'css_selector'    => '#top-menu' , 
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ));
+            
+   
     // SECTION CORRECTION
     foreach(array_keys($settings['section_settings']) as $section) {
         foreach(array_keys($settings['section_settings'][$section]) as $css_attr) {

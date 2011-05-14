@@ -696,43 +696,43 @@ function attachment_toolbox($size = thumbnail) {
 add_shortcode( '1of3', 'ht_col1of3_shortcode' );//add 3 column shortcode (for columns 1 and 2)
 
 function ht_col1of3_shortcode( $atts, $content = null ) {
-   return '<div style="width:100%; clear:both;"><div class="col1of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+   return '<div style="width:100%; clear:both;"></div><div class="fourcol internal-col">' . $content . '</div>';
 }
 
 add_shortcode( '2of3', 'ht_col2of3_shortcode' );//add 3 column shortcode (for column 2)
 
 function ht_col2of3_shortcode( $atts, $content = null ) {
-   return '<div class="col2of3" style="width:30%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+   return '<div class="fourcol internal-col" >' . $content . '</div>';
 }
 
 add_shortcode( '3of3', 'ht_col3of3_shortcode' );//add 3rd of 3 columns
 
 function ht_col3of3_shortcode( $atts, $content = null ) {
-   return '<div class="col3of3" style="width:30%; margin-right:0%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div></div><div style="clear:both;"></div>';
+   return '<div class="fourcol internal-col last">' . $content . '</div><div style="clear:both;"></div>';
 }
 
 add_shortcode( '1of2', 'ht_col1of2_shortcode' );// add 2 column shotcode
 
 function ht_col1of2_shortcode( $atts, $content = null ) {
-   return '<div class="col1of2" style="width:47.5%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+   return '<div class="sixcol internal-col">' . $content . '</div>';
 }
 
 add_shortcode( '2of2', 'ht_col2of2_shortcode' );// 2nd of 2 columns
 
 function ht_col2of2_shortcode( $atts, $content = null ) {
-   return '<div class="col2of2" style="width:47.5%; margin-right:0%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div><div style="clear:both;"></div>';
+   return '<div class="sixcol internal-col last" >' . $content . '</div><div style="clear:both;"></div>';
 }
 
 add_shortcode( '1of4', 'ht_col1of4_shortcode' );// add 4 column shotcode
 
 function ht_col1of4_shortcode( $atts, $content = null ) {
-   return '<div class="col1of4" style="width:21.4%; margin-right:5%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div>';
+   return '<div class="threecol internal-col">' . $content . '</div>';
 }
 
 add_shortcode( '4of4', 'ht_col4of4_shortcode' );// 4th of 4 columns
 
 function ht_col4of4_shortcode( $atts, $content = null ) {
-   return '<div class="col4of4" style="width:21.3%; margin-right:0%; margin-bottom:1.5em; float:left; background-color: #eee;">' . $content . '</div><div style="clear:both;"></div>';
+   return '<div class="threecol internal-col last" >' . $content . '</div><div style="clear:both;"></div>';
 }
 
 //------Box outs
@@ -750,4 +750,235 @@ $options = get_option('artpress_theme_options');//extract this from the function
         else $ht_middle = 'margin-right:1.5em; float:left;">';
         $ht_end =  $content . '</div>';
         return $ht_opening . $ht_middle . $ht_end;
+}
+
+
+
+
+
+
+
+/*add_filter('wp_get_attachment_image', 'ht_get_attachment_image', 1, 2);
+
+function ht_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = false, $attr = '') {
+
+	$html = '';
+	$image = wp_get_attachment_image_src($attachment_id, $size, $icon);
+	if ( $image ) {
+		list($src) = $image;
+		//$hwstring = image_hwstring($width, $height);
+		if ( is_array($size) )
+			$size = join('x', $size);
+		$attachment =& get_post($attachment_id);
+		$default_attr = array(
+			'src'	=> $src,
+			'class'	=> "attachment-$size",
+			'alt'	=> trim(strip_tags( get_post_meta($attachment_id, '_wp_attachment_image_alt', true) )), // Use Alt field first
+			'title'	=> trim(strip_tags( $attachment->post_title )),
+		);
+		if ( empty($default_attr['alt']) )
+			$default_attr['alt'] = trim(strip_tags( $attachment->post_excerpt )); // If not, Use the Caption
+		if ( empty($default_attr['alt']) )
+			$default_attr['alt'] = trim(strip_tags( $attachment->post_title )); // Finally, use the title
+
+		$attr = wp_parse_args($attr, $default_attr);
+		$attr = apply_filters( 'wp_get_attachment_image_attributes', $attr, $attachment );
+		$attr = array_map( 'esc_attr', $attr );
+		$html = rtrim("<img $hwstring");
+		foreach ( $attr as $name => $value ) {
+			$html .= " $name=" . '"' . $value . '"';
+		}
+		$html .= ' />';
+	}
+
+	return $html;
+}*/
+
+
+
+
+remove_shortcode( 'gallery' );
+add_shortcode('gallery', 'ht_gallery_shortcode');
+
+/**
+ * The Gallery shortcode.
+ *
+ * This overwrites the core WP gallery shortcode and spits out all the images in rows and columns. Yum!
+ *
+ * @since 2.5.0
+ *
+ * @param array $attr Attributes attributed to the shortcode.
+ * @return string HTML content to display gallery.
+ */
+function ht_gallery_shortcode($attr) {
+	global $post, $wp_locale;
+
+	static $instance = 0;
+	$instance++;
+
+	// Allow plugins/themes to override the default gallery template.
+	$output = apply_filters('post_gallery', '', $attr);
+	if ( $output != '' )
+		return $output;
+
+	// We're trusting author input, so let's at least make sure it looks like a valid orderby statement
+	if ( isset( $attr['orderby'] ) ) {
+		$attr['orderby'] = sanitize_sql_orderby( $attr['orderby'] );
+		if ( !$attr['orderby'] )
+			unset( $attr['orderby'] );
+	}
+
+	extract(shortcode_atts(array(
+		'order'      => 'ASC',
+		'orderby'    => 'menu_order ID',
+		'id'         => $post->ID,
+		'itemcol'    => 'div',
+		'icontag'    => 'div',
+		'captiontag' => 'div',
+		'columns'    => 3,
+		'size'       => 'thumbnail',
+		'include'    => '',
+		'exclude'    => ''
+	), $attr));
+
+	$id = intval($id);
+	if ( 'RAND' == $order )
+		$orderby = 'none';
+
+	if ( !empty($include) ) {
+		$include = preg_replace( '/[^0-9,]+/', '', $include );
+		$_attachments = get_posts( array('include' => $include, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+
+		$attachments = array();
+		foreach ( $_attachments as $key => $val ) {
+			$attachments[$val->ID] = $_attachments[$key];
+		}
+	} elseif ( !empty($exclude) ) {
+		$exclude = preg_replace( '/[^0-9,]+/', '', $exclude );
+		$attachments = get_children( array('post_parent' => $id, 'exclude' => $exclude, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+	} else {
+		$attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+	}
+
+	if ( empty($attachments) )
+		return '';
+
+	if ( is_feed() ) {
+		$output = "\n";
+		foreach ( $attachments as $att_id => $attachment )
+			$output .= wp_get_attachment_link($att_id, $size, true) . "\n";
+		return $output;
+	}
+
+	$captiontag = tag_escape($captiontag);
+	$columns = intval($columns);
+	$itemwidth = $columns > 0 ? floor(100/$columns) : 100;
+	$float = is_rtl() ? 'right' : 'left';
+
+	$selector = "gallery-{$instance}";
+
+	$gallery_style = $gallery_div = '';
+	if ( apply_filters( 'use_default_gallery_style', true ) )
+		$gallery_style = "
+		<style type='text/css'>
+			#{$selector} {
+				margin: auto;
+			}
+			#{$selector} .gallery-item {
+				float: {$float};
+				margin-top: 10px;
+				text-align: center;
+				width: {$itemwidth}%;
+			}
+			#{$selector} img {
+				border: 2px solid #cfcfcf;
+			}
+			#{$selector} .gallery-caption {
+				margin-left: 0;
+			}
+		</style>
+		<!-- see gallery_shortcode() in wp-includes/media.php -->";
+	$size_class = sanitize_html_class( $size );
+	$gallery_div = "<div id='$selector' class='gallery galleryid-{$id} gallery-columns-{$columns} gallery-size-{$size_class}'>";
+	$output = apply_filters( 'gallery_style', $gallery_style . "\n\t\t" . $gallery_div );
+	$output .= "<div class='row gallery-row'>";
+
+	$i = 0;
+	foreach ( $attachments as $id => $attachment ) {
+		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $size, false, false) : wp_get_attachment_link($id, $size, true, false); 
+	   $break = '';
+        $i++;
+        $output .= "<{$itemcol} class='gallery-item ";
+        switch ($columns) {
+        case 1:
+            $col_class = "twelvecol ";
+            $break = "</div><!-- .row --><div class='row gallery-row'>";
+            break;
+        case 2:
+            $col_class = "sixcol ";
+            if(( $i % 2 )==0) {
+                $col_class .= "last";
+                $break = "</div><!-- .row --><div class='row gallery-row'>";
+                }
+            break;
+        case 3:
+            $col_class = "fourcol ";
+            if(( $i % 3 )==0) {
+                $col_class .= "last";
+                $break = "</div><!-- .row --><div class='row gallery-row'>";
+                }
+            break;
+        case 4:
+            $col_class = "threecol ";
+            if(( $i % 4 )==0) {
+                $col_class .= "last";
+                $break = "</div><!-- .row --><div class='row gallery-row'>";
+                }
+            break;
+        case 6:
+            $col_class = "twocol ";
+            if(( $i % 6 )==0) {
+                $col_class .= "last";
+                $break = "</div><!-- .row --><div class='row gallery-row'>";
+                }
+            break;
+        }
+        $output .= $col_class . " '>";
+		$output .= "
+			<{$icontag} class='gallery-icon'>
+				$link
+			</{$icontag}>";
+		if ( $captiontag && trim($attachment->post_excerpt) ) {
+			$output .= "
+				<{$captiontag} class='wp-caption-text gallery-caption'>
+				" . wptexturize($attachment->post_excerpt) . "
+				</{$captiontag}>";
+		}
+		$output .= "</{$itemcol}>";
+		$output .= $break;
+		/*if ( $columns > 0 && ++$i % $columns == 0 )
+			$output .= '<br style="clear: both" />';removed to allow the columns to do their thing! kdev */
+        
+	}
+
+	$output .= "
+			<br style='clear: both;' />
+		</div>\n";
+
+	return $output;
+}
+
+// Remove height and width from images
+
+add_filter( 'post_thumbnail_html', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'image_send_to_editor', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'the_content', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'wp_get_attachment_link', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'wp_get_attachment_image', 'remove_thumbnail_dimensions', 10 );
+
+
+
+function remove_thumbnail_dimensions( $html ) {
+    $html = preg_replace( '/(width|height)=\"\d*\"\s/', "", $html );
+    return $html;
 }

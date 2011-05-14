@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Two columns, blank, content
+ * Template Name: Three columns, content, sidebar, sidebar
  *
  * A custom page template without sidebar.
  *
@@ -15,8 +15,8 @@
 get_header(); ?>
 
 		<div id="container" class="one-column row">
-		  <div class="fourcol"></div>
-			<div id="content" class="eightcol last" role="main">
+		  
+			<div id="content" class="sixcol" role="main">
 
 			<?php
 			/* Run the loop to output the page.
@@ -27,7 +27,11 @@ get_header(); ?>
 			?>
 
 			</div><!-- #content -->
+			<div class="threecol"><?php get_sidebar();?></div>
+			<div class="threecol last"><?php get_template_part( 'second-sidebar' );?></div>
+			
 			<div class="clear"></div>
+			
 		</div><!-- #container -->
 
 <?php get_footer(); ?>

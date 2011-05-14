@@ -59,10 +59,16 @@
 </head>
 
 <body <?php body_class(); ?>>
+
+<?php $kd = 2;  ?>
+		  
+		  
+            <?php if($kd == 1) { ?>	
+            
 	<div id="header" class="container hfeed">
-		<div id="masthead" class="row">
+		<div id="masthead" class="row">	
             <div class="fourcol">
-                <?php get_template_part( 'branding' );           // Logo file (logo.php) ?>
+                <?php get_template_part( 'branding' ); // Logo file (branding.php) ?>
             </div><!-- fourcol -->
             
 				<div class="eightcol last" style="position:relative;">
@@ -76,31 +82,52 @@
 			             </ul>
 		              </div><!-- #header-widgets .widget-area -->
 
-                <?php endif; ?>
+                    <?php endif; ?>
     
-                <?php get_template_part( 'main-nav' );           // Main Nav file (main-nav.php) ?>
+                <?php get_template_part( 'main-nav' );   // Main Nav file (main-nav.php) ?>
        
-            </div><!-- eightcol  --> 
+                </div><!-- eightcol  --> 
+            <?php } 
+            
+            elseif($kd == 2) { ?>	
+    <div id="header" class="container hfeed">
+		<div id="masthead" class="row">	
+            <div class="twelvecol">
+                <?php get_template_part( 'branding' ); // Logo file (branding.php) ?>
+            </div> 
+            
+            <div class="twelvecol">
+                <?php get_template_part( 'main-nav' );   // Main Nav file (main-nav.php) ?>
+            </div> 
+            <?php } 
+            
+             elseif($kd == 3) { ?>
+            <div id="top-menu" class="container" style="padding-bottom:0.5em;">
+	        	<div  class="row" style="padding-top:0px;">	
+                    	<div class="twelvecol" style="">
+                            <?php get_template_part( 'main-nav' );   // Main Nav file (main-nav.php) ?>
+                        </div> 
+                        <div class="clear"></div>
+                        
+                </div>
+            </div>
+            
+            <div id="header" class="container hfeed">
+                <div id="masthead" class="row" style="">
+                    <div class="twelvecol" style="padding-top:0em;">
+                        <?php get_template_part( 'branding' ); // Logo file (branding.php) ?>
+                    </div> 
+                    <div class="clear"></div>
+                </div>
+            </div>
+            
+            <?php } ?> 
+            
+            
+            
+            
+            
+            
 			<div class="clear"></div>
 		</div><!-- #masthead -->
 	</div><!-- #header -->
-
-	<div id="main" class="container">
-	   <div class="row" style="display:block;">
-	       <div class="twocol"></div>
-	       <div class="eightcol">
-	
-	<?php
-					// Check if this is a post or page, if it has a thumbnail, and if it's a big one
-					if ( is_singular() && current_theme_supports( 'post-thumbnails' ) &&
-							has_post_thumbnail( $post->ID ) &&
-							( /* $src, $width, $height */ $image = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'post-thumbnail' ) ) &&
-							$image[1] >= HEADER_IMAGE_WIDTH ) :
-						// Houston, we have a new header image!
-						echo get_the_post_thumbnail( $post->ID );
-					elseif ( get_header_image() ) : ?>
-						<img src="<?php header_image(); ?>" width="<?php echo HEADER_IMAGE_WIDTH; ?>" height="<?php echo HEADER_IMAGE_HEIGHT; ?>" alt="" />
-					<?php endif; ?>
-            </div>
-            <div class="twocol last"></div>
-        </div><!-- row -->

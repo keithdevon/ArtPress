@@ -17,6 +17,7 @@ get_header(); ?>
 
 		<div id="container" class="row">
 			<div id="content" class="eightcol" role="main">
+			<h1 class="page-title">Blog</h1>
 
 			<?php
 			/* Run the loop to output the posts.
@@ -28,6 +29,7 @@ get_header(); ?>
 			</div><!-- #content -->
 			
 			<div class="fourcol last"><?php get_sidebar(); ?></div>
+			<div class="clear"></div>
 			
 		</div><!-- #container -->
 
