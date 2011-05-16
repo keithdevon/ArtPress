@@ -1429,3 +1429,15 @@ img {
     box-shadow: 0px 3px 7px rgba(0,0,0,0.2);
     }
     
+/* Breadcrumbs ----------------------------------------------------------*/
+
+ul#breadcrumbs {
+    list-style-type: none;
+    margin:0px;
+    padding:0px;
+    }
+ul#breadcrumbs li {
+    float:left;
+    font-size: .66em;
+    margin:0px;
+    }

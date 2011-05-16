@@ -12,6 +12,7 @@ get_header(); ?>
 		<div id="content container" class="container" role="main">
             <div class="row">
                 <div class="twelvecol last">
+                <?php get_template_part( 'ht-crumbs' );?>
 				<h1 class="page-title"><?php
 					printf( __( '%s', 'twentyten' ), single_cat_title( '', false ) );
 				?></h1>

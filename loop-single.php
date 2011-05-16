@@ -19,6 +19,7 @@
 				<div id="post-<?php the_ID(); ?>" <?php post_class('container'); ?>>
 				    <div class="row">
 				        <div class="eightcol">
+				            <?php get_template_part( 'ht-crumbs' );?>
 					       <h1 class="entry-title"><?php the_title(); ?></h1>
                         
 					       <div class="entry-meta twelvecol last">

@@ -12,6 +12,7 @@ get_header(); ?>
 		<div id="container" class="container">
 		  <div class="row">
 			<div id="content" class="eightcol" role="main">
+			 <?php get_template_part( 'ht-crumbs' );?>
 
 <?php
 	/* Queue the first post, that way we know who

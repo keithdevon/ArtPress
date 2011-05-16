@@ -19,6 +19,8 @@ get_header(); ?>
             <div class="row">
             
                 <div class="eightcol">
+                
+                    <?php get_template_part( 'ht-crumbs' );?>
 
 			       <?php
 			       /* Run the loop to output the page.

@@ -226,8 +226,17 @@ function ht_create_form_group($settings, $group) {
 }
 function ht_create_form($settings) {
     $output = '';
+     $output .= '<script>
+	jQuery(function() {
+		jQuery( "#accordion" ).accordion({
+			collapsible: true,
+			active: false
+		});
+	});
+	</script>';
+	$output .= '<div id="accordion">';
     foreach (array_keys($settings['section_settings']) as $section) {
-        $output .= ot('h3')  .ucfirst($section) . ' settings'  . ct('h3');
+        $output .= ot('h3') . '<a href="#">' .ucfirst($section) . ' settings' . '</a>' . ct('h3');
         $output .= ot('div');
         $table_contents = ht_create_form_group($settings, $section);
         $table = ot('table', attr_class('form-table'));
@@ -235,7 +244,8 @@ function ht_create_form($settings) {
         $table .= ct('table');
         $output .= $table;
         $output .= '<p class="submit"><input type="submit" class="button-primary" value="' . __( 'Save Options' ) . '" /></p>';
-        $output .= ct('div');
+        $output .=  ct('div');
     }
+    $output .= '</div>';
     return $output;
 }

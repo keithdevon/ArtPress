@@ -122,12 +122,7 @@
             </div>
             
             <?php } ?> 
-            
-            
-            
-            
-            
-            
+                         
 			<div class="clear"></div>
 		</div><!-- #masthead -->
 	</div><!-- #header -->

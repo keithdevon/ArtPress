@@ -982,3 +982,20 @@ function remove_thumbnail_dimensions( $html ) {
     $html = preg_replace( '/(width|height)=\"\d*\"\s/', "", $html );
     return $html;
 }
+
+// Add jquery tools to admin
+
+if('is_admin') {
+
+wp_register_script('admin_accordion',
+       get_bloginfo('template_directory') . '/js/jquery-ui-1.8.12.custom.min.js',
+       array('jquery'),
+       '1.0' );
+       
+// enqueue the script
+wp_enqueue_script('admin_accordion');  
+
+wp_register_style( 'ht_accordion_styles', 
+        get_bloginfo('template_directory') . '/css/ui-lightness/jquery-ui-1.8.12.custom.css' );
+wp_enqueue_style( 'ht_accordion_styles' );  
+}
