@@ -20,6 +20,9 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
         $css_group_arr = $section_arr[$css_group];
         
         switch ($css_group) {
+            case 'font-size':
+                $declarations .=  dec($css_group, $css_group_arr['value']);       
+                break;
             case 'font-family':
                 $declarations .=  dec($css_group, $options['fonts'][$css_group_arr['value']]);       
                 break;

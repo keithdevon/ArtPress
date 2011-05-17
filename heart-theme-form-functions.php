@@ -49,9 +49,10 @@ function ht_form_text_field($field_name, $id, $value, $field_blurb, $size="5") {
     
 }
 function ht_form_checkbox($field_name, $id, $is_checked, $field_blurb, $value='') {
-    $output = ot( 'tr', attr_valign('top') )
+    $output = ht_input_hidden($id, 'off')
+        . ot( 'tr', attr_valign('top') )
         . ht_th( $field_name, "row" )
-        . td( ht_input_checkbox( $id, $is_checked, $value )
+        . td( ht_input_checkbox( $id, $is_checked, 'on')
         . ht_label ('description', $id, $field_blurb) )
         . ct( 'tr' );
     return $output;
@@ -118,7 +119,7 @@ function ht_create_select($potential_options, $id, $row_label, $field_blurb_pref
                 
             } 
         }
-        $html_options .= ht_option( ($opt == $selected) ? true : false, 
+        $html_options .= ht_option( ((string)$opt == $selected) ? true : false, 
                         (string)$opt, $potential_options[$opt], attr_style( $attr ));
     }
     return ht_form_field($row_label, 
@@ -153,8 +154,7 @@ function ht_create_form_group($settings, $group) {
                 $output .= ht_form_checkbox($css_attr_arr['row_label'],
                                             "[section_settings][{$group}][{$css_attr}][value]",
                                             ( $css_attr_arr['value'] == 'on' ) ? true : false, 
-                                            __( $css_attr_arr['field_blurb_suffix']),
-                                            'on' );
+                                            __( $css_attr_arr['field_blurb_suffix']));
                 break;
                 
             case 'background-color':
@@ -165,7 +165,7 @@ function ht_create_form_group($settings, $group) {
                 else 
                     $color_array = array_slice($settings['colors'] ,1);
                 
-                $form_style_attrs['background'] = $color_array;
+                $form_style_attrs['background-color'] = $color_array;
                 $output .= ht_create_select($color_array,
                                                 "[section_settings][{$group}][{$css_attr}][value]", 
                                                 $css_attr_arr['row_label'], 
@@ -200,12 +200,12 @@ function ht_create_form_group($settings, $group) {
                                             $css_attr_arr['value']);
                 break;
             case 'background-position':
-                $output.= ht_form_text_field('horizontal background position', 
+                $output.= ht_form_text_field('vertical background position', 
                                                 "[section_settings][{$group}][{$css_attr}][value][0]", 
                                                 $css_attr_arr['value'][0], 
                                                 "blah");
                 
-                $output.= ht_form_text_field('vertical background position', 
+                $output.= ht_form_text_field('horizontal background position', 
                                                 "[section_settings][{$group}][{$css_attr}][value][1]", 
                                                 $css_attr_arr['value'][1], 
                                                 "blah");
