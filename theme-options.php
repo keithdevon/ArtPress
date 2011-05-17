@@ -205,7 +205,11 @@ function artpress_options_validate( $new_settings ) {
     // provided by the client's browser, then checkboxes would disappear 
     // as no record of unticked checkboxes are returned to the server
     $previous_settings = get_option('artpress_theme_options');
-    $settings = array_merge_recursive_distinct($previous_settings, $new_settings);
+    if( is_array( $previous_settings ) ) {
+        $settings = array_merge_recursive_distinct($previous_settings, $new_settings);
+    } else {
+        $settings = array();
+    }
     
     if (!(isset( $settings['ap_reset'] ))) { 
         $settings['ap_reset'] = '';
@@ -218,16 +222,16 @@ function artpress_options_validate( $new_settings ) {
     // GLOBAL SETTINGS CORRECTION
     
     // correct the base text size
-    if (!(isset( $settings['base_text_size']) 
+    /*if (!(isset( $settings['base_text_size']) 
           && is_valid_size_string($settings['base_text_size']))) {   
         $settings['base_text_size'] = '1em'; 
-    }
+    }*/
     
     // correct the page width
-    if (!(isset( $settings['page_width']) 
+    /*if (!(isset( $settings['page_width']) 
           && is_valid_size_string($settings['page_width']))) {   
         $settings['page_width'] = '1024px'; 
-    }
+    }*/
     
     // correct the colors
     if ( ! isset( $settings['colors'] ) ) $settings['colors'] = 
