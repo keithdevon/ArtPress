@@ -91,7 +91,6 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 	clear: right;
 }
 #footer {
-    background: rgba(0,0,0,0.1);;
 }
 .clear {
     clear:both;
@@ -364,7 +363,6 @@ a:hover {
 -------------------------------------------------------------- */
 
 #header {
-    background: rgba(0,0,0,0.1);
     padding-bottom:18px;
     padding-top:24px;
     /*margin-top:16px; */
@@ -1409,6 +1407,20 @@ code {
 	}
 }
 
+    
+/* Breadcrumbs ----------------------------------------------------------*/
+
+ul#breadcrumbs {
+    list-style-type: none;
+    margin:0px;
+    padding:0px;
+    }
+ul#breadcrumbs li {
+    float:left;
+    font-size: .66em;
+    margin:0px;
+    }
+    
 /* ARTPRESS ADDITIONS - move these to a fully controlled stylesheet at a later date */
 
 
@@ -1426,18 +1438,14 @@ label.horiz {
     }
     
 img {
+    box-shadow: 0px 3px 7px rgba(0,0,0,0.4);
+    box-shadow: 0px 3px 7px black;
+    }
+    
+#header {
     box-shadow: 0px 3px 7px rgba(0,0,0,0.2);
     }
     
-/* Breadcrumbs ----------------------------------------------------------*/
-
-ul#breadcrumbs {
-    list-style-type: none;
-    margin:0px;
-    padding:0px;
-    }
-ul#breadcrumbs li {
-    float:left;
-    font-size: .66em;
-    margin:0px;
+#footer {
+    box-shadow: 0px 0px 7px rgba(0,0,0,0.2);
     }
