@@ -119,7 +119,7 @@ function ht_create_select($potential_options, $id, $row_label, $field_blurb_pref
                 
             } 
         }
-        $html_options .= ht_option( ($opt == $selected) ? true : false, 
+        $html_options .= ht_option( ((string)$opt == $selected) ? true : false, 
                         (string)$opt, $potential_options[$opt], attr_style( $attr ));
     }
     return ht_form_field($row_label, 
@@ -165,7 +165,7 @@ function ht_create_form_group($settings, $group) {
                 else 
                     $color_array = array_slice($settings['colors'] ,1);
                 
-                $form_style_attrs['background'] = $color_array;
+                $form_style_attrs['background-color'] = $color_array;
                 $output .= ht_create_select($color_array,
                                                 "[section_settings][{$group}][{$css_attr}][value]", 
                                                 $css_attr_arr['row_label'], 
