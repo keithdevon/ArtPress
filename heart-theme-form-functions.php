@@ -225,27 +225,21 @@ function ht_create_form_group($settings, $group) {
     return $output;
 }
 function ht_create_form($settings) {
-    $output = '';
-     $output .= '<script>
-	jQuery(function() {
-		jQuery( "#accordion" ).accordion({
-			collapsible: true,
-			active: false
-		});
-	});
-	</script>';
-	$output .= '<div id="accordion">';
+    //$output = '';//ot('div');
     foreach (array_keys($settings['section_settings']) as $section) {
-        $output .= ot('h3') . '<a href="#">' .ucfirst($section) . ' settings' . '</a>' . ct('h3');
-        $output .= ot('div');
+        echo ot('h3') . '<a href="#">' .ucfirst($section) . ' settings' . '</a>' . ct('h3');
+        echo ot('div');
+        echo '<form method="post" action="options.php">';
+        settings_fields( 'artpress_options' ); 
         $table_contents = ht_create_form_group($settings, $section);
         $table = ot('table', attr_class('form-table'));
         $table .= $table_contents;
         $table .= ct('table');
-        $output .= $table;
-        $output .= '<p class="submit"><input type="submit" class="button-primary" value="' . __( 'Save Options' ) . '" /></p>';
-        $output .=  ct('div');
+        echo $table;
+        echo '<p class="submit"><input type="submit" class="button-primary" value="' . __( "Save {$section} options" ) . '" /></p>';
+        echo ct('form');
+        echo  ct('div');
     }
-    $output .= '</div>';
-    return $output;
+    //$output .= ct('div');
+    //return $output;
 }

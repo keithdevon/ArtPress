@@ -82,15 +82,19 @@ function artpress_options_do_page() {
         $_REQUEST['updated'] = false;
 
     ?>
-    <div class="wrap">
-        <form method="post" enctype="multipart/form-data" action="options.php">
-   	        <?php settings_fields('artpress_options_bi'); ?>
-            <?php do_settings_sections('theme_options_slug'); ?>
-            <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Upload Images') ?>" /></p>
-        </form>
-    </div>
-    
-    <div class="wrap">
+
+    <script>
+	jQuery(function() {
+		jQuery( "#accordion" ).accordion({
+			collapsible: true,
+			active: false
+		});
+	});
+	</script>    
+    <div class="wrap" id="accordion">
+        <h3><a href="#">Global settings</a></h3>
+        <div>
+
         <?php 
         screen_icon(); echo "<h2>" . get_current_theme() . __( ' Options' ) . "</h2>"; 
         if ( false !== $_REQUEST['updated'] ) : ?>
@@ -98,14 +102,11 @@ function artpress_options_do_page() {
         <?php endif; ?>
           
         <form method="post" action="options.php">
-            <?php 
-            
+            <?php      
             settings_fields( 'artpress_options' ); 
             $settings = get_option( 'artpress_theme_options' );           
             $settings[ 'background_images' ] = get_option( 'ap_background_image_settings' );
-            
             ?>
-            <h3>Global settings</h3>
 
                 <table class="form-table">
                     <?php 
@@ -185,14 +186,22 @@ function artpress_options_do_page() {
                                                    '5');*/ 
                     ?>
                     </table>
-                <p class="submit"><input type="submit" class="button-primary" value="<?php _e( 'Save Options' ); ?>" /></p>
-
-                <?php echo ht_create_form($settings); ?>
-
+                <p class="submit"><input type="submit" class="button-primary" value="<?php _e( 'Save global settings ' ); ?>" /></p>
             </form>
         </div>
-        <?php
-}
+        <h3><a href="#">Background Images</a></h3>
+        <div class="wrap">
+            <form method="post" enctype="multipart/form-data" action="options.php">
+       	        <?php settings_fields('artpress_options_bi'); ?>
+                <?php do_settings_sections('theme_options_slug'); ?>
+                <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Upload Images') ?>" /></p>
+            </form>
+    	</div>
+        <?php //$settings = get_option( 'artpress_theme_options' );  
+        ht_create_form($settings); ?>
+
+	</div>
+<?php }
 
 /**
  * Sanitize and validate input. Accepts an array, return a sanitized array.
