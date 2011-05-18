@@ -42,7 +42,6 @@ function theme_options_add_page() {
         add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'artpress_options_do_page' );
 }
 
-
 function ap_bi_section_html() {
     echo "<p>Upload background images here, blah, blah ...</p>";
 }
@@ -221,10 +220,10 @@ function artpress_options_validate( $new_settings ) {
     }
     
     if (!(isset( $settings['ap_reset'] ))) { 
-        $settings['ap_reset'] = '';
+        $settings['ap_reset'] = 'off';
     }
     
-    if ( $settings['ap_reset'] == 'reset' ) {
+    if ( $settings['ap_reset'] == 'on' ) {
         $settings = array();
     }
     
