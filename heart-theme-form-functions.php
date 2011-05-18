@@ -263,7 +263,7 @@ function ht_create_form_group($settings, $group) {
                 $output.= ht_form_text_field('box shadow color', 
                                                 "[section_settings][{$group}][{$css_attr}][value][3]", 
                                                 $css_attr_arr['value'][3], 
-                                                "blah");
+                                                "blah", 24);
                 break;
             case 'text-shadow-use':
                 $output .= ht_form_checkbox($css_attr_arr['row_label'],
