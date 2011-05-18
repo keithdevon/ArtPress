@@ -97,8 +97,14 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 break;                  
             case 'border-color':
                 if($use_border) $declarations .= dec($css_group, $options['colors'][$css_group_arr['value']]);
-                break;                                
-        }
+                break;
+            case 'list-style-position':
+                $declarations .= dec($css_group, $ht_css_list_style_position[$css_group_arr['value']]);
+                break;                
+            case 'list-style-type':
+                $declarations .= dec($css_group, $ht_css_list_style_type[$css_group_arr['value']]);
+                break;  
+         }
     }
     $output .= rule($section_arr['css_selector'],decblock( $declarations ));
 }

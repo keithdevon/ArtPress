@@ -24,3 +24,6 @@ $ht_css_text_align = array('left', 'right', 'center', 'justify');
 $ht_css_text_decoration = array('none', 'underline', 'overline', 'line-through', 'blink');
 
 $ht_css_border_style = array('none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
+
+$ht_css_list_style_position = array('inherit', 'inside', 'outside');
+$ht_css_list_style_type = array('circle', 'decimal', 'decimal-leading-zero', 'disc', 'lower-alpha', 'lower-roman', 'none', 'square', 'upper-alpha', 'upper-roman');

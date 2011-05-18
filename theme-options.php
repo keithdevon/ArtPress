@@ -387,7 +387,14 @@ function artpress_options_validate( $new_settings ) {
             'border-style'    => array( 'row_label'=>'border style' , 'field_blurb_suffix'=>'Border style' , 'value'=>'0'),
             'border-width'    => array( 'row_label'=>'border width' , 'field_blurb_suffix'=>'Border width' , 'value'=>'1px'),
             'border-color'    => array( 'row_label'=>'border color' , 'field_blurb_prefix'=>'Border color' , 'value'=>'0'));               
-        
+
+    if( ! isset($settings['section_settings']['lists']) ) 
+        $settings['section_settings']['list'] = array(
+        	'css_selector'=>'ol,ul',
+            'list-style-position' => array( 'row_label'=>'list position' , 'field_blurb_suffix'=>'List position' , 'value'=>'0'),
+            'list-style-type' => array( 'row_label'=>'list marker' , 'field_blurb_suffix'=>'List marker' , 'value'=>'0')
+        );               
+   
    
     // SECTION CORRECTION
     foreach(array_keys($settings['section_settings']) as $section) {
