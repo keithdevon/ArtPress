@@ -134,6 +134,7 @@ function ht_create_form_group($settings, $group) {
     global $ht_css_attachment;
     global $ht_css_font_style;
     global $ht_css_text_transform;
+    global $ht_css_text_align;
     
     $output = '';
     foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
@@ -154,6 +155,13 @@ function ht_create_form_group($settings, $group) {
                 
             case 'font-style':
                 $output.= ht_create_select($ht_css_font_style,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);
+                break;
+            case 'text-align':
+                $output.= ht_create_select($ht_css_text_align,
                                             "[section_settings][{$group}][{$css_attr}][value]",
                                             $css_attr_arr['row_label'],
                                             $css_attr_arr['field_blurb_suffix'],

@@ -16,6 +16,7 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
     global $ht_css_repeat;
     global $ht_css_font_style;
     global $ht_text_transform;
+    global $ht_text_align;    
     $section_arr = $options['section_settings'][$section];
     $use_text_shadow = false;
     if( isset($section_arr['text-shadow-use']['value']) &&
@@ -35,6 +36,9 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 break;
             case 'text-transform':
                 $declarations .=  dec($css_group, $ht_css_text_transform[$css_group_arr['value']]);       
+                break;            
+            case 'text-align':
+                $declarations .=  dec($css_group, $ht_css_text_align[$css_group_arr['value']]);       
                 break;
             case 'color':
             case 'background-color':
