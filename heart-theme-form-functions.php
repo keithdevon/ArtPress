@@ -133,6 +133,7 @@ function ht_create_form_group($settings, $group) {
     global $ht_css_repeat;
     global $ht_css_attachment;
     global $ht_css_font_style;
+    global $ht_css_text_transform;
     
     $output = '';
     foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
