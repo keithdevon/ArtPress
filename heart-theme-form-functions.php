@@ -248,7 +248,32 @@ function ht_create_form_group($settings, $group) {
                                                 $css_attr_arr['value'][3], 
                                                 "blah");
                 break;
+            case 'text-shadow-use':
+                $output .= ht_form_checkbox($css_attr_arr['row_label'],
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            ( $css_attr_arr['value'] == 'on' ) ? true : false, 
+                                            __( $css_attr_arr['field_blurb_suffix']));
+                break;
+            case 'text-shadow':
+                $output.= ht_form_text_field('text shadow horizontal', 
+                                                "[section_settings][{$group}][{$css_attr}][value][0]", 
+                                                $css_attr_arr['value'][0], 
+                                                "blah");
                 
+                $output.= ht_form_text_field('text shadow vertical', 
+                                                "[section_settings][{$group}][{$css_attr}][value][1]", 
+                                                $css_attr_arr['value'][1], 
+                                                "blah");
+                $output.= ht_form_text_field('text shadow blur', 
+                                                "[section_settings][{$group}][{$css_attr}][value][2]", 
+                                                $css_attr_arr['value'][2], 
+                                                "blah");
+                
+                $output.= ht_form_text_field('text shadow color', 
+                                                "[section_settings][{$group}][{$css_attr}][value][3]", 
+                                                $css_attr_arr['value'][3], 
+                                                "blah");
+                break;    
             case 'font-size':
             case 'padding':
             case 'margin':

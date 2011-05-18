@@ -266,7 +266,9 @@ function artpress_options_validate( $new_settings ) {
         	'css_selector'=>'body',
             'font-size'       => array( 'row_label'=>'font-size' , 'field_blurb_suffix'=>'Font size' , 'value'=>'1em' ),
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
-            'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),              
+            'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),
+            'text-shadow-use'=> array( 'row_label'=>'use text shadow?', 'field_blurb_suffix'=>'tick to use a text shadow', 'value'=>'off'),
+        	'text-shadow'	  => array( 'row_label'=>'text shadow' , 'field_blurb_suffix'=>'text shadow' , 'value'=>array('5px', '5px', '5px', 'grey' ) ),              
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
             'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
@@ -285,7 +287,7 @@ function artpress_options_validate( $new_settings ) {
             'font-style'      => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),
             'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'transparent'),
             'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
             'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
         	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
@@ -336,7 +338,7 @@ function artpress_options_validate( $new_settings ) {
         $settings['section_settings']['widget links'] = array(	
             'css_selector'    => '.xoxo a:link, .xoxo a:visited' , 
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ));
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ));
             
     if( ! isset($settings['section_settings']['links']) ) 
         $settings['section_settings']['links'] = array(	

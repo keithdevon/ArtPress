@@ -20,7 +20,8 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
     $declarations = '';
     foreach(array_keys($section_arr) as $css_group) { // css-selector, font-family, color etc 
         $css_group_arr = $section_arr[$css_group];
-        
+        if($section_arr['text-shadow-use']['value'] == 'on') $use_text_shadow = true;
+        else $use_text_shadow = false;
         switch ($css_group) {
             case 'font-size':
                 $declarations .=  dec($css_group, $css_group_arr['value']);       
@@ -67,6 +68,9 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 $declarations .= dec('box-shadow',         $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] );
                 $declarations .= dec('-moz-box-shadow',    $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] ); 
                 $declarations .= dec('-webkit-box-shadow', $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] ); 
+                break;
+            case 'text-shadow':
+                if($use_text_shadow) $declarations .= dec('text-shadow',         $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] );
                 break;
                                                       
         }
