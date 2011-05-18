@@ -16,11 +16,20 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
     global $ht_css_repeat;
     global $ht_css_font_style;
     global $ht_text_transform;
-    global $ht_text_align;    
+    global $ht_text_align;
+    global $ht_text_decoration;
+    global $ht_css_border_style; 
+    
     $section_arr = $options['section_settings'][$section];
+    
+    $use_border = false;
+    if( isset($section_arr['border-use']['value']) &&
+        $section_arr['border-use']['value'] == 'on') $use_border = true;
+            
     $use_text_shadow = false;
     if( isset($section_arr['text-shadow-use']['value']) &&
         $section_arr['text-shadow-use']['value'] == 'on') $use_text_shadow = true;
+        
     $declarations = '';
     foreach(array_keys($section_arr) as $css_group) { // css-selector, font-family, color etc 
         $css_group_arr = $section_arr[$css_group];
@@ -39,6 +48,9 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 break;            
             case 'text-align':
                 $declarations .=  dec($css_group, $ht_css_text_align[$css_group_arr['value']]);       
+                break;
+            case 'text-decoration':
+                $declarations .=  dec($css_group, $ht_css_text_decoration[$css_group_arr['value']]);       
                 break;
             case 'color':
             case 'background-color':
@@ -75,9 +87,15 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 $declarations .= dec('-webkit-box-shadow', $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] ); 
                 break;
             case 'text-shadow':
-                if($use_text_shadow) $declarations .= dec('text-shadow',         $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] );
+                if($use_text_shadow) $declarations .= dec('text-shadow', $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] );
                 break;
-                                                      
+            case 'border-style':
+                if($use_border) $declarations .= dec($css_group, $ht_css_border_style[$css_group_arr['value']]);
+                break;
+            case 'border-width':
+                $declarations .= dec($css_group, $css_group_arr['value']);
+                break;                  
+                                            
         }
     }
     $output .= rule($section_arr['css_selector'],decblock( $declarations ));

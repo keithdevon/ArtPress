@@ -135,6 +135,8 @@ function ht_create_form_group($settings, $group) {
     global $ht_css_font_style;
     global $ht_css_text_transform;
     global $ht_css_text_align;
+    global $ht_css_text_decoration;
+    global $ht_css_border_style; 
     
     $output = '';
     foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
@@ -169,6 +171,13 @@ function ht_create_form_group($settings, $group) {
                 break;
             case 'text-transform':
                 $output.= ht_create_select($ht_css_text_transform,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);
+                break;
+            case 'text-decoration':
+                $output.= ht_create_select($ht_css_text_decoration,
                                             "[section_settings][{$group}][{$css_attr}][value]",
                                             $css_attr_arr['row_label'],
                                             $css_attr_arr['field_blurb_suffix'],
@@ -291,6 +300,20 @@ function ht_create_form_group($settings, $group) {
                                                __( $css_attr_arr['field_blurb_suffix'] ), 
                                                '5');                
                 break;
+            case 'border-style':
+                $output.= ht_create_select($ht_css_border_style,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);
+                break;
+            case 'border-width':
+                $output .= ht_form_text_field($css_attr_arr['row_label'], 
+                							  "[section_settings][{$group}][{$css_attr}][value]", 
+                                               esc_attr( $css_attr_arr['value'] ),
+                                               __( $css_attr_arr['field_blurb_suffix'] ), 
+                                               '5');                
+                break;                               
         }
     }
     return $output;
