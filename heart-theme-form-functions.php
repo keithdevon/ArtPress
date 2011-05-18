@@ -132,6 +132,8 @@ function ht_create_select($potential_options, $id, $row_label, $field_blurb_pref
 function ht_create_form_group($settings, $group) {
     global $ht_css_repeat;
     global $ht_css_attachment;
+    global $ht_css_font_style;
+    global $ht_css_text_transform;
     
     $output = '';
     foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
@@ -150,6 +152,20 @@ function ht_create_form_group($settings, $group) {
                                                 $css_attr_arr['value']);
                 break;
                 
+            case 'font-style':
+                $output.= ht_create_select($ht_css_font_style,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);
+                break;
+            case 'text-transform':
+                $output.= ht_create_select($ht_css_text_transform,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);
+                break;
             case 'background-image':
                 $output .= ht_form_checkbox($css_attr_arr['row_label'],
                                             "[section_settings][{$group}][{$css_attr}][value]",
@@ -208,6 +224,28 @@ function ht_create_form_group($settings, $group) {
                 $output.= ht_form_text_field('vertical background position', 
                                                 "[section_settings][{$group}][{$css_attr}][value][1]", 
                                                 $css_attr_arr['value'][1], 
+                                                "blah");
+                break;
+                
+                
+            case 'box-shadow':
+                $output.= ht_form_text_field('box shadow horizontal', 
+                                                "[section_settings][{$group}][{$css_attr}][value][0]", 
+                                                $css_attr_arr['value'][0], 
+                                                "blah");
+                
+                $output.= ht_form_text_field('box shadow vertical', 
+                                                "[section_settings][{$group}][{$css_attr}][value][1]", 
+                                                $css_attr_arr['value'][1], 
+                                                "blah");
+                $output.= ht_form_text_field('box shadow blur', 
+                                                "[section_settings][{$group}][{$css_attr}][value][2]", 
+                                                $css_attr_arr['value'][2], 
+                                                "blah");
+                
+                $output.= ht_form_text_field('box shadow color', 
+                                                "[section_settings][{$group}][{$css_attr}][value][3]", 
+                                                $css_attr_arr['value'][3], 
                                                 "blah");
                 break;
                 

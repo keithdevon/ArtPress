@@ -14,6 +14,8 @@ $output = "";
 
 foreach(array_keys($options['section_settings']) as $section) { // body, page etc
     global $ht_css_repeat;
+    global $ht_css_font_style;
+    global $ht_text_transform;
     $section_arr = $options['section_settings'][$section];
     $declarations = '';
     foreach(array_keys($section_arr) as $css_group) { // css-selector, font-family, color etc 
@@ -25,6 +27,12 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 break;
             case 'font-family':
                 $declarations .=  dec($css_group, $options['fonts'][$css_group_arr['value']]);       
+                break;
+            case 'font-style':
+                $declarations .=  dec($css_group, $ht_css_font_style[$css_group_arr['value']]);       
+                break;
+            case 'text-transform':
+                $declarations .=  dec($css_group, $ht_css_text_transform[$css_group_arr['value']]);       
                 break;
             case 'color':
             case 'background-color':
@@ -55,6 +63,12 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                                                       $css_group_arr['value'][1] ); 
                 }                                               
                 break;
+            case 'box-shadow':
+                $declarations .= dec('box-shadow',         $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] );
+                $declarations .= dec('-moz-box-shadow',    $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] ); 
+                $declarations .= dec('-webkit-box-shadow', $css_group_arr['value'][0] . ' ' . $css_group_arr['value'][1] . ' ' . $css_group_arr['value'][2] . ' ' . $css_group_arr['value'][3] ); 
+                break;
+                                                      
         }
     }
     $output .= rule($section_arr['css_selector'],decblock( $declarations ));
