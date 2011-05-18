@@ -14,6 +14,7 @@ $output = "";
 
 foreach(array_keys($options['section_settings']) as $section) { // body, page etc
     global $ht_css_repeat;
+    global $ht_css_font_style;
     $section_arr = $options['section_settings'][$section];
     $declarations = '';
     foreach(array_keys($section_arr) as $css_group) { // css-selector, font-family, color etc 
@@ -25,6 +26,9 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 break;
             case 'font-family':
                 $declarations .=  dec($css_group, $options['fonts'][$css_group_arr['value']]);       
+                break;
+            case 'font-style':
+                $declarations .=  dec($css_group, $ht_css_font_style[$css_group_arr['value']]);       
                 break;
             case 'color':
             case 'background-color':

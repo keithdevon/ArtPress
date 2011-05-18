@@ -16,3 +16,4 @@ function rule($selectors, $declaration_block) { // TODO validate selector
 /** background image repeat options*/
 $ht_css_repeat = array('no-repeat', 'repeat', 'repeat-x', 'repeat-y', 'inherit');
 $ht_css_attachment = array('scroll', 'fixed', 'inherit' );
+$ht_css_font_style = array('normal', 'italic', 'oblique');
