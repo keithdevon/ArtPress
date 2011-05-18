@@ -999,3 +999,26 @@ wp_register_style( 'ht_accordion_styles',
         get_bloginfo('template_directory') . '/css/ui-lightness/jquery-ui-1.8.12.custom.css' );
 wp_enqueue_style( 'ht_accordion_styles' );  
 }
+
+
+// Add Fancybox
+
+function fancybox() {
+?>
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		var select = $('a[href$=".bmp"],a[href$=".gif"],a[href$=".jpg"],a[href$=".jpeg"],a[href$=".png"],a[href$=".BMP"],a[href$=".GIF"],a[href$=".JPG"],a[href$=".JPEG"],a[href$=".PNG"]');
+		select.attr('rel', 'fancybox');
+		select.fancybox();
+	});
+</script>
+<?php
+}
+
+if (!is_admin()) {
+	wp_enqueue_script('jquery');
+	wp_enqueue_script('jquery.fancybox', get_stylesheet_directory_uri().'/fancybox/jquery.fancybox.js', array('jquery'), '1.2.6');
+	wp_enqueue_script('jquery.easing', get_stylesheet_directory_uri().'/js/jquery.easing.js', array('jquery'), '1.3');
+	wp_enqueue_style('jquery.fancybox', get_stylesheet_directory_uri().'/fancybox/jquery.fancybox.css', false, '1.2.6');
+	add_action('wp_head', 'fancybox');
+}
