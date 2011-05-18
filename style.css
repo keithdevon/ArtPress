@@ -981,7 +981,6 @@ These are now being handled by our column divs - kdev
 }
 h3#comments-title,
 h3#reply-title {
-	color: #000;
 	font-weight: bold;
 }
 h3#comments-title {
@@ -1275,7 +1274,6 @@ h3#reply-title {
 	font-weight: bold;
 }
 #site-info a {
-	color: #000;
 	text-decoration: none;
 }
 #site-generator {
@@ -1284,7 +1282,6 @@ h3#reply-title {
 }
 #site-generator a {
 	background: url(images/wordpress.png) center left no-repeat;
-	color: #666;
 	display: inline-block;
 	line-height: 16px;
 	padding-left: 20px;
@@ -1443,7 +1440,7 @@ img {
     }
     
 #header {
-    box-shadow: 0px 3px 7px rgba(0,0,0,0.2);
+    box-shadow: 0px 3px 7px rgba(0,0,0,0.1);
     }
     
 #footer {
