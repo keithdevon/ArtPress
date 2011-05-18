@@ -266,7 +266,7 @@ function artpress_options_validate( $new_settings ) {
         $settings['section_settings']['body'] = array(
         	'css_selector'=>'body',
             'font-size'       => array( 'row_label'=>'font-size' , 'field_blurb_suffix'=>'Font size' , 'value'=>'1em' ),
-            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
+            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'0' ),
             'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),
             'text-shadow-use'=> array( 'row_label'=>'use text shadow?', 'field_blurb_suffix'=>'tick to use a text shadow', 'value'=>'off'),
         	'text-shadow'	  => array( 'row_label'=>'text shadow' , 'field_blurb_suffix'=>'text shadow' , 'value'=>array('5px', '5px', '5px', 'grey' ) ),              

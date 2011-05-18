@@ -1433,16 +1433,3 @@ label.horiz {
 #header-widgets li.widget_search input#searchsubmit {
     float:right;
     }
-    
-img {
-    box-shadow: 0px 3px 7px rgba(0,0,0,0.4);
-    box-shadow: 0px 3px 7px black;
-    }
-    
-#header {
-    box-shadow: 0px 3px 7px rgba(0,0,0,0.1);
-    }
-    
-#footer {
-    box-shadow: 0px 0px 7px rgba(0,0,0,0.2);
-    }
