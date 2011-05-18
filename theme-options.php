@@ -278,8 +278,17 @@ function artpress_options_validate( $new_settings ) {
         	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
         	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'1' ),        
         	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),
-            'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
-            'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
+            //'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
+            //'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ),
+        	'margin-top'      => array( 'row_label'=>'margin-top' , 'field_blurb_suffix'=>'Margin top' , 'value'=>'' ),
+        	'margin-bottom'   => array( 'row_label'=>'margin-bottom' , 'field_blurb_suffix'=>'Margin bottom' , 'value'=>'' ),
+        	'margin-left'     => array( 'row_label'=>'margin-left' , 'field_blurb_suffix'=>'Margin left' , 'value'=>'' ),
+        	'margin-right'    => array( 'row_label'=>'margin-right' , 'field_blurb_suffix'=>'Margin right' , 'value'=>'' ),
+        	'padding-top'      => array( 'row_label'=>'padding-top' , 'field_blurb_suffix'=>'Padding top' , 'value'=>'' ),
+        	'padding-bottom'   => array( 'row_label'=>'padding-bottom' , 'field_blurb_suffix'=>'Padding bottom' , 'value'=>'' ),
+        	'padding-left'     => array( 'row_label'=>'padding-left' , 'field_blurb_suffix'=>'Padding left' , 'value'=>'' ),
+        	'padding-right'    => array( 'row_label'=>'padding-right' , 'field_blurb_suffix'=>'Padding right' , 'value'=>'' )
+        );
 
     if( ! isset($settings['section_settings']['headings']) ) 
         $settings['section_settings']['headings'] = array(

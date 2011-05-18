@@ -56,8 +56,8 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
             case 'background-color':
                 $declarations .= dec($css_group, $options['colors'][$css_group_arr['value']]);
                 break;
-            case 'padding':
-            case 'margin':
+            case 'padding': case 'padding-top': case 'padding-bottom': case 'padding-left': case 'padding-right':
+            case 'margin': case 'margin-top': case 'margin-bottom': case 'margin-left': case 'margin-right':
                 $declarations .= dec($css_group, $css_group_arr['value']);
                 break;   
             case 'background-image:url':
