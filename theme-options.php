@@ -87,7 +87,8 @@ function artpress_options_do_page() {
 	jQuery(function() {
 		jQuery( "#accordion" ).accordion({
 			collapsible: true,
-			active: false
+			active: false,
+			autoHeight: false,
 		});
 	});
 	</script>    
