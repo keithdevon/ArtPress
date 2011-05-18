@@ -200,12 +200,12 @@ function ht_create_form_group($settings, $group) {
                                             $css_attr_arr['value']);
                 break;
             case 'background-position':
-                $output.= ht_form_text_field('vertical background position', 
+                $output.= ht_form_text_field('horizontal background position', 
                                                 "[section_settings][{$group}][{$css_attr}][value][0]", 
                                                 $css_attr_arr['value'][0], 
                                                 "blah");
                 
-                $output.= ht_form_text_field('horizontal background position', 
+                $output.= ht_form_text_field('vertical background position', 
                                                 "[section_settings][{$group}][{$css_attr}][value][1]", 
                                                 $css_attr_arr['value'][1], 
                                                 "blah");
