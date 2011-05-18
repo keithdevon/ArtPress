@@ -319,7 +319,16 @@ function ht_create_form_group($settings, $group) {
                                                esc_attr( $css_attr_arr['value'] ),
                                                __( $css_attr_arr['field_blurb_suffix'] ), 
                                                '5');                
-                break;                               
+                break; 
+            case 'border-color':
+                $output .= ht_create_select(array_slice($settings['colors'] ,1),
+                                                "[section_settings][{$group}][{$css_attr}][value]", 
+                                                $css_attr_arr['row_label'], 
+                                                $css_attr_arr['field_blurb_prefix'],
+                                                $css_attr_arr['value'],
+                                                $form_style_attrs
+                                                );
+                break;                              
         }
     }
     return $output;

@@ -95,7 +95,9 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
             case 'border-width':
                 if($use_border) $declarations .= dec($css_group, $css_group_arr['value']);
                 break;                  
-                                            
+            case 'border-color':
+                if($use_border) $declarations .= dec($css_group, $options['colors'][$css_group_arr['value']]);
+                break;                                
         }
     }
     $output .= rule($section_arr['css_selector'],decblock( $declarations ));
