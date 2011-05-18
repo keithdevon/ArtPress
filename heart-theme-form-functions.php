@@ -299,6 +299,12 @@ function ht_create_form_group($settings, $group) {
                                                esc_attr( $css_attr_arr['value'] ),
                                                __( $css_attr_arr['field_blurb_suffix'] ), 
                                                '5');                
+                break;    
+            case 'border-use':
+                $output .= ht_form_checkbox($css_attr_arr['row_label'],
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            ( $css_attr_arr['value'] == 'on' ) ? true : false, 
+                                            __( $css_attr_arr['field_blurb_suffix']));
                 break;
             case 'border-style':
                 $output.= ht_create_select($ht_css_border_style,

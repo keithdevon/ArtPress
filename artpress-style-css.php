@@ -93,7 +93,7 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 if($use_border) $declarations .= dec($css_group, $ht_css_border_style[$css_group_arr['value']]);
                 break;
             case 'border-width':
-                $declarations .= dec($css_group, $css_group_arr['value']);
+                if($use_border) $declarations .= dec($css_group, $css_group_arr['value']);
                 break;                  
                                             
         }
