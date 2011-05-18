@@ -86,7 +86,8 @@ function artpress_options_do_page() {
 	jQuery(function() {
 		jQuery( "#accordion" ).accordion({
 			collapsible: true,
-			active: false
+			active: false,
+			autoHeight: false,
 		});
 	});
 	</script>    
@@ -243,7 +244,7 @@ function artpress_options_validate( $new_settings ) {
     
     // correct the colors
     if ( ! isset( $settings['colors'] ) ) $settings['colors'] = 
-        array_merge(array('transparent'=>'transparent'), array('#111111', '#444444', '#888888', '#cccccc', '#eeeeee'));
+        array_merge(array('transparent'=>'transparent'), array('#111111', '#a9021e', '#888888', '#cccccc', '#eeeeee'));
     
     foreach(array_keys($settings['colors']) as $key) { // TODO need to properly validate the color value       
         if (!(isset( $settings['colors'][$key]))) {
@@ -252,7 +253,7 @@ function artpress_options_validate( $new_settings ) {
     } 
     
     // correct the fonts
-    if ( ! isset( $settings['fonts'] ) ) $settings['fonts'] = array('Georgia', 'sans-serif', 'monospace');
+    if ( ! isset( $settings['fonts'] ) ) $settings['fonts'] = array('Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif', '"Helvetica Neue", Arial, Helvetica, sans-serif', 'Futura, "Century Gothic", AppleGothic, sans-serif');
     
     foreach(array_keys($settings['fonts']) as $key) {        
         if (!(isset( $settings['fonts'][$key]))) {  // TODO need to properly validate the font 
@@ -274,7 +275,7 @@ function artpress_options_validate( $new_settings ) {
             'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
             'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
         	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
-        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'0' ),        
+        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'1' ),        
         	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
@@ -338,20 +339,20 @@ function artpress_options_validate( $new_settings ) {
         $settings['section_settings']['widget links'] = array(	
             'css_selector'    => '.xoxo a:link, .xoxo a:visited' , 
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ));
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ));
             
     if( ! isset($settings['section_settings']['links']) ) 
         $settings['section_settings']['links'] = array(	
             'css_selector'    => 'a:link, a:visited' , 
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ));
+            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ),
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ));
             
                         
     if( ! isset($settings['section_settings']['link hover']) ) 
         $settings['section_settings']['link hover'] = array(	
             'css_selector'    => 'a:hover, a:active' , 
             'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ));
+            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ));
             
     if( ! isset($settings['section_settings']['top menu']) ) 
         $settings['section_settings']['top menu'] = array(	
