@@ -25,7 +25,7 @@ function theme_options_init(){
     register_setting( 'artpress_options', 'artpress_theme_options', 'artpress_options_validate' );
     register_setting( 'artpress_options_bi', 'ap_background_image_settings', 'ap_bi_validate' );
     
-    add_settings_section( 'ap_bi_section', 'Background Images', 'ap_bi_section_html', 'theme_options_slug' );
+    add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'theme_options_slug' );
 
     add_settings_field( $background_image_prefix . '1', 'Background Image 1', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '1');
     add_settings_field( $background_image_prefix . '2', 'Background Image 2', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '2');
@@ -39,7 +39,7 @@ function theme_options_init(){
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'artpress_options_do_page' );
+        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'artpress_options_do_page' ); // TODO stop Artpress Options from being displayed on the form
 }
 
 function ap_bi_section_html() {
