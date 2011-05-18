@@ -17,11 +17,12 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
     global $ht_css_font_style;
     global $ht_text_transform;
     $section_arr = $options['section_settings'][$section];
+    $use_text_shadow = false;
+    if( isset($section_arr['text-shadow-use']['value']) &&
+        $section_arr['text-shadow-use']['value'] == 'on') $use_text_shadow = true;
     $declarations = '';
     foreach(array_keys($section_arr) as $css_group) { // css-selector, font-family, color etc 
         $css_group_arr = $section_arr[$css_group];
-        if($section_arr['text-shadow-use']['value'] == 'on') $use_text_shadow = true;
-        else $use_text_shadow = false;
         switch ($css_group) {
             case 'font-size':
                 $declarations .=  dec($css_group, $css_group_arr['value']);       
