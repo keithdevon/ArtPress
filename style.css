@@ -91,7 +91,6 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 	clear: right;
 }
 #footer {
-    background: rgba(0,0,0,0.1);;
 }
 .clear {
     clear:both;
@@ -364,7 +363,6 @@ a:hover {
 -------------------------------------------------------------- */
 
 #header {
-    background: rgba(0,0,0,0.1);
     padding-bottom:18px;
     padding-top:24px;
     /*margin-top:16px; */
@@ -983,7 +981,6 @@ These are now being handled by our column divs - kdev
 }
 h3#comments-title,
 h3#reply-title {
-	color: #000;
 	font-weight: bold;
 }
 h3#comments-title {
@@ -1277,7 +1274,6 @@ h3#reply-title {
 	font-weight: bold;
 }
 #site-info a {
-	color: #000;
 	text-decoration: none;
 }
 #site-generator {
@@ -1286,7 +1282,6 @@ h3#reply-title {
 }
 #site-generator a {
 	background: url(images/wordpress.png) center left no-repeat;
-	color: #666;
 	display: inline-block;
 	line-height: 16px;
 	padding-left: 20px;
@@ -1409,6 +1404,20 @@ code {
 	}
 }
 
+    
+/* Breadcrumbs ----------------------------------------------------------*/
+
+ul#breadcrumbs {
+    list-style-type: none;
+    margin:0px;
+    padding:0px;
+    }
+ul#breadcrumbs li {
+    float:left;
+    font-size: .66em;
+    margin:0px;
+    }
+    
 /* ARTPRESS ADDITIONS - move these to a fully controlled stylesheet at a later date */
 
 
@@ -1423,21 +1432,4 @@ label.horiz {
     
 #header-widgets li.widget_search input#searchsubmit {
     float:right;
-    }
-    
-img {
-    box-shadow: 0px 3px 7px rgba(0,0,0,0.2);
-    }
-    
-/* Breadcrumbs ----------------------------------------------------------*/
-
-ul#breadcrumbs {
-    list-style-type: none;
-    margin:0px;
-    padding:0px;
-    }
-ul#breadcrumbs li {
-    float:left;
-    font-size: .66em;
-    margin:0px;
     }
