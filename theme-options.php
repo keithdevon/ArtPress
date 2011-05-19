@@ -358,7 +358,11 @@ function artpress_options_validate( $new_settings ) {
         	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'0' ),
             'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
-            'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
+            'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ),
+             'border-use'      => array( 'row_label'=>'use border?', 'field_blurb_suffix'=>'tick to use a border', 'value'=>'off'),
+            'border-style'    => array( 'row_label'=>'border style' , 'field_blurb_suffix'=>'Border style' , 'value'=>'0'),
+            'border-width'    => array( 'row_label'=>'border width' , 'field_blurb_suffix'=>'Border width' , 'value'=>'1px'),
+            'border-color'    => array( 'row_label'=>'border color' , 'field_blurb_prefix'=>'Border color' , 'value'=>'0'));
             
     if( ! isset($settings['section_settings']['widget links']) ) 
         $settings['section_settings']['widget links'] = array(	
