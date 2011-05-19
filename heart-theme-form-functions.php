@@ -69,12 +69,8 @@ function ht_form_cell_radio ( $id, $value, $is_checked, $field_blurb) {
 }
 
 function ht_create_radio_row($potential_options, $id, $row_label, $field_blurb_prefix, $checked, $misc_cell='') {
-    //$id = '[section_settings][' . $group . '][' . $css_field . '][value]';
     $field_blurb_prefix = __($field_blurb_prefix);
-    //$checked = esc_attr( $settings['section_settings'][$group][$css_field]['value'] );
-    //$checked = esc_attr( $id );
     $cells = '';
-    //for ($i = 0; $i < count($potential_options); $i++) {
     foreach (array_keys($potential_options) as $opt) {
         $cells .= ht_form_cell_radio($id, (string)$opt, ($opt == $checked) ? true : false, $field_blurb_prefix . ' ' . $opt );
     }  
@@ -91,41 +87,20 @@ function ht_create_radio_row($potential_options, $id, $row_label, $field_blurb_p
  * and the value is the visible text for that option.
  * */
 function ht_create_select($potential_options, $id, $row_label, $field_blurb_prefix, $selected, $form_style_attrs=null) {
-    /*$id = '[section_settings][' . $group . '][' . $css_field . '][value]';
     $field_blurb_prefix = __($field_blurb_prefix);
-    $checked = esc_attr( $settings['section_settings'][$group][$css_field]['value'] );
-    $cells = '';
-    for ($i = 0; $i < count($options); $i++) {
-        $cells .= ht_form_cell_radio($id, $i, ($i == $checked) ? true : false, $field_blurb_prefix . ' ' . $i );
-    }  
-	return ht_form_field($row_label, 
-        table(
-            tr($cells . $misc_cell),    
-            attr_valign('top')
-        )
-    );*/
-    //$id = '[section_settings][' . $group . '][' . $css_field . '][value]';
-    $field_blurb_prefix = __($field_blurb_prefix);
-    //$selected = "";//$selected = esc_attr( $settings['section_settings'][$group][$css_field]['value'] );
-    
     $html_options = '';
 
     foreach (array_keys($potential_options) as $opt) {
         $attr = '';
         if ($form_style_attrs) {
             foreach (array_keys($form_style_attrs) as $css_attr) {
-                //foreach ($form_style_attrs[$css_attr] as $value ) {
-                    $attr .= dec($css_attr, $form_style_attrs[$css_attr][$opt]);
-                
+                $attr .= dec($css_attr, $form_style_attrs[$css_attr][$opt]);  
             } 
         }
         $html_options .= ht_option( ((string)$opt == $selected) ? true : false, 
                         (string)$opt, $potential_options[$opt], attr_style( $attr ));
     }
     return ht_form_field($row_label, 
-                         //ot('select', attr_name($id))
-                         //. $html_options
-                         //. ct('select')
                         ht_select($id, $html_options));
     
 }
@@ -355,7 +330,6 @@ function ht_create_form_group($settings, $group) {
     return $output;
 }
 function ht_create_form($settings) {
-    //$output = '';//ot('div');
     foreach (array_keys($settings['section_settings']) as $section) {
         echo ot('h3') . '<a href="#">' .ucfirst($section) . ' settings' . '</a>' . ct('h3');
         echo ot('div');
@@ -370,6 +344,4 @@ function ht_create_form($settings) {
         echo ct('form');
         echo  ct('div');
     }
-    //$output .= ct('div');
-    //return $output;
 }
