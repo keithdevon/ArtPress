@@ -135,6 +135,10 @@ function ht_create_form_group($settings, $group) {
     global $ht_css_font_style;
     global $ht_css_text_transform;
     global $ht_css_text_align;
+    global $ht_css_text_decoration;
+    global $ht_css_border_style; 
+    global $ht_css_list_style_position;
+    global $ht_css_list_style_type;
     
     $output = '';
     foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
@@ -169,6 +173,13 @@ function ht_create_form_group($settings, $group) {
                 break;
             case 'text-transform':
                 $output.= ht_create_select($ht_css_text_transform,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);
+                break;
+            case 'text-decoration':
+                $output.= ht_create_select($ht_css_text_decoration,
                                             "[section_settings][{$group}][{$css_attr}][value]",
                                             $css_attr_arr['row_label'],
                                             $css_attr_arr['field_blurb_suffix'],
@@ -254,7 +265,7 @@ function ht_create_form_group($settings, $group) {
                 $output.= ht_form_text_field('box shadow color', 
                                                 "[section_settings][{$group}][{$css_attr}][value][3]", 
                                                 $css_attr_arr['value'][3], 
-                                                "blah");
+                                                "blah", 24);
                 break;
             case 'text-shadow-use':
                 $output .= ht_form_checkbox($css_attr_arr['row_label'],
@@ -283,14 +294,57 @@ function ht_create_form_group($settings, $group) {
                                                 "blah");
                 break;    
             case 'font-size':
-            case 'padding':
-            case 'margin':
+            case 'padding': case 'padding-top': case 'padding-bottom': case 'padding-left': case 'padding-right':
+            case 'margin': case 'margin-top': case 'margin-bottom': case 'margin-left': case 'margin-right':
                 $output .= ht_form_text_field($css_attr_arr['row_label'], 
                 							  "[section_settings][{$group}][{$css_attr}][value]", 
                                                esc_attr( $css_attr_arr['value'] ),
                                                __( $css_attr_arr['field_blurb_suffix'] ), 
                                                '5');                
+                break;    
+            case 'border-use':
+                $output .= ht_form_checkbox($css_attr_arr['row_label'],
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            ( $css_attr_arr['value'] == 'on' ) ? true : false, 
+                                            __( $css_attr_arr['field_blurb_suffix']));
                 break;
+            case 'border-style':
+                $output.= ht_create_select($ht_css_border_style,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);
+                break;
+            case 'border-width':
+                $output .= ht_form_text_field($css_attr_arr['row_label'], 
+                							  "[section_settings][{$group}][{$css_attr}][value]", 
+                                               esc_attr( $css_attr_arr['value'] ),
+                                               __( $css_attr_arr['field_blurb_suffix'] ), 
+                                               '5');                
+                break; 
+            case 'border-color':
+                $output .= ht_create_select(array_slice($settings['colors'] ,1),
+                                                "[section_settings][{$group}][{$css_attr}][value]", 
+                                                $css_attr_arr['row_label'], 
+                                                $css_attr_arr['field_blurb_prefix'],
+                                                $css_attr_arr['value'],
+                                                $form_style_attrs
+                                                );
+                break;                                                
+            case 'list-style-position':
+                $output.= ht_create_select($ht_css_list_style_position,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);                                                
+                break;
+            case 'list-style-type':
+                $output.= ht_create_select($ht_css_list_style_type,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);                                                
+                break;                                 
         }
     }
     return $output;

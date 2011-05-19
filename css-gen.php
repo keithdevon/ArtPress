@@ -13,9 +13,17 @@ function rule($selectors, $declaration_block) { // TODO validate selector
     return $selectors . ' ' . $declaration_block . "\n";
 }
 
-/** background image repeat options*/
+/** css property options*/
 $ht_css_repeat = array('no-repeat', 'repeat', 'repeat-x', 'repeat-y', 'inherit');
 $ht_css_attachment = array('scroll', 'fixed', 'inherit' );
+
 $ht_css_font_style = array('normal', 'italic', 'oblique');
+
 $ht_css_text_transform = array('none', 'uppercase', 'lowercase', 'capitalize');
 $ht_css_text_align = array('left', 'right', 'center', 'justify');
+$ht_css_text_decoration = array('none', 'underline', 'overline', 'line-through', 'blink');
+
+$ht_css_border_style = array('none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
+
+$ht_css_list_style_position = array('inherit', 'inside', 'outside');
+$ht_css_list_style_type = array('circle', 'decimal', 'decimal-leading-zero', 'disc', 'lower-alpha', 'lower-roman', 'none', 'square', 'upper-alpha', 'upper-roman');
