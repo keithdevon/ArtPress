@@ -110,21 +110,12 @@ function artpress_options_do_page() {
 
                 <table class="form-table">
                     <?php 
-                    /*echo ht_form_text_field('test text', '[test:text]', $settings['test:text'], 'blurb');
-                    echo ht_create_select(  array('1'=>'option1', '2'=>'option2'), 
-                                            '[test:select]', 
-                                            'test select', 
-                                            'blurb',
-                                            $settings['test:select']);*/
-                    
+
                     echo ht_form_checkbox("Reset", '[ap_reset]', false, "check this box and hit reset to reset all options", 'reset');
-                    
-                    //echo ht_form_text_field('Base text size', '[base_text_size]', esc_attr( $settings['base_text_size']), __( "example options: '16px', '1em' or '100%'" ), '5');
-                    
+
                     // output the rest of the color fields
                     foreach (array_keys(array_slice($settings['colors'], 1)) as $color ) {
                         $output = '';
-                        //$id = '[colors][' . $color . ']';
                         $output = ht_th(__('Color ' . $color), "row");
                         $output .= td(ht_input_text('[colors][' . $color . ']','colorwell', esc_attr( $settings['colors'][$color] ), '7'));
                         if ($color == '0') {
@@ -133,26 +124,11 @@ function artpress_options_do_page() {
                         }
                         echo tr($output);
                     }
-                    
-                    // output the font selectors
-                    /*$cells = '';
-                    foreach (array_keys($settings['fonts']) as $font) {
-                        $id = '[fonts][' . $font . ']';
-                        $cells .= ht_form_cell($id,    'fontfamily', esc_attr( $settings['fonts'][$font] ), '7', __( 'Font ' . $font ));
-                    }              
-                    echo ht_form_field('Fonts',
-                        table(
-                            tr($cells),    
-                            attr_valign('top')
-                        )
-                    );*/
+
                     foreach (array_keys($settings['fonts']) as $font) {
                         echo ht_form_text_field('Font ' .  $font, '[fonts][' . $font . ']', esc_attr( $settings['fonts'][$font] ), 'blurb');
                     }
-               
-                    // output the page width selector
-                    //echo ht_form_text_field('Page Width', '[page_width]', esc_attr( $settings['page_width']), __( "example options: '1000px', '30em' or '100%'" ), '6');
-                                    /* Color Pickers */ 
+                    /* Color Pickers */ 
                     ?>
                                     
                             <script>
@@ -172,19 +148,7 @@ function artpress_options_do_page() {
                               });
                           });
                      </script>
-                     
-                    <?php 
-                    // thumbnail shadow
-                    //  left offset
-                    //  top offset - 
-                    //  size - px
-                    //  color - rgb(0,0,0);
-                    /*echo ht_form_text_field($settings['section_settings'][$group][$css_attr]['row_label'], 
-                    							  '[section_settings][' . $group . '][' . $css_attr . '][value]', 
-                                                   esc_attr( $settings['section_settings'][$group][$css_attr]['value']),
-                                                   __( $settings['section_settings'][$group][$css_attr]['field_blurb_suffix'] ), 
-                                                   '5');*/ 
-                    ?>
+
                     </table>
                 <p class="submit"><input type="submit" class="button-primary" value="<?php _e( 'Save global settings ' ); ?>" /></p>
             </form>
@@ -230,18 +194,6 @@ function artpress_options_validate( $new_settings ) {
     
     // GLOBAL SETTINGS CORRECTION
     
-    // correct the base text size
-    /*if (!(isset( $settings['base_text_size']) 
-          && is_valid_size_string($settings['base_text_size']))) {   
-        $settings['base_text_size'] = '1em'; 
-    }*/
-    
-    // correct the page width
-    /*if (!(isset( $settings['page_width']) 
-          && is_valid_size_string($settings['page_width']))) {   
-        $settings['page_width'] = '1024px'; 
-    }*/
-    
     // correct the colors
     if ( ! isset( $settings['colors'] ) ) $settings['colors'] = 
         array_merge(array('transparent'=>'transparent'), array('#222222', '#a9021e', '#888888', '#eeeeee', '#ffffff'));
@@ -278,8 +230,6 @@ function artpress_options_validate( $new_settings ) {
         	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
         	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'1' ),        
         	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),
-            //'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
-            //'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ),
         	'margin-top'      => array( 'row_label'=>'margin-top' , 'field_blurb_suffix'=>'Margin top' , 'value'=>'' ),
         	'margin-bottom'   => array( 'row_label'=>'margin-bottom' , 'field_blurb_suffix'=>'Margin bottom' , 'value'=>'' ),
         	'margin-left'     => array( 'row_label'=>'margin-left' , 'field_blurb_suffix'=>'Margin left' , 'value'=>'' ),
@@ -314,6 +264,7 @@ function artpress_options_validate( $new_settings ) {
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'transparent'),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ),
+            'box-shadow-use'  => array( 'row_label'=>'use box shadow?', 'field_blurb_suffix'=>'tick to use a box shadow', 'value'=>'on'),
             'box-shadow'	  => array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('3px', '3px', '7px', 'rgba(200,200,200,0.5)' ) ) );
     
     if( ! isset($settings['section_settings']['site title']) ) 
@@ -391,6 +342,7 @@ function artpress_options_validate( $new_settings ) {
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ),
+            'box-shadow-use'  => array( 'row_label'=>'use box shadow?', 'field_blurb_suffix'=>'tick to use a box shadow', 'value'=>'off'),
             'box-shadow'	  => array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('3px', '3px', '7px', 'rgba(200,200,200,0.5)' ) ),
             'border-use'      => array( 'row_label'=>'use border?', 'field_blurb_suffix'=>'tick to use a border', 'value'=>'off'),
             'border-style'    => array( 'row_label'=>'border style' , 'field_blurb_suffix'=>'Border style' , 'value'=>'0'),
