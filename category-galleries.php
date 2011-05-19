@@ -9,7 +9,7 @@
 
 get_header(); ?>
 
-		<div id="content container" class="container" role="main">
+		<div id="content" class="container" role="main">
             <div class="row">
                 <div class="twelvecol last">
                 <?php get_template_part( 'ht-crumbs' );?>

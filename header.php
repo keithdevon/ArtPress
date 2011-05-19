@@ -60,36 +60,6 @@
 
 <body <?php body_class(); ?>>
 
-<?php $kd = 2;  ?>
-		  
-		  
-            <?php if($kd == 1) { ?>	
-            
-	<div id="header" class="container hfeed">
-		<div id="masthead" class="row">	
-            <div class="fourcol">
-                <?php get_template_part( 'branding' ); // Logo file (branding.php) ?>
-            </div><!-- fourcol -->
-            
-				<div class="eightcol last" style="position:relative;">
-				<?php
-	               // A second sidebar for widgets, just because.
-	               if ( is_active_sidebar( 'header-widget-area' ) ) : ?>
-
-		              <div id="header-widgets" class="widget-area" role="complementary">
-			             <ul class="xoxo">
-				            <?php dynamic_sidebar( 'header-widget-area' ); ?>
-			             </ul>
-		              </div><!-- #header-widgets .widget-area -->
-
-                    <?php endif; ?>
-    
-                <?php get_template_part( 'main-nav' );   // Main Nav file (main-nav.php) ?>
-       
-                </div><!-- eightcol  --> 
-            <?php } 
-            
-            elseif($kd == 2) { ?>	
     <div id="header" class="container hfeed">
 		<div id="masthead" class="row">	
             <div class="twelvecol">
@@ -99,30 +69,8 @@
             <div class="twelvecol">
                 <?php get_template_part( 'main-nav' );   // Main Nav file (main-nav.php) ?>
             </div> 
-            <?php } 
             
-             elseif($kd == 3) { ?>
-            <div id="top-menu" class="container" style="padding-bottom:0.5em;">
-	        	<div  class="row" style="padding-top:0px;">	
-                    	<div class="twelvecol" style="">
-                            <?php get_template_part( 'main-nav' );   // Main Nav file (main-nav.php) ?>
-                        </div> 
-                        <div class="clear"></div>
-                        
-                </div>
-            </div>
-            
-            <div id="header" class="container hfeed">
-                <div id="masthead" class="row" style="">
-                    <div class="twelvecol" style="padding-top:0em;">
-                        <?php get_template_part( 'branding' ); // Logo file (branding.php) ?>
-                    </div> 
-                    <div class="clear"></div>
-                </div>
-            </div>
-            
-            <?php } ?> 
-                         
+                                     
 			<div class="clear"></div>
 		</div><!-- #masthead -->
 	</div><!-- #header -->
