@@ -27,7 +27,7 @@ function ht_input_radio ($id, $is_checked, $value) {
         return ht_input( $id, 'radio',  attr_value($value) . attr_checked($is_checked ) );
 }
 function ht_option ($is_selected, $value, $content, $attr='') {
-        return ot( 'option',  attr_value($value) . attr_selected($is_selected ) . $attr)
+        return ot( 'option',  attr_value((string)$value) . attr_selected($is_selected ) . $attr)
             . $content
             . ct( 'option' );
 }
@@ -91,11 +91,24 @@ function ht_create_radio_row($potential_options, $id, $row_label, $field_blurb_p
         }
         return ht_option( $is_selected, $value, $content, attr_style( $attr ));
 }*/
-function ht_options_styled ($potential_options, $selected, $option_group_name, $form_style_attrs=null) {    
+function ht_options_styled ($potential_options, $selected, $form_style_attrs=null) {    
     $html_options = '';        
+    $is_optgroup = false;
+    $content = '';
     foreach (array_keys($potential_options) as $opt) {
+        if (is_array($potential_options[$opt])) {
+            if($is_optgroup) { // if this has already been set ... 
+                // ... then we need to close the previous opt group
+                $html_options .= ct('optgroup');          
+            }
+            // set to true as we have encountered an array which denotes
+            // an new optgroup
+            $is_optgroup = true; 
+            // create the new optgroup    
+            $html_options .= ot('optgroup', attr_label($potential_options[$opt][1]));
+            $content = $potential_options[$opt][0];
+        } else $content = $potential_options[$opt];
         $attr = '';
-        
         // add any existing style attributes to the option group
         if ($form_style_attrs) {
             foreach (array_keys($form_style_attrs) as $css_attr) {
@@ -103,10 +116,11 @@ function ht_options_styled ($potential_options, $selected, $option_group_name, $
             } 
         }
         $html_options .= ht_option( ((string)$opt == $selected) ? true : false, 
-                        "k[]={$option_group_name}&k[]={$opt}", 
-                        $potential_options[$opt], 
+                        (string)$opt, 
+                        $content, 
                         attr_style( $attr ));
         }
+        if ($is_optgroup) $html_options .= ct('optgroup');
     return $html_options;
 }
 /** 
@@ -132,7 +146,7 @@ function ht_create_select($potential_options, $id, $row_label, $field_blurb_pref
  * the second key is a css attribute e.g. <i>background-color</i><br>
  * and the third key denotes which value to use for the aforementioned css attribute
  * */
-function ht_create_select_grouped($potential_grouped_options, $id, $row_label, $field_blurb_prefix, $selected, $form_style_attrs=null) {
+/*function ht_create_select_grouped($potential_grouped_options, $id, $row_label, $field_blurb_prefix, $selected, $form_style_attrs=null) {
     $field_blurb_prefix = __($field_blurb_prefix);
     $html_optgroups = '';
 
@@ -143,7 +157,7 @@ function ht_create_select_grouped($potential_grouped_options, $id, $row_label, $
         $html_optgroups .= optgroup($optgroup, $options);
     }
     return ht_form_field($row_label, ht_select($id, $html_optgroups));
-}
+}*/
 function ht_create_form_group($settings, $group) {
     global $ht_css_repeat;
     global $ht_css_attachment;
@@ -165,7 +179,7 @@ function ht_create_form_group($settings, $group) {
                                             $settings['section_settings'][$group]['css_selector']);
                 break;
             case 'font-family':
-                $output .= ht_create_select_grouped($ht_css_font_family, 
+                $output .= ht_create_select($ht_css_font_family, 
                                                 "[section_settings][{$group}][{$css_attr}][value]",
                                                 $css_attr_arr['row_label'], 
                                                 $css_attr_arr['field_blurb_prefix'],

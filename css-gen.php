@@ -29,8 +29,7 @@ $ht_css_list_style_position = array('inherit', 'inside', 'outside');
 $ht_css_list_style_type = array('circle', 'decimal', 'decimal-leading-zero', 'disc', 'lower-alpha', 'lower-roman', 'none', 'square', 'upper-alpha', 'upper-roman');
 
 $ht_css_font_family = array(
-    'paragraph or title' => array(
-	'Arial, “Helvetica Neue”, Helvetica, sans-serif',
+	array('Arial, “Helvetica Neue”, Helvetica, sans-serif','paragraph or title'),
 	'Cambria, Georgia, Times, “Times New Roman”, serif',
 	'“Century Gothic”, “Apple Gothic”, sans-serif',
 	'Consolas, “Lucida Console”, Monaco, monospace',
@@ -40,10 +39,8 @@ $ht_css_font_family = array(
 	'Futura, “Century Gothic”, AppleGothic, sans-serif',
 	'Impact, Haettenschweiler, “Arial Narrow Bold”, sans-serif',
 	'“Lucida Sans”, “Lucida Grande”, “Lucida Sans Unicode”, sans-serif',
-	'Times, “Times New Roman”, Georgia, serif'
-	),
-    'paragraph' => array(
-	'Baskerville, “Times New Roman”, Times, serif',
+	'Times, “Times New Roman”, Georgia, serif', 
+	array('Baskerville, “Times New Roman”, Times, serif','paragraph'),
 	'Garamond, “Hoefler Text”, Times New Roman, Times, serif',
 	'Geneva, “Lucida Sans”, “Lucida Grande”, “Lucida Sans Unicode”, Verdana, sans-serif',
 	'Georgia, Palatino,” Palatino Linotype”, Times, “Times New Roman”, serif',
@@ -52,10 +49,8 @@ $ht_css_font_family = array(
 	'Palatino, “Palatino Linotype”, Georgia, Times, “Times New Roman”, serif',
 	'Tahoma, Geneva, Verdana',
 	'“Trebuchet MS”, “Lucida Sans Unicode”, “Lucida Grande”,” Lucida Sans”, Arial, sans-serif',
-	'Verdana, Geneva, Tahoma, sans-serif'
-	),
-    'title' => array(
-	'Baskerville, Times, “Times New Roman”, serif',
+	'Verdana, Geneva, Tahoma, sans-serif',
+	array('Baskerville, Times, “Times New Roman”, serif','title'),
 	'Garamond, “Hoefler Text”, Palatino, “Palatino Linotype”, serif',
 	'Geneva, Verdana, “Lucida Sans”, “Lucida Grande”, “Lucida Sans Unicode”, sans-serif',
 	'Georgia, Times, “Times New Roman”, serif',
@@ -65,5 +60,4 @@ $ht_css_font_family = array(
 	'Tahoma, Verdana, Geneva',
 	'“Trebuchet MS”, Tahoma, Arial, sans-serif',
 	'Verdana, Tahoma, Geneva, sans-serif'
-	)
-);
+	);
