@@ -1417,9 +1417,15 @@ ul#breadcrumbs {
     }
 ul#breadcrumbs li {
     float:left;
-    font-size: .66em;
     margin:0px;
+    letter-spacing:1px;
     }
+    
+span.crumb-divider {
+    text-decoration:none;
+    }
+    
+
     
 /* ARTPRESS ADDITIONS - move these to a fully controlled stylesheet at a later date */
 
