@@ -184,11 +184,11 @@ function ht_create_form_group($settings, $group) {
                 foreach (array_keys($settings['fonts']) as $font_num) {
                      if( is_array( $ht_css_font_family[$settings['fonts'][$font_num]] ) ) {
                          $font = $ht_css_font_family[$settings['fonts'][$font_num]][0];
-                         $select_fonts[$font_num] = $font;
+                         $select_fonts[$font_num] = "font {$font_num} -- {$font}";
                      }
                      else {
                          $font = $ht_css_font_family[$settings['fonts'][$font_num]];
-                         $select_fonts[$font_num] = $font;
+                         $select_fonts[$font_num] = "font {$font_num} -- {$font}";
                      }       
                 }
                 $output .= ht_create_select($select_fonts, 
