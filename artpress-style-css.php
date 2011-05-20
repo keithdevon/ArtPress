@@ -42,7 +42,14 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 $declarations .=  dec($css_group, $css_group_arr['value']);       
                 break;
             case 'font-family':
-                $declarations .=  dec($css_group, $options['fonts'][$css_group_arr['value']]);       
+                $property = '';
+                $key = $css_group_arr['value'];
+                if ( is_array( $ht_css_font_family[$key] ) ) {
+                    $property = $ht_css_font_family[$key][0];
+                } else {
+                    $property = $ht_css_font_family[$key];
+                }
+                $declarations .=  dec($css_group, $property);
                 break;
             case 'font-style':
                 $declarations .=  dec($css_group, $ht_css_font_style[$css_group_arr['value']]);       

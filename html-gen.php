@@ -17,6 +17,7 @@ function attr_style ($value)      {
 function attr_valign ($value)     { return attribute('valign', $value); }
 function attr_size ($value)       { return attribute('size', $value); }
 function attr_href ($value)       { return attribute('href', $value); }
+function attr_label ($value)      { return attribute('label', $value); }
 function attr_checked ($value)    {
     if( $value == true ){
         return attribute('checked', 'checked');
@@ -42,5 +43,6 @@ function tr($content, $attributes ="") { return ot('tr', $attributes) . $content
 function table($content, $attributes ="") { return ot('table', $attributes) . $content . ct('table'); }
 function alink($href, $content, $attributes) { return ot('a', attr_href($href) . $attributes ) . $content . ct('a');}
 function div($content, $attributes ="") { return ot('div', $attributes) . $content . ct('div'); }
+function optgroup($label, $options) { return ot('optgroup', attr_label($label)) . $options . ct('optgroup'); }
 
 ?>
