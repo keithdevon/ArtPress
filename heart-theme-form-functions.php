@@ -164,6 +164,7 @@ function ht_create_form_group($settings, $group) {
     global $ht_css_font_style;
     global $ht_css_text_transform;
     global $ht_css_text_align;
+    global $ht_css_text_decoration;
     global $ht_css_border_style; 
     global $ht_css_list_style_position;
     global $ht_css_list_style_type;
