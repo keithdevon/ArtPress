@@ -1175,7 +1175,7 @@ h3#reply-title {
 	max-width: 100%;
 }
 .widget_search #s {/* This keeps the search inputs in line */
-	width: 60%;
+	width: 40%;
 }
 .widget_search label {
 	display: none;
@@ -1433,6 +1433,6 @@ label.horiz {
     width:200px;
     }
     
-#header-widgets li.widget_search input#searchsubmit {
+#access form.searchform {
     float:right;
     }
