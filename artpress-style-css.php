@@ -20,6 +20,7 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
     global $ht_text_decoration;
     global $ht_css_border_style; 
     global $ht_css_font_family;
+    global $ht_css_font_weight;
     
     $section_arr = $options['section_settings'][$section];
     
@@ -56,6 +57,9 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
             case 'font-style':
                 $declarations .=  dec($css_group, $ht_css_font_style[$css_group_arr['value']]);       
                 break;
+            case 'font-weight':
+                $declarations .=  dec($css_group, $ht_css_font_weight[$css_group_arr['value']]);       
+                break;                
             case 'text-transform':
                 $declarations .=  dec($css_group, $ht_css_text_transform[$css_group_arr['value']]);       
                 break;            

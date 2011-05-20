@@ -28,6 +28,8 @@ $ht_css_border_style = array('none', 'hidden', 'dotted', 'dashed', 'solid', 'dou
 $ht_css_list_style_position = array('inherit', 'inside', 'outside');
 $ht_css_list_style_type = array('circle', 'decimal', 'decimal-leading-zero', 'disc', 'lower-alpha', 'lower-roman', 'none', 'square', 'upper-alpha', 'upper-roman');
 
+$ht_css_font_weight = array('normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500', '600', '700', '800', '900'  );
+
 $ht_css_font_family = array(
 	array('Arial, “Helvetica Neue”, Helvetica, sans-serif','paragraph or title'),
 	'Cambria, Georgia, Times, “Times New Roman”, serif',

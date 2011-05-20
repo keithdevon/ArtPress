@@ -169,6 +169,7 @@ function ht_create_form_group($settings, $group) {
     global $ht_css_list_style_position;
     global $ht_css_list_style_type;
     global $ht_css_font_family;
+    global $ht_css_font_weight;
     
     $output = '';
     foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
@@ -200,6 +201,13 @@ function ht_create_form_group($settings, $group) {
                 
             case 'font-style':
                 $output.= ht_create_select($ht_css_font_style,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);
+                break;
+            case 'font-weight':
+                $output.= ht_create_select($ht_css_font_weight,
                                             "[section_settings][{$group}][{$css_attr}][value]",
                                             $css_attr_arr['row_label'],
                                             $css_attr_arr['field_blurb_suffix'],
