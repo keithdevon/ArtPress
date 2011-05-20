@@ -19,6 +19,7 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
     global $ht_text_align;
     global $ht_text_decoration;
     global $ht_css_border_style; 
+    global $ht_css_font_family;
     
     $section_arr = $options['section_settings'][$section];
     
@@ -43,11 +44,12 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
                 break;
             case 'font-family':
                 $property = '';
-                $key = $css_group_arr['value'];
-                if ( is_array( $ht_css_font_family[$key] ) ) {
-                    $property = $ht_css_font_family[$key][0];
+                $font_select_num = $css_group_arr['value']; // 1, 2 or 3
+                $font_num = $options['fonts'][$font_select_num];
+                if ( is_array( $ht_css_font_family[$font_num] ) ) {
+                    $property = $ht_css_font_family[$font_num][0];
                 } else {
-                    $property = $ht_css_font_family[$key];
+                    $property = $ht_css_font_family[$font_num];
                 }
                 $declarations .=  dec($css_group, $property);
                 break;

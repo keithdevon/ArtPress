@@ -76,7 +76,7 @@ function artpress_options_do_page() {
     $num_colors = $global_options['num_colors'];
     $num_fonts = $global_options['num_fonts'];
     global $select_options, $radio_options;
-
+    global $ht_css_font_family;
     if ( ! isset( $_REQUEST['updated'] ) )
         $_REQUEST['updated'] = false;
 
@@ -126,7 +126,8 @@ function artpress_options_do_page() {
                     }
 
                     foreach (array_keys($settings['fonts']) as $font) {
-                        echo ht_form_text_field('Font ' .  $font, '[fonts][' . $font . ']', esc_attr( $settings['fonts'][$font] ), 'blurb');
+                        //echo ht_form_text_field('Font ' .  $font, '[fonts][' . $font . ']', esc_attr( $settings['fonts'][$font] ), 'blurb');
+                        echo ht_create_select($ht_css_font_family, '[fonts][' . $font . ']', 'Font ' .  $font, 'blurb', $settings['fonts'][$font]);
                     }
                     /* Color Pickers */ 
                     ?>
@@ -172,6 +173,7 @@ function artpress_options_do_page() {
  */
 function artpress_options_validate( $new_settings ) {
     global $select_options, $radio_options, $artpress_colors, $num_colors;
+    global $ht_css_font_family;
     
     // we need to merge the new settings with the old settings.
     // if we were to populate our new form using only the new settings
@@ -205,11 +207,16 @@ function artpress_options_validate( $new_settings ) {
     } 
     
     // correct the fonts
-    if ( ! isset( $settings['fonts'] ) ) $settings['fonts'] = array('Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif', '"Helvetica Neue", Arial, Helvetica, sans-serif', 'Futura, "Century Gothic", AppleGothic, sans-serif');
+    if ( ! isset( $settings['fonts'] ) ) $settings['fonts'] = array(0, 0, 0);
     
-    foreach(array_keys($settings['fonts']) as $key) {        
-        if (!(isset( $settings['fonts'][$key]))) {  // TODO need to properly validate the font 
-            $settings['fonts'][$key] = 'Arial';        
+    foreach(array_keys($settings['fonts']) as $key) {
+        // TODO need to properly validate the font 
+        
+        $val = $settings['fonts'][$key];
+        $int = true; // is_int($val);// FIXME not typesafe
+        $small = ($val < sizeof($ht_css_font_family)) ;
+        if ( ! ( $int && $small ) )  {  
+            $settings['fonts'][$key] = '0';        
         }
     }
     

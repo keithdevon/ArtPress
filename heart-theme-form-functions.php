@@ -180,7 +180,18 @@ function ht_create_form_group($settings, $group) {
                                             $settings['section_settings'][$group]['css_selector']);
                 break;
             case 'font-family':
-                $output .= ht_create_select($ht_css_font_family, 
+                $select_fonts = array();
+                foreach (array_keys($settings['fonts']) as $font_num) {
+                     if( is_array( $ht_css_font_family[$settings['fonts'][$font_num]] ) ) {
+                         $font = $ht_css_font_family[$settings['fonts'][$font_num]][0];
+                         $select_fonts[$font_num] = $font;
+                     }
+                     else {
+                         $font = $ht_css_font_family[$settings['fonts'][$font_num]];
+                         $select_fonts[$font_num] = $font;
+                     }       
+                }
+                $output .= ht_create_select($select_fonts, 
                                                 "[section_settings][{$group}][{$css_attr}][value]",
                                                 $css_attr_arr['row_label'], 
                                                 $css_attr_arr['field_blurb_prefix'],
