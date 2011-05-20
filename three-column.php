@@ -13,8 +13,8 @@
  */
 
 get_header(); ?>
-
-		<div id="container" class="one-column row">
+    <div id="content" class="container">
+		<div class="three-columns row">
 		  <div class="threecol"><?php get_sidebar();?></div>
 			<div id="content" class="sixcol" role="main">
 			
@@ -34,6 +34,6 @@ get_header(); ?>
 			
 			<div class="clear"></div>
 			
-		</div><!-- #container -->
-
+		</div><!--  -->
+    </div><!-- #content -->
 <?php get_footer(); ?>

@@ -8,9 +8,9 @@
  */
 
 get_header(); ?>
-
-		<div id="container" class="row">
-			<div id="content" class="eightcol" role="main">
+    <div id="content" class="container">
+		<div class="row">
+			<div class="eightcol" role="main">
                 <?php get_template_part( 'ht-crumbs' );?>
 				<h1 class="page-title"><?php
 					printf( __( '%s', 'twentyten' ), single_cat_title( '', false ) );
@@ -27,7 +27,7 @@ get_header(); ?>
 				get_template_part( 'loop', 'category' );
 				?>
 
-			</div><!-- #content -->
+			</div><!-- .eightcol -->
 			
 			<div class="fourcol last">
 			 <?php get_sidebar(); ?>
@@ -35,7 +35,7 @@ get_header(); ?>
             
             <div class="clear"></div>
 			
-		</div><!-- #container -->
-
+		</div><!-- .row -->
+    </div>
 
 <?php get_footer(); ?>

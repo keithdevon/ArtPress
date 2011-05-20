@@ -14,9 +14,9 @@
  */
 
 get_header(); ?>
-
-		<div id="container" class="row">
-			<div id="content" class="eightcol" role="main">
+    <div id="content" class="container">
+		<div class="row">
+			<div class="eightcol" role="main">
 			<h1 class="page-title">Blog</h1>
 
 			<?php
@@ -32,5 +32,5 @@ get_header(); ?>
 			<div class="clear"></div>
 			
 		</div><!-- #container -->
-
+    </div>
 <?php get_footer(); ?>
