@@ -81,28 +81,68 @@ function ht_create_radio_row($potential_options, $id, $row_label, $field_blurb_p
         )
     ); 
 }
-/** 
- * @var $potential_options should be a one dimensional array<br>
- * where the key is the value of the option<br>
- * and the value is the visible text for that option.
- * */
-function ht_create_select($potential_options, $id, $row_label, $field_blurb_prefix, $selected, $form_style_attrs=null) {
-    $field_blurb_prefix = __($field_blurb_prefix);
-    $html_options = '';
-
+/*function ht_options_styled ($is_selected, $value, $content, $style_attrs_arr=null) {
+        $attr = '';
+        // add any existing style attributes to the option group
+        if ($style_attrs_arr) {
+            foreach (array_keys($style_attrs_arr) as $css_attr) {
+                $attr .= dec($css_attr, $style_attrs_arr[$css_attr]);  
+            } 
+        }
+        return ht_option( $is_selected, $value, $content, attr_style( $attr ));
+}*/
+function ht_options_styled ($potential_options, $selected, $option_group_name, $form_style_attrs=null) {    
+    $html_options = '';        
     foreach (array_keys($potential_options) as $opt) {
         $attr = '';
+        
+        // add any existing style attributes to the option group
         if ($form_style_attrs) {
             foreach (array_keys($form_style_attrs) as $css_attr) {
                 $attr .= dec($css_attr, $form_style_attrs[$css_attr][$opt]);  
             } 
         }
         $html_options .= ht_option( ((string)$opt == $selected) ? true : false, 
-                        (string)$opt, $potential_options[$opt], attr_style( $attr ));
+                        "k[]={$option_group_name}&k[]={$opt}", 
+                        $potential_options[$opt], 
+                        attr_style( $attr ));
+        }
+    return $html_options;
+}
+/** 
+ * @var $potential_options should be a one dimensional array<br>
+ * where the key is the value of the option<br>
+ * and the value is the visible text for that option.<br>
+ * @var $form_style_arr is a two dimensional array where the the first key<br>
+ * is a css attribute e.g. <i>background-color</i><br>
+ * and the second key denotes which value to use for the aforementioned css attribute
+ * */
+function ht_create_select($potential_options, $id, $row_label, $field_blurb_prefix, $selected, $form_style_attrs=null) {
+    $field_blurb_prefix = __($field_blurb_prefix);
+    $html_options = ht_options_styled($potential_options, $selected, null, $form_style_attrs);
+    return ht_form_field( $row_label, ht_select( $id, $html_options ) );   
+}
+/** 
+ * @var $potential_grouped_options should be a two dimensional array<br>
+ * where the first key is the optgroup name,<br> 
+ * the second key is the value of the option<br>
+ * and the value is the visible text for that option.<br>
+ * @var $form_style_arr is a three dimensional array<br>
+ * where the first key is the optgroup name,<br> 
+ * the second key is a css attribute e.g. <i>background-color</i><br>
+ * and the third key denotes which value to use for the aforementioned css attribute
+ * */
+function ht_create_select_grouped($potential_grouped_options, $id, $row_label, $field_blurb_prefix, $selected, $form_style_attrs=null) {
+    $field_blurb_prefix = __($field_blurb_prefix);
+    $html_optgroups = '';
+
+    foreach (array_keys($potential_grouped_options) as $optgroup) {
+        $style_group = null;
+        if ( isset($form_style_attrs) ) $style_group = $form_style_attrs($optgroup);
+        $options = ht_options_styled($potential_grouped_options[$optgroup], $selected, $style_group);
+        $html_optgroups .= optgroup($optgroup, $options);
     }
-    return ht_form_field($row_label, 
-                        ht_select($id, $html_options));
-    
+    return ht_form_field($row_label, ht_select($id, $html_optgroups));
 }
 function ht_create_form_group($settings, $group) {
     global $ht_css_repeat;
@@ -110,10 +150,10 @@ function ht_create_form_group($settings, $group) {
     global $ht_css_font_style;
     global $ht_css_text_transform;
     global $ht_css_text_align;
-    global $ht_css_text_decoration;
     global $ht_css_border_style; 
     global $ht_css_list_style_position;
     global $ht_css_list_style_type;
+    global $ht_css_font_family;
     
     $output = '';
     foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
@@ -125,7 +165,7 @@ function ht_create_form_group($settings, $group) {
                                             $settings['section_settings'][$group]['css_selector']);
                 break;
             case 'font-family':
-                $output .= ht_create_select($settings['fonts'], 
+                $output .= ht_create_select_grouped($ht_css_font_family, 
                                                 "[section_settings][{$group}][{$css_attr}][value]",
                                                 $css_attr_arr['row_label'], 
                                                 $css_attr_arr['field_blurb_prefix'],
