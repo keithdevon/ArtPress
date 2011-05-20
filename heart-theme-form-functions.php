@@ -405,7 +405,7 @@ function ht_create_form_group($settings, $group) {
 }
 function ht_create_form($settings) {
     foreach (array_keys($settings['section_settings']) as $section) {
-        echo ot('h3') . '<a href="#">' .ucfirst($section) . ' settings' . '</a>' . ct('h3');
+        echo ot('h3') . '<a href="#">' .ucfirst($section) . '</a>' . ct('h3');
         echo ot('div');
         echo '<form method="post" action="options.php">';
         settings_fields( 'artpress_options' ); 
