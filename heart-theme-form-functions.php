@@ -169,6 +169,7 @@ function ht_create_form_group($settings, $group) {
     global $ht_css_list_style_position;
     global $ht_css_list_style_type;
     global $ht_css_font_family;
+    global $ht_css_font_weight;
     
     $output = '';
     foreach (array_keys($settings['section_settings'][$group]) as $css_attr) {
@@ -180,7 +181,18 @@ function ht_create_form_group($settings, $group) {
                                             $settings['section_settings'][$group]['css_selector']);
                 break;
             case 'font-family':
-                $output .= ht_create_select($ht_css_font_family, 
+                $select_fonts = array();
+                foreach (array_keys($settings['fonts']) as $font_num) {
+                     if( is_array( $ht_css_font_family[$settings['fonts'][$font_num]] ) ) {
+                         $font = $ht_css_font_family[$settings['fonts'][$font_num]][0];
+                         $select_fonts[$font_num] = "font {$font_num} -- {$font}";
+                     }
+                     else {
+                         $font = $ht_css_font_family[$settings['fonts'][$font_num]];
+                         $select_fonts[$font_num] = "font {$font_num} -- {$font}";
+                     }       
+                }
+                $output .= ht_create_select($select_fonts, 
                                                 "[section_settings][{$group}][{$css_attr}][value]",
                                                 $css_attr_arr['row_label'], 
                                                 $css_attr_arr['field_blurb_prefix'],
@@ -189,6 +201,13 @@ function ht_create_form_group($settings, $group) {
                 
             case 'font-style':
                 $output.= ht_create_select($ht_css_font_style,
+                                            "[section_settings][{$group}][{$css_attr}][value]",
+                                            $css_attr_arr['row_label'],
+                                            $css_attr_arr['field_blurb_suffix'],
+                                            $css_attr_arr['value']);
+                break;
+            case 'font-weight':
+                $output.= ht_create_select($ht_css_font_weight,
                                             "[section_settings][{$group}][{$css_attr}][value]",
                                             $css_attr_arr['row_label'],
                                             $css_attr_arr['field_blurb_suffix'],
@@ -386,7 +405,7 @@ function ht_create_form_group($settings, $group) {
 }
 function ht_create_form($settings) {
     foreach (array_keys($settings['section_settings']) as $section) {
-        echo ot('h3') . '<a href="#">' .ucfirst($section) . ' settings' . '</a>' . ct('h3');
+        echo ot('h3') . '<a href="#">' .ucfirst($section) . '</a>' . ct('h3');
         echo ot('div');
         echo '<form method="post" action="options.php">';
         settings_fields( 'artpress_options' ); 
