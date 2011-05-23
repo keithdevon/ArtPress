@@ -9,9 +9,13 @@
                                 </div><!-- .entry-meta -->
                             </div><!-- twelvecol last -->
                             <div class="clear"></div>
+                            <div class="twelvecol">
+                                <?php the_content(); ?>
+                            </div>
                         </div><!-- row -->
                         
-					       	<?php the_content(); ?>
+                    
+					       	
                         
 					       	
 					       	<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'twentyten' ), 'after' => '</div>' ) ); ?>

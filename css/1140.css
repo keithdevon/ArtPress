@@ -20,6 +20,10 @@ margin: 0 auto;
 overflow: hidden;
 }
 
+.eightcol .row {
+    min-width: 500px;
+    }
+
 .onecol, .twocol, .threecol, .fourcol, .fivecol, .sixcol, .sevencol, .eightcol, .ninecol, .tencol, .elevencol {
 margin-right: 3.8%;
 float: left;

@@ -17,7 +17,7 @@ get_header(); ?>
     <div id="content" class="container">
 		<div class="row">
 			<div class="eightcol" role="main">
-			<h1 class="page-title">Blog</h1>
+                <h1 class="page-title">Blog</h1>
 
 			<?php
 			/* Run the loop to output the posts.

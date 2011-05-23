@@ -17,8 +17,7 @@ get_header(); ?>
 					printf( __( '%s', 'twentyten' ), single_cat_title( '', false ) );
 				?></h1>
 				</div>
-				<div class="clear"></div>
-            </div>
+            <div class="clear"></div>
 				<?php
 					$category_description = category_description();
 					if ( ! empty( $category_description ) )
