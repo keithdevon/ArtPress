@@ -27,9 +27,10 @@ function theme_options_init(){
     
     add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'theme_options_slug' );
 
-    add_settings_field( $background_image_prefix . '1', 'Background Image 1', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '1');
-    add_settings_field( $background_image_prefix . '2', 'Background Image 2', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '2');
-    add_settings_field( $background_image_prefix . '3', 'Background Image 3', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '3');
+    add_settings_field( 'logo-image',                   'Logo image',         'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '0');
+    add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '1');
+    add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '2');
+    add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '3');
             
     $options = get_option('artpress_theme_options');  
     $padded_with_default_options = artpress_options_validate($options);
@@ -43,7 +44,7 @@ function theme_options_add_page() {
 }
 
 function ap_bi_section_html() {
-    echo "<p>Upload background images here, blah, blah ...</p>";
+    echo "<p>Upload images here</p>";
 }
 
 /** Displays the html form for selecting background images */
@@ -81,7 +82,7 @@ function artpress_options_do_page() {
         $_REQUEST['updated'] = false;
 
     ?>
-
+	<h3>Artpress Options</h3>
     <script>
 	jQuery(function() {
 		jQuery( "#accordion" ).accordion({
@@ -154,7 +155,7 @@ function artpress_options_do_page() {
                 <p class="submit"><input type="submit" class="button-primary" value="<?php _e( 'Save global settings ' ); ?>" /></p>
             </form>
         </div>
-        <h3><a href="#">Background Images</a></h3>
+        <h3><a href="#">Image upload</a></h3>
         <div class="wrap">
             <form method="post" enctype="multipart/form-data" action="options.php">
        	        <?php settings_fields('artpress_options_bi'); ?>
@@ -283,11 +284,12 @@ function artpress_options_validate( $new_settings ) {
             'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'0' ),
         	'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ),
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),
-            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
+        	'logo-image-use'  => array( 'row_label'=>'use logo image?', 'field_blurb_suffix'=>'tick to use the logo image', 'value'=>'off'),
+            /*'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
             'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
         	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
         	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'0' ),
-        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),        
+        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),*/        
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
             

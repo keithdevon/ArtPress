@@ -1,4 +1,6 @@
 <?php
+// TODO reorder attributes in alphabetical order
+
 /** Generic HTML generating functions */
 /* Generic HTML attribute functions */
 function attribute($name, $value) { 
@@ -10,6 +12,9 @@ function attr_name ($value)       { return attribute('name', $value); }
 function attr_class ($value)      { return attribute('class', $value); }
 function attr_value ($value)      { return attribute('value', $value); }
 function attr_type ($value)       { return attribute('type', $value); }
+function attr_alt ($value)        { return attribute('alt', $value); }
+function attr_src ($value)        { return attribute('src', $value); }
+
 function attr_style ($value)      { 
     if( $value==true ) return attribute('style', $value);
     else return ''; 

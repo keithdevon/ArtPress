@@ -235,6 +235,7 @@ function ht_create_form_group($settings, $group) {
                                             $css_attr_arr['value']);
                 break;
             case 'background-image':
+            case 'logo-image-use':
                 $output .= ht_form_checkbox($css_attr_arr['row_label'],
                                             "[section_settings][{$group}][{$css_attr}][value]",
                                             ( $css_attr_arr['value'] == 'on' ) ? true : false, 
