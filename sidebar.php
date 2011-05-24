@@ -20,8 +20,21 @@
 	 */
 	if ( ! dynamic_sidebar( 'primary-widget-area' ) ) : ?>
 
+<?php
+// Get the id of a page by its name
+/*function get_page_id($page_name){
+	global $wpdb;
+	$page_name = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name = '".$page_name."'");
+	return $page_name;
+}*/
+
+?>
+
 			<li id="search" class="widget-container widget_search">
+				<h3 class="widget-title">Search</h3>
+				<ul>
 				<?php get_search_form(); ?>
+				</ul>
 			</li>
 
 			<li id="archives" class="widget-container">

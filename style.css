@@ -171,6 +171,11 @@ code {
 	margin-top: 20px;
 	padding: 0 20px;
 }
+#site-title img {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow:none;
+    }
 
 /* Structure the footer area */
 #footer-widget-area {
@@ -397,10 +402,7 @@ h1#site-title, #site-title {
 
 /* This is the custom header image */
 #branding img {
-	border-top: 4px solid #000;
-	border-bottom: 1px solid #000;
-	display: block;
-	float: left;
+
 }
 
 
