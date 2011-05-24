@@ -306,7 +306,7 @@ function artpress_options_validate( $new_settings ) {
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ), 
         	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'1' ),  
         	'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'2' ),
-        	 'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
+        	'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
         	'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),       
         	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
@@ -319,14 +319,14 @@ function artpress_options_validate( $new_settings ) {
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ), 
         	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),  
             'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'0' ),
-             'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
+            'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
         	'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ),
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),
-            /*'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
+            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
             'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
         	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
         	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'0' ),
-        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),*/        
+        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),        
             'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
             'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ));
             
@@ -337,7 +337,7 @@ function artpress_options_validate( $new_settings ) {
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'0' ), 
         	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),  
             'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'0' ),
-             'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
+            'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
         	'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '0' ),
             'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),
             'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
@@ -354,7 +354,7 @@ function artpress_options_validate( $new_settings ) {
             'font-size'       => array( 'row_label'=>'font-size' , 'field_blurb_suffix'=>'Font size' , 'value'=>'.8em' ),
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ), 
         	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ), 
-             'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'1' ),
+            'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'1' ),
         	'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
             'text-decoration'  => array( 'row_label'=>'text decoration' , 'field_blurb_suffix'=>'text decoration' , 'value'=>'0' ));     
         
@@ -452,10 +452,11 @@ function artpress_options_validate( $new_settings ) {
         	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
         	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'1' ),        
         	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('center', 'top') ),
-            'padding'         => array( 'row_label'=>'padding' , 'value'=>'' , 'field_blurb_suffix'=>'internal space between the element\'s content and its border' ),
-            'margin'          => array( 'row_label'=>'margin' , 'value'=>'' , 'field_blurb_suffix'=>'external space between the element\'s border and other elements' ),
             'box-shadow-use'  => array( 'row_label'=>'use box shadow?', 'field_blurb_suffix'=>'tick to use a box shadow', 'value'=>'off'),
-            'box-shadow'	  => array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('3px', '3px', '7px', 'rgba(200,200,200,0.5)' ) ) );
+            'box-shadow'	  => array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('3px', '3px', '7px', 'rgba(200,200,200,0.5)' ) ),
+            'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
+            'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
+        );          
         
         if( ! isset($settings['section_settings']['footer']) ) 
         $settings['section_settings']['footer'] = array(
