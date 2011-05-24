@@ -73,10 +73,22 @@ foreach(array_keys($options['section_settings']) as $section) { // body, page et
             case 'background-color':
                 $declarations .= dec($css_group, $options['colors'][$css_group_arr['value']]);
                 break;
-            case 'padding': case 'padding-top': case 'padding-bottom': case 'padding-left': case 'padding-right':
-            case 'margin': case 'margin-top': case 'margin-bottom': case 'margin-left': case 'margin-right':
+            case 'padding-top': case 'padding-bottom': case 'padding-left': case 'padding-right':
+            case 'margin-top': case 'margin-bottom': case 'margin-left': case 'margin-right':
                 $declarations .= dec($css_group, $css_group_arr['value']);
-                break;   
+                break;
+            case 'margin':
+                $declarations .= dec('margin-top',    $css_group_arr['value'][(string)0]);
+                $declarations .= dec('margin-right',  $css_group_arr['value'][(string)1]);                
+                $declarations .= dec('margin-bottom', $css_group_arr['value'][(string)2]);
+                $declarations .= dec('margin-left',   $css_group_arr['value'][(string)3]);
+                break;
+            case 'padding':
+                $declarations .= dec('padding-top',    $css_group_arr['value'][(string)0]);
+                $declarations .= dec('padding-right',  $css_group_arr['value'][(string)1]);                
+                $declarations .= dec('padding-bottom', $css_group_arr['value'][(string)2]);
+                $declarations .= dec('padding-left',   $css_group_arr['value'][(string)3]);                
+                break;  
             case 'background-image:url':
                 if($section_arr['background-image']['value'] == 'on') {
                     $declarations .= "{$css_group}('{$background_images[$css_group_arr['value']]['url']}');";
