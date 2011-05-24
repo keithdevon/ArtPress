@@ -458,14 +458,12 @@ div.menu li {
 	top: 0;
 }
 #access ul ul a {
-	background: #333;
 	line-height: 1em;
 	padding: 10px;
 	width: 160px;
 	height: auto;
 }
 #access li:hover > a {
-    background: transparent;
     }
 #access ul ul :hover > a {
 	
@@ -839,15 +837,15 @@ img.size-medium,
 img.alignleft {
 	display: inline;
 	float: left;
-	margin-right: 24px;
-	margin-top: 4px;
+	margin-right: 1.5em;
+	margin-top: .4em;
 }
 .alignright,
 img.alignright {
 	display: inline;
 	float: right;
-	margin-left: 24px;
-	margin-top: 4px;
+	margin-left: 1.5em;
+	margin-top: .4em;
 }
 .aligncenter,
 img.aligncenter {
@@ -859,21 +857,20 @@ img.aligncenter {
 img.alignleft,
 img.alignright,
 img.aligncenter {
-	margin-bottom: 12px;
+	margin-bottom: 0.8em;
 }
 .wp-caption {
 	background: #f1f1f1;
-	line-height: 18px;
-	margin-bottom: 20px;
+	line-height: 1.5em;
+	margin-bottom: 1.5em;
 	max-width: 632px !important; /* prevent too-wide images from breaking layout */
-	padding: 4px;
+	padding: .4em;
 	text-align: center;
 }
 .wp-caption img {
 	margin: 5px 5px 0;
 }
 .wp-caption p.wp-caption-text {
-	color: #888;
 	font-size: 12px;
 	margin: 5px;
 }
@@ -881,7 +878,7 @@ img.aligncenter {
 	margin: 0;
 }
 .gallery {
-	margin: 0 auto 18px;
+	margin: 0 auto 1em;
 }
 .gallery .gallery-item {
 	float: left;
@@ -913,7 +910,6 @@ These are now being handled by our column divs - kdev
 	margin: 0;
 }
 .gallery img {
-	margin-bottom:1.5em;
 }
 .gallery br+br {
 	display: none;
@@ -1157,7 +1153,7 @@ h3#reply-title {
 }
 .widget-area ul ul {
 	list-style: circle;
-	margin-left: 1em;
+	margin-left: 18px;
 }
 .widget-area select {
 	max-width: 100%;
