@@ -1028,27 +1028,22 @@ class HTChildMenu extends WP_Widget {
     function widget($args, $instance) {
         extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
-        ?>
-              <?php echo $before_widget; ?>
+       
+        global $wp_query;
+        $thePostID = $wp_query->post->ID;
+
+        $children = wp_list_pages('title_li=&child_of='.$thePostID.'&echo=0'.'&depth=1');
+        if ($children) { ?>
+            <?php echo $before_widget; ?>
                   <?php if ( $title )
                         echo $before_title . $title . $after_title; ?>
-                  
-  <?php                // Works in single post outside of the Loop
-function ht_child_pages() {
-global $wp_query;
-$thePostID = $wp_query->post->ID;
-
-$children = wp_list_pages('title_li=&child_of='.$thePostID.'&echo=0'.'&depth=1');
-  if ($children) { ?>
-  <ul class="sub-pages">
-  <?php echo $children; ?>
-  </ul>
-  <?php }} ?>
   
-  <?php ht_child_pages(); ?>
-                  
-                  
-              <?php echo $after_widget; ?>
+                        <ul class="sub-pages">
+                        <?php echo $children; ?>
+                        </ul>
+        <?php } ?>
+               
+        <?php echo $after_widget; ?>
         <?php
     }
 

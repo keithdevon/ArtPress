@@ -259,6 +259,11 @@ h5, p {
     font-size: 1em;
 	margin-bottom: 1.5em;
 }
+
+p {
+    
+    }
+
 ul {
 	list-style: square;
 	margin: 0 0 1.5em 1.5em;
@@ -681,14 +686,8 @@ body.page .edit-link {
 	display: block;
 }
 #entry-author-info {
-	background: #f2f7fc;
-	border-top: 4px solid #000;
 	clear: both;
-	font-size: 14px;
-	line-height: 20px;
-	margin: 24px 0;
 	overflow: hidden;
-	padding: 18px 20px;
 }
 #entry-author-info #author-avatar {
 	background: #fff;
@@ -700,13 +699,9 @@ body.page .edit-link {
 }
 #entry-author-info #author-description {
 	float: left;
-	margin: 0 0 0 104px;
+	margin: 0 0 2em 104px;
 }
 #entry-author-info h2 {
-	color: #000;
-	font-size: 100%;
-	font-weight: bold;
-	margin-bottom: 0;
 }
 .entry-utility {
 	clear: both;
