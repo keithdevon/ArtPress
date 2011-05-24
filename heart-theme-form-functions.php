@@ -349,14 +349,38 @@ function ht_create_form_group($settings, $group) {
                                                 "blah");
                 break;    
             case 'font-size':
-            case 'padding': case 'padding-top': case 'padding-bottom': case 'padding-left': case 'padding-right':
-            case 'margin': case 'margin-top': case 'margin-bottom': case 'margin-left': case 'margin-right':
+            case 'padding-top': case 'padding-bottom': case 'padding-left': case 'padding-right':
+            case 'margin-top': case 'margin-bottom': case 'margin-left': case 'margin-right':
                 $output .= ht_form_text_field($css_attr_arr['row_label'], 
                 							  "[section_settings][{$group}][{$css_attr}][value]", 
                                                esc_attr( $css_attr_arr['value'] ),
                                                __( $css_attr_arr['field_blurb_suffix'] ), 
                                                '5');                
                 break;    
+            case 'margin':
+            case 'padding':
+                $cells = ht_form_cell("[section_settings][{$group}][{$css_attr}][value][0]", 
+                                        '', 
+                                        $css_attr_arr['value'][0], 
+                                        6, 
+                                        'top');
+                $cells .= ht_form_cell("[section_settings][{$group}][{$css_attr}][value][1]", 
+                                        '', 
+                                        $css_attr_arr['value'][1], 
+                                        6, 
+                                        'right');
+                $cells .= ht_form_cell("[section_settings][{$group}][{$css_attr}][value][2]", 
+                                        '', 
+                                        $css_attr_arr['value'][2], 
+                                        6, 
+                                        'bottom');
+                $cells .= ht_form_cell("[section_settings][{$group}][{$css_attr}][value][3]", 
+                                        '', 
+                                        $css_attr_arr['value'][3], 
+                                        6, 
+                                        'left');    
+                $output .= ht_form_field($css_attr_arr['row_label'], table(tr($cells)));                                                                                                                       
+                break;
             case 'border-use':
                 $output .= ht_form_checkbox($css_attr_arr['row_label'],
                                             "[section_settings][{$group}][{$css_attr}][value]",
