@@ -13,10 +13,10 @@
  */
 
 get_header(); ?>
-
-		<div id="container" class="one-column row">
+    <div id="content" class="container">
+		<div class="row">
 		  
-			<div id="content" class="sixcol" role="main">
+			<div class="sixcol" role="main">
 			
 			<?php get_template_part( 'ht-crumbs' );?>
 
@@ -35,5 +35,5 @@ get_header(); ?>
 			<div class="clear"></div>
 			
 		</div><!-- #container -->
-
+    </div>
 <?php get_footer(); ?>

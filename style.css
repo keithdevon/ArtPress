@@ -83,6 +83,9 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 #content {
 
 }
+.post {
+    margin-bottom:1.5em;
+    }
 #primary,
 #secondary {
 	
@@ -198,7 +201,7 @@ body {
 body,
 input,
 textarea {
-	color: #666;
+	
 }
 hr {
 	background-color: #e7e7e7;
@@ -342,14 +345,14 @@ textarea {
 	padding: 2px;
 }
 a:link {
-	color: #0066cc;
+	
 }
 a:visited {
-	color: #743399;
+	
 }
 a:active,
 a:hover {
-	color: #ff4b33;
+	
 }
 
 /* Text meant only for screen readers */
@@ -389,6 +392,7 @@ h1#site-title, #site-title {
 	float:left;
 	line-height:1.5em;
 	margin-bottom:0;
+    width:100%;
 }
 
 /* This is the custom header image */
@@ -454,18 +458,16 @@ div.menu li {
 	top: 0;
 }
 #access ul ul a {
-	background: #333;
 	line-height: 1em;
 	padding: 10px;
 	width: 160px;
 	height: auto;
 }
 #access li:hover > a {
-    background: transparent;
     }
 #access ul ul :hover > a {
-	background: #ddd;
-	color: #888;
+	
+	
 }
 #access ul li:hover > ul {
 	display: block;
@@ -474,7 +476,7 @@ div.menu li {
 #access ul li.current-menu-ancestor > a,
 #access ul li.current-menu-item > a,
 #access ul li.current-menu-parent > a {
-	color: #fff;
+	
 	text-shadow: none;
 }
 * html #access ul li.current_page_item a,
@@ -482,7 +484,7 @@ div.menu li {
 * html #access ul li.current-menu-item a,
 * html #access ul li.current-menu-parent a,
 * html #access ul li a:hover {
-	color: #fff;
+	
 }
 
 #access ul#menu-main-menu {
@@ -576,7 +578,7 @@ div.menu li {
 }
 .page-title a:active,
 .page-title a:hover {
-	color: #ff4b33;
+	
 }
 
 .entry-title a:link,
@@ -586,11 +588,10 @@ div.menu li {
 }
 .entry-title a:active,
 .entry-title a:hover {
-	color: #ff4b33;
+	
 }
 .entry-meta {
-	color: #888;
-	font-size: 12px;
+	font-size: 0.8em;
 }
 .entry-meta abbr,
 .entry-utility abbr {
@@ -671,7 +672,7 @@ div.menu li {
 }
 .page-link a:active,
 .page-link a:hover {
-	color: #ff4b33;
+	
 }
 body.page .edit-link {
 	clear: both;
@@ -717,7 +718,7 @@ body.page .edit-link {
 }
 .entry-meta a:hover,
 .entry-utility a:hover {
-	color: #ff4b33;
+	
 }
 #content .video-player {
 	padding: 0;
@@ -760,27 +761,24 @@ body.page .edit-link {
 .home #content .category-gallery .entry-utility {
 	padding-top: 4px;
 }
-
-h2.gallery-title {
-    font-size:1em;
-    }
     
 h2.gallery-title a:link, h2.gallery-title a:visited { 
     text-decoration: none;
-    color:#333;
-    }
-/* ArtPress Gallery format styling */
-
-body.category-galleries div.format-gallery {
-    text-align:center;
     }
     
-body.category-galleries #content div.format-gallery .entry-title {
-    font-size: 1em;
+/* ArtPress Gallery format styling */
+    
+body.category-galleries h2.entry-title {
+    margin-bottom:0px;
+    }
+    
+body.category-galleries .entry-meta {
+    margin-bottom:1em;
     }
     
 body.category-galleries div.format-gallery .entry-content p, body.category-galleries div.format-gallery .entry-meta, body.category-galleries div.format-gallery .entry-utility {
-    display:none;
+    /*display:none; TODO remove this when options are present */
+    text-align:left;
     }
     
 body.category-galleries body.category-galleries #content div.format-gallery .entry-title {
@@ -788,20 +786,15 @@ body.category-galleries body.category-galleries #content div.format-gallery .ent
     font-size:1em;
     border: none;
     }
-    
-.archive div.format-gallery {
-    border:1px solid #eee;
-    margin-bottom: 1.5em;
-    padding:1.5em;
-    }
         
 body.category-galleries div.format-gallery {
-    margin-bottom: 0px;
+    margin-bottom: 2em;
     border: none;
     padding: 0px;
     }
     
-div.gallery-thumb {
+div.list div.gallery-thumb {
+    float:left;
     }
     
 .gallery-row {
@@ -844,15 +837,15 @@ img.size-medium,
 img.alignleft {
 	display: inline;
 	float: left;
-	margin-right: 24px;
-	margin-top: 4px;
+	margin-right: 1.5em;
+	margin-top: .4em;
 }
 .alignright,
 img.alignright {
 	display: inline;
 	float: right;
-	margin-left: 24px;
-	margin-top: 4px;
+	margin-left: 1.5em;
+	margin-top: .4em;
 }
 .aligncenter,
 img.aligncenter {
@@ -864,21 +857,20 @@ img.aligncenter {
 img.alignleft,
 img.alignright,
 img.aligncenter {
-	margin-bottom: 12px;
+	margin-bottom: 0.8em;
 }
 .wp-caption {
 	background: #f1f1f1;
-	line-height: 18px;
-	margin-bottom: 20px;
+	line-height: 1.5em;
+	margin-bottom: 1.5em;
 	max-width: 632px !important; /* prevent too-wide images from breaking layout */
-	padding: 4px;
+	padding: .4em;
 	text-align: center;
 }
 .wp-caption img {
 	margin: 5px 5px 0;
 }
 .wp-caption p.wp-caption-text {
-	color: #888;
 	font-size: 12px;
 	margin: 5px;
 }
@@ -886,7 +878,7 @@ img.aligncenter {
 	margin: 0;
 }
 .gallery {
-	margin: 0 auto 18px;
+	margin: 0 auto 1em;
 }
 .gallery .gallery-item {
 	float: left;
@@ -918,7 +910,6 @@ These are now being handled by our column divs - kdev
 	margin: 0;
 }
 .gallery img {
-	margin-bottom:1.5em;
 }
 .gallery br+br {
 	display: none;
@@ -933,19 +924,16 @@ These are now being handled by our column divs - kdev
 -------------------------------------------------------------- */
 
 .navigation {
-	color: #888;
-	font-size: 12px;
-	line-height: 18px;
+	font-size: .8em;
 	overflow: hidden;
 }
 .navigation a:link,
 .navigation a:visited {
-	color: #888;
 	text-decoration: none;
 }
 .navigation a:active,
 .navigation a:hover {
-	color: #ff4b33;
+
 }
 .nav-previous {
 	float: left;
@@ -957,14 +945,14 @@ These are now being handled by our column divs - kdev
 	width: 50%;
 }
 #nav-above {
-	margin: 0 0 18px 0;
+
 }
 #nav-above {
-	display: none;
+	
 }
 .paged #nav-above,
 .single #nav-above {
-	display: block;
+	
 }
 #nav-below {
 }
@@ -1034,12 +1022,12 @@ h3#comments-title {
 }
 .comment-meta a:link,
 .comment-meta a:visited {
-	color: #888;
+	
 	text-decoration: none;
 }
 .comment-meta a:active,
 .comment-meta a:hover {
-	color: #ff4b33;
+	
 }
 .commentlist .even {
 }
@@ -1051,11 +1039,11 @@ h3#comments-title {
 }
 .reply a,
 a.comment-edit-link {
-	color: #888;
+	
 }
 .reply a:hover,
 a.comment-edit-link:hover {
-	color: #ff4b33;
+	
 }
 .commentlist .children {
 	list-style: none;
@@ -1164,14 +1152,14 @@ h3#reply-title {
 	margin-left: 0;
 }
 .widget-area ul ul {
-	list-style: square;
-	margin-left: 1.3em;
+	list-style: circle;
+	margin-left: 18px;
 }
 .widget-area select {
 	max-width: 100%;
 }
 .widget_search #s {/* This keeps the search inputs in line */
-	width: 60%;
+	width: 40%;
 }
 .widget_search label {
 	display: none;
@@ -1231,7 +1219,6 @@ h3#reply-title {
 	color: #000;
 }
 .widget_rss a.rsswidget:hover {
-	color: #ff4b33;
 }
 .widget_rss .widget-title img {
 	width: 11px;
@@ -1413,9 +1400,15 @@ ul#breadcrumbs {
     }
 ul#breadcrumbs li {
     float:left;
-    font-size: .66em;
     margin:0px;
+    letter-spacing:1px;
     }
+    
+span.crumb-divider {
+    text-decoration:none;
+    }
+    
+
     
 /* ARTPRESS ADDITIONS - move these to a fully controlled stylesheet at a later date */
 
@@ -1429,6 +1422,6 @@ label.horiz {
     width:200px;
     }
     
-#header-widgets li.widget_search input#searchsubmit {
+#access form.searchform {
     float:right;
     }

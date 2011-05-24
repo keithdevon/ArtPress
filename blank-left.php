@@ -13,10 +13,11 @@
  */
 
 get_header(); ?>
-
-		<div id="container" class="one-column row">
+    <div id="content" class="container">
+		<div class="blank-left row">
 		  <div class="fourcol"></div>
-			<div id="content" class="eightcol last" role="main">
+			<div class="eightcol last" role="main">
+			 <?php get_template_part( 'ht-crumbs' );?>
 
 			<?php
 			/* Run the loop to output the page.
@@ -26,8 +27,8 @@ get_header(); ?>
 			 get_template_part( 'loop', 'page' );
 			?>
 
-			</div><!-- #content -->
+			</div><!-- .eightcol last -->
 			<div class="clear"></div>
-		</div><!-- #container -->
-
+		</div><!-- .row -->
+    </div><!-- content -->
 <?php get_footer(); ?>

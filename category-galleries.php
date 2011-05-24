@@ -9,7 +9,7 @@
 
 get_header(); ?>
 
-		<div id="content container" class="container" role="main">
+		<div id="content" class="container" role="main">
             <div class="row">
                 <div class="twelvecol last">
                 <?php get_template_part( 'ht-crumbs' );?>
@@ -17,8 +17,7 @@ get_header(); ?>
 					printf( __( '%s', 'twentyten' ), single_cat_title( '', false ) );
 				?></h1>
 				</div>
-				<div class="clear"></div>
-            </div>
+            <div class="clear"></div>
 				<?php
 					$category_description = category_description();
 					if ( ! empty( $category_description ) )

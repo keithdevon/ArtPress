@@ -14,8 +14,9 @@
 
 get_header(); ?>
 
-		<div id="container" class="row">
-			<div id="content" class="eightcol" role="main">
+		<div id="content" class="container">
+		  <div class="row">
+			<div class="eightcol" role="main">
 
 <?php
 	/* Queue the first post, that way we know
@@ -52,15 +53,18 @@ get_header(); ?>
 	 * called loop-archive.php and that will be used instead.
 	 */
 	 get_template_part( 'loop', 'archive' );
-?>
-
-			</div><!-- #content -->
+?>                  
+              
+              
+			</div>
 			
 			<div class="fourcol last">
-			 <?php get_sidebar(); ?>
+			  <?php get_sidebar(); ?>
             </div>
 			
-		</div><!-- #container -->
+		</div><!-- .row -->
+		  <div class="clear"></div>
+    </div><!-- .container -->
 
 
 <?php get_footer(); ?>

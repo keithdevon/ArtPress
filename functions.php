@@ -533,7 +533,7 @@ if ( ! function_exists( 'twentyten_posted_on' ) ) :
  * @since Twenty Ten 1.0
  */
 function twentyten_posted_on() {
-	printf( __( '<span class="%1$s">Posted on</span> %2$s <span class="meta-sep">by</span> %3$s', 'twentyten' ),
+	printf( __( '<span class="%1$s"></span> %2$s <span class="meta-sep">by</span> %3$s', 'twentyten' ),
 		'meta-prep meta-prep-author',
 		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="entry-date">%3$s</span></a>',
 			get_permalink(),
@@ -963,10 +963,17 @@ function ht_gallery_shortcode($attr) {
 
 	$output .= "
 			<br style='clear: both;' />
-		</div>\n";
+		</div></div>\n";
 
 	return $output;
 }
+
+
+// ADD new image sizes
+
+add_image_size( 'Gallery list', 350, 200, true );
+
+
 
 // Remove height and width from images
 
@@ -981,23 +988,6 @@ add_filter( 'wp_get_attachment_image', 'remove_thumbnail_dimensions', 10 );
 function remove_thumbnail_dimensions( $html ) {
     $html = preg_replace( '/(width|height)=\"\d*\"\s/', "", $html );
     return $html;
-}
-
-// Add jquery tools to admin
-
-if('is_admin') {
-
-wp_register_script('admin_accordion',
-       get_bloginfo('template_directory') . '/js/jquery-ui-1.8.12.custom.min.js',
-       array('jquery'),
-       '1.0' );
-       
-// enqueue the script
-wp_enqueue_script('admin_accordion');  
-
-wp_register_style( 'ht_accordion_styles', 
-        get_bloginfo('template_directory') . '/css/ui-lightness/jquery-ui-1.8.12.custom.css' );
-wp_enqueue_style( 'ht_accordion_styles' );  
 }
 
 

@@ -20,13 +20,12 @@
 				<?php if ( ! empty( $post->post_parent ) ) : ?>
 					<p class=""><a href="<?php echo get_permalink( $post->post_parent ); ?>" title="<?php esc_attr( printf( __( 'Return to %s', 'twentyten' ), get_the_title( $post->post_parent ) ) ); ?>" rel="gallery"><?php
 						/* translators: %s - title of parent post */
-						printf( __( '<span class="meta-nav">&larr;</span> %s', 'twentyten' ), get_the_title( $post->post_parent ) );
+						printf( __( '<span class="meta-nav">&larr; Back to </span> "%s"', 'twentyten' ), get_the_title( $post->post_parent ) );
 					?></a></p>
 				<?php endif; ?>
 
 				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<h2 class="entry-title"><?php the_title(); ?></h2>
-
 					<div class="entry-meta">
 						<?php
 							printf( __( '<span class="%1$s">By</span> %2$s', 'twentyten' ),

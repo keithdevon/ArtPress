@@ -9,8 +9,9 @@
 
 get_header(); ?>
 
-		<div id="container">
-			<div id="content" role="main">
+		<div id="content" class="container">
+			<div role="main" class="row">
+			 <div class="eightcol">
 
 <?php if ( have_posts() ) : ?>
 				<h1 class="page-title"><?php printf( __( 'Search Results for: %s', 'twentyten' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
@@ -30,8 +31,12 @@ get_header(); ?>
 					</div><!-- .entry-content -->
 				</div><!-- #post-0 -->
 <?php endif; ?>
-			</div><!-- #content -->
-		</div><!-- #container -->
-
-<?php get_sidebar(); ?>
+                </div><!-- eightcol -->
+			
+                <div class="fourcol last">
+                    <?php get_sidebar(); ?>
+                </div>
+                <div class="clear"></div>
+            </div><!-- .row -->
+		</div><!-- #content -->
 <?php get_footer(); ?>

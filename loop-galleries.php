@@ -20,12 +20,16 @@
 ?>
 
 <?php /* Display navigation to next/previous pages when applicable */ ?>
-<div class="row">
 <?php if ( $wp_query->max_num_pages > 1 ) : ?>
+
 	<div id="nav-above" class="navigation">
-		<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older posts', 'twentyten' ) ); ?></div>
-		<div class="nav-next"><?php previous_posts_link( __( 'Newer posts <span class="meta-nav">&rarr;</span>', 'twentyten' ) ); ?></div>
+	   <div class="twelvecol last">
+		<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older galleries', 'twentyten' ) ); ?></div>
+		<div class="nav-next"><?php previous_posts_link( __( 'Newer galleries <span class="meta-nav">&rarr;</span>', 'twentyten' ) ); ?></div>
+		</div>
 	</div><!-- #nav-above -->
+</div><!-- row -->
+
 <?php endif; ?>
 
 <?php /* If there are no posts to display, such as an empty archive page */ ?>
@@ -38,81 +42,65 @@
 		</div><!-- .entry-content -->
 	</div><!-- #post-0 -->
 <?php endif; ?>
-</div>
+
 
 <?php
-	/* Start the Loop.
-	 *
-	 * In Twenty Ten we use the same loop in multiple contexts.
-	 * It is broken into three main parts: when we're displaying
-	 * posts that are in the gallery category, when we're displaying
-	 * posts in the asides category, and finally all other posts.
-	 *
-	 * Additionally, we sometimes check for whether we are on an
-	 * archive page, a search page, etc., allowing for small differences
-	 * in the loop on each template without actually duplicating
-	 * the rest of the loop that is shared.
-	 *
-	 * Without further ado, the loop:
-	 */ ?>
+// THE GRID LOOP
+?>
+
+<?php
+$g_cat_layout = 'grid';
+if( $g_cat_layout == 'grid' ) {?>
+
 <?php $post_count = 0; ?>
 <?php while ( have_posts() ) : the_post(); ?>
 <?php   $post_count ++;
-        if($post_count == 7) $post_count = 1; ?>
+        if($post_count == 4) $post_count = 1; ?>
 
 
 <?php /* How to display posts of the Gallery format. The gallery category is the old way. */ ?>
 
 	<?php if ( ( function_exists( 'get_post_format' ) && 'gallery' == get_post_format( $post->ID ) ) || in_category( _x( 'gallery', 'gallery category slug', 'twentyten' ) ) ) : ?>
 	<?php if($post_count == 1) echo '<div class="row">';?>
-	<div class="twocol <?php if($post_count == 6) echo ' last';?>">
+	<div class="fourcol <?php if($post_count == 3) echo ' last';?>">
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-			<div class="entry-meta">
-				<?php twentyten_posted_on(); ?>
-			</div><!-- .entry-meta -->
+           
+			
 
 			<div class="entry-content">
 <?php if ( post_password_required() ) : ?>
 				<?php the_content(); ?>
 <?php else : ?>
-				<?php
+                				<?php
 					$images = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', 'post_mime_type' => 'image', 'orderby' => 'menu_order', 'order' => 'ASC', 'numberposts' => 999 ) );
 					if ( $images ) :
 						$total_images = count( $images );
 						$image = array_shift( $images );
-						$image_img_tag = wp_get_attachment_image( $image->ID, 'thumbnail' );
+						$image_img_tag = wp_get_attachment_image( $image->ID, 'Gallery list' );
 						$image_img_tag = preg_replace( '/(width|height)=\"\d*\"\s/', "", $image_img_tag );
 				?>
 						<div class="gallery-thumb">
 							<a class="size-thumbnail" href="<?php the_permalink(); ?>"><?php echo $image_img_tag; ?></a>
 						</div><!-- .gallery-thumb -->
-						<p><em><?php printf( _n( 'This gallery contains <a %1$s>%2$s photo</a>.', 'This gallery contains <a %1$s>%2$s photos</a>.', $total_images, 'twentyten' ),
+						
+<h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
+
+<div class="entry-meta">
+    <?php twentyten_posted_on(); ?>
+   <?php printf( _n( '<a %1$s>%2$s photo</a>.', '<a %1$s>| %2$s photos</a>.', $total_images, 'twentyten' ),
 								'href="' . get_permalink() . '" title="' . sprintf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ) . '" rel="bookmark"',
 								number_format_i18n( $total_images )
-							); ?></em></p>
+							); ?>
+</div>
 				<?php endif; ?>
 						<?php the_excerpt(); ?>
 <?php endif; ?>
-
-                <h2 class="gallery-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
                 
 			</div><!-- .entry-content -->
 			
-
-			<div class="entry-utility">
-			<?php if ( function_exists( 'get_post_format' ) && 'gallery' == get_post_format( $post->ID ) ) : ?>
-				<a href="<?php echo get_post_format_link( 'gallery' ); ?>" title="<?php esc_attr_e( 'View Galleries', 'twentyten' ); ?>"><?php _e( 'More Galleries', 'twentyten' ); ?></a>
-				<span class="meta-sep">|</span>
-			<?php elseif ( in_category( _x( 'gallery', 'gallery category slug', 'twentyten' ) ) ) : ?>
-				<a href="<?php echo get_term_link( _x( 'gallery', 'gallery category slug', 'twentyten' ), 'category' ); ?>" title="<?php esc_attr_e( 'View posts in the Gallery category', 'twentyten' ); ?>"><?php _e( 'More Galleries', 'twentyten' ); ?></a>
-				<span class="meta-sep">|</span>
-			<?php endif; ?>
-				<span class="comments-link"><?php comments_popup_link( __( 'Leave a comment', 'twentyten' ), __( '1 Comment', 'twentyten' ), __( '% Comments', 'twentyten' ) ); ?></span>
-				<?php edit_post_link( __( 'Edit', 'twentyten' ), '<span class="meta-sep">|</span> <span class="edit-link">', '</span>' ); ?>
-			</div><!-- .entry-utility -->
 		</div><!-- #post-## -->
     </div><!-- .twocol -->
-    <?php if($post_count == 6) echo ' <div class="clear"></div></div>';?>
+    <?php if($post_count == 3) echo ' <div class="clear"></div></div>';?>
 
 
 
@@ -124,11 +112,94 @@
 
 <?php /* Display navigation to next/previous pages when applicable */ ?>
 <?php if (  $wp_query->max_num_pages > 1 ) : ?>
-				<div id="nav-below" class="navigation">
-					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older posts', 'twentyten' ) ); ?></div>
-					<div class="nav-next"><?php previous_posts_link( __( 'Newer posts <span class="meta-nav">&rarr;</span>', 'twentyten' ) ); ?></div>
+            
+				<div id="nav-below" class="navigation row">
+				    <div class="twelvecol last">
+					   <div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older galleries', 'twentyten' ) ); ?></div>
+					   <div class="nav-next"><?php previous_posts_link( __( 'Newer galleries <span class="meta-nav">&rarr;</span>', 'twentyten' ) ); ?></div>
+				    </div>
 				</div><!-- #nav-below -->
+
+            <div class="clear"></div>
 </div>
 <?php endif; ?>
-    <div class="clear"></div>
-</div><!-- row of .twocols -->
+<? } 
+
+
+
+
+
+
+
+// LIST LAYOUT
+
+elseif($g_cat_layout == 'list') {
+?>
+
+<div class="row">
+
+<?php while ( have_posts() ) : the_post(); ?>
+
+	<?php if ( ( function_exists( 'get_post_format' ) && 'gallery' == get_post_format( $post->ID ) ) || in_category( _x( 'gallery', 'gallery category slug', 'twentyten' ) ) ) : ?>
+		<div id="post-<?php the_ID(); ?>" <?php post_class('list'); ?>>
+            <h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
+
+			<div class="entry-content">
+<?php if ( post_password_required() ) : ?>
+				<?php the_content(); ?>
+<?php else : ?>
+                				<?php
+					$images = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', 'post_mime_type' => 'image', 'orderby' => 'menu_order', 'order' => 'ASC', 'numberposts' => 999 ) );
+					if ( $images ) :
+						$total_images = count( $images );
+						$image = array_shift( $images );
+						$image_img_tag = wp_get_attachment_image( $image->ID, 'Gallery list' );
+						$image_img_tag = preg_replace( '/(width|height)=\"\d*\"\s/', "", $image_img_tag );
+				?>
+						<div class="gallery-thumb threecol">
+							<a class="size-thumbnail" href="<?php the_permalink(); ?>"><?php echo $image_img_tag; ?></a>
+						</div><!-- .gallery-thumb -->
+						
+						<div class="entry-meta">
+				            <?php twentyten_posted_on(); ?>
+						  <p><?php printf( _n( 'This gallery contains <a %1$s>%2$s photo</a>.', 'This gallery contains <a %1$s>%2$s photos</a>.', $total_images, 'twentyten' ),
+								'href="' . get_permalink() . '" title="' . sprintf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ) . '" rel="bookmark"',
+								number_format_i18n( $total_images )
+							); ?></p>
+                        </div>
+				<?php endif; ?>
+						<?php the_excerpt(); ?>
+<?php endif; ?>
+			
+		</div><!-- .entry-content -->
+    </div><!-- #post-## -->
+
+
+
+		<?php comments_template( '', true ); ?>
+
+	<?php endif; ?>
+
+<?php endwhile; // End the loop. Whew. ?>
+
+<?php /* Display navigation to next/previous pages when applicable */ ?>
+<?php if (  $wp_query->max_num_pages > 1 ) : ?>
+            
+				<div id="nav-below" class="navigation row">
+				    <div class="twelvecol last">
+					   <div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older galleries', 'twentyten' ) ); ?></div>
+					   <div class="nav-next"><?php previous_posts_link( __( 'Newer galleries <span class="meta-nav">&rarr;</span>', 'twentyten' ) ); ?></div>
+				    </div>
+				</div><!-- #nav-below -->
+
+            <div class="clear"></div>
+</div>
+<?php endif; ?>
+
+
+
+
+<?php } ?>
+
+    
+</div><!-- row -->

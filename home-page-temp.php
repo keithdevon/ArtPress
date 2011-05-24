@@ -29,7 +29,7 @@ get_header(); ?>
             <?php if ( is_active_sidebar( '2-2-home-widget-area' ) ) : ?>
                 <?php dynamic_sidebar( '2-2-home-widget-area' ); ?>
             <?php endif; ?>
-            
+            <div class="clear"></div>
         </div>
                 
         <div class="row">
@@ -47,7 +47,7 @@ get_header(); ?>
             <?php if ( is_active_sidebar( '3-3-home-widget-area' ) ) : ?>
             	<?php dynamic_sidebar( '3-3-home-widget-area' ); ?>
             <?php endif; ?>
-                         
+            <div class="clear"></div>           
         </div>
         
         <div class="clear"></div>
