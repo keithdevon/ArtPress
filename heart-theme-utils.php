@@ -1,4 +1,19 @@
 <?php
+/** converts a list to an nested array key in string form
+ * eg ('foo','bar','baz') -> [foo][bar][baz] 
+ */
+function am($array, $thing, $second_thing=null) {
+    if ($second_thing) {
+        return array_merge($array, array($thing), array($second_thing));
+    } else {
+        return array_merge($array, array($thing));
+    }
+}
+function get_qualifier($list) {
+    $qualifier = '';
+    foreach($list as $part) $qualifier .= "[{$part}]";
+    return $qualifier;
+}
 function array_merge_recursive_distinct ( array &$array1, array &$array2 )
 {
   $merged = $array1;

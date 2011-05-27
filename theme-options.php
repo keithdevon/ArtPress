@@ -2,25 +2,56 @@
 require_once 'heart-theme-utils.php';
 require_once 'heart-theme-form-functions.php';
 
-add_action( 'admin_init', 'theme_options_init' );
+add_action( 'admin_init', 'artpress_theme_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
 add_action( 'admin_init', 'artpress_options_load_scripts' );
 
 // Load our scripts
 function artpress_options_load_scripts() {
-    wp_enqueue_script('farbtastic', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.js', array('jquery'));
+    wp_register_script('jquery151',
+       get_bloginfo('template_directory') . '/js/james/js/jquery-1.5.1.min.js'
+       //,array('jquery'),
+       //'1.0' 
+       );      
+    
+    wp_register_script('jqueryui1813',
+           get_bloginfo('template_directory') . '/js/james/js/jquery-ui-1.8.13.custom.min.js',
+           array('jquery151')
+           //'1.0' 
+           );       
+    
+    wp_register_style( 'jqueryui1813css', 
+                        get_bloginfo('template_directory') . 
+                        	'/js/james/css/ui-lightness/jquery-ui-1.8.13.custom.css' );
+                        
+    wp_enqueue_script('jquery151');  
+    wp_enqueue_script('jqueryui1813');
+    wp_enqueue_style( 'jqueryui1813css' );  
+
+    wp_enqueue_script('farbtastic', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.js', array('jquery151'));
     wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.css' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
    
- 
-add_action('init', 'ht_init_method');
+    
+    add_action('init', 'ht_init_method');
 }
 /**
  * Init plugin options to white list our options
  */
 $background_image_prefix = 'ap_bi_';
 
-function theme_options_init(){
+function artpress_theme_init() {
+    register_setting( 'artpress_options', 'ap_options', 'ap_options_validate2' );
+    
+    // check if settings already exist
+    /*$options = get_option('ap_options');
+    if ( $options == null ) {
+        $options = default_settings();
+        update_option('ap_options', $options);
+    }*/
+}
+
+/*function theme_options_init(){
     global $background_image_prefix;
     register_setting( 'artpress_options', 'artpress_theme_options', 'artpress_options_validate' );
     register_setting( 'artpress_options_bi', 'ap_background_image_settings', 'ap_bi_validate' );
@@ -35,12 +66,13 @@ function theme_options_init(){
     $options = get_option('artpress_theme_options');  
     $padded_with_default_options = artpress_options_validate($options);
     update_option('artpress_theme_options', $padded_with_default_options);   
-}
+}*/
 /**
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'artpress_options_do_page', '', 110 ); // TODO stop Artpress Options from being displayed on the form
+        //add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'artpress_options_do_page', '', 110 ); // TODO stop Artpress Options from being displayed on the form
+        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'ap_settings_page', '', 110 ); // TODO stop Artpress Options from being displayed on the form
 }
 
 function ap_bi_section_html() {
@@ -71,8 +103,133 @@ function ap_bi_html($number) {
     $input = "<input type='file' name='{$file_id}' size='40' value='{$path}'/>";
     echo $image. $label . $input;
 }
+function ap_settings_page() {
+
+    // page title stuff
+    screen_icon(); 
+    echo h2( get_current_theme() . __( ' Options' ) ); 
+    if ( ! isset( $_REQUEST['updated'] ) ) $_REQUEST['updated'] = false;    
+    if ( false !== $_REQUEST['updated'] ) echo div( p(_e( 'Options saved' )), attr_class('updated fade') );
+ 
+    // create form for current save
+    //$settings = get_option( 'ap_options' ); // TODO this will be null on first invocation
+    $settings = default_settings();
+    
+    // pass full settings through
+    // needs to be full so the inputs have fully qualified names
+    ap_create_form(array('cs'), $settings['saves'][$settings['current-save-id']]); 
+
+}
+function default_save() {
+    return array(
+        'global-settings'=>array(
+            'fonts'=> array(26, 1, 4),
+    		'colors'=>array_merge(array('transparent'=>'transparent'), array('#222222', '#a9021e', '#666666', '#eeeeee', '#ffffff'))
+    
+        ),
+        'sections'=>array(
+    
+            'body'=>array( 
+                'css'=>'body',
+                'children'=>array(
+                    'page title' =>array(
+                        'css'=>'page-title',
+                        'typography'=>array(
+                            'font-size'      =>array(),
+                            'color'          =>array(),
+                            'text-align'     =>array(),
+                            'text-decoration'=>array(),
+                            'font-style'     =>array(),
+                            'text-transform' =>array()
+                        ),
+                        'background'=>array(
+                            'background-color'     =>array(),
+                            'background-image:url' =>array(),
+                            'background-position'  =>array(),
+                            'background-attachment'=>array(),
+                            'background-repeat'    =>array()
+                        ),
+                        'layout'=>array(
+                            'border' =>array(),
+                            'margin' =>array(),
+                            'padding'=>array(),
+                            'display'=>array()
+                        ),
+                        'effects'   =>array()
+                    ),
+                    'entry title'=>array(),
+                    'h2'         =>array()
+                )
+            ),
+            
+    		'header'=>array( 
+            	'css'=>'#header',
+                'children'=>array(
+                    'site title'      =>array(),
+                    'site description'=>array(),
+                )            
+            ),
+            
+    		'menu'=>array( 
+                'css'=>'#access',
+                'children'=>array(
+                    'link'      =>array(),
+                    'hover'     =>array(),
+                    'current'   =>array(),
+                    'dropdown'  =>array()
+                )            
+            )
+        )
+    );
+}
+function default_settings () {
+    $s = array(       
+        'current-save-id'=>'default',
+        'saves'=>array(
+            'default'=>default_save(),
+            'save1'  =>array(),
+            'save2'  =>array(),
+            'red'    =>array(),
+            'red2'   =>array()),
+        'cs'=>default_save()
+    );
+    return $s;
+}
+/** 
+ * @var new_settings will either be what is passed to update_option
+ * or what is returned from the options form
+ * */
+function ap_options_validate2( $new_settings ) {
+    // we need to merge the new settings with the old settings.
+    // if we were to populate our new form using only the new settings
+    // provided by the client's browser, then checkboxes would disappear 
+    // as no record of unticked checkboxes are returned to the server
+    $options = get_option('ap_options');
+    if ($options == null) {
+        $options = default_settings();
+    }
+    
+    if ( ! isset($options['current-save-id'] ) ) {
+        $options['current-save-id'] = 'default';
+    } 
+    /*if( is_array( $previous_settings ) ) {
+        $save_settings = array_merge_recursive_distinct($previous_settings, $new_settings);
+    } else {
+        $settings = array();
+    }*/
+    $previous_save = $options['saves'][$options['current-save-id']];
+    $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
+    
+    // validate save
+    
+    // store save
+    $options['saves'][$options['current-save-id']] = $merged_save;
+    
+    return $options;
+}
+
 /** Create the options page */
-function artpress_options_do_page() {
+/*function artpress_options_do_page() {
     global $global_options;
     $num_colors = $global_options['num_colors'];
     $num_fonts = $global_options['num_fonts'];
@@ -130,7 +287,7 @@ function artpress_options_do_page() {
                         //echo ht_form_text_field('Font ' .  $font, '[fonts][' . $font . ']', esc_attr( $settings['fonts'][$font] ), 'blurb');
                         echo ht_create_select($ht_css_font_family, '[fonts][' . $font . ']', 'Font ' .  $font, 'blurb', $settings['fonts'][$font]);
                     }
-                    /* Color Pickers */ 
+                    // Color Pickers  
                     ?>
                                     
                             <script>
@@ -167,12 +324,12 @@ function artpress_options_do_page() {
         ht_create_form($settings); ?>
 
 	</div>
-<?php }
+<?php }*/
 
 /**
  * Sanitize and validate input. Accepts an array, return a sanitized array.
  */
-function artpress_options_validate( $new_settings ) {
+/*function artpress_options_validate( $new_settings ) {
     global $select_options, $radio_options, $artpress_colors, $num_colors;
     global $ht_css_font_family;
     
@@ -220,7 +377,59 @@ function artpress_options_validate( $new_settings ) {
             $settings['fonts'][$key] = '0';        
         }
     }
-    
+    // new settings section format
+    if( ! isset($settings['sections']['body']) ) 
+        $settings['sections']['body'] = array( 
+            'css'=>'body',
+            'children'=>array(
+                'page title' =>array(
+                    'typography'=>array(
+                        'font-size'      =>array(),
+                        'color'          =>array(),
+                        'text-align'     =>array(),
+                        'text-decoration'=>array(),
+                        'font-style'     =>array(),
+                        'text-transform' =>array()
+                    ),
+                    'background'=>array(
+                        'background-color'     =>array(),
+                        'background-image:url' =>array(),
+                        'background-position'  =>array(),
+                        'background-attachment'=>array(),
+                        'background-repeat'    =>array()
+                    ),
+                    'layout'=>array(
+                        'border' =>array(),
+                        'margin' =>array(),
+                        'padding'=>array(),
+                        'display'=>array()
+                    ),
+                    'effects'   =>array()
+                ),
+                'entry title'=>array(),
+                'h2'         =>array()
+            )
+        );
+    if( ! isset($settings['sections']['header']) ) 
+        $settings['sections']['header'] = array( 
+            'css'=>'#header',
+            'children'=>array(
+                'site title'      =>array(),
+                'site description'=>array(),
+            )            
+        );
+    if( ! isset($settings['sections']['menu']) ) 
+        $settings['sections']['menu'] = array( 
+            'css'=>'#access',
+            'children'=>array(
+                'link'      =>array(),
+                'hover'     =>array(),
+                'current'   =>array(),
+                'dropdown'  =>array()
+            )            
+        );
+              
+    /*    
     // create default sections and initialize css selectors         
     if( ! isset($settings['section_settings']['body']) ) 
         $settings['section_settings']['body'] = array(
@@ -239,15 +448,7 @@ function artpress_options_validate( $new_settings ) {
         	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
         	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'1' ),        
         	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),
-        	/*'margin-top'      => array( 'row_label'=>'margin-top' , 'field_blurb_suffix'=>'Margin top' , 'value'=>'' ),
-        	'margin-bottom'   => array( 'row_label'=>'margin-bottom' , 'field_blurb_suffix'=>'Margin bottom' , 'value'=>'' ),
-        	'margin-left'     => array( 'row_label'=>'margin-left' , 'field_blurb_suffix'=>'Margin left' , 'value'=>'' ),
-        	'margin-right'    => array( 'row_label'=>'margin-right' , 'field_blurb_suffix'=>'Margin right' , 'value'=>'' ),
-        	'padding-top'      => array( 'row_label'=>'padding-top' , 'field_blurb_suffix'=>'Padding top' , 'value'=>'' ),
-        	'padding-bottom'   => array( 'row_label'=>'padding-bottom' , 'field_blurb_suffix'=>'Padding bottom' , 'value'=>'' ),
-        	'padding-left'     => array( 'row_label'=>'padding-left' , 'field_blurb_suffix'=>'Padding left' , 'value'=>'' ),
-        	'padding-right'    => array( 'row_label'=>'padding-right' , 'field_blurb_suffix'=>'Padding right' , 'value'=>'' ),*/
-        	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
+           	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
         	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
         );
 
@@ -541,7 +742,7 @@ function artpress_options_validate( $new_settings ) {
     }
     
     return $settings;
-}
+}*/
 
 function ap_bi_validate($input) {
     global $background_image_prefix;
@@ -563,15 +764,18 @@ function ap_bi_validate($input) {
 
 if('is_admin') {
 
+/*
 wp_register_script('admin_accordion',
        get_bloginfo('template_directory') . '/js/jquery-ui-1.8.12.custom.min.js',
        array('jquery'),
        '1.0' );
+       */
+
        
 // enqueue the script
-wp_enqueue_script('admin_accordion');  
+//wp_enqueue_script('admin_accordion');
 
-wp_register_style( 'ht_accordion_styles', 
-        get_bloginfo('template_directory') . '/css/ui-lightness/jquery-ui-1.8.12.custom.css' );
-wp_enqueue_style( 'ht_accordion_styles' );  
+//wp_register_style( 'ht_accordion_styles', 
+//        get_bloginfo('template_directory') . '/css/ui-lightness/jquery-ui-1.8.12.custom.css' );
+//wp_enqueue_style( 'ht_accordion_styles' );  
 }

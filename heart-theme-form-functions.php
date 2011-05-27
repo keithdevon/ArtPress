@@ -158,7 +158,7 @@ function ht_create_select($potential_options, $id, $row_label, $field_blurb_pref
     }
     return ht_form_field($row_label, ht_select($id, $html_optgroups));
 }*/
-function ht_create_form_group($settings, $group) {
+/*function ht_create_form_group($settings, $group) {
     global $ht_css_repeat;
     global $ht_css_attachment;
     global $ht_css_font_style;
@@ -427,8 +427,185 @@ function ht_create_form_group($settings, $group) {
         }
     }
     return $output;
+}*/
+
+
+function ap_create_global_settings_form($qualifier, $global_settings) {
+    global $ht_css_font_family;
+    
+    echo ot('form', attr_method('post') . attr_action('options.php'));
+        $font_rows = '';
+        $color_rows = '';
+        echo settings_fields( 'artpress_options' );
+        // colors
+        ?><script>
+            /*jQuery(document).ready(function() {
+                var f = jQuery.farbtastic('#picker');
+                var p = jQuery('#picker').css('opacity', 0.25);
+                var selected;
+                jQuery('.colorwell')
+                  .each(function () { f.linkTo(this); jQuery(this).css('opacity', 0.75); })
+                  .focus(function() {
+                    if (selected) {
+                      jQuery(selected).css('opacity', 0.75).removeClass('colorwell-selected');
+                    }
+                    f.linkTo(this);
+                    p.css('opacity', 1);
+                    jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
+                  });
+              });*/
+        </script><?php
+        foreach (array_keys(array_slice($global_settings['colors'], 1)) as $color ) {
+            $output = '';
+            $output = ht_th(__('Color ' . ($color + 1)), "row");
+            $output .= td(ht_input_text(get_qualifier($qualifier) . "[colors][{$color}]",
+            							'colorwell', esc_attr( $global_settings['colors'][$color] ), '7'));
+            if ($color == '0') {
+                $output .= td( div('', attr_id('picker')),
+                               attribute('rowspan', '6') . attr_valign('top'));
+            }
+            $color_rows .= tr($output);
+        }
+        
+        // fonts
+        foreach (array_keys($global_settings['fonts']) as $font) {
+            $font_rows .= ht_create_select($ht_css_font_family, 
+                                            get_qualifier($qualifier) . "[fonts][{$font}]", 'Font ' .  ($font + 1), 'blurb', $global_settings['fonts'][$font]);
+        }
+        echo table($color_rows, attr_class('form-table'));
+        echo table($font_rows, attr_class('form-table'));
+                
+        //<p class="submit"><input type="submit" class="button-primary" value="<?php _e( 'Save global settings ' ); ?/>" /></p>
+        echo p(
+            input('submit', attr_class('button-primary') . attr_value(__( 'Save global settings ' ))),
+            attr_class('submit')
+        );
+    echo ct('form');
 }
-function ht_create_form($settings) {
+function ap_create_section_settings_form($qualifier, $section_settings, $tab_count){
+    global $ht_css_repeat;
+    global $ht_css_attachment;
+    global $ht_css_font_style;
+    global $ht_css_text_transform;
+    global $ht_css_text_align;
+    global $ht_css_text_decoration;
+    global $ht_css_border_style; 
+    global $ht_css_list_style_position;
+    global $ht_css_list_style_type;
+    global $ht_css_font_family;
+    global $ht_css_font_weight;
+        
+    $section = end($qualifier);
+    echo ot('div', attr_id('tabs-' . $tab_count ) . attr_style("border: solid grey 1px; padding: 0.5em;"));
+        echo h3($section);
+        
+        foreach(array_keys($section_settings[$section]['children']) as $sub) { // page title, h2 etc
+            
+            $ssq = am($qualifier, 'children', $sub); // sub section qualifier
+            echo ot('div',  attr_style("border: dashed grey 1px;padding: 0.5em;"));
+                echo h4($sub);
+                echo ot('div', attr_style("border: dotted grey 1px;padding: 0.5em;"));
+                    $sssq_string = get_qualifier(am($ssq, 'typography')); 
+                    echo h5('typography');
+                    $rows = '';
+                        echo ot('div', attr_style("border: dotted #999 1px;padding: 0.25em;"));
+                            
+                            $rows .= ht_create_select(
+                                        $ht_css_font_style,
+                                        $sssq_string . "[font-style]" . "[value]",
+                                        'font style',
+                                        'blurb suffix',
+                                        'value');
+                            $rows .= ht_create_select(
+                                        $ht_css_font_weight,
+                                        $sssq_string . "[font-weight]" . "[value]",
+                                        'font weight',
+                                        'blurb suffix',
+                                        'value');
+                            $rows .= ht_create_select(
+                                        $ht_css_text_align,
+                                        $sssq_string . "[text-align]" . "[value]",
+                                        'text align',
+                                        'blurb suffix',
+                                        'value');
+
+                            $rows .= ht_create_select(
+                                        $ht_css_text_transform,
+                                        $sssq_string . "[text-transform]" . "[value]",
+                                        'text transform',
+                                        'blurb suffix',
+                                        'value');
+
+                            $rows .= ht_create_select(
+                                        $ht_css_text_decoration,
+                                        $sssq_string . "[text-decoration]" . "[value]",
+                                        'text decoration',
+                                        'blurb suffix',
+                                        'value');                                      
+                            echo table($rows, attr_class('form-table'));
+                                                                              
+                        echo ct('div');
+                    
+                    echo h5('background');
+                        echo ot('div', attr_style("border: dotted #999 1px;padding: 0.25em;"));
+                        echo ct('div');                    
+                    
+                    echo h5('layout');
+                        echo ot('div', attr_style("border: dotted #999 1px;padding: 0.25em;"));
+                        echo ct('div');                    
+                        
+                    echo h5('effects');
+                        echo ot('div', attr_style("border: dotted #999 1px;padding: 0.25em;"));
+                        echo ct('div');
+                                           
+                echo ct('div');
+            echo ct('div');
+        }
+    echo ct('div'); 
+}
+function ap_create_form($qualifier, $save) {
+    $tab_count = 1;
+    ?>
+    <!-- do this properly 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script> 
+	-->
+	<script>
+    	$(function() {
+    		$( "#tabs" ).tabs();
+    	});
+	</script>
+    <?php
+    echo ot('div', attr_id('tabs'));
+    // create the tab links
+    $lis  = li(alink('#tabs-' . $tab_count++, 'Global'));
+    $lis .= li(alink('#tabs-' . $tab_count++, 'Images'));
+    foreach (array_keys($save['sections']) as $section) {
+        $lis .= li(alink("#tabs-" . $tab_count++, $section));
+    }
+    echo ul($lis);
+    
+    $tab_count = 1;
+    // global div
+    echo ot('div', attr_id('tabs-' . $tab_count++) . attr_style("border: solid grey 1px; padding: 0.5em;"));
+        echo h3('global settings');
+        ap_create_global_settings_form(am($qualifier, 'global-settings'), 
+                                       $save['global-settings']);
+    echo ct('div'); 
+    
+    // image div
+    echo ot('div', attr_id('tabs-' . $tab_count++) . attr_style("border: solid grey 1px; padding: 0.5em;"));
+        echo h3('image settings');
+    echo ct('div');
+    
+    // section divs
+    foreach (array_keys($save['sections']) as $section) {
+        ap_create_section_settings_form(am($qualifier, 'sections', $section), 
+                                        $save['sections'], $tab_count++);
+    }
+    echo ct('div');
+}
+/*function ht_create_form($settings) {
     foreach (array_keys($settings['section_settings']) as $section) {
         echo ot('h3') . '<a href="#">' .ucfirst($section) . '</a>' . ct('h3');
         echo ot('div');
@@ -443,4 +620,4 @@ function ht_create_form($settings) {
         echo ct('form');
         echo  ct('div');
     }
-}
+}*/
