@@ -1,0 +1,165 @@
+time 1306743251
+new [description:"changed location of task database to artpress/.task" end:"1306743251" entry:"1306743251" status:"completed" uuid:"39b67f6b-dcea-f301-3f5e-5ecffc479bac"]
+---
+time 1306746700
+new [description:"create object orientated form" entry:"1306746700" status:"pending" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+---
+time 1306746714
+old [description:"create object orientated form" entry:"1306746700" status:"pending" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+new [description:"create object orientated form" entry:"1306746700" start:"1306746714" status:"pending" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+---
+time 1306858421
+old [description:"create object orientated form" entry:"1306746700" start:"1306746714" status:"pending" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+new [description:"create object orientated form" entry:"1306746700" start:"1306746714" status:"pending" tags:"james" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+---
+time 1306858557
+new [description:"create modular text size option" entry:"1306858557" status:"pending" tags:"james" uuid:"8a5db151-02bb-7f99-d484-e4b86c41c754"]
+---
+time 1306858572
+old [description:"create object orientated form" entry:"1306746700" start:"1306746714" status:"pending" tags:"james" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+new [description:"create object orientated form" entry:"1306746700" start:"1306746714" status:"pending" tags:"james,alpha" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+---
+time 1306858572
+old [description:"create modular text size option" entry:"1306858557" status:"pending" tags:"james" uuid:"8a5db151-02bb-7f99-d484-e4b86c41c754"]
+new [description:"create modular text size option" entry:"1306858557" status:"pending" tags:"james,alpha" uuid:"8a5db151-02bb-7f99-d484-e4b86c41c754"]
+---
+time 1306858802
+old [description:"create object orientated form" entry:"1306746700" start:"1306746714" status:"pending" tags:"james,alpha" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+new [description:"create object orientated form" entry:"1306746700" project:"alpha" start:"1306746714" status:"pending" tags:"james,alpha" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+---
+time 1306858802
+old [description:"create modular text size option" entry:"1306858557" status:"pending" tags:"james,alpha" uuid:"8a5db151-02bb-7f99-d484-e4b86c41c754"]
+new [description:"create modular text size option" entry:"1306858557" project:"alpha" status:"pending" tags:"james,alpha" uuid:"8a5db151-02bb-7f99-d484-e4b86c41c754"]
+---
+time 1306858827
+old [description:"create object orientated form" entry:"1306746700" project:"alpha" start:"1306746714" status:"pending" tags:"james,alpha" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+new [description:"create object orientated form" entry:"1306746700" project:"alpha" start:"1306746714" status:"pending" tags:"james" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+---
+time 1306858827
+old [description:"create modular text size option" entry:"1306858557" project:"alpha" status:"pending" tags:"james,alpha" uuid:"8a5db151-02bb-7f99-d484-e4b86c41c754"]
+new [description:"create modular text size option" entry:"1306858557" project:"alpha" status:"pending" tags:"james" uuid:"8a5db151-02bb-7f99-d484-e4b86c41c754"]
+---
+time 1306859026
+new [description:"fix menu dropdown" entry:"1306859026" project:"alpha" status:"pending" uuid:"34a08f31-809d-6aaf-6fd9-ddd28d610033"]
+---
+time 1306859090
+new [description:"proper css generation" entry:"1306859090" project:"beta" status:"pending" uuid:"e39a1871-debf-82ca-c754-7682f5f9c44a"]
+---
+time 1306859117
+new [description:"validate form inputs" entry:"1306859117" project:"beta" status:"pending" tags:"james" uuid:"3f451505-4176-0919-a7e6-f93e42860ae3"]
+---
+time 1306859130
+old [description:"fix menu dropdown" entry:"1306859026" project:"alpha" status:"pending" uuid:"34a08f31-809d-6aaf-6fd9-ddd28d610033"]
+new [description:"fix menu dropdown" entry:"1306859026" project:"alpha" status:"pending" tags:"james" uuid:"34a08f31-809d-6aaf-6fd9-ddd28d610033"]
+---
+time 1306859130
+old [description:"proper css generation" entry:"1306859090" project:"beta" status:"pending" uuid:"e39a1871-debf-82ca-c754-7682f5f9c44a"]
+new [description:"proper css generation" entry:"1306859090" project:"beta" status:"pending" tags:"james" uuid:"e39a1871-debf-82ca-c754-7682f5f9c44a"]
+---
+time 1306859400
+new [description:"google fonts" entry:"1306859400" project:"beta" status:"pending" tags:"james" uuid:"2fe92078-a1f6-9532-cc93-6d4019aa54f8"]
+---
+time 1306859427
+new [description:"multiple setting saves" entry:"1306859427" project:"beta" status:"pending" tags:"james" uuid:"2b6af645-7e82-db60-ef8a-2b1f8fc0736a"]
+---
+time 1306859479
+new [description:"change numbers from zero to 1 based in the settings form" entry:"1306859479" project:"beta" status:"pending" tags:"james" uuid:"266fac25-675d-55f9-7d33-3618a7c657a8"]
+---
+time 1306859536
+new [description:"test adding and remove images from the gallery" entry:"1306859536" project:"beta" status:"pending" tags:"james" uuid:"04890eca-b0c0-fea5-13f6-cbbc6e750571"]
+---
+time 1306859941
+new [description:"breadcrumb on/off switch" entry:"1306859941" project:"beta" status:"pending" tags:"james" uuid:"a9378652-3b8e-dc33-d3d1-02c332e5a574"]
+---
+time 1306863415
+new [description:"enable non-live testing of new settings" entry:"1306863415" project:"beta" status:"pending" tags:"james" uuid:"ccc3125e-3505-1417-0d82-4deb857623ce"]
+---
+time 1306960480
+new [description:"Fix cssgrid in IE7" due:"1307055600" entry:"1306960480" status:"pending" uuid:"b660d671-f65f-4abb-8214-4e7bc40ab30d"]
+---
+time 1306996097
+old [description:"Fix cssgrid in IE7" due:"1307055600" entry:"1306960480" status:"pending" uuid:"b660d671-f65f-4abb-8214-4e7bc40ab30d"]
+new [description:"Fix cssgrid in IE7" due:"1306969200" entry:"1306960480" project:"alpha" status:"pending" tags:"keith" uuid:"b660d671-f65f-4abb-8214-4e7bc40ab30d"]
+---
+time 1306996290
+new [description:"Installing WordPress" due:"1306969200" entry:"1306996290" project:"alpha" status:"pending" tags:"keith+docs" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+---
+time 1306996364
+new [description:"Sidebars and Widgets" due:"1307055600" entry:"1306996364" project:"alpha" status:"pending" tags:"keith+docs" uuid:"39533c5b-2712-4ffb-8208-5abaf62d592a"]
+---
+time 1306996432
+new [description:"Editing images" due:"1307055600" entry:"1306996432" project:"alpha" status:"pending" tags:"keith+docs" uuid:"a98f5f3b-3433-49ee-a96e-01936f9a19b5"]
+---
+time 1306996466
+new [description:"Managing galleries" due:"1307055600" entry:"1306996466" project:"alpha" status:"pending" tags:"keith+docs" uuid:"79d0cc98-6868-4cbf-a56f-faf3f71e28ff"]
+---
+time 1306996492
+new [description:"Customising ArtPress" due:"1307055600" entry:"1306996492" project:"alpha" status:"pending" tags:"keith+docs" uuid:"fcd75842-2cb1-4616-a651-701fab266f09"]
+---
+time 1306996542
+old [description:"Customising ArtPress" due:"1307055600" entry:"1306996492" project:"alpha" status:"pending" tags:"keith+docs" uuid:"fcd75842-2cb1-4616-a651-701fab266f09"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742,8a5db151-02bb-7f99-d484-e4b86c41c754" description:"Customising ArtPress" due:"1307055600" entry:"1306996492" project:"alpha" status:"pending" tags:"keith+docs" uuid:"fcd75842-2cb1-4616-a651-701fab266f09"]
+---
+time 1306996684
+old [description:"Sidebars and Widgets" due:"1307055600" entry:"1306996364" project:"alpha" status:"pending" tags:"keith+docs" uuid:"39533c5b-2712-4ffb-8208-5abaf62d592a"]
+new [description:"Sidebars and Widgets" due:"1307055600" entry:"1306996364" project:"alpha" status:"pending" tags:"keith+docs,keith" uuid:"39533c5b-2712-4ffb-8208-5abaf62d592a"]
+---
+time 1306996684
+old [description:"Editing images" due:"1307055600" entry:"1306996432" project:"alpha" status:"pending" tags:"keith+docs" uuid:"a98f5f3b-3433-49ee-a96e-01936f9a19b5"]
+new [description:"Editing images" due:"1307055600" entry:"1306996432" project:"alpha" status:"pending" tags:"keith+docs,keith" uuid:"a98f5f3b-3433-49ee-a96e-01936f9a19b5"]
+---
+time 1306996684
+old [description:"Managing galleries" due:"1307055600" entry:"1306996466" project:"alpha" status:"pending" tags:"keith+docs" uuid:"79d0cc98-6868-4cbf-a56f-faf3f71e28ff"]
+new [description:"Managing galleries" due:"1307055600" entry:"1306996466" project:"alpha" status:"pending" tags:"keith+docs,keith" uuid:"79d0cc98-6868-4cbf-a56f-faf3f71e28ff"]
+---
+time 1306996684
+old [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742,8a5db151-02bb-7f99-d484-e4b86c41c754" description:"Customising ArtPress" due:"1307055600" entry:"1306996492" project:"alpha" status:"pending" tags:"keith+docs" uuid:"fcd75842-2cb1-4616-a651-701fab266f09"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742,8a5db151-02bb-7f99-d484-e4b86c41c754" description:"Customising ArtPress" due:"1307055600" entry:"1306996492" project:"alpha" status:"pending" tags:"keith+docs,keith" uuid:"fcd75842-2cb1-4616-a651-701fab266f09"]
+---
+time 1306996821
+old [description:"Sidebars and Widgets" due:"1307055600" entry:"1306996364" project:"alpha" status:"pending" tags:"keith+docs,keith" uuid:"39533c5b-2712-4ffb-8208-5abaf62d592a"]
+new [description:"Sidebars and Widgets" due:"1307055600" entry:"1306996364" project:"alpha" status:"pending" tags:"keith" uuid:"39533c5b-2712-4ffb-8208-5abaf62d592a"]
+---
+time 1306996821
+old [description:"Editing images" due:"1307055600" entry:"1306996432" project:"alpha" status:"pending" tags:"keith+docs,keith" uuid:"a98f5f3b-3433-49ee-a96e-01936f9a19b5"]
+new [description:"Editing images" due:"1307055600" entry:"1306996432" project:"alpha" status:"pending" tags:"keith" uuid:"a98f5f3b-3433-49ee-a96e-01936f9a19b5"]
+---
+time 1306996821
+old [description:"Managing galleries" due:"1307055600" entry:"1306996466" project:"alpha" status:"pending" tags:"keith+docs,keith" uuid:"79d0cc98-6868-4cbf-a56f-faf3f71e28ff"]
+new [description:"Managing galleries" due:"1307055600" entry:"1306996466" project:"alpha" status:"pending" tags:"keith" uuid:"79d0cc98-6868-4cbf-a56f-faf3f71e28ff"]
+---
+time 1306996821
+old [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742,8a5db151-02bb-7f99-d484-e4b86c41c754" description:"Customising ArtPress" due:"1307055600" entry:"1306996492" project:"alpha" status:"pending" tags:"keith+docs,keith" uuid:"fcd75842-2cb1-4616-a651-701fab266f09"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742,8a5db151-02bb-7f99-d484-e4b86c41c754" description:"Customising ArtPress" due:"1307055600" entry:"1306996492" project:"alpha" status:"pending" tags:"keith" uuid:"fcd75842-2cb1-4616-a651-701fab266f09"]
+---
+time 1306996835
+old [description:"Sidebars and Widgets" due:"1307055600" entry:"1306996364" project:"alpha" status:"pending" tags:"keith" uuid:"39533c5b-2712-4ffb-8208-5abaf62d592a"]
+new [description:"Sidebars and Widgets" due:"1307055600" entry:"1306996364" project:"alpha" status:"pending" tags:"keith,docs" uuid:"39533c5b-2712-4ffb-8208-5abaf62d592a"]
+---
+time 1306996835
+old [description:"Editing images" due:"1307055600" entry:"1306996432" project:"alpha" status:"pending" tags:"keith" uuid:"a98f5f3b-3433-49ee-a96e-01936f9a19b5"]
+new [description:"Editing images" due:"1307055600" entry:"1306996432" project:"alpha" status:"pending" tags:"keith,docs" uuid:"a98f5f3b-3433-49ee-a96e-01936f9a19b5"]
+---
+time 1306996835
+old [description:"Managing galleries" due:"1307055600" entry:"1306996466" project:"alpha" status:"pending" tags:"keith" uuid:"79d0cc98-6868-4cbf-a56f-faf3f71e28ff"]
+new [description:"Managing galleries" due:"1307055600" entry:"1306996466" project:"alpha" status:"pending" tags:"keith,docs" uuid:"79d0cc98-6868-4cbf-a56f-faf3f71e28ff"]
+---
+time 1306996835
+old [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742,8a5db151-02bb-7f99-d484-e4b86c41c754" description:"Customising ArtPress" due:"1307055600" entry:"1306996492" project:"alpha" status:"pending" tags:"keith" uuid:"fcd75842-2cb1-4616-a651-701fab266f09"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742,8a5db151-02bb-7f99-d484-e4b86c41c754" description:"Customising ArtPress" due:"1307055600" entry:"1306996492" project:"alpha" status:"pending" tags:"keith,docs" uuid:"fcd75842-2cb1-4616-a651-701fab266f09"]
+---
+time 1306996867
+old [description:"Installing WordPress" due:"1306969200" entry:"1306996290" project:"alpha" status:"pending" tags:"keith+docs" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+new [description:"+ keith" due:"1306969200" entry:"1306996290" project:"alpha" status:"pending" tags:"docs" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+---
+time 1306996895
+old [description:"+ keith" due:"1306969200" entry:"1306996290" project:"alpha" status:"pending" tags:"docs" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+new [description:"Installing WordPress" due:"1306969200" entry:"1306996290" project:"alpha" status:"pending" tags:"docs" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+---
+time 1306996905
+old [description:"Installing WordPress" due:"1306969200" entry:"1306996290" project:"alpha" status:"pending" tags:"docs" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+new [description:"Installing WordPress" due:"1306969200" entry:"1306996290" project:"alpha" status:"pending" tags:"docs,keith" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+---
+time 1307014224
+new [description:"fix 404 page layout" due:"1307055600" entry:"1307014224" project:"alpha" status:"pending" tags:"keith" uuid:"43c74ecd-cda4-4ce1-a2d2-9b35c697759e"]
+---
