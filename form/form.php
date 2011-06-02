@@ -74,7 +74,7 @@ abstract class Hierarchy {
  *
  */
 class Group  extends Hierarchy {
-    protected $members = array(); // TODO should this just be $children?
+    //protected $members = array(); // TODO should this just be $children?
     
     function __construct($name, $parent) {
         $args = func_get_args();
@@ -87,14 +87,14 @@ class Group  extends Hierarchy {
     public function add_member($member) {
         //echo "Group add_member";
         $member_name = $member->get_name();
-        $this->members[$member_name] = $member;
+        $this->children[$member_name] = $member;
         
         // the group's parent and the group's members' parents are the same object
         // (see the class documentation)
         $member->set_parent($this->get_parent());
     }
     public function get_members() {
-        return $this->members;
+        return $this->get_children();
     }
 }
 class Option_Group extends Group {
@@ -114,7 +114,6 @@ class Option_Group extends Group {
 }
 class Tab_Group extends Group implements Render_As_HTML {
     function get_html() {
-    
     }
 }
 
