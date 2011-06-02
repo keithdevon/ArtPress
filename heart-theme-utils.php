@@ -44,10 +44,12 @@ function get_prefix($str, $suffix) {
     return substr($str, 0, strlen($str) - strlen($suffix));
 }
 function is_suffix_string($str, $suffix) {
+    $return = false;
     if (ends_with($str, $suffix)) {
         $prefix = get_prefix($str, $suffix);
-        return is_numeric($prefix);
-    }
+        $return = is_numeric($prefix);
+    } 
+    return $return;
 }
 function is_em_string($str) {
     return is_suffix_string($str, 'em');
@@ -59,7 +61,11 @@ function is_percent_string($str) {
     return is_suffix_string($str, '%');
 }
 function is_valid_size_string($str) {
-    return is_em_string($str) || is_px_string($str) || is_percent_string($str);
+    $return = false;
+    if (is_em_string($str) || is_px_string($str) || is_percent_string($str)) {
+        $return = true;
+    }
+    return $return;
 }
 function is_valid_color_string($str) {
     return (strlen($str) == 7) && starts_with($str, '#') && ctype_xdigit(substr($str, 1));
