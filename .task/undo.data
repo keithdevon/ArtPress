@@ -163,3 +163,26 @@ new [description:"Installing WordPress" due:"1306969200" entry:"1306996290" proj
 time 1307014224
 new [description:"fix 404 page layout" due:"1307055600" entry:"1307014224" project:"alpha" status:"pending" tags:"keith" uuid:"43c74ecd-cda4-4ce1-a2d2-9b35c697759e"]
 ---
+time 1307350334
+new [description:"fix empty sidebars" due:"1307314800" entry:"1307350334" project:"alpha" status:"pending" tags:"keith" uuid:"39455aa8-62b0-4bd5-bdde-73f78d3ab7fb"]
+---
+time 1307350779
+new [description:"add what is wp page" entry:"1307350779" project:"beta" status:"pending" tags:"keith" uuid:"76b56b77-c2a3-46f0-aedf-62ce76d2f9fa"]
+---
+time 1307355884
+old [description:"Installing WordPress" due:"1306969200" entry:"1306996290" project:"alpha" status:"pending" tags:"docs,keith" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+new [description:"Installing WordPress" due:"1306969200" end:"1307355884" entry:"1306996290" project:"alpha" status:"completed" tags:"docs,keith" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+---
+time 1307356097
+old [description:"fix 404 page layout" due:"1307055600" entry:"1307014224" project:"alpha" status:"pending" tags:"keith" uuid:"43c74ecd-cda4-4ce1-a2d2-9b35c697759e"]
+new [description:"fix 404 page layout" due:"1307055600" end:"1307356097" entry:"1307014224" project:"alpha" status:"completed" tags:"keith" uuid:"43c74ecd-cda4-4ce1-a2d2-9b35c697759e"]
+---
+time 1307359876
+new [description:"fix sidebar IDs and naming" entry:"1307359876" project:"alpha" status:"pending" tags:"keith" uuid:"745e1aab-416c-48be-a6bf-48aa7fd753d2"]
+---
+time 1307360707
+new [description:"change sidebar css selector to .sidebar" entry:"1307360707" project:"alpha" status:"pending" tags:"keith" uuid:"52aa68bd-4f27-4158-9e57-f03244056a03"]
+---
+time 1307360822
+new [description:"auto generate appropriate gallery image sizes" entry:"1307360822" project:"alpha" status:"pending" tags:"keith" uuid:"c5a07b27-7dcc-4eb4-b5f8-f62f031600ef"]
+---

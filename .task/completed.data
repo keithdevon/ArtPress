@@ -1,1 +1,3 @@
 [description:"changed location of task database to artpress/.task" end:"1306743251" entry:"1306743251" status:"completed" uuid:"39b67f6b-dcea-f301-3f5e-5ecffc479bac"]
+[description:"Installing WordPress" due:"1306969200" end:"1307355884" entry:"1306996290" project:"alpha" status:"completed" tags:"docs,keith" uuid:"c061ef27-a4c6-4905-b9f7-3c7dc3f82f42"]
+[description:"fix 404 page layout" due:"1307055600" end:"1307356097" entry:"1307014224" project:"alpha" status:"completed" tags:"keith" uuid:"43c74ecd-cda4-4ce1-a2d2-9b35c697759e"]
