@@ -1,6 +1,10 @@
 <?php
-require_once 'html-gen.php';
-require_once 'css-gen.php';
+$dir = get_template_directory() . '/';
+$full_dir1 = $dir . 'html-gen.php';
+require_once $full_dir1;
+
+$full_dir2= $dir . 'css-gen.php';
+require_once $full_dir2;
 
 /** Heart Theme specific functions */
 function ht_label($class, $for, $text) {

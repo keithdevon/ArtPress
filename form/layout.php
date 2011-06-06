@@ -2,10 +2,11 @@
 require_once 'form.php';
 
 // BORDER
-class Border_Style extends CSS_Dropdown_Input { 
+class Border_Style extends CSS_Dropdown_Input {
+    static $options = array('none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
     function __construct($parent, $value) { 
         parent::__construct('border-style', 'border style', $parent, $value);
-        self::set_options(array('none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit'));
+        self::set_options( self::$options );
     }    
 }
 class Border_Width extends CSS_Size_Text_Input {
@@ -59,23 +60,24 @@ class Padding_Left extends CSS_Size_Text_Input {
 }
 
 // DISPLAY
-class Display extends CSS_Dropdown_Input { 
-    function __construct($parent, $value) { 
-        parent::__construct('display', 'display mode', $parent, $value);
-        self::set_options(array('inherit', 'none', 'block', 'inline', 'inline-block', 'inline-table', 'list-item', 
+class Display extends CSS_Dropdown_Input {
+    static $options = array('inherit', 'none', 'block', 'inline', 'inline-block', 'inline-table', 'list-item', 
         						'run-in', 'table', 'table-caption', 'table-cell', 'table-column', 
         						'table-column-group', 'table-footer-group', 'table-header-group', 
-        						'table-row', 'table-row-group'));
+        						'table-row', 'table-row-group');
+    function __construct($parent, $value) { 
+        parent::__construct('display', 'display mode', $parent, $value);
+        self::set_options( self::$options );
     }    
 }
 
-$mt = new Margin_Top(null, "1em");
-echo "\n" . $mt->get_html();
-echo "\n" . $mt::is_valid($mt->get_value());
-$mt = new Margin_Top(null, "3px");
-echo "\n" . $mt->get_html();
-echo "\n" . $mt::is_valid($mt->get_value()); 
-$mt = new Margin_Top(null, "4");
-echo "\n" . $mt->get_html();
-$v = $mt::is_valid($mt->get_value());
-echo "\n" .  $v;
+//$mt = new Margin_Top(null, "1em");
+//echo "\n" . $mt->get_html();
+//echo "\n" . $mt::is_valid($mt->get_value());
+//$mt = new Margin_Top(null, "3px");
+//echo "\n" . $mt->get_html();
+//echo "\n" . $mt::is_valid($mt->get_value()); 
+//$mt = new Margin_Top(null, "4");
+//echo "\n" . $mt->get_html();
+//$v = $mt::is_valid($mt->get_value());
+//echo "\n" .  $v;

@@ -1,6 +1,19 @@
 <?php
+$dir1 = get_bloginfo('template_directory') . '/';
+$dir2 = $_SERVER['DOCUMENT_ROOT'];
+$dir3 = get_theme_root();
+$dir = get_template_directory() . '/';
+$dir5 = get_template_directory_uri();
 require_once 'heart-theme-utils.php';
-require_once 'heart-theme-form-functions.php';
+$full_dir = $dir . 'form/heart-theme-form-functions.php';
+include_once $full_dir;
+require_once $dir . 'form/form.php';
+require_once $dir . 'form/color.php';
+require_once $dir . 'form/font.php';
+require_once $dir . 'form/text.php';
+require_once $dir . 'form/layout.php';
+require_once $dir . 'form/effect.php';
+require_once $dir . 'form/background-image.php';
 
 add_action( 'admin_init', 'artpress_theme_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
@@ -113,12 +126,41 @@ function ap_settings_page() {
  
     // create form for current save
     //$settings = get_option( 'ap_options' ); // TODO this will be null on first invocation
-    $settings = default_settings();
+    //$settings = default_settings();
     
     // pass full settings through
     // needs to be full so the inputs have fully qualified names
-    ap_create_form(array('cs'), $settings['saves'][$settings['current-save-id']]); 
-
+    //ap_create_form(array('cs'), $settings['saves'][$settings['current-save-id']]);
+    $lst = new List_Style_Type(null, 0);
+    //echo $lst->get_name(); echo "\n";
+    //var_dump( $lst->get_options() );
+    $ta = new Text_Align(null, 0);
+    $td = new Text_Decoration(null, 0);
+    $tt = new Text_Transform(null, 0);
+    $t1 = new Tab('typography', null, array($ta, $td, $tt));
+    
+    $bs = new Border_Style(null, 0);
+    $bw = new Border_Width(null, '');
+    $t2 = new Tab('layout', null, array($bs, $bw));
+    
+    $br = new Background_Repeat(null, 0);
+    $ba = new Background_Attachment(null, 0);
+    $t3 = new Tab('background', null, array($br, $ba));
+    
+    $tsh = new Text_Shadow_Horizontal(null, '');
+    $tsv = new Text_Shadow_Vertical(null, '');
+    $t4 = new Tab('effect', null, array($tsh, $tsv));
+    
+    $h2tg = new Tab_Group('typography tab group', null, array($t1, $t2, $t3, $t4));
+    $h2 = new CSS_Selector('h2', 'header 2', null, array($h2tg));    
+    
+    $h3 = new CSS_Selector('h3', 'header 3', null, array($h2tg));    
+    
+    $csg = new CSS_Selector_Group('body', 'body', null, array($h2, $h3));
+    
+    //echo $h2->get_html();
+    //echo $h3->get_html();
+    echo $csg->get_html();
 }
 function default_save() {
     return array(
