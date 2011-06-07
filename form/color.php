@@ -8,8 +8,8 @@ require_once 'form.php';
  *
  */
 class Global_Color extends CSS_Text_Input {
-    function __construct($id, $name, $parent, $value) {
-        parent::__construct($id, 'color', $name, $parent, $value);        
+    function __construct($id, $name, $value) {
+        parent::__construct($id, 'color', $name, $value);        
     }
 
     static function is_valid($value) {
@@ -23,8 +23,8 @@ class Global_Color extends CSS_Text_Input {
  */
 class Section_Color extends CSS_Dropdown_Input {
     static $options;
-    function __construct($id, $parent, $value, $group_arr) {
-        parent::__construct($id, 'color', 'color select', $parent, $value); 
+    function __construct($id, $value, $group_arr) {
+        parent::__construct($id, 'color', 'color select', $value); 
         self::set_options($group_arr);
     }    
 }
@@ -35,8 +35,8 @@ class Section_Color extends CSS_Dropdown_Input {
  */
 class Section_Background_Color extends CSS_Dropdown_Input {
     static $options;
-    function __construct($id, $parent, $value, $group_arr) {
-        parent::__construct($id, 'background-color', 'background color select', $parent, $value); 
+    function __construct($id, $value, $group_arr) {
+        parent::__construct($id, 'background-color', 'background color select', $value); 
         self::set_options($group_arr);
     }    
 }

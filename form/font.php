@@ -1,12 +1,17 @@
 <?php
 require_once 'form.php';
 
+
+//class Text_Align extends CSS_Dropdown_Input {
+//    static private $options = array('left', 'right', 'center', 'justify');
+//    function __construct($id, $value) { 
+//        parent::__construct($id, 'text-align', 'text align', $value);
+//        self::set_options( self::$options );
+//    }    
+//}
 // FONT
 class Global_Font_Family extends CSS_Dropdown_Input {
-    static $options; 
-    function __construct($id, $parent, $value) { 
-        parent::__construct($id, 'font-family', 'font family', $parent, $value); 
-        self::set_options(array(
+    static $options = array(
                             array('Arial, “Helvetica Neue”, Helvetica, sans-serif','paragraph or title'),
                         	'Cambria, Georgia, Times, “Times New Roman”, serif',
                         	'“Century Gothic”, “Apple Gothic”, sans-serif',
@@ -38,7 +43,10 @@ class Global_Font_Family extends CSS_Dropdown_Input {
                         	'Tahoma, Verdana, Geneva',
                         	'“Trebuchet MS”, Tahoma, Arial, sans-serif',
                         	'Verdana, Tahoma, Geneva, sans-serif'
-                    	));
+                    	); 
+    function __construct($id, $name, $value) { 
+        parent::__construct($id, 'font-family', $name, $value); 
+        self::set_options( self::$options );
     }    
 }
 /**
@@ -48,22 +56,22 @@ class Global_Font_Family extends CSS_Dropdown_Input {
  */
 class Section_Font extends CSS_Dropdown_Input {
     static $options;
-    function __construct($id, $parent, $value, $group_arr) {
-        parent::__construct($id, 'font-family', 'font select', $parent, $value); 
+    function __construct($id, $value, $group_arr) {
+        parent::__construct($id, 'font-family', 'font select', $value); 
         self::set_options($group_arr);
     }    
 }
 class Font_Style extends CSS_Dropdown_Input {
     static $options; 
-    function __construct($id, $parent, $value) { 
-        parent::__construct($id, 'font-style', 'font style', $parent, $value); 
+    function __construct($id, $value) { 
+        parent::__construct($id, 'font-style', 'font style', $value); 
         self::set_options(array('normal', 'italic', 'oblique'));
     }    
 }
 class Font_Weight extends CSS_Dropdown_Input {
     static $options; 
-    function __construct($id, $parent, $value) { 
-        parent::__construct($id, 'font-weight', 'font weight', $parent, $value); 
+    function __construct($id, $value) { 
+        parent::__construct($id, 'font-weight', 'font weight', $value); 
         self::set_options(array('normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500', '600', '700', '800', '900'  ));
     }    
 }

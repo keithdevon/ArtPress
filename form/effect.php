@@ -23,14 +23,14 @@ require_once 'form.php';
 
 
 class Text_Shadow_Horizontal extends CSS_Size_Text_Input {
-    function __construct($id, $parent, $value) {
-        parent::__construct($id, 'text-shadow', 'horizontal text shadow', $parent, $value);
+    function __construct($id, $value) {
+        parent::__construct($id, 'text-shadow', 'horizontal text shadow', $value);
     }
 }
 
 class Text_Shadow_Vertical extends CSS_Size_Text_Input {
-    function __construct($id, $parent, $value) {
-        parent::__construct($id, 'text-shadow', 'vertical text shadow', $parent, $value);
+    function __construct($id, $value) {
+        parent::__construct($id, 'text-shadow', 'vertical text shadow', $value);
     }
 }
 

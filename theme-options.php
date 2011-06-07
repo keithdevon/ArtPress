@@ -131,36 +131,82 @@ function ap_settings_page() {
     // pass full settings through
     // needs to be full so the inputs have fully qualified names
     //ap_create_form(array('cs'), $settings['saves'][$settings['current-save-id']]);
-    $lst = new List_Style_Type(null, 0);
-    //echo $lst->get_name(); echo "\n";
-    //var_dump( $lst->get_options() );
-    $ta = new Text_Align(null, 0);
-    $td = new Text_Decoration(null, 0);
-    $tt = new Text_Transform(null, 0);
-    $t1 = new Tab('typography', null, array($ta, $td, $tt));
+    $lst = new List_Style_Type('bodyh2lst', 0);
+
+    $ta = new Text_Align('bodyh2ta', 0);
+    $td = new Text_Decoration('bodyh2td', 0);
+    $tt = new Text_Transform('bodyh2tt', 0);
+    $t1 = new Tab('bodyh2typography', 'typography', array($ta, $td, $tt
+    ));
     
-    $bs = new Border_Style(null, 0);
-    $bw = new Border_Width(null, '');
-    $t2 = new Tab('layout', null, array($bs, $bw));
+    $bs = new Border_Style('bodyh2bs', 0);
+    $bw = new Border_Width('bodyh2bw', '');
+    $t2 = new Tab('bodyh2layout', 'layout', array($bs, $bw));
     
     $br = new Background_Repeat(null, 0);
     $ba = new Background_Attachment(null, 0);
-    $t3 = new Tab('background', null, array($br, $ba));
+    $t3 = new Tab('bodyh2background', 'background', array($br, $ba));
     
     $tsh = new Text_Shadow_Horizontal(null, '');
     $tsv = new Text_Shadow_Vertical(null, '');
-    $t4 = new Tab('effect', null, array($tsh, $tsv));
+    $t4 = new Tab('bodyh2effect', 'effects', array($tsh, $tsv));
     
-    $h2tg = new Tab_Group('typography tab group', null, array($t1, $t2, $t3, $t4));
-    $h2 = new CSS_Selector('h2', 'header 2', null, array($h2tg));    
+    $h2tg = new Tab_Group('bodyh2typographytabgroup', 'typography tab group', array($t1, $t2, $t3, $t4
+    ));
+    $h2 = new CSS_Selector('bodyh2', 'h2', 'header 2', array($h2tg
+    ));    
+    //echo $h2tg->get_html();
+    //echo $h2->get_html();
     
-    $h3 = new CSS_Selector('h3', 'header 3', null, array($h2tg));    
+    $ta = new Text_Align('bodyh3ta', 0);
+    $td = new Text_Decoration('bodyh3td', 0);
+    $tt = new Text_Transform('bodyh3tt', 0);
+    $t1 = new Tab('bodyh3typography', 'typography', array($ta, $td, $tt));
     
-    $csg = new CSS_Selector_Group('body', 'body', null, array($h2, $h3));
+    $bs = new Border_Style('bodyh3bs', 0);
+    $bw = new Border_Width('bodyh3bw', '');
+    $t2 = new Tab('bodyh3layout', 'layout', array($bs, $bw));
+    
+    $br = new Background_Repeat(null, 0);
+    $ba = new Background_Attachment(null, 0);
+    $t3 = new Tab('bodyh3background', 'background', array($br, $ba));
+    
+    $tsh = new Text_Shadow_Horizontal(null, '');
+    $tsv = new Text_Shadow_Vertical(null, '');
+    $t4 = new Tab('bodyh3effect', 'effects', array($tsh, $tsv));
+    
+    $h3tg = new Tab_Group('bodyh3typographytabgroup', 'typography tab group', array($t1, $t2, $t3, $t4
+    ));
+    $h3 = new CSS_Selector('bodyh3', 'h3', 'header 3', array($h3tg
+    ));    
+    
+    $bodycsg = new CSS_Selector_Group('bodycsg', 'body', 'body', array($h2, $h3));
     
     //echo $h2->get_html();
     //echo $h3->get_html();
-    echo $csg->get_html();
+    //echo $csg->get_html();
+    //echo $bodycsg->get_html();
+    
+    $bodytab = new Tab('bodytab', 'body tab', $bodycsg);
+    //echo $bodytab->get_html();
+    $gc1 = new Global_Color('gsgc1', 'Color 1', '#222222');
+    $gc2 = new Global_Color('gsgc2', 'Color 2', '#444444');
+    $gc3 = new Global_Color('gsgc3', 'Color 3', '#666666');
+    $gc4 = new Global_Color('gsgc4', 'Color 4', '#888888');
+    $gcgrp = new Option_Group('gcgrp', 'Global Colors', array($gc1, $gc2, $gc3, $gc4));
+    
+    $gf1 = new Global_Font_Family('gsgf1', 'font family 1', 0);
+    $gf2 = new Global_Font_Family('gsgf2', 'font family 2', 0);
+    $gf3 = new Global_Font_Family('gsgf3', 'font family 3', 0);
+    $gfgrp = new Option_Group('gfgrp', 'Global Fonts', array($gf1, $gf2, $gf3));
+    
+    $globalsettings = new Tab('gstab', 'global settings', array($gcgrp, $gfgrp) );
+    $headertab = new Tab('headertab', 'header tab');
+    
+    $maintabgroup = new Tab_Group('maintabgroup', 'main tab group', array($bodytab, $globalsettings, $headertab
+    ));
+    
+    echo $maintabgroup->get_html();
 }
 function default_save() {
     return array(
