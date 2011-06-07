@@ -19,3 +19,4 @@
 [description:"fix sidebar IDs and naming" entry:"1307359876" project:"alpha" status:"pending" tags:"keith" uuid:"745e1aab-416c-48be-a6bf-48aa7fd753d2"]
 [description:"change sidebar css selector to .sidebar" entry:"1307360707" project:"alpha" status:"pending" tags:"keith" uuid:"52aa68bd-4f27-4158-9e57-f03244056a03"]
 [description:"auto generate appropriate gallery image sizes" entry:"1307360822" project:"alpha" status:"pending" tags:"keith" uuid:"c5a07b27-7dcc-4eb4-b5f8-f62f031600ef"]
+[description:"build contact details plugin" entry:"1307432324" project:"beta" status:"pending" tags:"keith" uuid:"7ef4ebe6-655c-4296-930c-4cd9186cff94"]
