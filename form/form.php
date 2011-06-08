@@ -125,20 +125,40 @@ class Option_Group extends Group {
     /**
      * Constructs an options array on the fly from its constituent settings
      * The settings names are the keys of the array 
-     * and the settings values are the values of the array.
+     * and the settings values are the values of the array. 
      */
+    // TODO ^ is this still true?
     function __construct($id, $name, $members=array()) {
         parent::__construct($id, $name, $members);
-    }
-    
-    function get_options() {
+    }  
+    function get_options() { 
         $options = array();
         foreach ($this->get_children() as $member) {
-            //$member_name = $member->get_name();
             $options[] = $member->get_value();
         }
         return $options;
-    }   
+    }
+    function get_html() {
+        $contents = parent::get_html();
+        return table($contents, attr_class('form-table'));
+    }
+}
+class Lookup_Option_Group extends Option_Group {
+    /**
+     * specifically created for font options
+     */
+    function __construct($id, $name, $members=array()) {
+        parent::__construct($id, $name, $members);
+    } 
+    function get_options() { 
+        $options = array();
+        foreach ($this->get_children() as $member) {
+            $member_options = $member->get_options();
+            $n = $member->get_value();
+            $options[$n] = $member_options[$n];
+        }
+        return $options;
+    }
 }
 class Tab extends Group  {
     private $html_id;
@@ -343,7 +363,7 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
         $select = ot('select', $this->get_html_name());
         $select .= $this->get_html_options();
         $select .= ct('select');
-        $o = create_form_row( $select );
+        $o = $this->create_form_row( $select );
         return $o;
     }
     private function get_html_options() {
@@ -363,24 +383,24 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
                 // create the new optgroup    
                 $html_options .= ot('optgroup', attr_label($potential_options[$opt][1]));
                 $content = $potential_options[$opt][0];
-                } else $content = $potential_options[$opt];
-                $attr = '';
-                // add any existing style attributes to the option group
-                //if ($form_style_attrs) {
-                //    foreach (array_keys($form_style_attrs) as $css_attr) {
-                //        $attr .= dec($css_attr, $form_style_attrs[$css_attr][$opt]);  
-                //    } 
-                //}        
-                //return ot( 'option',  attr_value((string)$value) . attr_selected($is_selected ) . $attr)
-                //. $content
-                //. ct( 'option' );
-                $html_options .= ot('option', 
-                                attr_selected( ((string)$opt == $this->get_value()) ? true : false) . 
-                                attr_value((string)$opt));
-                $html_options .= $content;
-                $html_options .= ct('option');
-            }
-            if ($is_optgroup) $html_options .= ct('optgroup');
+            } else $content = $potential_options[$opt];
+            $attr = '';
+            // add any existing style attributes to the option group
+            //if ($form_style_attrs) {
+            //    foreach (array_keys($form_style_attrs) as $css_attr) {
+            //        $attr .= dec($css_attr, $form_style_attrs[$css_attr][$opt]);  
+            //    } 
+            //}        
+            //return ot( 'option',  attr_value((string)$value) . attr_selected($is_selected ) . $attr)
+            //. $content
+            //. ct( 'option' );
+            $html_options .= ot('option', 
+                            attr_selected( ((string)$opt == $this->get_value()) ? true : false) . 
+                            attr_value((string)$opt));
+            $html_options .= $content;
+            $html_options .= ct('option');
+        }
+        if ($is_optgroup) $html_options .= ct('optgroup');
         return $html_options;    
     }
     
@@ -391,7 +411,8 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
     //abstract static function get_options(); 
     //abstract static function set_options($options);         
     function get_options() { 
-        return $this->options; 
+        $options = $this->options; 
+        return $options;
     }
     function set_options( &$options ) { 
         $this->options = $options;

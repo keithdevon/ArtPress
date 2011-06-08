@@ -189,3 +189,24 @@ new [description:"auto generate appropriate gallery image sizes" entry:"13073608
 time 1307432324
 new [description:"build contact details plugin" entry:"1307432324" project:"beta" status:"pending" tags:"keith" uuid:"7ef4ebe6-655c-4296-930c-4cd9186cff94"]
 ---
+time 1307461629
+new [description:"generate form from settings" entry:"1307461629" status:"pending" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+---
+time 1307461799
+old [description:"generate form from settings" entry:"1307461629" status:"pending" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate form from settings" entry:"1307461629" status:"pending" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+---
+time 1307461875
+old [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate form from settings" entry:"1307461629" status:"pending" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate form from settings" entry:"1307461629" project:"alpha" status:"pending" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+---
+time 1307461909
+old [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate form from settings" entry:"1307461629" project:"alpha" status:"pending" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate form from settings" entry:"1307461629" project:"alpha" status:"pending" tags:"james" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+---
+time 1307462022
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"save settings" entry:"1307462022" project:"alpha" status:"pending" tags:"james" uuid:"5067ec87-783d-3a13-e431-97b44efbef83"]
+---
+time 1307462052
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate css" entry:"1307462052" project:"alpha" status:"pending" tags:"james" uuid:"bbc26745-226b-3d2b-754f-85b6eba345af"]
+---

@@ -8,24 +8,29 @@ require_once 'form.php';
  *
  */
 class Global_Color extends CSS_Text_Input {
+    private static $global_color_instances = array();
+    
     function __construct($id, $name, $value) {
-        parent::__construct($id, 'color', $name, $value);        
+        parent::__construct($id, 'color', $name, $value);
+        self::$global_color_instances[] = $this;    
     }
-
     static function is_valid($value) {
         return preg_match('/^#[a-f0-9]{6}$/i', $value ); 
     }
+    static function get_dropdown_color_options() {
+        $options = array();
+        foreach (self::$global_color_instances as $color) {
+            $v = $color->get_value();
+            $options[] = $v;
+        }
+        return $options;       
+    }
 }
-/**
- * Class to chose one of the preselected colors as the foreground color
- * @author jsd
- *
- */
 class Section_Color extends CSS_Dropdown_Input {
     static $options;
-    function __construct($id, $value, $group_arr) {
+    function __construct($id, $value) {
         parent::__construct($id, 'color', 'color select', $value); 
-        self::set_options($group_arr);
+        self::set_options( Global_Color::get_dropdown_color_options() );
     }    
 }
 /**
@@ -35,11 +40,12 @@ class Section_Color extends CSS_Dropdown_Input {
  */
 class Section_Background_Color extends CSS_Dropdown_Input {
     static $options;
-    function __construct($id, $value, $group_arr) {
+    function __construct($id, $value) {
         parent::__construct($id, 'background-color', 'background color select', $value); 
-        self::set_options($group_arr);
+        self::set_options(Global_Color::get_dropdown_color_options());
     }    
 }
+
 
 // TEST DATA TODO remove!
 

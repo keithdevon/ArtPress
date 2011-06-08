@@ -131,12 +131,33 @@ function ap_settings_page() {
     // pass full settings through
     // needs to be full so the inputs have fully qualified names
     //ap_create_form(array('cs'), $settings['saves'][$settings['current-save-id']]);
-    $lst = new List_Style_Type('bodyh2lst', 0);
+    
+    $gc1 = new Global_Color('gsgc1', 'Color 1', '#222222');
+    $gc2 = new Global_Color('gsgc2', 'Color 2', '#444444');
+    $gc3 = new Global_Color('gsgc3', 'Color 3', '#666666');
+    $gc4 = new Global_Color('gsgc4', 'Color 4', '#888888');
+    $gcgrp = new Option_Group('gcgrp', 'Global Colors', array($gc1, $gc2, $gc3, $gc4));
+    
+    $gf1 = new Global_Font_Family('gsgf1', 'font family 1', 0);
+    $gf2 = new Global_Font_Family('gsgf2', 'font family 2', 2);
+    $gf3 = new Global_Font_Family('gsgf3', 'font family 3', 4);
+    $gfgrp = new Lookup_Option_Group('gfgrp', 'Global Fonts', array($gf1, $gf2, $gf3));
+    
+    $globalsettings = new Tab('gstab', 'global settings', array(//$gcgrp, 
+    $gfgrp) );
+    
+    // ----------------
+    
+    //$lst = new List_Style_Type('bodyh2lst', 0);
+    
+    $sc = new Section_Color('bodyh2sc', 0);
+    $sbc = new Section_Background_Color('bodyh2sbc', 0);
 
+    $ff = new Section_Font('bodyh2ff', 0);
     $ta = new Text_Align('bodyh2ta', 0);
     $td = new Text_Decoration('bodyh2td', 0);
     $tt = new Text_Transform('bodyh2tt', 0);
-    $t1 = new Tab('bodyh2typography', 'typography', array($ta, $td, $tt
+    $t1 = new Tab('bodyh2typography', 'typography', array($sc, $sbc, $ff, $ta, $td, $tt
     ));
     
     $bs = new Border_Style('bodyh2bs', 0);
@@ -157,6 +178,8 @@ function ap_settings_page() {
     ));    
     //echo $h2tg->get_html();
     //echo $h2->get_html();
+    
+    // ----------------
     
     $ta = new Text_Align('bodyh3ta', 0);
     $td = new Text_Decoration('bodyh3td', 0);
@@ -189,18 +212,7 @@ function ap_settings_page() {
     
     $bodytab = new Tab('bodytab', 'body tab', $bodycsg);
     //echo $bodytab->get_html();
-    $gc1 = new Global_Color('gsgc1', 'Color 1', '#222222');
-    $gc2 = new Global_Color('gsgc2', 'Color 2', '#444444');
-    $gc3 = new Global_Color('gsgc3', 'Color 3', '#666666');
-    $gc4 = new Global_Color('gsgc4', 'Color 4', '#888888');
-    $gcgrp = new Option_Group('gcgrp', 'Global Colors', array($gc1, $gc2, $gc3, $gc4));
-    
-    $gf1 = new Global_Font_Family('gsgf1', 'font family 1', 0);
-    $gf2 = new Global_Font_Family('gsgf2', 'font family 2', 0);
-    $gf3 = new Global_Font_Family('gsgf3', 'font family 3', 0);
-    $gfgrp = new Option_Group('gfgrp', 'Global Fonts', array($gf1, $gf2, $gf3));
-    
-    $globalsettings = new Tab('gstab', 'global settings', array($gcgrp, $gfgrp) );
+
     $headertab = new Tab('headertab', 'header tab');
     
     $maintabgroup = new Tab_Group('maintabgroup', 'main tab group', array($bodytab, $globalsettings, $headertab

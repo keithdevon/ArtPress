@@ -20,3 +20,6 @@
 [description:"change sidebar css selector to .sidebar" entry:"1307360707" project:"alpha" status:"pending" tags:"keith" uuid:"52aa68bd-4f27-4158-9e57-f03244056a03"]
 [description:"auto generate appropriate gallery image sizes" entry:"1307360822" project:"alpha" status:"pending" tags:"keith" uuid:"c5a07b27-7dcc-4eb4-b5f8-f62f031600ef"]
 [description:"build contact details plugin" entry:"1307432324" project:"beta" status:"pending" tags:"keith" uuid:"7ef4ebe6-655c-4296-930c-4cd9186cff94"]
+[depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate form from settings" entry:"1307461629" project:"alpha" status:"pending" tags:"james" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+[depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"save settings" entry:"1307462022" project:"alpha" status:"pending" tags:"james" uuid:"5067ec87-783d-3a13-e431-97b44efbef83"]
+[depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate css" entry:"1307462052" project:"alpha" status:"pending" tags:"james" uuid:"bbc26745-226b-3d2b-754f-85b6eba345af"]
