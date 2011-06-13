@@ -16,3 +16,13 @@ class Background_Attachment extends CSS_Dropdown_Input {
         self::set_options( self::$options );
     }    
 }
+class Background_Horizontal_Position extends CSS_Horizontal_Position_Text_Input {
+    function __construct( $id, $value ) {
+        parent::__construct( $id, 'background-position', 'horizontal background position', $value );
+    }
+}
+class Background_Vertical_Position extends CSS_Horizontal_Position_Text_Input {
+    function __construct( $id, $value ) {
+        parent::__construct( $id, 'background-position', 'vertical background position', $value );
+    }
+}

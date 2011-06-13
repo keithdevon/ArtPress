@@ -45,7 +45,7 @@ class Global_Font_Family extends CSS_Dropdown_Input {
                         	'“Trebuchet MS”, Tahoma, Arial, sans-serif',
                         	'Verdana, Tahoma, Geneva, sans-serif'
                     	); 
-    function __construct($id, $name, $value) { 
+    function __construct($id, $name, $value=0) { 
         parent::__construct($id, 'font-family', $name, $value); 
         self::set_options( self::$options );
         self::$global_font_family_instances[] = $this;
@@ -93,22 +93,22 @@ class Section_Font extends CSS_Dropdown_Input {
         $font = $fonts[$value];
         return $font;
     }
-    function __construct($id, $value) {
+    function __construct($id, $value=0) {
         parent::__construct($id, 'font-family', 'font select', $value); 
         self::set_options( Global_Font_Family::get_dropdown_font_family_options());
     }    
 }
 class Font_Style extends CSS_Dropdown_Input {
-    static $options; 
-    function __construct($id, $value) { 
+    static $options = array('normal', 'italic', 'oblique');
+    function __construct($id, $value=0) { 
         parent::__construct($id, 'font-style', 'font style', $value); 
-        self::set_options(array('normal', 'italic', 'oblique'));
+        self::set_options( self::$options );
     }    
 }
 class Font_Weight extends CSS_Dropdown_Input {
-    static $options; 
-    function __construct($id, $value) { 
+    static $options = array('normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500', '600', '700', '800', '900');  
+    function __construct($id, $value=0) { 
         parent::__construct($id, 'font-weight', 'font weight', $value); 
-        self::set_options(array('normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500', '600', '700', '800', '900'  ));
+        self::set_options( self::$options );
     }    
 }
