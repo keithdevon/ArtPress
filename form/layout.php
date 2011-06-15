@@ -72,7 +72,7 @@ class Display extends CSS_Dropdown_Input {
 }
 
 class Layout_Tab extends Sub_Tab {
-    function __construct($name, $members=null) {
+    function __construct($display_name, $members=null) {
         if ( null == $members ) { 
             $members[] = new Border_Style();                                               
             $members[] = new Border_Width();                                              
@@ -91,7 +91,7 @@ class Layout_Tab extends Sub_Tab {
             $pl = new Padding_Left();                                           
             $members[] = new Option_Row_Group('padding', array($pt, $pb, $pr, $pl) );
         }
-        parent::__construct($name, $members);
+        parent::__construct($display_name, $members);
     }
 }
 //$mt = new Margin_Top(null, "1em");

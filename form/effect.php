@@ -54,7 +54,7 @@ class Border_Radius extends CSS_Size_Text_Input {
 }
 
 class Effect_Tab extends Sub_Tab {
-    function __construct($name, $members=null) {
+    function __construct($display_name, $members=null) {
         if ( null == $members ) { 
             $members[]  = new Border_Radius();
             $tsh   = new Text_Shadow_Horizontal();
@@ -70,6 +70,6 @@ class Effect_Tab extends Sub_Tab {
             $members[] = new Option_Row_Group('box shadow', array( $bsh, $bsv, $bsbr, $bsc ));
             
         }
-        parent::__construct($name, $members);
+        parent::__construct($display_name, $members);
     }
 }

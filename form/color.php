@@ -10,9 +10,11 @@ require_once 'form.php';
 class Global_Color extends CSS_Text_Input {
     private static $global_color_instances = array();
     
-    function __construct($name, $value) {
-        parent::__construct('color', $name, $value);
-        self::$global_color_instances[] = $this;    
+    function __construct($display_name, $value) {
+        parent::__construct('color', $display_name, $value);
+        self::$global_color_instances[] = $this;   
+        $this_class = get_class($this);
+        $this->set_name($this_class . '__' . sizeof(self::$global_color_instances));
     }
     static function is_valid($value) {
         return preg_match('/^#[a-f0-9]{6}$/i', $value ); 

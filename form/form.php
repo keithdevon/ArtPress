@@ -50,12 +50,12 @@ interface CSS {
  */
 abstract class Hierarchy {
     private $id;    // non unique
-    private $name;
+    private $display_name;
     private $parent;
     private $children;
     
-    function __construct($name, $children=array()) {
-        $this->name   = $name;
+    function __construct($display_name, $children=array()) {
+        $this->display_name   = $display_name;
         if ($children != null) {
             if ( is_array($children) ) {
                 foreach ( $children as $child ) {
@@ -67,7 +67,7 @@ abstract class Hierarchy {
     }
     
     // GETTERS
-    final function get_name()     { return $this->name;     }
+    final function get_display_name()     { return $this->display_name;     }
     final function get_children() { return $this->children; }
     final function get_parent()   { return $this->parent;   }
     final function get_id()       { return $this->id;       }
@@ -115,8 +115,8 @@ abstract class Hierarchy {
  *
  */
 class Group extends Hierarchy implements Render_As_HTML, Skippable {
-    function __construct($name, $members=array()) {
-        parent::__construct($name, $members);
+    function __construct($display_name, $members=array()) {
+        parent::__construct($display_name, $members);
  
     }
     function get_html() {
@@ -137,8 +137,8 @@ class Option_Group extends Group {
      * and the settings values are the values of the array. 
      */
     // TODO ^ is this still true?
-    function __construct($name, $members=array()) {
-        parent::__construct($name, $members);
+    function __construct($display_name, $members=array()) {
+        parent::__construct($display_name, $members);
     }  
     function get_options() { 
         $options = array();
@@ -152,7 +152,7 @@ class Option_Group extends Group {
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {
-                $child_name = $child->get_name();
+                $child_name = $child->get_display_name();
                 $child_html = $child->get_html();  
                 $children_html .= row($child_name, $child_html);
             }
@@ -161,8 +161,8 @@ class Option_Group extends Group {
     }
 }
 class Option_Row_Group extends Group {
-    function __construct($name, $members=array()) {
-        parent::__construct($name, $members);
+    function __construct($display_name, $members=array()) {
+        parent::__construct($display_name, $members);
     } 
     function get_html() {
         $children_html = '';
@@ -179,8 +179,8 @@ class Lookup_Option_Group extends Option_Group {
     /**
      * specifically created for font options
      */
-    function __construct($name, $members=array()) {
-        parent::__construct($name, $members);
+    function __construct($display_name, $members=array()) {
+        parent::__construct($display_name, $members);
     } 
     function get_options() { 
         $options = array();
@@ -194,8 +194,8 @@ class Lookup_Option_Group extends Option_Group {
 }
 abstract class Sub_Tab extends Group  { // TODO change to Sub_Tab
     private $html_id;
-    function __construct($name, $members=null) {
-        parent::__construct($name, $members);
+    function __construct($display_name, $members=null) {
+        parent::__construct($display_name, $members);
     }
     function get_html() {
 
@@ -204,7 +204,7 @@ abstract class Sub_Tab extends Group  { // TODO change to Sub_Tab
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {
-                $child_name = $child->get_name();
+                $child_name = $child->get_display_name();
                 $child_html = $child->get_html();  
                 $children_html .= row($child_name, $child_html);
             }
@@ -221,9 +221,9 @@ abstract class Sub_Tab extends Group  { // TODO change to Sub_Tab
 }
 class Main_Tab extends Hierarchy implements Render_As_HTML {
     private $html_id;
-    function __construct($name, $members=null//,  $html_id=null
+    function __construct($display_name, $members=null//,  $html_id=null
                             ) {
-        parent::__construct($name, $members);
+        parent::__construct($display_name, $members);
     }  
     function get_html() {
         $children_html = '';
@@ -247,8 +247,8 @@ class Main_Tab extends Hierarchy implements Render_As_HTML {
 }         
 class Tab_Group extends Group {
 
-    function __construct($name, $members=array()) {
-        parent::__construct($name, $members);
+    function __construct($display_name, $members=array()) {
+        parent::__construct($display_name, $members);
     }
     
     function get_html() {
@@ -266,7 +266,7 @@ class Tab_Group extends Group {
                 //<div id="tabs-1">
                 $child->set_html_id("{$id}-tabs-" . $n);
                 //<a href="#tabs-1">
-                $links .= li( alink('#' . $child->get_html_id(), $child->get_name() ) );
+                $links .= li( alink('#' . $child->get_html_id(), $child->get_display_name() ) );
                 $tabs  .= $child->get_html();
             }
         }
@@ -283,23 +283,17 @@ class Tab_Group extends Group {
     }
 }
 class Main_Tab_Group extends Tab_Group {
-    function __construct($name, $members=array()) {
+    function __construct($display_name, $members=array()) {
     
         $globalsettings = new Global_Settings();
-   
-        //$h2 = new CSS_Selector('h2', 'header 2');
-        $h2 = new H2();
-        $h3 = new H3();
-        $h4 = new H4();   
-        $body = new CSS_Selector_Group('body', 'body', array($h2, $h3, $h4));
-        $bodytab = new Main_Tab('body tab', $body);
+        $bodytab = new Body_Tab();
         
-        parent::__construct($name, array($bodytab, $globalsettings));
+        parent::__construct('main tab group', array($bodytab, $globalsettings));
     }
 }
 class CSS_Selector extends Hierarchy implements Render_As_HTML, CSS {
     private $css_selector;
-    function __construct($css_selector, $name, $children=null) {
+    function __construct($css_selector, $display_name, $children=null) {
         $this->css_selector = $css_selector;
         if ( null == $children ) {
             $t1 = new Typography_Tab('typography');
@@ -308,7 +302,7 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, CSS {
             $t4 = new Effect_Tab('effects');
             $children[] = new Tab_Group('sub tab group', array($t1, $t2, $t3, $t4));
         }
-        parent::__construct($name, $children);
+        parent::__construct($display_name, $children);
     }
     function get_css_selector() {
         $parent = $this->parent;
@@ -330,8 +324,8 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, CSS {
     }
 }
 class CSS_Selector_Group extends CSS_Selector {
-    function __construct($css_selector, $name, $children) {
-        parent::__construct($css_selector, $name, $children);
+    function __construct($css_selector, $display_name, $children) {
+        parent::__construct($css_selector, $display_name, $children);
     }
     function get_html() {
         $o = '<script> $(function() { $( "#' . $this->get_id() . '-accordion" ).accordion(); }); </script>';
@@ -339,8 +333,8 @@ class CSS_Selector_Group extends CSS_Selector {
        
         $children = $this->get_children();
         foreach ($children as $child) {
-            $name = $child->get_name();
-            $link = h4( alink('#', $name) );
+            $child_name = $child->get_display_name();
+            $link = h4( alink('#', $child_name) );
             $child_html = $child->get_html();
             $o .= $link;
             $o .= div(
@@ -360,27 +354,59 @@ class CSS_Selector_Group extends CSS_Selector {
  */
 abstract class Setting extends Hierarchy implements Render_As_HTML {
 
+    private $name;
     private $value;
 
-    function __construct($name, $v) {
+    function __construct($display_name, $v) {
         $this->value = $v;
-        parent::__construct($name, null);
-        //set_value($v);
+        parent::__construct($display_name, null);
+        $this->name = get_class($this);
     }
 
     function get_value()       { return $this->value; }
     function set_value($value) { $this->value = $value; }
     
-    private function get_qualifier() {
-        $qualifier = '';
-        foreach($this::get_ancestory() as $part) $qualifier = "[{$part->get_id()}]" . $qualifier;
-        return $qualifier;
-    }
+    //private function get_qualifier() {
+    //    $qualifier = '';
+    //    foreach($this::get_ancestory() as $part) $qualifier = "[{$part->get_id()}]" . $qualifier;
+    //    return $qualifier;
+    //}
     
+    function get_parentage() {
+        $p = $this->get_parent();
+        $parents = array();
+        while ($p != null) {
+            array_push($parents, $p);
+            $p = $p->get_parent();
+        }
+        return $parents;
+    }
+    function get_full_name() {
+        $parents = '';
+        foreach($this::get_parentage() as $p) {
+            $parent_class = get_class($p);
+            $parents = "[{$parent_class}]" . $parents;
+            
+        }
+        $local_name = $this->get_name();
+        $full_name = $parents . '[' . $local_name . ']';
+        return $full_name;        
+    }
     function get_html_name() {
         //TODO add option group name eg artpress_theme_options
-        return attr_name($this->get_qualifier() . '[' . $this->get_id() . ']');
+        return attr_name($this->get_full_name());
     }
+    function get_name() { 
+        $name = '';
+        $parents = $this->get_parentage();    
+        foreach ( $parents as $parent ) {
+            if( $parent instanceof CSS )
+                $name =  get_class($parent). '__' . $name;
+        }
+        $name .= $this->name;
+        return $name; 
+    }
+    function set_name($name) { $this->name = $name; }
     
 }
 /**
@@ -392,15 +418,15 @@ abstract class Setting extends Hierarchy implements Render_As_HTML {
 abstract class CSS_Setting extends Setting implements CSS {
     private $css_property;
     
-    function __construct($css_property, $name, $value) {
+    function __construct($css_property, $display_name, $value) {
        // echo var_dump(func_get_args());
        $this->css_property = $css_property;
-       parent::__construct($name, $value);
+       parent::__construct($display_name, $value);
     }
     function get_css_declaration() {
-        $name = $this->get_name();
+        $display_name = $this->get_display_name();
         $value = $this->get_value();
-        if ($value) return "\n" . $name . ": " . $value . ";";
+        if ($value) return "\n" . $display_name . ": " . $value . ";";
         else return '';
     }
     function get_css() {
@@ -408,8 +434,8 @@ abstract class CSS_Setting extends Setting implements CSS {
     }
 }
 abstract class CSS_Text_Input extends CSS_Setting {
-    function __construct($css_property, $name, $value) {
-        parent::__construct($css_property, $name, $value);        
+    function __construct($css_property, $display_name, $value) {
+        parent::__construct($css_property, $display_name, $value);        
     }
     function get_html() {
         $input = input('text', $this->get_html_name() . attr_value($this->get_value()));
@@ -418,8 +444,8 @@ abstract class CSS_Text_Input extends CSS_Setting {
     }
 }
 abstract class CSS_Size_Text_Input extends CSS_Text_Input {
-    function __construct($css_property, $name, $value='') {
-        parent::__construct($css_property, $name, $value);        
+    function __construct($css_property, $display_name, $value='') {
+        parent::__construct($css_property, $display_name, $value);        
     }
     
     static function is_valid($value) {
@@ -428,8 +454,8 @@ abstract class CSS_Size_Text_Input extends CSS_Text_Input {
     }
 }
 abstract class CSS_Horizontal_Position_Text_Input extends CSS_Size_Text_Input {
-    function __construct($css_property, $name, $value='') {
-        parent::__construct($css_property, $name, $value);        
+    function __construct($css_property, $display_name, $value='') {
+        parent::__construct($css_property, $display_name, $value);        
     }
     
     static function is_valid($value) {
@@ -441,8 +467,8 @@ abstract class CSS_Horizontal_Position_Text_Input extends CSS_Size_Text_Input {
     }
 }
 abstract class CSS_Vertical_Position_Text_Input extends CSS_Size_Text_Input {
-    function __construct($css_property, $name, $value='') {
-        parent::__construct($css_property, $name, $value);        
+    function __construct($css_property, $display_name, $value='') {
+        parent::__construct($css_property, $display_name, $value);        
     }
     
     static function is_valid($value) {
@@ -462,8 +488,8 @@ abstract class CSS_Vertical_Position_Text_Input extends CSS_Size_Text_Input {
 abstract class CSS_Dropdown_Input extends CSS_Setting {
     private $options;
     
-    function __construct($css_property, $name, $value=0) { 
-        parent::__construct($css_property, $name, $value);
+    function __construct($css_property, $display_name, $value=0) { 
+        parent::__construct($css_property, $display_name, $value);
     }
     
     function get_html() {

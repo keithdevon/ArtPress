@@ -27,13 +27,13 @@ class Background_Vertical_Position extends CSS_Horizontal_Position_Text_Input {
     }
 }
 class Background_Image_Tab extends Sub_Tab {
-    function __construct($name, $members=null) {
+    function __construct($display_name, $members=null) {
         if ( null == $members ) { 
             $members[] = new Background_Repeat();
             $members[] = new Background_Attachment();
             $members[] = new Background_Horizontal_Position();
             $members[] = new Background_Vertical_Position();        
         }
-        parent::__construct($name, $members);
+        parent::__construct($display_name, $members);
     }
 }
