@@ -8,9 +8,10 @@ require_once 'heart-theme-utils.php';
 $full_dir = $dir . 'form/heart-theme-form-functions.php';
 include_once $full_dir;
 require_once $dir . 'form/form.php';
+require_once $dir . 'form/global.php';
 require_once $dir . 'form/color.php';
-require_once $dir . 'form/font.php';
-require_once $dir . 'form/text.php';
+require_once $dir . 'form/body.php';
+require_once $dir . 'form/typography.php';
 require_once $dir . 'form/layout.php';
 require_once $dir . 'form/effect.php';
 require_once $dir . 'form/background-image.php';
@@ -131,7 +132,7 @@ function ap_settings_page() {
     // pass full settings through
     // needs to be full so the inputs have fully qualified names
     //ap_create_form(array('cs'), $settings['saves'][$settings['current-save-id']]);
-    $maintabgroup = new Main_Tab_Group('maintabgroup', 'main tab group');
+    $maintabgroup = new Main_Tab_Group('main tab group');
     
     echo $maintabgroup->get_html();
 }

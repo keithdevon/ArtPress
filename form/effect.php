@@ -2,53 +2,74 @@
 require_once 'form.php';
 
 class Text_Shadow_Horizontal extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'text-shadow', 'horizontal text shadow', $value);
+    function __construct($value='') {
+        parent::__construct('text-shadow', 'horizontal text shadow', $value);
     }
 }
 class Text_Shadow_Vertical extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'text-shadow', 'vertical text shadow', $value);
+    function __construct($value='') {
+        parent::__construct('text-shadow', 'vertical text shadow', $value);
     }
 }
 class Text_Shadow_Blur_Radius extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'text-shadow', 'text shadow blur radius', $value);
+    function __construct($value='') {
+        parent::__construct('text-shadow', 'text shadow blur radius', $value);
     }
 }
 class Text_Shadow_Color extends CSS_Dropdown_Input {
     static $options;
-    function __construct($id, $value) {
-        parent::__construct($id, 'color', 'text shadow color select', $value); 
+    function __construct($value=0) {
+        parent::__construct('color', 'text shadow color select', $value); 
         self::set_options( Global_Color::get_dropdown_color_options() );
     }    
 }
 
 class Box_Shadow_Horizontal extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'box-shadow', 'horizontal box shadow', $value);
+    function __construct($value='') {
+        parent::__construct('box-shadow', 'horizontal box shadow', $value);
     }
 }
 class Box_Shadow_Vertical extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'box-shadow', 'vertical box shadow', $value);
+    function __construct($value='') {
+        parent::__construct('box-shadow', 'vertical box shadow', $value);
     }
 }
 class Box_Shadow_Blur_Radius extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'box-shadow', 'box shadow blur radius', $value);
+    function __construct($value='') {
+        parent::__construct('box-shadow', 'box shadow blur radius', $value);
     }
 }
 class Box_Shadow_Color extends CSS_Dropdown_Input {
     static $options;
-    function __construct($id, $value) {
-        parent::__construct($id, 'color', 'box shadow color select', $value); 
+    function __construct($value=0) {
+        parent::__construct('color', 'box shadow color select', $value); 
         self::set_options( Global_Color::get_dropdown_color_options() );
     }    
 }
 
 class Border_Radius extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'border-radius', 'border-radius', $value);
+    function __construct($value='') {
+        parent::__construct('border-radius', 'border-radius', $value);
+    }
+}
+
+class Effect_Tab extends Sub_Tab {
+    function __construct($name, $members=null) {
+        if ( null == $members ) { 
+            $members[]  = new Border_Radius();
+            $tsh   = new Text_Shadow_Horizontal();
+            $tsv   = new Text_Shadow_Vertical();
+            $tsbr  = new Text_Shadow_Blur_Radius();
+            $tsc   = new Text_Shadow_Color();
+            $members[] = new Option_Row_Group('text shadow', array( $tsh, $tsv, $tsbr, $tsc ));
+    
+            $bsh   = new Box_Shadow_Horizontal();
+            $bsv   = new Box_Shadow_Vertical();
+            $bsbr  = new Box_Shadow_Blur_Radius();
+            $bsc   = new Box_Shadow_Color();
+            $members[] = new Option_Row_Group('box shadow', array( $bsh, $bsv, $bsbr, $bsc ));
+            
+        }
+        parent::__construct($name, $members);
     }
 }

@@ -4,58 +4,58 @@ require_once 'form.php';
 // BORDER
 class Border_Style extends CSS_Dropdown_Input {
     static $options = array('none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
-    function __construct($id, $value) { 
-        parent::__construct($id, 'border-style', 'border style', $value);
+    function __construct($value=0) { 
+        parent::__construct('border-style', 'border style', $value);
         self::set_options( self::$options );
     }    
 }
 class Border_Width extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'border-width', 'border width', $value);
+    function __construct($value='') {
+        parent::__construct('border-width', 'border width', $value);
     }
 }
 // MARGIN
 class Margin_Top extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'margin-top', 'top margin width', $value);
+    function __construct($value='') {
+        parent::__construct('margin-top', 'top margin width', $value);
     }
 }
 class Margin_Bottom extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'margin-bottom', 'bottom margin width', $value);
+    function __construct($value='') {
+        parent::__construct('margin-bottom', 'bottom margin width', $value);
     }
 }
 class Margin_Right extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'margin-right', 'right margin width', $value);
+    function __construct($value='') {
+        parent::__construct('margin-right', 'right margin width', $value);
     }
 }
 class Margin_Left extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'margin-top', 'left margin width', $value);
+    function __construct($value='') {
+        parent::__construct('margin-top', 'left margin width', $value);
     }
 }
 
 
 // PADDING
 class Padding_Top extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'padding-top', 'top padding width', $value);
+    function __construct($value='') {
+        parent::__construct('padding-top', 'top padding width', $value);
     }
 }
 class Padding_Bottom extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'padding-bottom', 'bottom padding width', $value);
+    function __construct($value='') {
+        parent::__construct('padding-bottom', 'bottom padding width', $value);
     }
 }
 class Padding_Right extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'padding-right', 'right padding width', $value);
+    function __construct($value='') {
+        parent::__construct('padding-right', 'right padding width', $value);
     }
 }
 class Padding_Left extends CSS_Size_Text_Input {
-    function __construct($id, $value) {
-        parent::__construct($id, 'padding-top', 'left padding width', $value);
+    function __construct($value='') {
+        parent::__construct('padding-top', 'left padding width', $value);
     }
 }
 
@@ -65,34 +65,34 @@ class Display extends CSS_Dropdown_Input {
         						'run-in', 'table', 'table-caption', 'table-cell', 'table-column', 
         						'table-column-group', 'table-footer-group', 'table-header-group', 
         						'table-row', 'table-row-group');
-    function __construct($id, $value) { 
-        parent::__construct($id, 'display', 'display mode', $value);
+    function __construct($value=0) { 
+        parent::__construct('display', 'display mode', $value);
         self::set_options( self::$options );
     }    
 }
 
 class Layout_Tab extends Sub_Tab {
-        function __construct($id, $name, $members=null, $html_id=null) {
+    function __construct($name, $members=null) {
         if ( null == $members ) { 
-            $members[] = new Border_Style('bodyh2bs', 0);                                               
-            $members[] = new Border_Width('bodyh2bw', '');                                              
+            $members[] = new Border_Style();                                               
+            $members[] = new Border_Width();                                              
                                                                                                  
-            $display = new Display('bodyh2display', 0);                                          
+            $display = new Display();                                          
                                                                                                  
-            $mt = new Margin_Top(    'bodyh2mt', '');                                            
-            $mb = new Margin_Bottom( 'bodyh2mb', '');                                            
-            $mr = new Margin_Right(  'bodyh2mr', '');                                            
-            $ml = new Margin_Left(   'bodyh2ml', '');                                            
-            $members[] = new Option_Row_Group( 'bodyh2mgrp', 'margin', array($mt, $mb, $mr, $ml) );   
+            $mt = new Margin_Top();                                            
+            $mb = new Margin_Bottom();                                            
+            $mr = new Margin_Right();                                            
+            $ml = new Margin_Left();                                            
+            $members[] = new Option_Row_Group('margin', array($mt, $mb, $mr, $ml) );   
                                                                                                  
-            $pt = new Padding_Top(    'bodyh2pt', '');                                           
-            $pb = new Padding_Bottom( 'bodyh2pb', '');                                           
-            $pr = new Padding_Right(  'bodyh2pr', '');                                           
-            $pl = new Padding_Left(   'bodyh2pl', '');                                           
-            $members[] = new Option_Row_Group( 'bodyh2pgrp', 'padding', array($pt, $pb, $pr, $pl) );  
-                                                                                                 
-            //$t2 = new Sub_Tab('bodyh2layout', 'layout', array( $bs, $bw, $display, $mgrp, $pgrp));
+            $pt = new Padding_Top();                                           
+            $pb = new Padding_Bottom();                                           
+            $pr = new Padding_Right();                                           
+            $pl = new Padding_Left();                                           
+            $members[] = new Option_Row_Group('padding', array($pt, $pb, $pr, $pl) );
         }
+        parent::__construct($name, $members);
+    }
 }
 //$mt = new Margin_Top(null, "1em");
 //echo "\n" . $mt->get_html();

@@ -4,25 +4,36 @@ require_once 'form.php';
 // BACKGROUND IMAGE
 class Background_Repeat extends CSS_Dropdown_Input {
     static $options = array('no-repeat', 'repeat', 'repeat-x', 'repeat-y', 'inherit'); 
-    function __construct($id, $value) { 
-        parent::__construct($id, 'background-repeat', 'background repeat', $value); 
+    function __construct($value=0) { 
+        parent::__construct('background-repeat', 'background repeat', $value); 
         self::set_options( self::$options );
     }    
 }
 class Background_Attachment extends CSS_Dropdown_Input {
     static $options = array('scroll', 'fixed', 'inherit' ); 
-    function __construct($id, $value) { 
-        parent::__construct($id, 'background-attachment', 'background attachment', $value); 
+    function __construct($value=0) { 
+        parent::__construct('background-attachment', 'background attachment', $value); 
         self::set_options( self::$options );
     }    
 }
 class Background_Horizontal_Position extends CSS_Horizontal_Position_Text_Input {
-    function __construct( $id, $value ) {
-        parent::__construct( $id, 'background-position', 'horizontal background position', $value );
+    function __construct($value='') {
+        parent::__construct('background-position', 'horizontal background position', $value );
     }
 }
 class Background_Vertical_Position extends CSS_Horizontal_Position_Text_Input {
-    function __construct( $id, $value ) {
-        parent::__construct( $id, 'background-position', 'vertical background position', $value );
+    function __construct($value='') {
+        parent::__construct('background-position', 'vertical background position', $value );
+    }
+}
+class Background_Image_Tab extends Sub_Tab {
+    function __construct($name, $members=null) {
+        if ( null == $members ) { 
+            $members[] = new Background_Repeat();
+            $members[] = new Background_Attachment();
+            $members[] = new Background_Horizontal_Position();
+            $members[] = new Background_Vertical_Position();        
+        }
+        parent::__construct($name, $members);
     }
 }

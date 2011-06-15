@@ -11,6 +11,18 @@
  * 
  * default value
  * 
+ * IDENTITY PROBLEM
+ * 
+ * I need a way to uniquely identify certain form elements for reasons of backwards compatibility
+ * Also I would like a way to identify each form element so that 
+ * I can use this information to store the form hierarchy in the db,
+ * which will allow me to quickly recreate the form from the saved settings.
+ * 
+ * For the purposes of backwards compatability, uniques arises from a combination of the 
+ * css selectors and css property 
+ * 
+ * For the form hierarchy ..
+ * 
  * */
 $dir = get_template_directory() . '/';
 require_once $dir . 'html-gen.php';
@@ -22,6 +34,10 @@ interface Render_As_HTML {
 }
 
 interface Skippable {}
+
+interface CSS {
+    function get_css();
+}
 
 /**
  * 
@@ -38,8 +54,7 @@ abstract class Hierarchy {
     private $parent;
     private $children;
     
-    function __construct($id, $name, $children=array()) {
-        $this->id     = $id;
+    function __construct($name, $children=array()) {
         $this->name   = $name;
         if ($children != null) {
             if ( is_array($children) ) {
@@ -48,6 +63,7 @@ abstract class Hierarchy {
                 }
             } else $this->add_child($children);
         } 
+        $this->id     = $this->construct_id();
     }
     
     // GETTERS
@@ -69,15 +85,17 @@ abstract class Hierarchy {
 
     function construct_id() {
         $id = '';
-        foreach ( get_ancestory() as $ancestor ) {
-            $id .= '_' . $ancestor;
+        $ancestory = $this->get_ancestory(); 
+        foreach ( $ancestory as $ancestor ) {
+            $id .= '_' . get_class($ancestor);
         }
-        return $id;
+        $this->id = $id;
     }
     
     // SETTERS
     function add_child($child)   { 
         $child->set_parent($this);
+        $child->construct_id();
         $this->children[]   = $child;  
     }
     function set_parent($parent) { $this->parent = $parent; }
@@ -97,8 +115,8 @@ abstract class Hierarchy {
  *
  */
 class Group extends Hierarchy implements Render_As_HTML, Skippable {
-    function __construct($id, $name, $members=array()) {
-        parent::__construct($id, $name, $members);
+    function __construct($name, $members=array()) {
+        parent::__construct($name, $members);
  
     }
     function get_html() {
@@ -119,8 +137,8 @@ class Option_Group extends Group {
      * and the settings values are the values of the array. 
      */
     // TODO ^ is this still true?
-    function __construct($id, $name, $members=array()) {
-        parent::__construct($id, $name, $members);
+    function __construct($name, $members=array()) {
+        parent::__construct($name, $members);
     }  
     function get_options() { 
         $options = array();
@@ -143,8 +161,8 @@ class Option_Group extends Group {
     }
 }
 class Option_Row_Group extends Group {
-    function __construct($id, $name, $members=array()) {
-        parent::__construct($id, $name, $members);
+    function __construct($name, $members=array()) {
+        parent::__construct($name, $members);
     } 
     function get_html() {
         $children_html = '';
@@ -161,8 +179,8 @@ class Lookup_Option_Group extends Option_Group {
     /**
      * specifically created for font options
      */
-    function __construct($id, $name, $members=array()) {
-        parent::__construct($id, $name, $members);
+    function __construct($name, $members=array()) {
+        parent::__construct($name, $members);
     } 
     function get_options() { 
         $options = array();
@@ -176,9 +194,8 @@ class Lookup_Option_Group extends Option_Group {
 }
 abstract class Sub_Tab extends Group  { // TODO change to Sub_Tab
     private $html_id;
-    function __construct($id, $name, $members=null, $html_id=null) {
-        parent::__construct($id, $name, $members);
-        $this->id = $id;
+    function __construct($name, $members=null) {
+        parent::__construct($name, $members);
     }
     function get_html() {
 
@@ -202,28 +219,11 @@ abstract class Sub_Tab extends Group  { // TODO change to Sub_Tab
     function get_html_id()       { return $this->html_id;   }
     function set_html_id($value) { $this->html_id = $value; }
 }
-class Typography_Tab extends Sub_Tab {
-    function __construct($id, $name, $members=null, $html_id=null) {
-        if ( null == $members ) { 
-            $members[] = new Section_Color('bodyh2sc');
-            $members[] = new Section_Background_Color('bodyh2sbc');        
-            $members[] = new Section_Font('bodyh2ff');
-            $members[] = new Font_Style('bodyh2fs');
-            $members[] = new Font_Weight('bodyh2fs');
-            $members[] = new Text_Align('bodyh2ta');
-            $members[] = new Text_Decoration('bodyh2td');
-            $members[] = new Text_Transform('bodyh2tt');
-        }
-        parent::__construct($id, $name, $members);
-        $this->id = $id;
-    }    
-}
-
 class Main_Tab extends Hierarchy implements Render_As_HTML {
     private $html_id;
-    function __construct($id, $name, $members=null, $html_id=null) {
-        parent::__construct($id, $name, $members);
-        $this->id = $id;
+    function __construct($name, $members=null//,  $html_id=null
+                            ) {
+        parent::__construct($name, $members);
     }  
     function get_html() {
         $children_html = '';
@@ -247,8 +247,8 @@ class Main_Tab extends Hierarchy implements Render_As_HTML {
 }         
 class Tab_Group extends Group {
 
-    function __construct($id, $name, $members=array()) {
-        parent::__construct($id, $name, $members);
+    function __construct($name, $members=array()) {
+        parent::__construct($name, $members);
     }
     
     function get_html() {
@@ -283,138 +283,32 @@ class Tab_Group extends Group {
     }
 }
 class Main_Tab_Group extends Tab_Group {
-    function __construct($id, $name, $members=array()) {
-        parent::__construct($id, $name, $members);
+    function __construct($name, $members=array()) {
     
-        $gc1 = new Global_Color('gsgc1', 'Color 1', '#222222');
-        $gc2 = new Global_Color('gsgc2', 'Color 2', '#444444');
-        $gc3 = new Global_Color('gsgc3', 'Color 3', '#666666');
-        $gc4 = new Global_Color('gsgc4', 'Color 4', '#888888');
-        $gcgrp = new Option_Group('gcgrp', 'Global Colors', array($gc1, $gc2, $gc3, $gc4));
+        $globalsettings = new Global_Settings();
+   
+        //$h2 = new CSS_Selector('h2', 'header 2');
+        $h2 = new H2();
+        $h3 = new H3();
+        $h4 = new H4();   
+        $body = new CSS_Selector_Group('body', 'body', array($h2, $h3, $h4));
+        $bodytab = new Main_Tab('body tab', $body);
         
-        $gf1 = new Global_Font_Family('gsgf1', 'font family 1', 0);
-        $gf2 = new Global_Font_Family('gsgf2', 'font family 2', 2);
-        $gf3 = new Global_Font_Family('gsgf3', 'font family 3', 4);
-        $gfgrp = new Lookup_Option_Group('gfgrp', 'Global Fonts', array($gf1, $gf2, $gf3));
-        
-        $globalsettings = new Main_Tab('gstab', 'global settings', array($gcgrp, 
-            $gfgrp) );
-        
-        // ----------------
-        
-        //$lst = new List_Style_Type('bodyh2lst', 0);
-        
-        //$sc = new Section_Color('bodyh2sc');
-        //$sbc = new Section_Background_Color('bodyh2sbc');
-        //
-        //$ff = new Section_Font('bodyh2ff');
-        //$fs = new Font_Style('bodyh2fs');
-        //$fw = new Font_Weight('bodyh2fs');
-        //$ta = new Text_Align('bodyh2ta');
-        //$td = new Text_Decoration('bodyh2td');
-        //$tt = new Text_Transform('bodyh2tt');
-        //$t1 = new Sub_Tab('bodyh2typography', 'typography', array($sc, $sbc, $fs, $fw, $ff, $ta, $td, $tt
-        ));
-        
-        //$bs = new Border_Style('bodyh2bs', 0);
-        //$bw = new Border_Width('bodyh2bw', '');
-        //
-        //$display = new Display('bodyh2display', 0);
-        //
-        //$mt = new Margin_Top(    'bodyh2mt', '');
-        //$mb = new Margin_Bottom( 'bodyh2mb', '');
-        //$mr = new Margin_Right(  'bodyh2mr', '');
-        //$ml = new Margin_Left(   'bodyh2ml', '');
-        //$mgrp = new Option_Row_Group( 'bodyh2mgrp', 'margin', array($mt, $mb, $mr, $ml) );
-        //
-        //$pt = new Padding_Top(    'bodyh2pt', '');
-        //$pb = new Padding_Bottom( 'bodyh2pb', '');
-        //$pr = new Padding_Right(  'bodyh2pr', '');
-        //$pl = new Padding_Left(   'bodyh2pl', '');
-        //$pgrp = new Option_Row_Group( 'bodyh2pgrp', 'padding', array($pt, $pb, $pr, $pl) );
-        //
-        //$t2 = new Sub_Tab('bodyh2layout', 'layout', array( $bs, $bw, $display, $mgrp, $pgrp));
-        
-        $br = new Background_Repeat(null, 0);
-        $ba = new Background_Attachment(null, 0);
-        $bhp = new Background_Horizontal_Position('bodyh2bhp', '');
-        $bvp = new Background_Vertical_Position('bodyh2bvp', '');        
-        $t3 = new Sub_Tab('bodyh2background', 'background', array($br, $ba, $bhp, $bvp));
-        
-        $tsh   = new Text_Shadow_Horizontal(  'bodyh2tsh', '');
-        $tsv   = new Text_Shadow_Vertical(    'bodyh2tsv', '');
-        $tsbr  = new Text_Shadow_Blur_Radius( 'bodyh2tsbr', '');
-        $tsc   = new Text_Shadow_Color(       'bodyh2tsc', 0);
-        $tsgrp = new Option_Row_Group('bodyh2tsgrp', 'text shadow', array( $tsh, $tsv, $tsbr, $tsc ));
-
-        $bsh   = new Box_Shadow_Horizontal(  'bodyh2bsh', '');
-        $bsv   = new Box_Shadow_Vertical(    'bodyh2bsv', '');
-        $bsbr  = new Box_Shadow_Blur_Radius( 'bodyh2bsbr', '');
-        $bsc   = new Box_Shadow_Color(       'bodyh2bsc', 0);
-        $bsgrp = new Option_Row_Group('bodyh2tsgrp', 'box shadow', array( $bsh, $bsv, $bsbr, $bsc ));
-        
-        $brad  = new Border_Radius('bodyh2brad', '');
-        
-        //$effectgrp = new Option_Group('bodyh2effectgrp', 'effects', array($tsgrp, $bsgrp));
-        
-        $t4 = new Sub_Tab('bodyh2effect', 'effects', array(//$effectgrp
-            $brad, $tsgrp, $bsgrp
-            ));
-        
-        $h2tg = new Tab_Group('bodyh2typographytabgroup', 'typography tab group', array($t1, $t2, $t3, $t4
-        ));
-        $h2 = new CSS_Selector('bodyh2', 'h2', 'header 2', array($h2tg
-        ));    
-        //echo $h2tg->get_html();
-        //echo $h2->get_html();
-        
-        // ----------------
-        
-        $ta = new Text_Align('bodyh3ta', 0);
-        $td = new Text_Decoration('bodyh3td', 0);
-        $tt = new Text_Transform('bodyh3tt', 0);
-        $t1 = new Sub_Tab('bodyh3typography', 'typography', array($ta, $td, $tt));
-        
-        $bs = new Border_Style('bodyh3bs', 0);
-        $bw = new Border_Width('bodyh3bw', '');
-        
-        $t2 = new Sub_Tab('bodyh3layout', 'layout', array($bs, $bw));
-        
-        $br = new Background_Repeat(null, 0);
-        $ba = new Background_Attachment(null, 0);
-        $t3 = new Sub_Tab('bodyh3background', 'background', array($br, $ba));
-        
-        $tsh = new Text_Shadow_Horizontal(null, '');
-        $tsv = new Text_Shadow_Vertical(null, '');
-        $t4 = new Sub_Tab('bodyh3effect', 'effects', array($tsh, $tsv));
-        
-        $h3tg = new Tab_Group('bodyh3typographytabgroup', 'typography tab group', array($t1, $t2, $t3, $t4
-        ));
-        $h3 = new CSS_Selector('bodyh3', 'h3', 'header 3', array($h3tg
-        ));    
-        
-        $bodycsg = new CSS_Selector_Group('bodycsg', 'body', 'body', array($h2, $h3));
-        
-        //echo $h2->get_html();
-        //echo $h3->get_html();
-        //echo $csg->get_html();
-        //echo $bodycsg->get_html();
-        
-        $bodytab = new Main_Tab('bodytab', 'body tab', $bodycsg);
-        //echo $bodytab->get_html();
-    
-        $headertab = new Main_Tab('headertab', 'header tab');
-        
-        $this->add_child($bodytab);
-        $this->add_child($globalsettings);
-        $this->add_child($headertab);
+        parent::__construct($name, array($bodytab, $globalsettings));
     }
 }
-class CSS_Selector extends Hierarchy implements Render_As_HTML {
+class CSS_Selector extends Hierarchy implements Render_As_HTML, CSS {
     private $css_selector;
-    function __construct($id, $css_selector, $name, $children) {
-        parent::__construct($id, $name, $children);
+    function __construct($css_selector, $name, $children=null) {
         $this->css_selector = $css_selector;
+        if ( null == $children ) {
+            $t1 = new Typography_Tab('typography');
+            $t2 = new Layout_Tab('layout'); 
+            $t3 = new Background_Image_Tab('background');
+            $t4 = new Effect_Tab('effects');
+            $children[] = new Tab_Group('sub tab group', array($t1, $t2, $t3, $t4));
+        }
+        parent::__construct($name, $children);
     }
     function get_css_selector() {
         $parent = $this->parent;
@@ -431,10 +325,13 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML {
         }
         return div($o);   
     }
+    function get_css() {
+        return $this->css_selector;
+    }
 }
 class CSS_Selector_Group extends CSS_Selector {
-    function __construct($id, $css_selector, $name, $children) {
-        parent::__construct($id, $css_selector, $name, $children);
+    function __construct($css_selector, $name, $children) {
+        parent::__construct($css_selector, $name, $children);
     }
     function get_html() {
         $o = '<script> $(function() { $( "#' . $this->get_id() . '-accordion" ).accordion(); }); </script>';
@@ -465,9 +362,9 @@ abstract class Setting extends Hierarchy implements Render_As_HTML {
 
     private $value;
 
-    function __construct($id, $name, $v) {
+    function __construct($name, $v) {
         $this->value = $v;
-        parent::__construct($id, $name, null);
+        parent::__construct($name, null);
         //set_value($v);
     }
 
@@ -492,13 +389,13 @@ abstract class Setting extends Hierarchy implements Render_As_HTML {
  * @author jsd
  *
  */
-abstract class CSS_Setting extends Setting {
+abstract class CSS_Setting extends Setting implements CSS {
     private $css_property;
     
-    function __construct($id, $css_property, $name, $value) {
+    function __construct($css_property, $name, $value) {
        // echo var_dump(func_get_args());
        $this->css_property = $css_property;
-       parent::__construct($id, $name, $value);
+       parent::__construct($name, $value);
     }
     function get_css_declaration() {
         $name = $this->get_name();
@@ -506,14 +403,14 @@ abstract class CSS_Setting extends Setting {
         if ($value) return "\n" . $name . ": " . $value . ";";
         else return '';
     }
-}
-
-
-abstract class CSS_Text_Input extends CSS_Setting {
-    function __construct($id, $css_property, $name, $value) {
-        parent::__construct($id, $css_property, $name, $value);        
+    function get_css() {
+        return $css_property;
     }
-    
+}
+abstract class CSS_Text_Input extends CSS_Setting {
+    function __construct($css_property, $name, $value) {
+        parent::__construct($css_property, $name, $value);        
+    }
     function get_html() {
         $input = input('text', $this->get_html_name() . attr_value($this->get_value()));
         //$o = $this->create_form_row( $input );
@@ -521,8 +418,8 @@ abstract class CSS_Text_Input extends CSS_Setting {
     }
 }
 abstract class CSS_Size_Text_Input extends CSS_Text_Input {
-    function __construct($id, $css_property, $name, $value='') {
-        parent::__construct($id, $css_property, $name, $value);        
+    function __construct($css_property, $name, $value='') {
+        parent::__construct($css_property, $name, $value);        
     }
     
     static function is_valid($value) {
@@ -531,8 +428,8 @@ abstract class CSS_Size_Text_Input extends CSS_Text_Input {
     }
 }
 abstract class CSS_Horizontal_Position_Text_Input extends CSS_Size_Text_Input {
-    function __construct($id, $css_property, $name, $value='') {
-        parent::__construct($id, $css_property, $name, $value);        
+    function __construct($css_property, $name, $value='') {
+        parent::__construct($css_property, $name, $value);        
     }
     
     static function is_valid($value) {
@@ -544,8 +441,8 @@ abstract class CSS_Horizontal_Position_Text_Input extends CSS_Size_Text_Input {
     }
 }
 abstract class CSS_Vertical_Position_Text_Input extends CSS_Size_Text_Input {
-    function __construct($id, $css_property, $name, $value='') {
-        parent::__construct($id, $css_property, $name, $value);        
+    function __construct($css_property, $name, $value='') {
+        parent::__construct($css_property, $name, $value);        
     }
     
     static function is_valid($value) {
@@ -565,8 +462,8 @@ abstract class CSS_Vertical_Position_Text_Input extends CSS_Size_Text_Input {
 abstract class CSS_Dropdown_Input extends CSS_Setting {
     private $options;
     
-    function __construct($id, $css_property, $name, $value=0) { 
-        parent::__construct($id, $css_property, $name, $value);
+    function __construct($css_property, $name, $value=0) { 
+        parent::__construct($css_property, $name, $value);
     }
     
     function get_html() {
@@ -635,15 +532,15 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
 // LIST
 class List_Style_Type extends CSS_Dropdown_Input {
     static private $options = array('circle', 'decimal', 'decimal-leading-zero', 'disc', 'lower-alpha', 'lower-roman', 'none', 'square', 'upper-alpha', 'upper-roman');
-    function __construct($id, $value) { 
-        parent::__construct($id, 'list-style-type', 'list style type', $value);
+    function __construct($value) { 
+        parent::__construct('list-style-type', 'list style type', $value);
         $this->set_options( self::$options );
     }    
 }
 class List_Style_Position extends CSS_Dropdown_Input {
     static $options = array('inherit', 'inside', 'outside');
-    function __construct($id, $value) { 
-        parent::__construct($id, 'list-style-position', 'list style position', $value);
+    function __construct($value) { 
+        parent::__construct('list-style-position', 'list style position', $value);
         self::set_options( self::$options );
     }    
 }
