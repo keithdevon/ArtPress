@@ -47,20 +47,20 @@ function ct($tag_name)                 { return '</' . $tag_name . '>'; }       
 /* Specific HTML element functions */
 function alink($href, $content, $attributes="") { return ot('a', attr_href($href) . $attributes ) . $content . ct('a');}
 function div($content, $attributes ="")         { return ot('div', $attributes)   . $content . ct('div'); }
-function h1($content, $attributes ="")          { return ot('h1', $attributes)   . $content . ct('h1'); }
-function h2($content, $attributes ="")          { return ot('h2', $attributes)   . $content . ct('h2'); }
-function h3($content, $attributes ="")          { return ot('h3', $attributes)   . $content . ct('h3'); }
-function h4($content, $attributes ="")          { return ot('h4', $attributes)   . $content . ct('h4'); }
-function h5($content, $attributes ="")          { return ot('h5', $attributes)   . $content . ct('h5'); }
-function h6($content, $attributes ="")          { return ot('h6', $attributes)   . $content . ct('h6'); }
+function h1($content, $attributes ="")          { return ot('h1', $attributes)    . $content . ct('h1'); }
+function h2($content, $attributes ="")          { return ot('h2', $attributes)    . $content . ct('h2'); }
+function h3($content, $attributes ="")          { return ot('h3', $attributes)    . $content . ct('h3'); }
+function h4($content, $attributes ="")          { return ot('h4', $attributes)    . $content . ct('h4'); }
+function h5($content, $attributes ="")          { return ot('h5', $attributes)    . $content . ct('h5'); }
+function h6($content, $attributes ="")          { return ot('h6', $attributes)    . $content . ct('h6'); }
 function input($type, $attributes ="")          { return bt('input', attr_type($type) . $attributes); }
 function li($content, $attributes ="")          { return ot('li', $attributes)    . $content . ct('li'); }
 function optgroup($label, $options)             { return ot('optgroup', attr_label($label)) . $options . ct('optgroup'); }
 function option($value, $content)               { return ot('option', attr_value($value)) . $content . ct('option'); }
-function p($content, $attributes ="")           { return ot('p', $attributes)    . $content . ct('p'); }
-function table($content, $attributes ="")       { return ot('table', $attributes) . $content . ct('table'); }
-function td($content, $attributes ="")          { return ot('td', $attributes)    . $content . ct('td'); }
-function tr($content, $attributes ="")          { return ot('tr', $attributes)    . $content . ct('tr'); }
+function p($content, $attributes ="")           { return ot('p', $attributes)      . $content . ct('p'); }
+function table($content, $attributes ="")       { return ot('table', $attributes)  . $content . ct('table'); }
+function td($content, $attributes ="")          { return ot('td', $attributes)     . $content . ct('td'); }
+function tr($content, $attributes ="")          { return ot('tr', $attributes)     . $content . ct('tr'); }
 function ul($content, $attributes='')           { return ot('ul', $attributes)     . $content . ct('ul'); }
 
 

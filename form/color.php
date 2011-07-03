@@ -14,7 +14,9 @@ class Global_Color extends CSS_Text_Input {
         parent::__construct('color', $display_name, $value);
         self::$global_color_instances[] = $this;   
         $this_class = get_class($this);
-        $this->set_name($this_class . '__' . sizeof(self::$global_color_instances));
+        $number_of_global_color_instances = sizeof(self::$global_color_instances);
+        $name = $this_class . '__' . $number_of_global_color_instances;
+        $this->set_name( $name );
     }
     static function is_valid($value) {
         return preg_match('/^#[a-f0-9]{6}$/i', $value ); 
@@ -27,25 +29,35 @@ class Global_Color extends CSS_Text_Input {
         }
         return $options;       
     }
+    function get_name() { return $this->name; }
 }
-class Section_Color extends CSS_Dropdown_Input {
-    static $options;
+abstract class Section_Color extends CSS_Dropdown_Input {
+    function __construct($css_property, $display_name, $value=0) {
+        parent::__construct($css_property, $display_name, $value);
+    }
+    function get_options() {
+        return Global_Color::get_dropdown_color_options();
+    }
+    function get_css_value() {
+        $options = $this->get_options();
+        $value = $options[$this->get_value()];
+        return $value;
+    }
+}
+class Section_Foreground_Color extends Section_Color {
     function __construct($value=0) {
         parent::__construct('color', 'color select', $value); 
-        self::set_options( Global_Color::get_dropdown_color_options() );
-    }    
+    }
 }
 /**
  * Class to chose one of the preselected colors as the background color
  * @author jsd
  *
  */
-class Section_Background_Color extends CSS_Dropdown_Input {
-    static $options;
+class Section_Background_Color extends Section_Color {
     function __construct($value=0) {
         parent::__construct('background-color', 'background color select', $value); 
-        self::set_options(Global_Color::get_dropdown_color_options());
-    }    
+    }
 }
 
 

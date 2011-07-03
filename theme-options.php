@@ -86,7 +86,7 @@ function artpress_theme_init() {
  */
 function theme_options_add_page() {
         //add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'artpress_options_do_page', '', 110 ); // TODO stop Artpress Options from being displayed on the form
-        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'ap_settings_page', '', 110 ); // TODO stop Artpress Options from being displayed on the form
+        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
 }
 
 function ap_bi_section_html() {
@@ -117,6 +117,29 @@ function ap_bi_html($number) {
     $input = "<input type='file' name='{$file_id}' size='40' value='{$path}'/>";
     echo $image. $label . $input;
 }
+/** 
+ * HACK ALERT! creating my own 'settings_fields' that doesn't echo but returns its contents.
+ * */
+/*
+ * function wp_nonce_field( $action = -1, $name = "_wpnonce", $referer = true , $echo = true ) {
+	$name = esc_attr( $name );
+	$nonce_field = '<input type="hidden" id="' . $name . '" name="' . $name . '" value="' . wp_create_nonce( $action ) . '" />';
+	if ( $echo )
+		echo $nonce_field;
+
+	if ( $referer )
+		wp_referer_field( $echo );
+
+	return $nonce_field;
+}
+ * */
+function get_settings_fields($option_group) {
+    $o =  "<input type='hidden' name='option_page' value='" . esc_attr($option_group) . "' />";
+    $o .= '<input type="hidden" name="action" value="update" />';
+    //function wp_nonce_field( $action = -1, $name = "_wpnonce", $referer = true , $echo = true ) {
+	$o .= wp_nonce_field("$option_group-options", "_wpnonce", true, false);
+	return $o;
+}
 function ap_settings_page() {
 
     // page title stuff
@@ -132,8 +155,12 @@ function ap_settings_page() {
     // pass full settings through
     // needs to be full so the inputs have fully qualified names
     //ap_create_form(array('cs'), $settings['saves'][$settings['current-save-id']]);
-    $maintabgroup = new Main_Tab_Group('main tab group');
-    
+
+    $maintabgroup = new Main_Tab_Group('main tab group', 'ap_options');
+    $options = get_option('ap_options');
+    if ($options != null) {
+        $maintabgroup->inject_values($options['saves'][$options['current-save-id']]);
+    }
     echo $maintabgroup->get_html();
 }
 function default_save() {
@@ -222,18 +249,30 @@ function ap_options_validate2( $new_settings ) {
     // as no record of unticked checkboxes are returned to the server
     $options = get_option('ap_options');
     if ($options == null) {
-        $options = default_settings();
-    }
-    
-    if ( ! isset($options['current-save-id'] ) ) {
+        //$options = default_settings();
+        $mtb = new Main_Tab_Group('mtb');
+        $default_settings = $mtb->get_setting_values_array();
+        $options = array( 'cs'=>$default_settings );
+        $options['saves'] = array();
+        $options['saves']['default'] = $options['cs'];
         $options['current-save-id'] = 'default';
-    } 
+    }   
+    //if ( ! isset($options['current-save-id'] ) ) {
+    //    $options['current-save-id'] = 'default';
+    //}
+    //if ( ! isset($options['saves'])) {
+    //    $options['saves'] = array();
+    //    $options['saves']['default'] = $options['cs'];
+    //}
     /*if( is_array( $previous_settings ) ) {
         $save_settings = array_merge_recursive_distinct($previous_settings, $new_settings);
     } else {
         $settings = array();
     }*/
     $previous_save = $options['saves'][$options['current-save-id']];
+    if ($new_settings == null ) {
+        $new_settings = array('cs'=>array());
+    }
     $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
     
     // validate save

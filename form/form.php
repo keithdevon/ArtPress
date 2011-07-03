@@ -32,11 +32,12 @@ interface Render_As_HTML {
      //static function is_valid($value);
      function get_html();
 }
-
-interface Skippable {}
-
 interface CSS {
     function get_css();
+}
+interface ICSS_Selector extends CSS {
+    function get_css_selector();
+    //function get_full_css_selector();
 }
 
 /**
@@ -49,7 +50,6 @@ interface CSS {
  *
  */
 abstract class Hierarchy {
-    private $id;    // non unique
     private $display_name;
     private $parent;
     private $children;
@@ -63,42 +63,56 @@ abstract class Hierarchy {
                 }
             } else $this->add_child($children);
         } 
-        $this->id     = $this->construct_id();
     }
     
     // GETTERS
-    final function get_display_name()     { return $this->display_name;     }
-    final function get_children() { return $this->children; }
-    final function get_parent()   { return $this->parent;   }
-    final function get_id()       { return $this->id;       }
+    final function get_display_name() { return $this->display_name; }
+    final function get_children()     { return $this->children;     }
+    final function get_parent()       { return $this->parent;       }
     
-    function get_ancestory() {
-        $p = $this->parent;
-        $ancestors = array();
+    function get_parentage_array() {
+        $p = $this->get_parent();
+        $parents = array();
         while ($p != null) {
-            if (!($p instanceof Skippable))
-                array_push($ancestors, $p);
+            array_push($parents, $p);
             $p = $p->get_parent();
         }
-        return $ancestors;
+        return $parents;
     }
-
-    function construct_id() {
-        $id = '';
-        $ancestory = $this->get_ancestory(); 
-        foreach ( $ancestory as $ancestor ) {
-            $id .= '_' . get_class($ancestor);
+    function get_parentage_string() {
+        $pa = $this->get_parentage_array();
+        $str = '';
+        foreach( $pa as $parent ) {
+            $str = get_class($parent) . '__' . $str;
         }
-        $this->id = $id;
+        return $str;
     }
-    
     // SETTERS
     function add_child($child)   { 
         $child->set_parent($this);
-        $child->construct_id();
-        $this->children[]   = $child;  
+        //$pre = $this->children;
+        $this->children[]   = $child;
+        //$post = $this->children;
     }
     function set_parent($parent) { $this->parent = $parent; }
+    
+    function to_array() {
+        $contents = array();
+        $children = $this->get_children();
+        //$i = 0; // used to 'uniquify' $contents's keys
+        foreach ( $children as $child ) {
+            $child_type = get_class($child);
+            //$key = $i++ . '__' . $child_type;
+            //$key = $child_type;
+            $key = $this->get_name();
+            $contents[$key] = $child->to_array();
+        }
+        return $contents;
+    }
+    
+    function get_name() {
+        return get_class($this);
+    }
 }
 
 /** 
@@ -114,7 +128,7 @@ abstract class Hierarchy {
  * it will have been skipped.
  *
  */
-class Group extends Hierarchy implements Render_As_HTML, Skippable {
+class Group extends Hierarchy implements Render_As_HTML {
     function __construct($display_name, $members=array()) {
         parent::__construct($display_name, $members);
  
@@ -128,6 +142,20 @@ class Group extends Hierarchy implements Render_As_HTML, Skippable {
             }
         }
         return $o;   
+    }
+    function to_array() {
+        $contents = array();
+        $children = $this->get_children();
+        foreach ( $children as $child ) {
+            $i = 2; // used to 'uniquify' $contents's keys
+            $child_type = get_class($child);
+            $key = $child_type;
+            while( array_key_exists($key, $contents) ) {
+                $key = $child_type . '__' . $i++;
+            }
+            $contents[$key] = $child->to_array();
+        }
+        return $contents;
     }
 }
 class Option_Group extends Group {
@@ -221,9 +249,11 @@ abstract class Sub_Tab extends Group  { // TODO change to Sub_Tab
 }
 class Main_Tab extends Hierarchy implements Render_As_HTML {
     private $html_id;
-    function __construct($display_name, $members=null//,  $html_id=null
+    private $opt_group;
+    function __construct($display_name, $opt_group, $members=null//,  $html_id=null
                             ) {
         parent::__construct($display_name, $members);
+        $this->opt_group = $opt_group;
     }  
     function get_html() {
         $children_html = '';
@@ -235,6 +265,7 @@ class Main_Tab extends Hierarchy implements Render_As_HTML {
         }
         $o = ot( 'div', attr_id( $this->get_html_id() ) );
             $o .= '<form method="post" action="options.php">';
+                $o .= get_settings_fields($this->opt_group);
                 $o .= $children_html;
                 $save = __( 'save' );
                 $o .= "<p class='submit'><input type='submit' class='button-primary' value='{$save}' /></p>";      
@@ -256,7 +287,7 @@ class Tab_Group extends Group {
         $links = '';
         $tabs = '';
         
-        $id = $this->get_id();
+        $id = $this->get_parentage_string();
         $children = $this->get_children();
         
         $count = 1;
@@ -287,11 +318,105 @@ class Main_Tab_Group extends Tab_Group {
     
         $globalsettings = new Global_Settings();
         $bodytab = new Body_Tab();
+        //$images_tab = new Images_Tab();
         
         parent::__construct('main tab group', array($bodytab, $globalsettings));
     }
+    function to_array() {
+        $children = parent::to_array();
+        return array('cs'=>$children);
+    }
+    //function get_settings() {
+    //    $settings_array = array();
+    //    $children = $this->get_children();
+    //    while( $children!= null ) {
+    //        foreach ( $children as $child ) {
+    //            if( $child instanceof Setting ) {
+    //                $name = $child->get_name();
+    //                $value = $child->get_value();
+    //                $settings_array[$name] = $value;
+    //            }
+    //        }
+    //    }
+    //    return $settings_array;
+    //}
+
+    function get_setting_values_array() {
+        $setting_values = array();
+        $settings = get_setting_instances($this);
+        foreach( $settings as $setting ) {
+            $name = $setting->get_name();
+            $value = $setting->get_value();
+            $setting_values[$name] = $value;
+        }
+        return $setting_values;
+    }
+    /** 
+     * Recursive function to get CSS Selector objects
+     * 
+     */
+    function get_css_selectors($thing=null, $selectors=null) {
+        if( $thing==null ) {
+            return $this->get_css_selectors($this, array());
+        } else if( $thing instanceof CSS_Selector) {
+            $selectors[] = $thing;
+            return $selectors;
+        } else if ( $thing instanceof Hierarchy ) { 
+            $children = $thing->get_children();
+            if( $children!= null ) {
+                foreach ( $children as $child ) {
+                    $new_selectors = $this->get_css_selectors($child, $selectors);
+                    $selectors = $new_selectors;
+                }
+            }
+            return $selectors;            
+        }
+        
+    }
+    
+    function inject_values($values) {
+        $settings = get_setting_instances($this);
+        foreach( array_keys($settings) as $setting_key ) {
+            // Do a check first to see that setting key exists in the existing supplied $values
+            // which will be false for new settings in new versions
+            if( key_exists($setting_key, $values)) {
+                $setting = $settings[$setting_key];
+                $value = $values[$setting_key];
+                $setting->set_value($value);
+            } else {
+                echo ''; // TODO remove debug code
+            }
+        }
+    }
 }
-class CSS_Selector extends Hierarchy implements Render_As_HTML, CSS {
+/**
+ * Recursive function to return an array of all the setting objects.
+ * 
+ * 
+ * 
+ * @param unknown_type $thing
+ * @param unknown_type $settings_array
+ */
+function get_setting_instances($hierarchy_obj, $settings_array=null) {
+    if( !is_array($settings_array) ) {
+        return get_setting_instances($hierarchy_obj, array());
+    } else if( $hierarchy_obj instanceof Setting ) {
+        $name = $hierarchy_obj->get_name();
+        //$value = $hierarchy_obj->get_value();
+        //$settings_array[$name] = $value;
+        $settings_array[$name] = $hierarchy_obj;
+        return $settings_array;
+    } else if ( $hierarchy_obj instanceof Hierarchy ) {
+        $children = $hierarchy_obj->get_children();
+        if( $children!= null ) {
+            foreach ( $children as $child ) {
+                $settings_array = get_setting_instances($child, $settings_array);
+            }
+        }
+        return $settings_array;
+    }
+}
+class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
     private $css_selector;
     function __construct($css_selector, $display_name, $children=null) {
         $this->css_selector = $css_selector;
@@ -304,10 +429,12 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, CSS {
         }
         parent::__construct($display_name, $children);
     }
-    function get_css_selector() {
-        $parent = $this->parent;
-        $parent_css = $parent->get_css_selector();
-        return $parent_css . ' ' . $css_selector;
+    function get_css_selector() { 
+        // TODO this might need to be removed
+       // $parent = $this->parent;
+        //$parent_css = $parent->get_css_selector();
+        //return $parent_css . ' ' . $css_selector;
+        return $this->get_css();
     }
     function get_html() {
         $o = '';
@@ -322,14 +449,43 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, CSS {
     function get_css() {
         return $this->css_selector;
     }
+    function create_css_rule() {
+        $full_selector = get_full_selector($this);
+        
+    }
 }
-class CSS_Selector_Group extends CSS_Selector {
+
+function get_full_selector_array($icss_selector) {
+    $full_selector = array($icss_selector->get_css());
+    $parent = $icss_selector->get_parent();
+    while( $parent != null ) {
+        if( $parent instanceof ICSS_Selector ) {
+            array_push( $full_selector, $parent->get_css_selector() );
+        }
+        $parent = $parent->get_parent();
+    }
+    return $full_selector;
+}
+function get_full_selector_string($selector_array) {
+    $output = '';
+    foreach ($selector_array as $selector) {
+        $output = $selector . ' ' . $output;
+    }
+    return $output;
+}
+
+
+class CSS_Selector_Group extends Group implements ICSS_Selector {
+    private $css_selector;
+    
     function __construct($css_selector, $display_name, $children) {
-        parent::__construct($css_selector, $display_name, $children);
+        $this->css_selector = $css_selector;
+        //    function __construct($display_name, $members=array()) {
+        parent::__construct($display_name, $children);
     }
     function get_html() {
-        $o = '<script> $(function() { $( "#' . $this->get_id() . '-accordion" ).accordion(); }); </script>';
-        $o .= ot('div', attr_id($this->get_id() . '-accordion'));
+        $o = '<script> $(function() { $( "#' . $this->get_parentage_string() . '-accordion" ).accordion(); }); </script>';
+        $o .= ot('div', attr_id($this->get_parentage_string() . '-accordion'));
        
         $children = $this->get_children();
         foreach ($children as $child) {
@@ -344,6 +500,12 @@ class CSS_Selector_Group extends CSS_Selector {
         $o .= ct('div');
         return $o;
     }
+    function get_css() {
+        return $this->css_selector;
+    }
+    function get_css_selector() {
+        return $this->css_selector;
+    }
 }
 /**
  * 
@@ -353,61 +515,82 @@ class CSS_Selector_Group extends CSS_Selector {
  *
  */
 abstract class Setting extends Hierarchy implements Render_As_HTML {
-
-    private $name;
+    //private static $setting_locations;
+    //private static $settings;
+    protected $name;
     private $value;
 
     function __construct($display_name, $v) {
         $this->value = $v;
         parent::__construct($display_name, null);
         $this->name = get_class($this);
+        //self::$settings[] = $this;
     }
 
     function get_value()       { return $this->value; }
     function set_value($value) { $this->value = $value; }
     
-    //private function get_qualifier() {
-    //    $qualifier = '';
-    //    foreach($this::get_ancestory() as $part) $qualifier = "[{$part->get_id()}]" . $qualifier;
-    //    return $qualifier;
-    //}
-    
-    function get_parentage() {
-        $p = $this->get_parent();
-        $parents = array();
-        while ($p != null) {
-            array_push($parents, $p);
-            $p = $p->get_parent();
-        }
-        return $parents;
-    }
     function get_full_name() {
         $parents = '';
-        foreach($this::get_parentage() as $p) {
-            $parent_class = get_class($p);
-            $parents = "[{$parent_class}]" . $parents;
-            
-        }
+        //foreach($this::get_parentage_array() as $p) {
+        //    $parent_class = get_class($p);
+        //    $parents = "[{$parent_class}]" . $parents;
+        //    
+        //}
         $local_name = $this->get_name();
         $full_name = $parents . '[' . $local_name . ']';
         return $full_name;        
     }
     function get_html_name() {
-        //TODO add option group name eg artpress_theme_options
-        return attr_name($this->get_full_name());
+        //TODO add option group name eg artpress_theme_options - eh?
+        // cs denotes that this setting constitutes part of the 'current save'.
+        
+        // TODO I don't like artpress_options being hard coded, not important for now though
+        return attr_name('ap_options[cs]' . $this->get_full_name());
     }
     function get_name() { 
-        $name = '';
-        $parents = $this->get_parentage();    
-        foreach ( $parents as $parent ) {
-            if( $parent instanceof CSS )
-                $name =  get_class($parent). '__' . $name;
-        }
-        $name .= $this->name;
-        return $name; 
+        return $this->name; 
     }
     function set_name($name) { $this->name = $name; }
     
+    function to_array() {
+        $key = $this->get_name();
+        $value = $this->get_value();
+        return array($key=>$value);
+    }
+    //function add_child($child) {
+    //    parent::add_child($child);
+    //}
+    //function set_parent($parent) {
+    //    parent::set_parent($parent);
+    //    $name = $this->get_name();
+    //    $location = $this;//->get_parent();
+    //    self::$setting_locations[$name] = $location;   
+    //}
+    //static function get_settings() {
+    //    return self::$settings;
+    //}
+    //static function get_setting_locations() {
+    //    return self::$setting_locations;
+    //}
+    //static function get_setting_values() {
+    //    $setting_locations = Setting::get_setting_locations();
+    //    $setting_values = array();
+    //    foreach( array_keys( $setting_locations ) as $setting_name ) {
+    //        $setting = $setting_locations[$setting_name];
+    //        $value = $setting->get_value();
+    //        $setting_values[$setting_name] = $value;
+    //    }
+    //}
+    //static function get_setting_values_array() {
+    //    $settings_array = array();
+    //    foreach( self::get_settings() as $setting ) {
+    //        $name = $setting->get_name();
+    //        $value = $setting->get_value();
+    //        $settings_array[$name] = $value;
+    //    }
+    //    return $settings_array;
+    //}
 }
 /**
  * 
@@ -419,9 +602,8 @@ abstract class CSS_Setting extends Setting implements CSS {
     private $css_property;
     
     function __construct($css_property, $display_name, $value) {
-       // echo var_dump(func_get_args());
-       $this->css_property = $css_property;
-       parent::__construct($display_name, $value);
+        $this->css_property = $css_property;
+        parent::__construct($display_name, $value);
     }
     function get_css_declaration() {
         $display_name = $this->get_display_name();
@@ -430,7 +612,32 @@ abstract class CSS_Setting extends Setting implements CSS {
         else return '';
     }
     function get_css() {
-        return $css_property;
+        return $this->css_property;
+    }
+    function get_css_value() {
+        return $this->get_value();
+    }
+    function get_name() { 
+        $name = '';
+        $parents = $this->get_parentage_array();    
+        foreach ( $parents as $parent ) {
+            if( $parent instanceof CSS ) {
+                $name =  $parent->get_css() . '__' . $name;
+            }
+        }
+        $name .= $this->get_css();
+        return $name; 
+    }
+}
+class CSS_Option_Row_Group extends Option_Row_Group implements CSS {
+    private $css_property;
+    
+    function __construct($display_name, $common_css_property, $members=array()) {
+        $this->css_property = $common_css_property;
+        parent::__construct($display_name, $members);
+    }
+    function get_css() {
+        return $this->css_property;
     }
 }
 abstract class CSS_Text_Input extends CSS_Setting {
@@ -439,7 +646,6 @@ abstract class CSS_Text_Input extends CSS_Setting {
     }
     function get_html() {
         $input = input('text', $this->get_html_name() . attr_value($this->get_value()));
-        //$o = $this->create_form_row( $input );
         return $input;
     }
 }
@@ -496,14 +702,13 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
         $select = ot('select', $this->get_html_name());
         $select .= $this->get_html_options();
         $select .= ct('select');
-        //$o = $this->create_form_row( $select );
         return $select;
     }
     private function get_html_options() {
         $html_options = '';        
         $is_optgroup = false;
         $content = '';
-        $potential_options = static::get_options();
+        $potential_options = $this->get_options(); // TODO this isn't a static method but works ...
         foreach (array_keys($potential_options) as $opt) {
             if (is_array($potential_options[$opt])) {
                 if($is_optgroup) { // if this has already been set ... 
@@ -528,7 +733,7 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
             //. $content
             //. ct( 'option' );
             $html_options .= ot('option', 
-                            attr_selected( ((string)$opt == $this->get_value()) ? true : false) . 
+                            attr_selected( ((string)$opt == $this->get_value()) ? true : false ) . 
                             attr_value((string)$opt));
             $html_options .= $content;
             $html_options .= ct('option');
@@ -538,6 +743,8 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
     }
     
     static function is_valid($value){
+        // TODO this looks wrong to me
+        // should this not just check to see that the value is between zero and the size of the array?
         return (in_array($value, static::get_options())) ? true : false;
     }
     

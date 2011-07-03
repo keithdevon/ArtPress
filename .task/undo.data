@@ -210,3 +210,46 @@ new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"save settings" 
 time 1307462052
 new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate css" entry:"1307462052" project:"alpha" status:"pending" tags:"james" uuid:"bbc26745-226b-3d2b-754f-85b6eba345af"]
 ---
+time 1309710314
+old [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate css" entry:"1307462052" project:"alpha" status:"pending" tags:"james" uuid:"bbc26745-226b-3d2b-754f-85b6eba345af"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate css" end:"1309710314" entry:"1307462052" project:"alpha" status:"completed" tags:"james" uuid:"bbc26745-226b-3d2b-754f-85b6eba345af"]
+---
+time 1309710333
+old [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"save settings" entry:"1307462022" project:"alpha" status:"pending" tags:"james" uuid:"5067ec87-783d-3a13-e431-97b44efbef83"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"save settings" end:"1309710333" entry:"1307462022" project:"alpha" status:"completed" tags:"james" uuid:"5067ec87-783d-3a13-e431-97b44efbef83"]
+---
+time 1309710356
+old [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate form from settings" entry:"1307461629" project:"alpha" status:"pending" tags:"james" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+new [depends:"75cd9b70-84f5-4d6e-b3ea-b445814bb742" description:"generate form from settings" end:"1309710356" entry:"1307461629" project:"alpha" status:"completed" tags:"james" uuid:"5f494814-37d8-1375-b0ae-fb123d3ed823"]
+---
+time 1309710366
+old [description:"fix menu dropdown" entry:"1306859026" project:"alpha" status:"pending" tags:"james" uuid:"34a08f31-809d-6aaf-6fd9-ddd28d610033"]
+new [description:"fix menu dropdown" end:"1309710366" entry:"1306859026" project:"alpha" status:"completed" tags:"james" uuid:"34a08f31-809d-6aaf-6fd9-ddd28d610033"]
+---
+time 1309710384
+old [description:"create modular text size option" entry:"1306858557" project:"alpha" status:"pending" tags:"james" uuid:"8a5db151-02bb-7f99-d484-e4b86c41c754"]
+new [description:"create modular text size option" end:"1309710384" entry:"1306858557" project:"alpha" status:"completed" tags:"james" uuid:"8a5db151-02bb-7f99-d484-e4b86c41c754"]
+---
+time 1309710417
+new [description:"composite css settings eg text-shadow" entry:"1309710417" status:"pending" uuid:"5d38c9d7-663a-d0f6-5489-4f9fad80875e"]
+---
+time 1309710438
+old [description:"composite css settings eg text-shadow" entry:"1309710417" status:"pending" uuid:"5d38c9d7-663a-d0f6-5489-4f9fad80875e"]
+new [description:"composite css settings eg text-shadow" entry:"1309710417" project:"alpha" status:"pending" tags:"james" uuid:"5d38c9d7-663a-d0f6-5489-4f9fad80875e"]
+---
+time 1309710473
+old [description:"create object orientated form" entry:"1306746700" project:"alpha" start:"1306746714" status:"pending" tags:"james" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+new [description:"create object orientated form" end:"1309710473" entry:"1306746700" project:"alpha" start:"1306746714" status:"completed" tags:"james" uuid:"75cd9b70-84f5-4d6e-b3ea-b445814bb742"]
+---
+time 1309710590
+new [description:"background images" entry:"1309710590" project:"alpha" status:"pending" tags:"james" uuid:"c82851f9-c6cc-ff40-b034-80d0cf92fa5b"]
+---
+time 1309710596
+new [description:"logo images" entry:"1309710596" project:"alpha" status:"pending" tags:"james" uuid:"9ca06af2-a1ca-a0e9-beca-d3f6fe8422cb"]
+---
+time 1309710617
+new [description:"body settings" entry:"1309710617" project:"alpha" status:"pending" tags:"james" uuid:"da131b34-4b58-7929-7e9e-24fdf68032d0"]
+---
+time 1309710638
+new [description:"remove top level tabs?" entry:"1309710638" project:"alpha" status:"pending" tags:"james" uuid:"2b3164cb-7076-31f3-4e36-d616b0022804"]
+---

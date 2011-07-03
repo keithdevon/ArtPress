@@ -32,7 +32,7 @@ class Margin_Right extends CSS_Size_Text_Input {
 }
 class Margin_Left extends CSS_Size_Text_Input {
     function __construct($value='') {
-        parent::__construct('margin-top', 'left margin width', $value);
+        parent::__construct('margin-left', 'left margin width', $value);
     }
 }
 
@@ -55,7 +55,7 @@ class Padding_Right extends CSS_Size_Text_Input {
 }
 class Padding_Left extends CSS_Size_Text_Input {
     function __construct($value='') {
-        parent::__construct('padding-top', 'left padding width', $value);
+        parent::__construct('padding-left', 'left padding width', $value);
     }
 }
 
