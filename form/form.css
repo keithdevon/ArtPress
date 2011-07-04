@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+
+.ui-tabs-panel {
+    height: 100%;
+}
+.ui-tabs .ui-tabs-hide {
+    position: absolute;
+    left: -10000px;
+}
+
+.ui-accordion .ui-accordion-content { 
+	/*padding: 1em 2.2em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; 
+	*/
+	display: block;
+	position: absolute;
+	/*left: -10000px;*/
+	}
+.ui-accordion .ui-accordion-content-active { 
+	display: block; 
+	position: relative;
+	height: 100%;
+	}	

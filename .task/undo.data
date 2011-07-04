@@ -253,3 +253,6 @@ new [description:"body settings" entry:"1309710617" project:"alpha" status:"pend
 time 1309710638
 new [description:"remove top level tabs?" entry:"1309710638" project:"alpha" status:"pending" tags:"james" uuid:"2b3164cb-7076-31f3-4e36-d616b0022804"]
 ---
+time 1309712354
+new [description:"selection of defaults" entry:"1309712354" project:"beta" status:"pending" tags:"james,keith" uuid:"9033df2c-f010-3d55-a7e1-8403ac854b5d"]
+---

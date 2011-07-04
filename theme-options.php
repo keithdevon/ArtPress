@@ -9,6 +9,7 @@ $full_dir = $dir . 'form/heart-theme-form-functions.php';
 include_once $full_dir;
 require_once $dir . 'form/form.php';
 require_once $dir . 'form/global.php';
+require_once $dir . 'form/images.php';
 require_once $dir . 'form/color.php';
 require_once $dir . 'form/body.php';
 require_once $dir . 'form/typography.php';
@@ -23,31 +24,39 @@ add_action( 'admin_init', 'artpress_options_load_scripts' );
 // Load our scripts
 function artpress_options_load_scripts() {
     wp_register_script('jquery151',
-       get_bloginfo('template_directory') . '/js/james/js/jquery-1.5.1.min.js'
+       get_bloginfo('template_directory') . '/js/ui1814/js/jquery-1.5.1.min.js'
        //,array('jquery'),
        //'1.0' 
        );      
     
-    wp_register_script('jqueryui1813',
-           get_bloginfo('template_directory') . '/js/james/js/jquery-ui-1.8.13.custom.min.js',
+    wp_register_script('jqueryui1814',
+    //js/ui1814/css/ui-lightness/images/ui-bg_diagonals-thick_18_b81900_40x40.png
+    
+           get_bloginfo('template_directory') . '/js/ui1814/js/jquery-ui-1.8.14.custom.min.js',
            array('jquery151')
            //'1.0' 
            );       
     
-    wp_register_style( 'jqueryui1813css', 
+    wp_register_style( 'jqueryui1814css', 
                         get_bloginfo('template_directory') . 
-                        	'/js/james/css/ui-lightness/jquery-ui-1.8.13.custom.css' );
+                        	'/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css' );
                         
+    wp_register_style( 'formcss', 
+                        get_bloginfo('template_directory') . 
+                        	'/form/form.css' );   
+                                             
     wp_enqueue_script('jquery151');  
-    wp_enqueue_script('jqueryui1813');
-    wp_enqueue_style( 'jqueryui1813css' );  
+    wp_enqueue_script('jqueryui1814');
+    wp_enqueue_style( 'jqueryui1814css' );  
 
     wp_enqueue_script('farbtastic', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.js', array('jquery151'));
     wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.css' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
-   
+    wp_enqueue_style( 'formcss' );
     
     add_action('init', 'ht_init_method');
+    
+
 }
 /**
  * Init plugin options to white list our options

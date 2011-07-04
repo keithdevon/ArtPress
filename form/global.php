@@ -2,7 +2,7 @@
 
 class Global_Settings extends Main_Tab {
     function __construct($members=null) {
-        if ( null == $members ) {
+        if ( null == $members ) {       
             $gc1 = new Global_Color('Color 1', '#222222');
             $gc2 = new Global_Color('Color 2', '#444444');
             $gc3 = new Global_Color('Color 3', '#666666');

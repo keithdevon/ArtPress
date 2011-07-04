@@ -220,7 +220,7 @@ class Lookup_Option_Group extends Option_Group {
         return $options;
     }
 }
-abstract class Sub_Tab extends Group  { // TODO change to Sub_Tab
+abstract class Sub_Tab extends Group  {
     private $html_id;
     function __construct($display_name, $members=null) {
         parent::__construct($display_name, $members);
@@ -250,8 +250,8 @@ abstract class Sub_Tab extends Group  { // TODO change to Sub_Tab
 class Main_Tab extends Hierarchy implements Render_As_HTML {
     private $html_id;
     private $opt_group;
-    function __construct($display_name, $opt_group, $members=null//,  $html_id=null
-                            ) {
+    protected $form_enctype = null;
+    function __construct($display_name, $opt_group, $members=null) {
         parent::__construct($display_name, $members);
         $this->opt_group = $opt_group;
     }  
@@ -264,7 +264,11 @@ class Main_Tab extends Hierarchy implements Render_As_HTML {
             }
         }
         $o = ot( 'div', attr_id( $this->get_html_id() ) );
-            $o .= '<form method="post" action="options.php">';
+            $o .= '<form method="post" ';
+            if($this->form_enctype != null) {
+                $o .= "enctype='{$this->form_enctype}'";               
+            }
+            $o .= 'action="options.php">';
                 $o .= get_settings_fields($this->opt_group);
                 $o .= $children_html;
                 $save = __( 'save' );
@@ -275,7 +279,8 @@ class Main_Tab extends Hierarchy implements Render_As_HTML {
     }
     function get_html_id()       { return $this->html_id;   }
     function set_html_id($value) { $this->html_id = $value; }
-}         
+} 
+      
 class Tab_Group extends Group {
 
     function __construct($display_name, $members=array()) {
@@ -320,7 +325,8 @@ class Main_Tab_Group extends Tab_Group {
         $bodytab = new Body_Tab();
         //$images_tab = new Images_Tab();
         
-        parent::__construct('main tab group', array($bodytab, $globalsettings));
+        parent::__construct('main tab group', array($globalsettings, $bodytab //, $images_tab
+        ));
     }
     function to_array() {
         $children = parent::to_array();
