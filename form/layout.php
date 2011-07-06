@@ -6,7 +6,6 @@ class Border_Style extends CSS_Dropdown_Input {
     static $options = array('none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
     function __construct($value=0) { 
         parent::__construct('border-style', 'border style', $value);
-        self::set_options( self::$options );
     }    
 }
 class Border_Width extends CSS_Size_Text_Input {
@@ -67,7 +66,6 @@ class Display extends CSS_Dropdown_Input {
         						'table-row', 'table-row-group');
     function __construct($value=0) { 
         parent::__construct('display', 'display mode', $value);
-        self::set_options( self::$options );
     }    
 }
 

@@ -18,7 +18,7 @@ class Global_Color extends CSS_Text_Input {
         $name = $this_class . '__' . $number_of_global_color_instances;
         $this->set_name( $name );
     }
-    static function is_valid($value) {
+    static function validate($value) {
         return preg_match('/^#[a-f0-9]{6}$/i', $value ); 
     }
     static function get_dropdown_color_options() {
@@ -35,11 +35,11 @@ abstract class Section_Color extends CSS_Dropdown_Input {
     function __construct($css_property, $display_name, $value=0) {
         parent::__construct($css_property, $display_name, $value);
     }
-    function get_options() {
+    static function get_options() {
         return Global_Color::get_dropdown_color_options();
     }
     function get_css_value() {
-        $options = $this->get_options();
+        $options = self::get_options();
         $value = $options[$this->get_value()];
         return $value;
     }

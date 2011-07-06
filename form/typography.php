@@ -3,31 +3,28 @@ require_once 'form.php';
 
 // TEXT
 class Text_Transform extends CSS_Dropdown_Input {
-    static private $options = array('none', 'uppercase', 'lowercase', 'capitalize');
+    static $options = array('none', 'uppercase', 'lowercase', 'capitalize');
     function __construct($value=0) { 
         parent::__construct('text-transform', 'text transform', $value);
-        self::set_options( self::$options );
     }    
 }
 class Text_Align extends CSS_Dropdown_Input {
-    static private $options = array('left', 'right', 'center', 'justify');
+    static $options = array('left', 'right', 'center', 'justify');
     function __construct($value=0) { 
         parent::__construct('text-align', 'text align', $value);
-        self::set_options( self::$options );
     }    
 }
 class Text_Decoration extends CSS_Dropdown_Input {
-    static private $options = array('none', 'underline', 'overline', 'line-through', 'blink');
+    static $options = array('none', 'underline', 'overline', 'line-through', 'blink');
     function __construct($value=0) { 
         parent::__construct('text-decoration', 'text decoration', $value);
-        self::set_options( self::$options );
     }   
 }
 
 // FONT
 class Global_Font_Family extends CSS_Dropdown_Input {
     private static $global_font_family_instances = array();
-    private static $options = array(
+    static $options = array(
                             array('Arial, “Helvetica Neue”, Helvetica, sans-serif','paragraph or title'),
                         	'Cambria, Georgia, Times, “Times New Roman”, serif',
                         	'“Century Gothic”, “Apple Gothic”, sans-serif',
@@ -62,10 +59,8 @@ class Global_Font_Family extends CSS_Dropdown_Input {
                     	); 
     function __construct($display_name, $value=0) { 
         parent::__construct('font-family', $display_name, $value); 
-        self::set_options( self::$options );
         self::$global_font_family_instances[] = $this;
     }
-    //static function get_static_options() { return self::$options; }
     static function get_dropdown_font_family_options() {
         $list = array();
         foreach (self::$global_font_family_instances as $global_font) {
@@ -79,9 +74,6 @@ class Global_Font_Family extends CSS_Dropdown_Input {
         }
         return $list;
     }
-    static function get_static_options() {
-        return self::$options;
-    }
     static function get_global_font_family_instances() {
         $instances = static::$global_font_family_instances;
         return $instances;
@@ -94,28 +86,16 @@ class Global_Font_Family extends CSS_Dropdown_Input {
  */
 class Section_Font extends CSS_Dropdown_Input {
     static $options;
-    //function get_value() { // TODO not sure if this is correct
-    //    $fonts = Global_Font_Family::get_options();
-    //    $value = parent::get_value();
-    //    $font = $fonts[$value];
-    //    return $font;
-    //}
+
     function __construct($value=0) {
         parent::__construct('font-family', 'font select', $value); 
-        //self::set_options( Global_Font_Family::get_dropdown_font_family_options());
-        self::set_options( Global_Font_Family::get_global_font_family_instances() );
+        self::$options = Global_Font_Family::get_global_font_family_instances();
     }    
-    // TODO remove this debug function
-    function get_html() {
-        $nowt = '';
-        return $nowt . parent::get_html();
-    }
-    function get_options() {
+    static function get_options() {
         $list = array();
-        //foreach (self::$global_font_family_instances as $global_font) {
         foreach (parent::get_options() as $global_font) {
            $v = $global_font->get_value();
-           $global_options = Global_Font_Family::get_static_options();
+           $global_options = Global_Font_Family::get_options();
            $font = $global_options[$v];
            if (is_array( $font ) ) {
                $list[] = $font[0];
@@ -124,25 +104,20 @@ class Section_Font extends CSS_Dropdown_Input {
            }
         }
         return $list;
-    }
-    
-    
+    } 
 }
 class Font_Style extends CSS_Dropdown_Input {
     static $options = array('normal', 'italic', 'oblique');
     function __construct($value=0) { 
         parent::__construct('font-style', 'font style', $value); 
-        self::set_options( self::$options );
     }    
 }
 class Font_Weight extends CSS_Dropdown_Input {
     static $options = array('normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500', '600', '700', '800', '900');  
     function __construct($value=0) { 
         parent::__construct('font-weight', 'font weight', $value); 
-        self::set_options( self::$options );
     }    
 }
-
 class Typography_Tab extends Sub_Tab {
     function __construct($display_name, $members=null, $html_id=null) {
         if ( null == $members ) { 

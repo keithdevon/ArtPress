@@ -25,8 +25,8 @@ class Image extends CSS_Text_Input {
         $name = $this_class . '__' . $number_of_global_image_instances;
         $this->set_name( $name );
     }
-    static function is_valid($value) {
-        //return preg_match('/^#[a-f0-9]{6}$/i', $value ); 
+    static function validate($value) {
+        //TODO
     }
     static function get_dropdown_image_options() {
         $options = array();
@@ -37,4 +37,19 @@ class Image extends CSS_Text_Input {
         return $options;       
     }
     function get_name() { return $this->name; }
+    
+    function get_html() {
+        $options = get_option('ap_options');
+        $name = $this->get_name();
+        $path ='';
+        if(array_key_exists('images', $options)) {
+            $img_file_paths = $options['images'];
+        }
+        $input = "<input type='file' name='{$name}' size='40' value='{$path}'/>";
+        return $input;
+    }
+    function set_value($value) {
+        $files = $_FILES;
+        
+    }
 }
