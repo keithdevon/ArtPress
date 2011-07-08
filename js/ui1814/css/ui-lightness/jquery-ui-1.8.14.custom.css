@@ -89,9 +89,9 @@
     text-decoration: none;
     }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
-    font-weight: bold; color: #eb8f00;}
+    font-weight: bold; color: green;}
 .ui-state-hover a, .ui-state-hover a:hover { 
-    color: #c77405; 
+    color: #de5731; 
     text-decoration: none; }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { 
     border: 1px solid #ddd;
