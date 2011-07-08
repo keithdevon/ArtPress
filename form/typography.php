@@ -112,7 +112,7 @@ class Section_Font extends CSS_Dropdown_Input {
     } 
 }
 class Font_Size extends CSS_Dropdown_Input {
-    static $options = array('0.8em', '1em', '1.2em', '1.5em', '2em', '3em', '4em');
+    static $options = array('0.8em', '1em', '1.2em', '1.5em', '2em', '3em', '4em', 'inherit');
     function __construct($value=0) { 
         parent::__construct('font-size', 'font size', $value); 
     }    
