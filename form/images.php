@@ -45,11 +45,12 @@ class Image extends CSS_Text_Input {
         if(array_key_exists('images', $options)) {
             $img_file_paths = $options['images'];
         }
-        $input = "<input type='file' name='{$name}' size='40' value='{$path}'/>";
+        $files = $_FILES;
+        // TODO un hard code hardcoded name
+        $input = "<input type='file' name='ap_options[images][{$name}]' size='40' value='{$path}'/>";
         return $input;
     }
     function set_value($value) {
-        $files = $_FILES;
         
     }
 }

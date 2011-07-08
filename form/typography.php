@@ -3,19 +3,19 @@ require_once 'form.php';
 
 // TEXT
 class Text_Transform extends CSS_Dropdown_Input {
-    static $options = array('none', 'uppercase', 'lowercase', 'capitalize');
+    static $options = array('', 'none', 'uppercase', 'lowercase', 'capitalize');
     function __construct($value=0) { 
         parent::__construct('text-transform', 'text transform', $value);
     }    
 }
 class Text_Align extends CSS_Dropdown_Input {
-    static $options = array('left', 'right', 'center', 'justify');
+    static $options = array('', 'left', 'right', 'center', 'justify');
     function __construct($value=0) { 
         parent::__construct('text-align', 'text align', $value);
     }    
 }
 class Text_Decoration extends CSS_Dropdown_Input {
-    static $options = array('none', 'underline', 'overline', 'line-through', 'blink');
+    static $options = array('', 'none', 'underline', 'overline', 'line-through', 'blink');
     function __construct($value=0) { 
         parent::__construct('text-decoration', 'text decoration', $value);
     }   
@@ -24,7 +24,7 @@ class Text_Decoration extends CSS_Dropdown_Input {
 // FONT
 class Global_Font_Family extends CSS_Dropdown_Input {
     private static $global_font_family_instances = array();
-    static $options = array(
+    static $options = array('', 
                             array('Arial, “Helvetica Neue”, Helvetica, sans-serif','paragraph or title'),
                         	'Cambria, Georgia, Times, “Times New Roman”, serif',
                         	'“Century Gothic”, “Apple Gothic”, sans-serif',
@@ -112,19 +112,19 @@ class Section_Font extends CSS_Dropdown_Input {
     } 
 }
 class Font_Size extends CSS_Dropdown_Input {
-    static $options = array('0.8em', '1em', '1.2em', '1.5em', '2em', '3em', '4em');
+    static $options = array('', '0.8em', '1em', '1.2em', '1.5em', '2em', '3em', '4em');
     function __construct($value=0) { 
         parent::__construct('font-size', 'font size', $value); 
     }    
 }
 class Font_Style extends CSS_Dropdown_Input {
-    static $options = array('normal', 'italic', 'oblique');
+    static $options = array('', 'normal', 'italic', 'oblique');
     function __construct($value=0) { 
         parent::__construct('font-style', 'font style', $value); 
     }    
 }
 class Font_Weight extends CSS_Dropdown_Input {
-    static $options = array('normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500', '600', '700', '800', '900');  
+    static $options = array('', 'normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500', '600', '700', '800', '900');  
     function __construct($value=0) { 
         parent::__construct('font-weight', 'font weight', $value); 
     }    

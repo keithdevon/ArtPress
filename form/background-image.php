@@ -3,13 +3,13 @@ require_once 'form.php';
 
 // BACKGROUND IMAGE
 class Background_Repeat extends CSS_Dropdown_Input {
-    static $options = array('no-repeat', 'repeat', 'repeat-x', 'repeat-y', 'inherit'); 
+    static $options = array('', 'no-repeat', 'repeat', 'repeat-x', 'repeat-y', 'inherit'); 
     function __construct($value=0) { 
         parent::__construct('background-repeat', 'background repeat', $value); 
     }    
 }
 class Background_Attachment extends CSS_Dropdown_Input {
-    static $options = array('scroll', 'fixed', 'inherit' ); 
+    static $options = array('', 'scroll', 'fixed', 'inherit' ); 
     function __construct($value=0) { 
         parent::__construct('background-attachment', 'background attachment', $value); 
     }    
