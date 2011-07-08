@@ -318,10 +318,13 @@ class Main_Tab_Group extends Tab_Group {
     function __construct($display_name, $members=array()) {
     
         $globalsettings = new Global_Settings();
+        $headertab = new Header_Tab();
         $bodytab = new Body_Tab();
+        $sidebartab = new Sidebar_Tab();
+        $footertab = new Footer_Tab();
         $images_tab = new Images_Tab();
         
-        parent::__construct('main tab group', array($globalsettings, $bodytab , $images_tab));
+        parent::__construct('main tab group', array($globalsettings, $headertab , $bodytab , $sidebartab , $footertab , $images_tab));
     }
     function to_array() {
         $children = parent::to_array();
@@ -459,7 +462,10 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
     function get_html() {
         $o = '<script> 
             $(function() { 
-                $( "#' . $this->get_parentage_string() . '-accordion" ).accordion({autoHeight: false});
+                $( "#' . $this->get_parentage_string() . '-accordion" ).accordion({
+                    autoHeight: false,
+                    collapsible: true
+                    });
             });
 	    </script>';
         $o .= ot('div', attr_id($this->get_parentage_string() . '-accordion'));
@@ -698,6 +704,12 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
     static function get_options() { 
         return static::$options;
     }
+    
+    function get_css_value() {
+       $value = $this->get_value();
+       $options = static::get_options();
+       return $options[$value];
+   }
 }
 
 // LIST
