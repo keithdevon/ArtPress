@@ -596,7 +596,7 @@ div.menu li {
 	padding:0;
 }
 #content .entry-summary p:last-child {
-	margin-bottom: 12px;
+	margin-bottom: 0px;
 }
 .entry-content fieldset {
 	border: 1px solid #e7e7e7;
@@ -1202,15 +1202,13 @@ h3#reply-title {
 	margin-left: 0;
 	padding: 0 20px 0 0;
 }
+
 #main .widget-area ul ul {
 	border: none;
 	margin-left: 1.3em;
 	padding: 0;
 }
-.sidebar {
-    padding:1px 1.5em 1.5em;
-    margin-top:0.875em;
-}
+
 
 /* Footer widget areas */
 #footer-widget-area {
