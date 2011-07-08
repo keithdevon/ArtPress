@@ -260,3 +260,20 @@ time 1309805037
 old [description:"validate form inputs" entry:"1306859117" project:"beta" status:"pending" tags:"james" uuid:"3f451505-4176-0919-a7e6-f93e42860ae3"]
 new [description:"validate form inputs" entry:"1306859117" project:"alpha" status:"pending" tags:"james" uuid:"3f451505-4176-0919-a7e6-f93e42860ae3"]
 ---
+time 1310144415
+new [description:"first font-family wont save" entry:"1310144415" project:"al" status:"pending" tags:"james+bug" uuid:"aef4b3f9-cacf-4803-99a5-a2bcbc66af36"]
+---
+time 1310144459
+old [description:"first font-family wont save" entry:"1310144415" project:"al" status:"pending" tags:"james+bug" uuid:"aef4b3f9-cacf-4803-99a5-a2bcbc66af36"]
+new [description:"first font-family wont save" entry:"1310144415" project:"al" status:"pending" tags:"james,bug" uuid:"aef4b3f9-cacf-4803-99a5-a2bcbc66af36"]
+---
+time 1310147193
+old [description:"first font-family wont save" entry:"1310144415" project:"al" status:"pending" tags:"james,bug" uuid:"aef4b3f9-cacf-4803-99a5-a2bcbc66af36"]
+new [description:"font-families dont save properly" entry:"1310144415" project:"al" status:"pending" tags:"james,bug" uuid:"aef4b3f9-cacf-4803-99a5-a2bcbc66af36"]
+---
+time 1310156640
+new [description:"add ability to inherit hover values from parent" entry:"1310156640" project:"al" status:"pending" tags:"james" uuid:"1216177c-26e8-4bfe-8059-7b6fad75cf80"]
+---
+time 1310156928
+new [description:"show/hide meta,author info etc." entry:"1310156928" project:"beta" status:"pending" tags:"keith" uuid:"059d8cf3-da83-4a28-98db-26b175fefdf5"]
+---

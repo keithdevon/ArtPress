@@ -23,3 +23,6 @@
 [description:"body settings" entry:"1309710617" project:"alpha" status:"pending" tags:"james" uuid:"da131b34-4b58-7929-7e9e-24fdf68032d0"]
 [description:"remove top level tabs?" entry:"1309710638" project:"alpha" status:"pending" tags:"james" uuid:"2b3164cb-7076-31f3-4e36-d616b0022804"]
 [description:"selection of defaults" entry:"1309712354" project:"beta" status:"pending" tags:"james,keith" uuid:"9033df2c-f010-3d55-a7e1-8403ac854b5d"]
+[description:"font-families dont save properly" entry:"1310144415" project:"al" status:"pending" tags:"james,bug" uuid:"aef4b3f9-cacf-4803-99a5-a2bcbc66af36"]
+[description:"add ability to inherit hover values from parent" entry:"1310156640" project:"al" status:"pending" tags:"james" uuid:"1216177c-26e8-4bfe-8059-7b6fad75cf80"]
+[description:"show/hide meta,author info etc." entry:"1310156928" project:"beta" status:"pending" tags:"keith" uuid:"059d8cf3-da83-4a28-98db-26b175fefdf5"]

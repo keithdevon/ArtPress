@@ -60,6 +60,10 @@ class Global_Font_Family extends CSS_Dropdown_Input {
     function __construct($display_name, $value=0) { 
         parent::__construct('font-family', $display_name, $value); 
         self::$global_font_family_instances[] = $this;
+        $this_class = get_class($this);
+        $number_of_global_font_family_instances = sizeof(self::$global_font_family_instances);
+        $name = $this_class . '__' . $number_of_global_font_family_instances;
+        $this->set_name( $name );
     }
     static function get_dropdown_font_family_options() {
         $list = array();
@@ -78,6 +82,7 @@ class Global_Font_Family extends CSS_Dropdown_Input {
         $instances = static::$global_font_family_instances;
         return $instances;
     }
+    function get_name() { return $this->name; }
 }
 /**
  * Class to represent a selector of one of the preselected font
