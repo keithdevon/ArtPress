@@ -464,7 +464,8 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
             $(function() { 
                 $( "#' . $this->get_parentage_string() . '-accordion" ).accordion({
                     autoHeight: false,
-                    collapsible: true
+                    collapsible: true,
+                     active: false,
                     });
             });
 	    </script>';
