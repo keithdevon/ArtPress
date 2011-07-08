@@ -453,7 +453,11 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
         parent::__construct($display_name, $children);
     }
     function get_html() {
-        $o = '<script> $(function() { $( "#' . $this->get_parentage_string() . '-accordion" ).accordion(); }); </script>';
+        $o = '<script> 
+            $(function() { 
+                $( "#' . $this->get_parentage_string() . '-accordion" ).accordion({autoHeight: false});
+            });
+	    </script>';
         $o .= ot('div', attr_id($this->get_parentage_string() . '-accordion'));
        
         $children = $this->get_children();
