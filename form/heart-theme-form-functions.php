@@ -476,6 +476,8 @@ function ap_create_global_settings_form($qualifier, $global_settings) {
             $font_rows .= ht_create_select($ht_css_font_family, 
                                             get_qualifier($qualifier) . "[fonts][{$font}]", 'Font ' .  ($font + 1), 'blurb', $global_settings['fonts'][$font]);
         }
+        
+        // Output the tables
         echo table($color_rows, attr_class('form-table'));
         echo table($font_rows, attr_class('form-table'));
                 
