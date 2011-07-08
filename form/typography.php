@@ -106,6 +106,12 @@ class Section_Font extends CSS_Dropdown_Input {
         return $list;
     } 
 }
+class Font_Size extends CSS_Dropdown_Input {
+    static $options = array('0.8em', '1em', '1.2em', '1.5em', '2em', '3em', '4em');
+    function __construct($value=0) { 
+        parent::__construct('font-size', 'font size', $value); 
+    }    
+}
 class Font_Style extends CSS_Dropdown_Input {
     static $options = array('normal', 'italic', 'oblique');
     function __construct($value=0) { 
@@ -124,6 +130,7 @@ class Typography_Tab extends Sub_Tab {
             $members[] = new Section_Foreground_Color();
             $members[] = new Section_Background_Color();        
             $members[] = new Section_Font();
+            $members[] = new Font_Size();
             $members[] = new Font_Style();
             $members[] = new Font_Weight();
             $members[] = new Text_Align();

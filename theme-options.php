@@ -11,7 +11,10 @@ require_once $dir . 'form/form.php';
 require_once $dir . 'form/global.php';
 require_once $dir . 'form/images.php';
 require_once $dir . 'form/color.php';
+require_once $dir . 'form/header-form.php';
 require_once $dir . 'form/body.php';
+require_once $dir . 'form/sidebar-form.php';
+require_once $dir . 'form/footer-form.php';
 require_once $dir . 'form/typography.php';
 require_once $dir . 'form/layout.php';
 require_once $dir . 'form/effect.php';
@@ -153,6 +156,7 @@ function ap_settings_page() {
 
     // page title stuff
     screen_icon(); 
+    echo ot('div', attr_class('wrap'));
     echo h2( get_current_theme() . __( ' Options' ) ); 
     if ( ! isset( $_REQUEST['updated'] ) ) $_REQUEST['updated'] = false;    
     if ( false !== $_REQUEST['updated'] ) echo div( p(_e( 'Options saved' )), attr_class('updated fade') );
@@ -171,6 +175,7 @@ function ap_settings_page() {
         $maintabgroup->inject_values($options['saves'][$options['current-save-id']]);
     }
     echo $maintabgroup->get_html();
+    echo ct('div');
 }
 function default_save() {
     return array(

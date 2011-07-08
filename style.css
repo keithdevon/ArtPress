@@ -582,18 +582,6 @@ div.menu li {
 	
 }
 
-.entry-title a:link,
-.entry-title a:visited {
-	color: #000;
-	text-decoration: none;
-}
-.entry-title a:active,
-.entry-title a:hover {
-	
-}
-.entry-meta {
-	font-size: 0.8em;
-}
 .entry-meta abbr,
 .entry-utility abbr {
 	border: none;
@@ -703,14 +691,7 @@ body.page .edit-link {
 	font-size: 12px;
 	line-height: 2em;
 }
-.entry-meta a,
-.entry-utility a {
-	color: #888;
-}
-.entry-meta a:hover,
-.entry-utility a:hover {
-	
-}
+
 #content .video-player {
 	padding: 0;
 }
