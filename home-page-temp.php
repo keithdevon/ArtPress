@@ -5,9 +5,9 @@ Template Name: Home Page
 
 get_header(); ?>
 
-    <div id="container" class="container">
+    <div id="content" class="container">
         <div class="row">
-            <div id="content" class="twelvecol" role="main">
+            <div class="twelvecol" role="main">
 
                 <?php
                 /* Run the loop to output the page.
@@ -17,20 +17,18 @@ get_header(); ?>
                 get_template_part( 'loop', 'page' );
                 ?>
 
-			</div><!-- #content -->
-        </div><!-- row -->
+			</div><!-- row -->
             
-        <div class="row">
-        
-            <?php if ( is_active_sidebar( '1-2-home-widget-area' ) ) : ?>
+            <?php if ( is_active_sidebar( '1-2-home-widget-area' ) || is_active_sidebar( '2-2-home-widget-area' ) ) : ?>
+            
+                <div class="row">
 		        <?php dynamic_sidebar( '1-2-home-widget-area' ); ?>
-		    <?php endif; ?>
-
-            <?php if ( is_active_sidebar( '2-2-home-widget-area' ) ) : ?>
+		   
                 <?php dynamic_sidebar( '2-2-home-widget-area' ); ?>
-            <?php endif; ?>
-            <div class="clear"></div>
+                <div class="clear"></div>
         </div>
+            <?php endif; ?>
+            
                 
         <div class="row">
             

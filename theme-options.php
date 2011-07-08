@@ -254,7 +254,6 @@ function artpress_options_validate( $new_settings ) {
     if( ! isset($settings['section_settings']['headings']) ) 
         $settings['section_settings']['headings'] = array(
         	'css_selector'=>'h1,h2,h3,h4,h5,h6',
-            'font-size'       => array( 'row_label'=>'font-size' , 'field_blurb_suffix'=>'Font size' , 'value'=>'1em' ),
             'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
             'font-style'      => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),
             'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'0' ),
@@ -297,7 +296,7 @@ function artpress_options_validate( $new_settings ) {
             'logo-image-use'  => array( 'row_label'=>'use logo image?', 'field_blurb_suffix'=>'tick to use the logo image', 'value'=>'off'),
             'text-shadow-use'=> array( 'row_label'=>'use text shadow?', 'field_blurb_suffix'=>'tick to use a text shadow', 'value'=>'on'),
         	'text-shadow'	  => array( 'row_label'=>'text shadow' , 'field_blurb_suffix'=>'text shadow' , 'value'=>array('1px', '1px', '0px', 'white' ) ),      
-        	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
+        	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('0px','','','') ),
         	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
         );            
     if( ! isset($settings['section_settings']['site description']) ) 
@@ -436,9 +435,16 @@ function artpress_options_validate( $new_settings ) {
             'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
         );             
 
-    if( ! isset($settings['section_settings']['lists']) ) 
-        $settings['section_settings']['list'] = array(
-        	'css_selector'=>'ol,ul',
+    if( ! isset($settings['section_settings']['unordered lists']) ) 
+        $settings['section_settings']['unordered lists'] = array(
+        	'css_selector'=>'ul',
+            'list-style-position' => array( 'row_label'=>'list position' , 'field_blurb_suffix'=>'List position' , 'value'=>'0'),
+            'list-style-type' => array( 'row_label'=>'list marker' , 'field_blurb_suffix'=>'List marker' , 'value'=>'0')
+        ); 
+
+    if( ! isset($settings['section_settings']['ordered lists']) ) 
+        $settings['section_settings']['ordered lists'] = array(
+        	'css_selector'=>'ol',
             'list-style-position' => array( 'row_label'=>'list position' , 'field_blurb_suffix'=>'List position' , 'value'=>'0'),
             'list-style-type' => array( 'row_label'=>'list marker' , 'field_blurb_suffix'=>'List marker' , 'value'=>'0')
         ); 

@@ -52,9 +52,13 @@
 $g_cat_layout = 'grid';
 if( $g_cat_layout == 'grid' ) {?>
 
-<?php $post_count = 0; ?>
+<?php $post_count = 0; 
+        $numItems = ($wp_query->post_count);
+        $postnumber = 0;
+?>
 <?php while ( have_posts() ) : the_post(); ?>
 <?php   $post_count ++;
+        $postnumber ++;
         if($post_count == 4) $post_count = 1; ?>
 
 
@@ -93,14 +97,15 @@ if( $g_cat_layout == 'grid' ) {?>
 							); ?>
 </div>
 				<?php endif; ?>
-						<?php the_excerpt(); ?>
+						<?php the_excerpt();?>
+						
 <?php endif; ?>
                 
 			</div><!-- .entry-content -->
 			
 		</div><!-- #post-## -->
     </div><!-- .twocol -->
-    <?php if($post_count == 3) echo ' <div class="clear"></div></div>';?>
+    <?php if($post_count == 3 || $postnumber == $numItems) echo ' <div class="clear"></div></div>';?>
 
 
 

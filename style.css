@@ -1,8 +1,8 @@
 /*
 Theme Name: ArtPress
 Theme URI: http://keithdevon.com
-Description: ArtPress has been built specifically for artists. It is a theme that includes advanced image handling and support for popular e-commerce plugins.
-Tags: buddypress
+Description: ArtPress has been built specifically for artists. It is based on TwentyTen and the 1140px grid framework from cssgrid.net.
+Tags: Art, 1140px grid
 Author: Heart Themes
 Version: 0.1
 License: GNU General Public License
@@ -74,7 +74,7 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
     overflow: visible;
     }
 .internal-col {
-    margin-bottom:1.5em;
+    /*margin-bottom:1.5em; removed because I think that heading and paragraph margins handle this */
     }
 #masthead {
     overflow: visible;
@@ -86,17 +86,15 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 .post {
     margin-bottom:1.5em;
     }
-#primary,
-#secondary {
-	
-}
-#secondary {
-	clear: right;
-}
 #footer {
 }
 .clear {
     clear:both;
+    display:block; 
+    overflow:hidden; 
+    visibility:hidden; 
+    width:0; 
+    height:0 
     }
 
 /*
@@ -226,46 +224,58 @@ h1, h2, h3, h4, h5, #access {
 	text-rendering: optimizeLegibility; 
 	}
 
-h1 {
-    font-size: 2.25em;
+/* { 
+    font-size:4.5em; 
+    line-height: 1em;
+    margin:1.07em 0 .94em;
+    }
+ { 
+    font-size:3.75em; 
+    line-height: 1.2em;
+    margin:.97em 0 1.04em;
+    }
+ { 
+    font-size:3em; 
+    line-height: 1em;
+    margin:1em 0 1em;
+    }*/
+#site-title, h1 { 
+    font-size:2.25em;
     line-height: 1.334em;
-    margin-bottom: .54em;
-	padding-top:.14em;
+    margin:1.5em 0 1.17em;
     }
-    
-h2 {
+h2 { 
     font-size:1.5em;
-    line-height:1em;
-    margin-bottom: 1.2em;
-    padding-top:.85em;
-    font-weight: bold;
+    line-height: 1em;
+    margin:1.88em 0 1.15em;
     }
-    
-h3 {
-    font-size: 1.333em;
+h3 { 
+    font-size:1.313em; 
     line-height: 1.143em;
-    margin-bottom:0.943em;
-    padding-top:.2em;
+    margin:2.2em 0 1.27em; 
+    }
+h4 { 
+    font-size:1.125em; 
+    line-height: 1.3328em;
+    margin:2.65em 0 1.42em;
+    }
+h5 { 
+    font-size:1em; 
+    line-height: 1.5em;
+    margin:0;
     }
 
-h4 {
-    font-size: 1.333em;
-    line-height: 1.143em;
-    margin-bottom:0.943em;
-    padding-top:.2em;
+p {
+    margin-bottom:1.5em;
     }
 
-h5, p {
-    font-size: 1em;
-	margin-bottom: 1.5em;
-}
 ul {
 	list-style: square;
-	margin: 0 0 1.5em 1.5em;
+	margin: 0 0 1.5em 3em;
 }
 ol {
 	list-style: decimal;
-	margin: 0 0 1.5em 1.5em;
+	margin: 0 0 1.5em 3em;
 }
 ol ol {
 	list-style: upper-alpha;
@@ -376,17 +386,9 @@ a:hover {
     /*margin-top:16px; */
 }
 #masthead {
-    padding-top:0px;
-    position:relative;
     }
 h1#site-title, #site-title {
-	float: left;
-	margin: 0 0 0.31em 0;
-	font-size:4.236em;
-	font-weight:bold;
-	line-height: 1.062em;
-	width:100%;
-	padding-top:.15em;
+	
 }
 
 #site-title a {
@@ -437,7 +439,8 @@ div.menu li {
 #access a {
 	color: #aaa;
 	display: block;
-	padding: 0 10px;
+	padding: 0;
+	margin:0 2em .5em 0;
 	text-decoration: none;
 }
 #access ul ul {
@@ -447,7 +450,7 @@ div.menu li {
 	display: none;
 	position: absolute;
 	top: 24px;
-	left: 0;
+	left: -.75em;
 	float: left;
 	width: 180px;
 	z-index: 99999;
@@ -488,10 +491,6 @@ div.menu li {
 * html #access ul li a:hover {
 	
 }
-
-#access ul#menu-main-menu {
-    margin-left:-10px;
-    }
 
 
 /* =Content
@@ -681,14 +680,8 @@ body.page .edit-link {
 	display: block;
 }
 #entry-author-info {
-	background: #f2f7fc;
-	border-top: 4px solid #000;
 	clear: both;
-	font-size: 14px;
-	line-height: 20px;
-	margin: 24px 0;
 	overflow: hidden;
-	padding: 18px 20px;
 }
 #entry-author-info #author-avatar {
 	background: #fff;
@@ -700,13 +693,9 @@ body.page .edit-link {
 }
 #entry-author-info #author-description {
 	float: left;
-	margin: 0 0 0 104px;
+	margin: 0 0 2em 104px;
 }
 #entry-author-info h2 {
-	color: #000;
-	font-size: 100%;
-	font-weight: bold;
-	margin-bottom: 0;
 }
 .entry-utility {
 	clear: both;
@@ -1110,7 +1099,7 @@ h3#reply-title {
 	margin: 0;
 }
 #cancel-comment-reply-link {
-	font-size: 12px;
+	font-size: 0.8em;
 	font-weight: normal;
 	line-height: 18px;
 }
@@ -1120,7 +1109,7 @@ h3#reply-title {
 }
 #respond label {
 	color: #888;
-	font-size: 12px;
+	font-size: 0.8em;
 }
 #respond input {
 	margin: 0 0 9px;
@@ -1131,7 +1120,7 @@ h3#reply-title {
 }
 #respond .form-allowed-tags {
 	color: #888;
-	font-size: 12px;
+	font-size: 0.8em;
 	line-height: 18px;
 }
 #respond .form-allowed-tags code {
@@ -1237,11 +1226,9 @@ h3#reply-title {
 	margin-left: 1.3em;
 	padding: 0;
 }
-#primary, #secondary {
-    background: rgba(200,200,200,0.1);
-    padding:6px 1.5em 18px;
-}
-#secondary {
+.sidebar {
+    padding:1px 1.5em 1.5em;
+    margin-top:0.875em;
 }
 
 /* Footer widget areas */
@@ -1274,6 +1261,7 @@ h3#reply-title {
 	line-height: 16px;
 	padding-left: 20px;
 	text-decoration: none;
+	float:right;
 }
 #site-generator a:hover {
 	text-decoration: underline;
@@ -1426,4 +1414,149 @@ label.horiz {
     
 #access form.searchform {
     float:right;
+    }
+    
+/* REMOVE EVERYTHING BELOW THIS LINE FOR RELEASE VERSIONS !!!! ______________________________________________*/
+    
+    
+/* GLOSSY BUTTONS ------------*/
+
+.css3-button {
+ 
+position:relative;
+ 
+display:inline-block;
+ 
+width:8em;
+ 
+padding:0.25em 0.5em 0.3em 0.5em;
+ 
+text-align:center;
+ 
+cursor:pointer;
+ 
+border:2px solid #999;
+ 
+background-color:#666;
+ 
+background-color:rgba(128,128,128,0.75);
+ 
+-moz-border-radius:16px;
+ 
+-webkit-border-radius:16px;
+ 
+-opera-border-radius:16px;
+ 
+-khtml-border-radius:16px;
+ 
+border-radius:16px;
+ 
+font-size:1em;
+ 
+color:#fff;
+ 
+font-weight:bold;
+ 
+text-shadow:1px 1px 3px rgba(0,0,0,0.5);
+ 
+background-image:-webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(64,64,64,0.75)), to(rgba(192,192,192,0.9)));
+ 
+background-image:-moz-linear-gradient(top,bottom,from(rgba(64,64,64,0.75)), to(rgba(192,192,192,0.9)));
+ 
+-khtml-box-shadow:rgba(192,192,192,0.75) 0px 8px 24px;
+ 
+-moz-box-shadow:rgba(192,192,192,0.75) 0px 8px 24px;
+ 
+box-shadow:rgba(192,192,192,0.75) 0px 8px 24px;
+ 
+}
+ 
+.css3-button span {
+ 
+position:absolute;
+ 
+display:block;
+ 
+width:94%;
+ 
+left:3.5%;
+ 
+top:0px;
+ 
+height:50%;
+ 
+-webkit-border-radius:8px;
+ 
+-moz-border-radius:8px;
+ 
+background-color:rgba(255,255,255,0.25);
+ 
+background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0.5)), to(rgba(255,255,255,0)));
+ 
+background-image:-moz-linear-gradient(top,bottom,from(rgba(255,255,255,0.75)), to(rgba(255,255,255,0)));
+ 
+}
+ 
+#shiny-green {
+
+font-family: helvetica, "Helvetica Neue", Arial, sans-serif;
+
+text-shadow:-1px 0px 0px rgba(0,0,0,.5);
+
+color:white;
+
+border-color:#00420C;
+ 
+background-color:rgba(0,105,19,0.75);
+ 
+background-image:-webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(0,105,19,0.75)), to(rgba(0,66,12,0.9)));
+ 
+background-image:-moz-linear-gradient(top,bottom,from(rgba(0,105,19,0.75)), to(rgba(0,66,12,0.9)));
+ 
+-khtml-box-shadow:rgba(0,66,12,0.75) 0px 8px 24px;
+ 
+-moz-box-shadow:rgba(0,66,12,0.75) 0px 8px 24px;
+ 
+box-shadow:rgba(0,66,12,0.75) 0px 8px 24px;
+ 
+}
+ 
+#shiny-green:hover {
+
+color:white;
+
+text-decoration:none;
+
+border-color:#006913;
+ 
+background-color:rgba(0,92,17,0.75);
+ 
+background-image:-webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(0,92,17,0.75)), to(rgba(2,169,33,0.9)));
+ 
+background-image:-moz-linear-gradient(top,bottom,from(rgba(0,92,17,0.75)), to(rgba(2,169,33,0.9)));
+ 
+-khtml-box-shadow:rgba(0,92,17,0.75) 0px 8px 24px;
+ 
+-moz-box-shadow:rgba(0,92,17,0.75) 0px 8px 24px;
+ 
+box-shadow:rgba(0,92,17,0.75) 0px 8px 24px; 
+
+ 
+/*margin: 0 5px 0 5px;*/
+ 
+}
+
+
+/* Gallery padding */
+
+div.gallery-icon {
+    padding:1em;
+    background: #eee;
+    }
+    
+a.tutorial-image:link {
+    margin-left:1em;
+    font-size: .66em;
+    color: #bbb;
+    letter-spacing: 1px;
     }

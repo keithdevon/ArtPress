@@ -384,28 +384,28 @@ function twentyten_widgets_init() {
 		'after_title' => '</h3>',
 	) );
     
-	// Area 1, located at the top of the sidebar.
+	// Sidebar A
 	register_sidebar( array(
-		'name' => __( 'Primary Widget Area', 'twentyten' ),
+		'name' => __( 'Sidebar A', 'twentyten' ),
 		'id' => 'primary-widget-area',
-		'description' => __( 'The primary widget area', 'twentyten' ),
+		'description' => __( 'The primary sidebar widget area and the default post sidebar', 'twentyten' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
 		'after_widget' => '</li>',
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
 
-	// Area 2, located below the Primary Widget Area in the sidebar. Empty by default.
+	// Sidebar B
 	register_sidebar( array(
-		'name' => __( 'Secondary Widget Area', 'twentyten' ),
+		'name' => __( 'Sidebar B', 'twentyten' ),
 		'id' => 'secondary-widget-area',
-		'description' => __( 'The secondary widget area', 'twentyten' ),
+		'description' => __( 'The secondary sidebar widget area and the default page sidebar', 'twentyten' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
 		'after_widget' => '</li>',
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
-	
+		
 	// Area 7, located on the home page. Empty by default.
 	register_sidebar( array(
 		'name' => __( 'Home Widget Area 1/2', 'twentyten' ),
@@ -575,16 +575,6 @@ function twentyten_posted_in() {
 	);
 }
 endif;
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -905,7 +895,24 @@ function ht_gallery_shortcode($attr) {
 
 	$i = 0;
 	foreach ( $attachments as $id => $attachment ) {
-		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $size, false, false) : wp_get_attachment_link($id, $size, true, false); 
+	   switch ($columns) {
+        case 1:
+            $ht_thumnail_size = "full-width";
+            break;
+        case 2:
+            $ht_thumnail_size = "six-col";
+            break;
+        case 3:
+            $ht_thumnail_size = "four-col";
+            break;
+        case 4:
+            $ht_thumnail_size = "three-col";
+            break;
+        case 6:
+            $ht_thumnail_size = "two-col";
+            break;
+        }
+		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $ht_thumnail_size, false) : wp_get_attachment_link($id, $size, true, false); 
 	   $break = '';
         $i++;
         $output .= "<{$itemcol} class='gallery-item ";
@@ -972,6 +979,11 @@ function ht_gallery_shortcode($attr) {
 // ADD new image sizes
 
 add_image_size( 'Gallery list', 350, 200, true );
+add_image_size( 'full-width', 1140, '', false );
+add_image_size( 'six-col', 548, '', false );
+add_image_size( 'four-col', 300, '', false );
+add_image_size( 'three-col', 252, '', false );
+add_image_size( 'two-col', 154, '', false );
 
 
 
@@ -1028,27 +1040,41 @@ class HTChildMenu extends WP_Widget {
     function widget($args, $instance) {
         extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
-        ?>
-              <?php echo $before_widget; ?>
-                  <?php if ( $title )
-                        echo $before_title . $title . $after_title; ?>
-                  
-  <?php                // Works in single post outside of the Loop
-function ht_child_pages() {
-global $wp_query;
-$thePostID = $wp_query->post->ID;
+       
+        global $wp_query;
+        $thePostID = $wp_query->post->ID;
+        $theParentID = $wp_query->post->post_parent; 
 
-$children = wp_list_pages('title_li=&child_of='.$thePostID.'&echo=0'.'&depth=1');
-  if ($children) { ?>
-  <ul class="sub-pages">
-  <?php echo $children; ?>
-  </ul>
-  <?php }} ?>
-  
-  <?php ht_child_pages(); ?>
-                  
-                  
-              <?php echo $after_widget; ?>
+        $children = wp_list_pages('title_li=&child_of='.$thePostID.'&echo=0'.'&depth=2');
+        if ($children) { ?>
+            <?php echo $before_widget; ?>
+                  <?php if ( $title )
+                        echo $before_title . $title . $after_title;
+                        else echo '<h3 class="widget-title">' . get_the_title() . ' Menu</h3>'; ?>
+
+                        <ul class="sub-pages">
+                        <?php echo $children; ?>
+                        </ul>
+                        <?php if ($wp_query->post->post_parent == TRUE) { ?>
+                        <br />
+                        <a style="font-size:.8em" href="<?php echo get_permalink($theParentID); ?>">Back up to <?php echo get_the_title($theParentID); ?></a>
+                        <?php } ?>
+        <?php } 
+        elseif ($wp_query->post->post_parent == TRUE) { ?>
+        <?php $children = wp_list_pages('title_li=&child_of='.$theParentID.'&echo=0'.'&depth=2'); ?>
+             <?php echo $before_widget; ?>
+                  <?php if ( $title )
+                        echo $before_title . $title . $after_title;
+                        else echo '<h3 class="widget-title">' . get_the_title($theParentID) . ' Menu</h3>'; ?>
+
+                        <ul class="sub-pages">
+                        <?php echo $children; ?>
+                        </ul>
+                        <br />
+                        <a style="font-size:.8em" href="<?php echo get_permalink($theParentID); ?>">Back up to <?php echo get_the_title($theParentID); ?></a>
+          <?php  }?>
+               
+        <?php echo $after_widget; ?>
         <?php
     }
 
@@ -1072,5 +1098,26 @@ $children = wp_list_pages('title_li=&child_of='.$thePostID.'&echo=0'.'&depth=1')
 
 } // class HTChildMenu
 
-// register FooWidget widget
+// register Child pages widget
 add_action('widgets_init', create_function('', 'return register_widget("HTChildMenu");'));
+
+
+
+
+
+// Add excerpts to pages
+
+add_action( 'init', 'my_add_excerpts_to_pages' );
+function my_add_excerpts_to_pages() {
+add_post_type_support( 'page', 'excerpt' );
+}
+
+
+// Add sidebar picker
+// require_once 'ht-sidebar-picker.php';
+
+// Add social info
+require_once 'ht-functions/ht-socials.php';
+
+// Add address widget
+//require_once 'ht-widgets/ht-contact-widget.php';

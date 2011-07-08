@@ -19,7 +19,6 @@ get_header(); ?>
             <div class="row">
             
                 <div class="eightcol">
-                
                     <?php get_template_part( 'ht-crumbs' );?>
 
 			       <?php
@@ -34,7 +33,7 @@ get_header(); ?>
 		        
                 
                 <div class="fourcol last"> 
-                    <?php get_sidebar(); ?>
+                    <?php get_template_part('second-sidebar'); ?>
                 </div>
                 
                 <div class="clear"></div>

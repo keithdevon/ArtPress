@@ -17,8 +17,9 @@ get_header(); ?>
     <div id="content" class="container">
 		<div class="row">
 			<div class="eightcol" role="main">
+			      <?php get_template_part( 'ht-crumbs' );?>
                 <h1 class="page-title">Blog</h1>
-
+               
 			<?php
 			/* Run the loop to output the posts.
 			 * If you want to overload this in a child theme then include a file

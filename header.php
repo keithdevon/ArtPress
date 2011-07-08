@@ -65,10 +65,13 @@
             <div class="twelvecol">
                 <?php get_template_part( 'branding' ); // Logo file (branding.php) ?>
             </div> 
+        </div>
             
+        <div class="row">
             <div id="main-nav" class="twelvecol">
                 <?php get_template_part( 'main-nav' );   // Main Nav file (main-nav.php) ?>
-            </div> 
+            </div>
+        </div>
             
                                      
 			<div class="clear"></div>
