@@ -97,7 +97,7 @@ class Section_Font extends CSS_Dropdown_Input {
         self::$options = Global_Font_Family::get_global_font_family_instances();
     }    
     static function get_options() {
-        $list = array();
+        $list = array('');
         foreach (parent::get_options() as $global_font) {
            $v = $global_font->get_value();
            $global_options = Global_Font_Family::get_options();

@@ -22,7 +22,7 @@ class Global_Color extends CSS_Text_Input {
         return preg_match('/^#[a-f0-9]{6}$/i', $value ); 
     }
     static function get_dropdown_color_options() {
-        $options = array();
+        $options = array('');
         foreach (self::$global_color_instances as $color) {
             $v = $color->get_value();
             $options[] = $v;
@@ -57,6 +57,11 @@ class Section_Foreground_Color extends Section_Color {
 class Section_Background_Color extends Section_Color {
     function __construct($value=0) {
         parent::__construct('background-color', 'background color select', $value); 
+    }
+    static function get_options() {
+        $options = parent::get_options();
+        $options[] = 'transparent';
+        return $options;
     }
 }
 
