@@ -1561,3 +1561,6 @@ a.tutorial-image:link {
     color: #bbb;
     letter-spacing: 1px;
     }
+td.label {
+    width:200px;
+    }

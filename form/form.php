@@ -176,7 +176,11 @@ class Option_Group extends Group {
             foreach($children as $child) {
                 $child_name = $child->get_display_name();
                 $child_html = $child->get_html();  
-                $children_html .= row($child_name, $child_html);
+                $row = ot('tr');
+                $row .= td($child_name, " style='width:200px;'");
+                $row .= td($child_html);
+                $row .= ct('tr');
+                $children_html .= $row;
             }
         }
         return table($children_html, attr_class('form-table'));
