@@ -324,7 +324,7 @@ class Main_Tab_Group extends Tab_Group {
         $sidebartab = new Sidebar_Tab();
         $footertab = new Footer_Tab();
         
-        parent::__construct('main tab group', array($globalsettings, $headertab , $menutab , $bodytab , $sidebartab , $footertab , $images_tab));
+        parent::__construct('main tab group', array($globalsettings, $headertab , $menutab , $bodytab , $sidebartab , $footertab));
     }
     function to_array() {
         $children = parent::to_array();
