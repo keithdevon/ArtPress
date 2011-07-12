@@ -15,11 +15,6 @@ class Site_Description extends CSS_Selector {
         parent::__construct('#site-description', 'site description', $children=null);
     }
 }
-class Menu_Items extends CSS_Selector {
-    function __construct($children=null) {
-        parent::__construct('#access a', 'Menu Items', $children=null);
-    }
-}
 
 class Header_Group extends CSS_Selector_Group {
     function __construct($children=null) {
@@ -27,7 +22,6 @@ class Header_Group extends CSS_Selector_Group {
             $children[] = new Header_Base(); 
             $children[] = new Site_Title();  
             $children[] = new Site_Description();
-            $children[] = new Menu_Items();
         }
         parent::__construct('#header', 'header', $children);
     }

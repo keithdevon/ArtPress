@@ -319,12 +319,13 @@ class Main_Tab_Group extends Tab_Group {
     
         $globalsettings = new Global_Settings();
         $headertab = new Header_Tab();
+        $menutab = new Menu_Tab();
         $bodytab = new Body_Tab();
         $sidebartab = new Sidebar_Tab();
         $footertab = new Footer_Tab();
         $images_tab = new Images_Tab();
         
-        parent::__construct('main tab group', array($globalsettings, $headertab , $bodytab , $sidebartab , $footertab , $images_tab));
+        parent::__construct('main tab group', array($globalsettings, $headertab , $menutab , $bodytab , $sidebartab , $footertab , $images_tab));
     }
     function to_array() {
         $children = parent::to_array();

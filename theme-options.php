@@ -12,6 +12,7 @@ require_once $dir . 'form/global.php';
 require_once $dir . 'form/images.php';
 require_once $dir . 'form/color.php';
 require_once $dir . 'form/header-form.php';
+require_once $dir . 'form/menu-form.php';
 require_once $dir . 'form/body.php';
 require_once $dir . 'form/sidebar-form.php';
 require_once $dir . 'form/footer-form.php';
@@ -42,11 +43,7 @@ function artpress_options_load_scripts() {
     
     wp_register_style( 'jqueryui1814css', 
                         get_bloginfo('template_directory') . 
-                        	'/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css' );
-                        
-    wp_register_style( 'formcss', 
-                        get_bloginfo('template_directory') . 
-                        	'/form/form.css' );   
+                        	'/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css' );  
                                              
     wp_enqueue_script('jquery151');  
     wp_enqueue_script('jqueryui1814');
@@ -55,7 +52,6 @@ function artpress_options_load_scripts() {
     wp_enqueue_script('farbtastic', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.js', array('jquery151'));
     wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.css' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
-    wp_enqueue_style( 'formcss' );
     
     add_action('init', 'ht_init_method');
     
