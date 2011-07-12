@@ -20,9 +20,9 @@ require_once $dir . 'form/layout.php';
 require_once $dir . 'form/effect.php';
 require_once $dir . 'form/background-image.php';
 
+add_action( 'admin_init', 'artpress_options_load_scripts' );
 add_action( 'admin_init', 'artpress_theme_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
-add_action( 'admin_init', 'artpress_options_load_scripts' );
 
 // Load our scripts
 function artpress_options_load_scripts() {
@@ -64,41 +64,27 @@ function artpress_options_load_scripts() {
 /**
  * Init plugin options to white list our options
  */
-$background_image_prefix = 'ap_bi_';
+$background_image_prefix = 'ap_image_';
 
 function artpress_theme_init() {
-    register_setting( 'artpress_options', 'ap_options', 'ap_options_validate2' );
+    global $background_image_prefix;
+    register_setting( 'artpress_options',     'ap_options', 'ap_options_validate2' );
+    register_setting( 'artpress_image_options', 'ap_images',   'ap_image_validate' );
     
-    // check if settings already exist
-    /*$options = get_option('ap_options');
-    if ( $options == null ) {
-        $options = default_settings();
-        update_option('ap_options', $options);
-    }*/
+    add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'image_upload_slug' );
+    
+    add_settings_field( 'logo-image',                   'Logo image',         'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '0');
+    add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '1');
+    add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '2');
+    add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '3');
 }
 
-/*function theme_options_init(){
-    global $background_image_prefix;
-    register_setting( 'artpress_options', 'artpress_theme_options', 'artpress_options_validate' );
-    register_setting( 'artpress_options_bi', 'ap_background_image_settings', 'ap_bi_validate' );
-    
-    add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'theme_options_slug' );
-
-    add_settings_field( 'logo-image',                   'Logo image',         'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '0');
-    add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '1');
-    add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '2');
-    add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_bi_html', 'theme_options_slug', 'ap_bi_section', '3');
-            
-    $options = get_option('artpress_theme_options');  
-    $padded_with_default_options = artpress_options_validate($options);
-    update_option('artpress_theme_options', $padded_with_default_options);   
-}*/
 /**
  * Load up the menu page
  */
 function theme_options_add_page() {
-        //add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'artpress_options_do_page', '', 110 ); // TODO stop Artpress Options from being displayed on the form
-        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress Options' ), 'edit_theme_options', 'theme_options_slug', 'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
+        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress' ), 'edit_theme_options', 'theme_options_slug', 'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
+        add_submenu_page('theme_options_slug', __('image upload'), __('image upload'), 'edit_theme_options', 'image_upload_slug', 'ap_image_upload_page');
 }
 
 function ap_bi_section_html() {
@@ -117,38 +103,24 @@ function ap_reset_html() { ?>
 function ap_bi_html($number) {
     global $background_image_prefix;
     $file_id = $background_image_prefix . $number;
-    $file_paths = get_option('ap_background_image_settings');
-    $label = "<p>not set</p>";
-    $path = ''; $image = '';
+    $file_paths = get_option('ap_images');
+    $path = ''; $image = ''; $url_label ='';
     if (isset($file_paths[$file_id]['url'])) {
         $url = $file_paths[$file_id]['url'];
         $path = $file_paths[$file_id]['file'];
         $image = "<img src='{$url}' height='40' />";
-        $label = "<p>{$path}</p>";
+        $url_label = p(alink($url, $path));
+        $path_label = "<p>({$path})</p>";
     }
-    $input = "<input type='file' name='{$file_id}' size='40' value='{$path}'/>";
-    echo $image. $label . $input;
+    $input = "<input type='file' name='{$file_id}' size='40' value=''/>";
+    echo $image . $url_label . $input;
 }
 /** 
  * HACK ALERT! creating my own 'settings_fields' that doesn't echo but returns its contents.
  * */
-/*
- * function wp_nonce_field( $action = -1, $name = "_wpnonce", $referer = true , $echo = true ) {
-	$name = esc_attr( $name );
-	$nonce_field = '<input type="hidden" id="' . $name . '" name="' . $name . '" value="' . wp_create_nonce( $action ) . '" />';
-	if ( $echo )
-		echo $nonce_field;
-
-	if ( $referer )
-		wp_referer_field( $echo );
-
-	return $nonce_field;
-}
- * */
 function get_settings_fields($option_group) {
     $o =  "<input type='hidden' name='option_page' value='" . esc_attr($option_group) . "' />";
     $o .= '<input type="hidden" name="action" value="update" />';
-    //function wp_nonce_field( $action = -1, $name = "_wpnonce", $referer = true , $echo = true ) {
 	$o .= wp_nonce_field("$option_group-options", "_wpnonce", true, false);
 	return $o;
 }
@@ -160,14 +132,6 @@ function ap_settings_page() {
     echo h2( get_current_theme() . __( ' Options' ) ); 
     if ( ! isset( $_REQUEST['updated'] ) ) $_REQUEST['updated'] = false;    
     if ( false !== $_REQUEST['updated'] ) echo div( p(_e( 'Options saved' )), attr_class('updated fade') );
- 
-    // create form for current save
-    //$settings = get_option( 'ap_options' ); // TODO this will be null on first invocation
-    //$settings = default_settings();
-    
-    // pass full settings through
-    // needs to be full so the inputs have fully qualified names
-    //ap_create_form(array('cs'), $settings['saves'][$settings['current-save-id']]);
 
     $maintabgroup = new Main_Tab_Group('main tab group', 'ap_options');
     $options = get_option('ap_options');
@@ -177,80 +141,14 @@ function ap_settings_page() {
     echo $maintabgroup->get_html();
     echo ct('div');
 }
-function default_save() {
-    return array(
-        'global-settings'=>array(
-            'fonts'=> array(26, 1, 4),
-    		'colors'=>array_merge(array('transparent'=>'transparent'), array('#222222', '#a9021e', '#666666', '#eeeeee', '#ffffff'))
-    
-        ),
-        'sections'=>array(
-    
-            'body'=>array( 
-                'css'=>'body',
-                'children'=>array(
-                    'page title' =>array(
-                        'css'=>'page-title',
-                        'typography'=>array(
-                            'font-size'      =>array(),
-                            'color'          =>array(),
-                            'text-align'     =>array(),
-                            'text-decoration'=>array(),
-                            'font-style'     =>array(),
-                            'text-transform' =>array()
-                        ),
-                        'background'=>array(
-                            'background-color'     =>array(),
-                            'background-image:url' =>array(),
-                            'background-position'  =>array(),
-                            'background-attachment'=>array(),
-                            'background-repeat'    =>array()
-                        ),
-                        'layout'=>array(
-                            'border' =>array(),
-                            'margin' =>array(),
-                            'padding'=>array(),
-                            'display'=>array()
-                        ),
-                        'effects'   =>array()
-                    ),
-                    'entry title'=>array(),
-                    'h2'         =>array()
-                )
-            ),
-            
-    		'header'=>array( 
-            	'css'=>'#header',
-                'children'=>array(
-                    'site title'      =>array(),
-                    'site description'=>array(),
-                )            
-            ),
-            
-    		'menu'=>array( 
-                'css'=>'#access',
-                'children'=>array(
-                    'link'      =>array(),
-                    'hover'     =>array(),
-                    'current'   =>array(),
-                    'dropdown'  =>array()
-                )            
-            )
-        )
-    );
-}
-function default_settings () {
-    $s = array(       
-        'current-save-id'=>'default',
-        'saves'=>array(
-            'default'=>default_save(),
-            'save1'  =>array(),
-            'save2'  =>array(),
-            'red'    =>array(),
-            'red2'   =>array()),
-        'cs'=>default_save()
-    );
-    return $s;
+function ap_image_upload_page() {
+    ?><div class="wrap">
+            <form method="post" enctype="multipart/form-data" action="options.php">
+       	        <?php settings_fields('artpress_image_options'); ?>
+                <?php do_settings_sections('image_upload_slug'); ?>
+                <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Upload Images') ?>" /></p>
+            </form>
+    	</div><?php   
 }
 /** 
  * @var new_settings will either be what is passed to update_option
@@ -267,22 +165,17 @@ function ap_options_validate2( $new_settings ) {
         $mtb = new Main_Tab_Group('mtb');
         $default_settings = $mtb->get_setting_values_array();
         $options = array( 'cs'=>$default_settings );
+    }
+    
+    // SAVES
+    if( !isset($options['saves']) ) {   
         $options['saves'] = array();
         $options['saves']['default'] = $options['cs'];
         $options['current-save-id'] = 'default';
-    }   
-    //if ( ! isset($options['current-save-id'] ) ) {
-    //    $options['current-save-id'] = 'default';
-    //}
-    //if ( ! isset($options['saves'])) {
-    //    $options['saves'] = array();
-    //    $options['saves']['default'] = $options['cs'];
-    //}
-    /*if( is_array( $previous_settings ) ) {
-        $save_settings = array_merge_recursive_distinct($previous_settings, $new_settings);
-    } else {
-        $settings = array();
-    }*/
+    }    
+    
+
+
     $previous_save = $options['saves'][$options['current-save-id']];
     if ($new_settings == null ) {
         $new_settings = array('cs'=>array());
@@ -296,6 +189,50 @@ function ap_options_validate2( $new_settings ) {
     
     return $options;
 }
+function ap_image_validate($input) {
+    global $background_image_prefix;
+    $override_defaults = array('test_form' => false); 
+    $options = get_option('ap_images');
+    
+    foreach(array_keys($_FILES) as $file_name) {
+        $prefix = substr($file_name, 0, strlen($background_image_prefix)); 
+        if ( $prefix == $background_image_prefix // make sure the file is named correctly 
+             && $_FILES[$file_name]['name'] != "" ) {    // make sure that it isn't empty TODO how do we handle deleting a file?
+            $file = wp_handle_upload($_FILES[$file_name], $override_defaults); // store the file in the database
+            $options[$file_name] = $file;
+        }
+    }
+    return $options;
+}
+//function ap_image_validate($input) {
+//    // IMAGES
+//    if( !isset($options['images']) ) {
+//        $options['images'] = array();
+//    }
+//    
+//    // TODO un hard code
+//    $images= $_FILES['ap_options']['name']['images'];
+//    //foreach(array_keys($images) as $image_id) {
+//    //    $overrides = array('test_form' => false); 
+//    //    $file = '';
+//    //    if( $_FILES['ap_options']['name']['images'][$image_id] ) {
+//    //        $file = wp_handle_upload($_FILES['ap_options']['name']['images'][$image_id], $overrides);
+//    //    }
+//    //    $options['images'][$image_id] = $file;
+//    //}
+//    
+//    // PREVIOUS IMPLEMENTATION
+//    //foreach(array_keys($_FILES) as $file_name) {
+//    //    $prefix = substr($file_name, 0, strlen($background_image_prefix)); 
+//    //    if ( $prefix == $background_image_prefix // make sure the file is named correctly 
+//    //         && $_FILES[$file_name]['name'] != "" ) {    // make sure that it isn't empty TODO how do we handle deleting a file?
+//    //        $file = wp_handle_upload($_FILES[$file_name], $override_defaults); // store the file in the database
+//    //        $options[$file_name] = $file;
+//    //    }
+//    //}
+//    $file = wp_handle_upload($_FILES['ap_options'], $overrides);
+//    $options['images'][$image_id] = $file;    
+//}
 
 /** Create the options page */
 /*function artpress_options_do_page() {
@@ -394,463 +331,3 @@ function ap_options_validate2( $new_settings ) {
 
 	</div>
 <?php }*/
-
-/**
- * Sanitize and validate input. Accepts an array, return a sanitized array.
- */
-/*function artpress_options_validate( $new_settings ) {
-    global $select_options, $radio_options, $artpress_colors, $num_colors;
-    global $ht_css_font_family;
-    
-    // we need to merge the new settings with the old settings.
-    // if we were to populate our new form using only the new settings
-    // provided by the client's browser, then checkboxes would disappear 
-    // as no record of unticked checkboxes are returned to the server
-    $previous_settings = get_option('artpress_theme_options');
-    if( is_array( $previous_settings ) ) {
-        $settings = array_merge_recursive_distinct($previous_settings, $new_settings);
-    } else {
-        $settings = array();
-    }
-    
-    if (!(isset( $settings['ap_reset'] ))) { 
-        $settings['ap_reset'] = 'off';
-    }
-    
-    if ( $settings['ap_reset'] == 'on' ) {
-        $settings = array();
-    }
-    
-    // GLOBAL SETTINGS CORRECTION
-    
-    // correct the colors
-    if ( ! isset( $settings['colors'] ) ) $settings['colors'] = 
-        array_merge(array('transparent'=>'transparent'), array('#222222', '#a9021e', '#666666', '#eeeeee', '#ffffff'));
-    
-    foreach(array_keys($settings['colors']) as $key) { // TODO need to properly validate the color value       
-        if (!(isset( $settings['colors'][$key]))) {
-            $settings['colors'][$key] = '#999999';        
-        }
-    } 
-    
-    // correct the fonts
-    if ( ! isset( $settings['fonts'] ) ) $settings['fonts'] = array(26, 1, 4);
-    
-    foreach(array_keys($settings['fonts']) as $key) {
-        // TODO need to properly validate the font 
-        
-        $val = $settings['fonts'][$key];
-        $int = true; // is_int($val);// FIXME not typesafe
-        $small = ($val < sizeof($ht_css_font_family)) ;
-        if ( ! ( $int && $small ) )  {  
-            $settings['fonts'][$key] = '0';        
-        }
-    }
-    // new settings section format
-    if( ! isset($settings['sections']['body']) ) 
-        $settings['sections']['body'] = array( 
-            'css'=>'body',
-            'children'=>array(
-                'page title' =>array(
-                    'typography'=>array(
-                        'font-size'      =>array(),
-                        'color'          =>array(),
-                        'text-align'     =>array(),
-                        'text-decoration'=>array(),
-                        'font-style'     =>array(),
-                        'text-transform' =>array()
-                    ),
-                    'background'=>array(
-                        'background-color'     =>array(),
-                        'background-image:url' =>array(),
-                        'background-position'  =>array(),
-                        'background-attachment'=>array(),
-                        'background-repeat'    =>array()
-                    ),
-                    'layout'=>array(
-                        'border' =>array(),
-                        'margin' =>array(),
-                        'padding'=>array(),
-                        'display'=>array()
-                    ),
-                    'effects'   =>array()
-                ),
-                'entry title'=>array(),
-                'h2'         =>array()
-            )
-        );
-    if( ! isset($settings['sections']['header']) ) 
-        $settings['sections']['header'] = array( 
-            'css'=>'#header',
-            'children'=>array(
-                'site title'      =>array(),
-                'site description'=>array(),
-            )            
-        );
-    if( ! isset($settings['sections']['menu']) ) 
-        $settings['sections']['menu'] = array( 
-            'css'=>'#access',
-            'children'=>array(
-                'link'      =>array(),
-                'hover'     =>array(),
-                'current'   =>array(),
-                'dropdown'  =>array()
-            )            
-        );
-              
-    /*    
-    // create default sections and initialize css selectors         
-    if( ! isset($settings['section_settings']['body']) ) 
-        $settings['section_settings']['body'] = array(
-        	'css_selector'=>'body',
-            'font-size'       => array( 'row_label'=>'font-size' , 'field_blurb_suffix'=>'Font size' , 'value'=>'1em' ),
-            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
-            'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),
-            'font-weight'     => array( 'row_label'=>'font weight' , 'field_blurb_suffix'=>'Font weight' , 'value'=>'0' ),
-            'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'0' ),
-            'text-shadow-use'=> array( 'row_label'=>'use text shadow?', 'field_blurb_suffix'=>'tick to use a text shadow', 'value'=>'off'),
-        	'text-shadow'	  => array( 'row_label'=>'text shadow' , 'field_blurb_suffix'=>'text shadow' , 'value'=>array('5px', '5px', '5px', 'grey' ) ),              
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'2'),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'4'),
-            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
-            'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
-        	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
-        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'1' ),        
-        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),
-           	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
-        	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        );
-
-    if( ! isset($settings['section_settings']['headings']) ) 
-        $settings['section_settings']['headings'] = array(
-        	'css_selector'=>'h1,h2,h3,h4,h5,h6',
-            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ),
-            'font-style'      => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),
-            'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'0' ),
-            'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value'=>'1'),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'transparent'),
-            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
-            'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
-        	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
-        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'0' ),        
-        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),
-        	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
-        	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        );
-        
-    if( ! isset($settings['section_settings']['header']) ) 
-        $settings['section_settings']['header'] = array(
-        	'css_selector'=>'#header',
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
-            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
-            'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
-        	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
-        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'1' ),        
-        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('center', 'top') ),
-            'box-shadow-use'  => array( 'row_label'=>'use box shadow?', 'field_blurb_suffix'=>'tick to use a box shadow', 'value'=>'on'),
-            'box-shadow'	  => array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('3px', '3px', '7px', 'rgba(200,200,200,0.5)' ) ), 
-        	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
-        	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        );
-    
-    if( ! isset($settings['section_settings']['site title']) ) 
-        $settings['section_settings']['site title'] = array(	
-            'css_selector'    => '#site-title, #site-title a:link, #site-title a:visited' , 
-            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'0' ), 
-        	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),  
-            'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'2' ),
-        	'color'           => array( 'row_label'=>'color' ,
-        	 'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ), 'field_blurb_prefix'=>'Color' , 'value' => '1' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),
-            'logo-image-use'  => array( 'row_label'=>'use logo image?', 'field_blurb_suffix'=>'tick to use the logo image', 'value'=>'off'),
-            'text-shadow-use'=> array( 'row_label'=>'use text shadow?', 'field_blurb_suffix'=>'tick to use a text shadow', 'value'=>'on'),
-        	'text-shadow'	  => array( 'row_label'=>'text shadow' , 'field_blurb_suffix'=>'text shadow' , 'value'=>array('1px', '1px', '0px', 'white' ) ),      
-        	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('0px','','','') ),
-        	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        );            
-    if( ! isset($settings['section_settings']['site description']) ) 
-        $settings['section_settings']['site description'] = array(	
-            'css_selector'    => '#site-description' , 
-            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ), 
-        	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'1' ),  
-        	'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'2' ),
-        	'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
-        	'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),       
-        	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
-        	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        ); 
-    if( ! isset($settings['section_settings']['page title']) ) 
-        $settings['section_settings']['page title'] = array(	
-            'css_selector'    => '.page-title' , 
-            'font-size'       => array( 'row_label'=>'font-size' , 'field_blurb_suffix'=>'Font size' , 'value'=>'2em' ),
-            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ), 
-        	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),  
-            'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'0' ),
-            'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
-        	'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),
-            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
-            'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
-        	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
-        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'0' ),
-        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),        
-        	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
-        	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        ); 
-    if( ! isset($settings['section_settings']['entry title']) ) 
-        $settings['section_settings']['entry title'] = array(	
-            'css_selector'    => '.entry-title, .entry-title a:link, .entry-title a:visited' , 
-            'font-size'       => array( 'row_label'=>'font-size' , 'field_blurb_suffix'=>'Font size' , 'value'=>'1.2em' ),
-            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'0' ), 
-        	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),  
-            'text-align'     => array( 'row_label'=>'text align' , 'field_blurb_suffix'=>'Text align' , 'value'=>'0' ),
-            'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'0' ),
-        	'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '0' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),
-            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
-            'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
-        	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
-        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'0' ),
-        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),        
-        	'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
-        	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        ); 
-    if( ! isset($settings['section_settings']['breadcrumbs']) ) 
-        $settings['section_settings']['breadcrumbs'] = array(	
-            'css_selector'    => 'ul#breadcrumbs, ul#breadcrumbs a:link, ul#breadcrumbs a:visited' , 
-            'font-size'       => array( 'row_label'=>'font-size' , 'field_blurb_suffix'=>'Font size' , 'value'=>'.8em' ),
-            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'1' ), 
-        	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ), 
-            'text-transform'  => array( 'row_label'=>'text transform' , 'field_blurb_suffix'=>'text transform' , 'value'=>'1' ),
-        	'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
-            'text-decoration'  => array( 'row_label'=>'text decoration' , 'field_blurb_suffix'=>'text decoration' , 'value'=>'0' ));     
-        
-    if( ! isset($settings['section_settings']['widget title']) ) 
-        $settings['section_settings']['widget title'] = array(	
-            'css_selector'    => '.widget-title' , 
-            'font-family'     => array( 'row_label'=>'font' , 'field_blurb_prefix'=>'Font' , 'value'=>'0' ),
-        	'font-style'     => array( 'row_label'=>'font style' , 'field_blurb_suffix'=>'Font style' , 'value'=>'0' ),  
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),
-            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
-            'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_suffix'=>'Image' , 'value'=>'ap_bi_1' ),
-        	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
-        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'0' ),
-            'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('left', 'top') ),
-            'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),            
-            'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') ),        
-            'border-style'    => array( 'row_label'=>'border style' , 'field_blurb_suffix'=>'Border style' , 'value'=>'0'),
-            'border-width'    => array( 'row_label'=>'border width' , 'field_blurb_suffix'=>'Border width' , 'value'=>'1px'),
-            'border-color'    => array( 'row_label'=>'border color' , 'field_blurb_prefix'=>'Border color' , 'value'=>'0'));
-            
-    if( ! isset($settings['section_settings']['widget links']) ) 
-        $settings['section_settings']['widget links'] = array(	
-            'css_selector'    => '.xoxo a:link, .xoxo a:visited' , 
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),
-            'text-decoration'  => array( 'row_label'=>'text decoration' , 'field_blurb_suffix'=>'text decoration' , 'value'=>'1' ), );
-            
-    if( ! isset($settings['section_settings']['links']) ) 
-        $settings['section_settings']['links'] = array(	
-            'css_selector'    => 'a:link, a:visited' ,
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ),
-            'text-decoration'  => array( 'row_label'=>'text decoration' , 'field_blurb_suffix'=>'text decoration' , 'value'=>'0' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ));
-            
-                        
-    if( ! isset($settings['section_settings']['link hover']) ) 
-        $settings['section_settings']['link hover'] = array(	
-            'css_selector'    => 'a:hover, a:active' , 
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '2' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ),
-            'text-decoration'  => array( 'row_label'=>'text decoration' , 'field_blurb_suffix'=>'text decoration' , 'value'=>'1' ));
-            
-    if( ! isset($settings['section_settings']['top menu']) ) 
-        $settings['section_settings']['top menu'] = array(	
-            'css_selector'    => '#main-nav' , 
-            'text-decoration'  => array( 'row_label'=>'text decoration' , 'field_blurb_suffix'=>'text decoration' , 'value'=>'0' ),
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '3' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ));
-            
-    if( ! isset($settings['section_settings']['menu hover']) ) 
-        $settings['section_settings']['menu hover'] = array(	
-            'css_selector'    => '#access a:hover, #access a:active' ,
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ));
-            
-    if( ! isset($settings['section_settings']['menu: current item']) ) 
-        $settings['section_settings']['menu: current item'] = array(	
-            'css_selector'    => '#access ul li.current_page_item > a, #access ul li.current-menu-ancestor > a, #access ul li.current-menu-item > a, #access ul li.current-menu-parent > a' ,
-            'color'           => array( 'row_label'=>'color' , 'field_blurb_prefix'=>'Color' , 'value' => '1' ),
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => 'transparent' ));
-            
-    if( ! isset($settings['section_settings']['menu: drop down']) ) 
-        $settings['section_settings']['menu: drop down'] = array(	
-            'css_selector'    => '#access ul ul, #access ul ul a:hover ' ,
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value' => '4' ));
-
-    if( ! isset($settings['section_settings']['images']) ) 
-        $settings['section_settings']['images'] = array(
-        	'css_selector'=>'img',
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
-            'box-shadow-use'  => array( 'row_label'=>'use box shadow?', 'field_blurb_suffix'=>'tick to use a box shadow', 'value'=>'on'),
-            'box-shadow'	  => array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('3px', '3px', '7px', 'rgba(0,0,0,0.3)' ) ),
-            'border-use'      => array( 'row_label'=>'use border?', 'field_blurb_suffix'=>'tick to use a border', 'value'=>'off'),
-            'border-style'    => array( 'row_label'=>'border style' , 'field_blurb_suffix'=>'Border style' , 'value'=>'0'),
-            'border-width'    => array( 'row_label'=>'border width' , 'field_blurb_suffix'=>'Border width' , 'value'=>'1px'),
-            'border-color'    => array( 'row_label'=>'border color' , 'field_blurb_prefix'=>'Border color' , 'value'=>'0'),
-            'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
-            'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        );             
-
-    if( ! isset($settings['section_settings']['unordered lists']) ) 
-        $settings['section_settings']['unordered lists'] = array(
-        	'css_selector'=>'ul',
-            'list-style-position' => array( 'row_label'=>'list position' , 'field_blurb_suffix'=>'List position' , 'value'=>'0'),
-            'list-style-type' => array( 'row_label'=>'list marker' , 'field_blurb_suffix'=>'List marker' , 'value'=>'0')
-        ); 
-
-    if( ! isset($settings['section_settings']['ordered lists']) ) 
-        $settings['section_settings']['ordered lists'] = array(
-        	'css_selector'=>'ol',
-            'list-style-position' => array( 'row_label'=>'list position' , 'field_blurb_suffix'=>'List position' , 'value'=>'0'),
-            'list-style-type' => array( 'row_label'=>'list marker' , 'field_blurb_suffix'=>'List marker' , 'value'=>'0')
-        ); 
-        
-         if( ! isset($settings['section_settings']['sidebars']) ) 
-        $settings['section_settings']['sidebars'] = array(
-        	'css_selector'=>'#primary, #secondary',
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
-            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
-            'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
-        	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
-        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'1' ),        
-        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('center', 'top') ),
-            'box-shadow-use'  => array( 'row_label'=>'use box shadow?', 'field_blurb_suffix'=>'tick to use a box shadow', 'value'=>'off'),
-            'box-shadow'	  => array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('3px', '3px', '7px', 'rgba(200,200,200,0.5)' ) ),
-            'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
-            'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        );          
-        
-        if( ! isset($settings['section_settings']['footer']) ) 
-        $settings['section_settings']['footer'] = array(
-        	'css_selector'=>'#footer',
-            'background-color'=> array( 'row_label'=>'background color' , 'field_blurb_prefix'=>'Color' , 'value'=>'3'),
-            'background-image'=> array( 'row_label'=>'use background image?', 'field_blurb_suffix'=>'tick to use a background image', 'value'=>'off'),
-            'background-image:url'=> array( 'row_label'=>'background image' , 'field_blurb_prefix'=>'Image' , 'value'=>'ap_bi_1' ),
-        	'background-attachment'=> array( 'row_label'=>'background image attachment' , 'field_blurb_suffix'=>'Attachment' , 'value'=>'0' ),
-        	'background-repeat'=> array( 'row_label'=>'background image repeat' , 'field_blurb_suffix'=>'Repeat' , 'value'=>'1' ),        
-        	'background-position'=> array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('center', 'top') ),
-            'box-shadow-use'  => array( 'row_label'=>'use box shadow?', 'field_blurb_suffix'=>'tick to use a box shadow', 'value'=>'on'),
-            'box-shadow'	  => array( 'row_label'=>'background image position' , 'field_blurb_suffix'=>'Position' , 'value'=>array('3px', '3px', '7px', 'rgba(200,200,200,0.5)' ) ),
-            'margin'          => array( 'row_label'=>'margin', 'field_blurb_suffix'=>'external space between the element\'s border and other elements', 'value'=>array('','','','') ),
-        	'padding'         => array( 'row_label'=>'padding', 'field_blurb_suffix'=>'internal space between the element\'s content and its border', 'value'=>array('','','','') )        
-        );               
-   
-   
-    // SECTION CORRECTION
-    foreach(array_keys($settings['section_settings']) as $section) {
-        foreach(array_keys($settings['section_settings'][$section]) as $css_attr) {
-            switch ($css_attr) {
-                case 'font-family':
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['row_label'] ) )       
-                                  $settings['section_settings'][$section][$css_attr]['row_label'] = 'font';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['field_blurb_prefix'] ) ) 
-                                  $settings['section_settings'][$section][$css_attr]['field_blurb_prefix'] = 'Font';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['value'] ) )              
-                                  $settings['section_settings'][$section][$css_attr]['value'] = '0';                
-                    break;              
-                case 'color':           
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['row_label'] ) )          
-                                  $settings['section_settings'][$section][$css_attr]['row_label'] = 'color';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['field_blurb_prefix'] ) ) 
-                                  $settings['section_settings'][$section][$css_attr]['field_blurb_prefix'] = 'Color';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['value'] ) )              
-                                  $settings['section_settings'][$section][$css_attr]['value'] = '0';                
-                    break;              
-                case 'background-color':      
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['row_label'] ) )          
-                                  $settings['section_settings'][$section][$css_attr]['row_label'] = 'background color';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['field_blurb_prefix'] ) ) 
-                                  $settings['section_settings'][$section][$css_attr]['field_blurb_prefix'] = 'Color';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['value'] ) )              
-                                  $settings['section_settings'][$section][$css_attr]['value'] = '0';                
-                    break; 
-                case 'background-image':      
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['row_label'] ) )          
-                                  $settings['section_settings'][$section][$css_attr]['row_label'] = 'use background image?';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['field_blurb_suffix'] ) ) 
-                                  $settings['section_settings'][$section][$css_attr]['field_blurb_suffix'] = 'tick to use a background image';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['value'] ) )              
-                                  $settings['section_settings'][$section][$css_attr]['value'] = 'off';
-                    if ( $settings['section_settings'][$section][$css_attr]['value'] != 'on') // TODO clean this up?
-                                  $settings['section_settings'][$section][$css_attr]['value'] = 'off';                                                                                                
-                    break;
-                case 'background-image:url':      
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['row_label'] ) )          
-                                  $settings['section_settings'][$section][$css_attr]['row_label'] = 'background image';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['field_blurb_prefix'] ) ) 
-                                  $settings['section_settings'][$section][$css_attr]['field_blurb_prefix'] = 'Image';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['value'] ) )              
-                                  $settings['section_settings'][$section][$css_attr]['value'] = '0';                
-                    break;                                  
-                case 'padding':         
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['row_label'] ) )          
-                                  $settings['section_settings'][$section][$css_attr]['row_label'] = 'padding';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['field_blurb_suffix'] ) ) 
-                                  $settings['section_settings'][$section][$css_attr]['field_blurb_suffix'] = 'Internal space between the element\'s content and its border';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['value'] ) )              
-                                  $settings['section_settings'][$section][$css_attr]['value'] = '0.5em';                
-                    break;              
-                case 'margin':          
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['row_label'] ) )          
-                                  $settings['section_settings'][$section][$css_attr]['row_label'] = 'margin';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['field_blurb_suffix'] ) ) 
-                                  $settings['section_settings'][$section][$css_attr]['field_blurb_suffix'] = 'External space between the element\'s border and other elements';
-                    if ( ! isset( $settings['section_settings'][$section][$css_attr]['value'] ) )              
-                                  $settings['section_settings'][$section][$css_attr]['value'] = '1em';                
-                    break;                                                             
-            }
-        }
-    }
-    
-    return $settings;
-}*/
-
-function ap_bi_validate($input) {
-    global $background_image_prefix;
-    $override_defaults = array('test_form' => false); 
-    $options = get_option('ap_background_image_settings');
-    
-    foreach(array_keys($_FILES) as $file_name) {
-        $prefix = substr($file_name, 0, strlen($background_image_prefix)); 
-        if ( $prefix == $background_image_prefix // make sure the file is named correctly 
-             && $_FILES[$file_name]['name'] != "" ) {    // make sure that it isn't empty TODO how do we handle deleting a file?
-            $file = wp_handle_upload($_FILES[$file_name], $override_defaults); // store the file in the database
-            $options[$file_name] = $file;
-        }
-    }
-    return $options;
-}
-
-// Add jquery tools to admin
-
-if('is_admin') {
-
-/*
-wp_register_script('admin_accordion',
-       get_bloginfo('template_directory') . '/js/jquery-ui-1.8.12.custom.min.js',
-       array('jquery'),
-       '1.0' );
-       */
-
-       
-// enqueue the script
-//wp_enqueue_script('admin_accordion');
-
-//wp_register_style( 'ht_accordion_styles', 
-//        get_bloginfo('template_directory') . '/css/ui-lightness/jquery-ui-1.8.12.custom.css' );
-//wp_enqueue_style( 'ht_accordion_styles' );  
-}

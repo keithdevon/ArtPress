@@ -14,7 +14,7 @@ class Images_Tab extends Main_Tab {
     }  
 }
 
-class Image extends CSS_Text_Input {
+class Image extends CSS_Text_Input { // TODO this should probably be deleted
     private static $global_image_instances = array();
     
     function __construct($display_name, $value='') {
@@ -52,5 +52,31 @@ class Image extends CSS_Text_Input {
     }
     function set_value($value) {
         
+    }
+}
+class Section_Image extends CSS_Dropdown_Input {
+    static $options;
+
+    function __construct($value=0) {
+        parent::__construct('background-image:url', 'image select', $value); 
+        $images = get_option('ap_images');
+        self::$options = $images;     
+    }    
+    static function get_options() {
+        $list = array('');
+        foreach (parent::get_options() as $image) {
+           $v = $image['url'];
+           $list[] = $v;
+        }
+        return $list;
+    }
+    function get_css_declaration() {
+        $options = self::get_options();
+        $value = $this->get_value();
+        $file = $options[$value];
+        if($file) {      
+            $dec = "\nbackground-image:url('{$file}');";
+            return $dec;
+        }
     }
 }

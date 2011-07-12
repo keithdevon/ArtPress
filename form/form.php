@@ -322,9 +322,8 @@ class Main_Tab_Group extends Tab_Group {
         $bodytab = new Body_Tab();
         $sidebartab = new Sidebar_Tab();
         $footertab = new Footer_Tab();
-        $images_tab = new Images_Tab();
         
-        parent::__construct('main tab group', array($globalsettings, $headertab , $bodytab , $sidebartab , $footertab , $images_tab));
+        parent::__construct('main tab group', array($globalsettings, $headertab , $bodytab , $sidebartab , $footertab));
     }
     function to_array() {
         $children = parent::to_array();
@@ -553,10 +552,10 @@ abstract class CSS_Setting extends Setting implements CSS {
         parent::__construct($display_name, $value);
     }
     function get_css_declaration() {
-        $display_name = $this->get_display_name();
-        $value = $this->get_value();
-        if ($value) return "\n" . $display_name . ": " . $value . ";";
-        else return '';
+        $value = $this->get_css_value();
+        if ($value) {
+            return dec($this->css_property, $value);
+        } else return '';
     }
     function get_css() {
         return $this->css_property;
