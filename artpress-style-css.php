@@ -26,7 +26,9 @@ foreach ( $selectors as $selector ) {
     foreach( $settings as $setting ) {
         $declarations .= $setting->get_css_declaration();
     }
-    $output .= rule( $selector_string, decblock($declarations) );
+    if($declarations) {
+        $output .= rule( $selector_string, decblock($declarations) );
+    }
 }
 echo $output;                      
 ?>
