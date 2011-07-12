@@ -113,44 +113,7 @@ DESCRIPTION: Full width content with no sidebar; used for attachment pages
 
 /* =Fonts
 -------------------------------------------------------------- */
-body,
-input,
-textarea,
-.page-title span,
-.pingback a.url {
-	font-family: Georgia, "Bitstream Charter", serif;
-}
-h2,
-h3#comments-title,
-h3#reply-title,
-#access .menu,
-#access div.menu ul,
-#cancel-comment-reply-link,
-.form-allowed-tags,
-#site-info,
-#site-title,
-#wp-calendar,
-.comment-meta,
-.comment-body tr th,
-.comment-body thead th,
-.entry-content label,
-.entry-content tr th,
-.entry-content thead th,
-.entry-meta,
-.entry-title,
-.entry-utility,
-#respond label,
-.navigation,
-.page-title,
-.pingback p,
-.reply,
-.widget-title,
-.wp-caption-text {
-	font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
-}
-input[type=submit] {
-	font-family: "Helvetica Neue", Arial, Helvetica, "Nimbus Sans L", sans-serif;
-}
+
 pre {
 	font-family: "Courier 10 Pitch", Courier, monospace;
 }
@@ -215,10 +178,6 @@ hr {
 }
 
 /* Text elements */
-
-h1, h2, h3, h4, h5, #access {
-    color: #333;
-    }
     
 #site-title, h1, h2, h3, h4 {
 	text-rendering: optimizeLegibility; 
@@ -412,11 +371,8 @@ h1#site-title, #site-title {
 -------------------------------------------------------------- */
 
 #access {
-	background: transparent;
 	display: block;
-	font-size:1em;
 	line-height:1.5em;
-	margin-top:1.83em;
 	width:100%;
 }
 #top-menu #access {  
@@ -437,7 +393,6 @@ div.menu li {
 	position: relative;
 }
 #access a {
-	color: #aaa;
 	display: block;
 	padding: 0;
 	margin:0 2em .5em 0;
@@ -596,7 +551,7 @@ div.menu li {
 	padding:0;
 }
 #content .entry-summary p:last-child {
-	margin-bottom: 12px;
+	margin-bottom: 0px;
 }
 .entry-content fieldset {
 	border: 1px solid #e7e7e7;
@@ -1139,10 +1094,7 @@ h3#reply-title {
 .widget-container {
 	margin: 0 0 24px 0;
 }
-.widget-title {
-	color: #222;
-	font-weight: bold;
-}
+
 .widget-area a:link,
 .widget-area a:visited {
 	text-decoration: none;
@@ -1202,15 +1154,13 @@ h3#reply-title {
 	margin-left: 0;
 	padding: 0 20px 0 0;
 }
+
 #main .widget-area ul ul {
 	border: none;
 	margin-left: 1.3em;
 	padding: 0;
 }
-.sidebar {
-    padding:1px 1.5em 1.5em;
-    margin-top:0.875em;
-}
+
 
 /* Footer widget areas */
 #footer-widget-area {

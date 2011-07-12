@@ -1,18 +1,18 @@
 <?php
 
+class Body_Base extends CSS_Selector {
+    function __construct($children=null) {
+        parent::__construct('', 'body settings', $children=null);
+    }
+}
 class Page_Title extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('.page-title', 'page title', $children=null);
+        parent::__construct('.page-title, h1', 'page title', $children=null);
     }
 }
 class Entry_Title extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('.entry-title, .entry-title a', 'entry title', $children=null);
-    }
-}
-class H1 extends CSS_Selector {
-    function __construct($children=null) {
-        parent::__construct('h1', 'header 1', $children=null);
+        parent::__construct('.entry-title, .entry-title a:link, .entry-title a:visited', 'entry title', $children=null);
     }
 }
 class H2 extends CSS_Selector {
@@ -47,7 +47,7 @@ class OL extends CSS_Selector {
 }
 class Link extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('a', 'link', $children=null);
+        parent::__construct('a:link, a:visited', 'link', $children=null);
     }
 }
 class Crumbs extends CSS_Selector {
@@ -62,16 +62,16 @@ class Crumb_Hover extends CSS_Selector {
 }
 class Entry_Meta extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('.entry-meta', 'entry meta', $children=null);
+        parent::__construct('.entry-meta, .entry-meta a:link, .entry-meta a:visited, .entry-utility, .entry-utility a:link, .entry-utility a:visited', 'entry meta', $children=null);
     }
 }
 
 class Body_Group extends CSS_Selector_Group {
     function __construct($children=null) {
         if( null == $children ) {
+            $children[] = new Body_Base();
             $children[] = new Page_Title();
             $children[] = new Entry_Title();
-            $children[] = new H1();
             $children[] = new H2();
             $children[] = new H3();
             $children[] = new H4();
