@@ -2,6 +2,11 @@
 require_once 'form.php';
 
 // BORDER
+class Border_Color extends Section_Color {
+    function __construct($value=0) {
+        parent::__construct('border-color', 'border color', $value); 
+    }
+}
 class Border_Style extends CSS_Dropdown_Input {
     static $options = array('', 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
     function __construct($value=0) { 
@@ -72,6 +77,7 @@ class Display extends CSS_Dropdown_Input {
 class Layout_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
         if ( null == $members ) { 
+            $members[] = new Border_Color();
             $members[] = new Border_Style();                                               
             $members[] = new Border_Width();                                              
                                                                                                  
