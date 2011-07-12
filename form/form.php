@@ -402,11 +402,13 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
     function __construct($css_selector, $display_name, $children=null) {
         $this->css_selector = $css_selector;
         if ( null == $children ) {
-            $t1 = new Typography_Tab('typography');
-            $t2 = new Layout_Tab('layout'); 
-            $t3 = new Background_Image_Tab('background');
-            $t4 = new Effect_Tab('effects');
-            $children[] = new Tab_Group('sub tab group', array($t1, $t2, $t3, $t4));
+            $children[] = new Tab_Group('sub tab group', array(
+                new Typography_Tab('typography'), 
+                new Layout_Tab('layout'), 
+                new Border_Tab('border'),
+                new Background_Image_Tab('background'), 
+                new Effect_Tab('effects')
+            ));
         }
         parent::__construct($display_name, $children);
     }

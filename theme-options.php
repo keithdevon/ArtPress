@@ -11,6 +11,7 @@ require_once $dir . 'form/form.php';
 require_once $dir . 'form/global.php';
 require_once $dir . 'form/images.php';
 require_once $dir . 'form/color.php';
+require_once $dir . 'form/border.php';
 require_once $dir . 'form/header-form.php';
 require_once $dir . 'form/menu-form.php';
 require_once $dir . 'form/body.php';
