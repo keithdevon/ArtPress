@@ -1,23 +1,7 @@
 <?php
 require_once 'form.php';
 
-// BORDER
-class Border_Color extends Section_Color {
-    function __construct($value=0) {
-        parent::__construct('border-color', 'border color', $value); 
-    }
-}
-class Border_Style extends CSS_Dropdown_Input {
-    static $options = array('', 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
-    function __construct($value=0) { 
-        parent::__construct('border-style', 'border style', $value);
-    }    
-}
-class Border_Width extends CSS_Size_Text_Input {
-    function __construct($value='') {
-        parent::__construct('border-width', 'border width', $value);
-    }
-}
+
 // MARGIN
 class Margin_Top extends CSS_Size_Text_Input {
     function __construct($value='') {
@@ -76,24 +60,23 @@ class Display extends CSS_Dropdown_Input {
 
 class Layout_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
-        if ( null == $members ) { 
-            $members[] = new Border_Color();
-            $members[] = new Border_Style();                                               
-            $members[] = new Border_Width();                                              
-                                                                                                 
-            $display = new Display();                                          
-                                                                                                 
-            $mt = new Margin_Top();                                            
-            $mb = new Margin_Bottom();                                            
-            $mr = new Margin_Right();                                            
-            $ml = new Margin_Left();                                            
-            $members[] = new Option_Row_Group('margin', array($mt, $mb, $mr, $ml) );   
-                                                                                                 
-            $pt = new Padding_Top();                                           
-            $pb = new Padding_Bottom();                                           
-            $pr = new Padding_Right();                                           
-            $pl = new Padding_Left();                                           
-            $members[] = new Option_Row_Group('padding', array($pt, $pb, $pr, $pl) );
+        if ( null == $members ) {                                             
+            $og = new Option_Group('', array(
+                new Option_Row_Group('margin',  
+                    array(
+                        new Margin_Top(), 
+                        new Margin_Bottom(), 
+                        new Margin_Right(), 
+                        new Margin_Left()) ),
+                new Option_Row_Group('padding', 
+                    array(
+                        new Padding_Top(), 
+                        new Padding_Bottom(), 
+                        new Padding_Right(), 
+                        new Padding_Left()) ),
+                new Display()
+                ));
+            $members[] = $og;
         }
         parent::__construct($display_name, $members);
     }

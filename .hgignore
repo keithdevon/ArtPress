@@ -1,17 +1,7 @@
 syntax: glob
 ignoreme
-*.data
-foo.sql
-.dropbox
 .task
 glob:.task/completed.data
 glob:.task/pending.data
 glob:.task/undo.data
-
-syntax: regexp
-^\.task/.*
-(^|/)\._
-^#.*#$
-.*~$
-.*sql$
 
