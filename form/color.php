@@ -10,7 +10,7 @@ require_once 'form.php';
 class Global_Color extends CSS_Text_Input {
     private static $global_color_instances = array();
     
-    function __construct($display_name, $value) {
+    function __construct($display_name, $value='') {
         parent::__construct('color', $display_name, $value);
         self::$global_color_instances[] = $this;   
         $this_class = get_class($this);

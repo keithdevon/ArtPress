@@ -262,16 +262,7 @@ class Main_Tab extends Hierarchy implements Render_As_HTML {
             }
         }
         $o = ot( 'div', attr_id( $this->get_html_id() ) );
-            $o .= '<form method="post" ';
-            if($this->form_enctype != null) {
-                $o .= "enctype='{$this->form_enctype}'";               
-            }
-            $o .= 'action="options.php">';
-                $o .= get_settings_fields($this->opt_group);
-                $o .= $children_html;
-                $save = __( 'save' );
-                $o .= "<p class='submit'><input type='submit' class='button-primary' value='{$save}' /></p>";      
-            $o .= ct('form');
+        $o .= $children_html;
         $o .= ct('div');
         return $o;
     }
@@ -375,6 +366,20 @@ class Main_Tab_Group extends Tab_Group {
                 $setting->set_value($value);
             }
         }
+    }
+    function get_html() {
+        $o = '';
+        $o .= '<form method="post" ';
+        $o .= 'action="options.php">';
+            $o .= get_settings_fields('artpress_options');
+            $o .= label('current-save-id', 'save as');
+            $o .= input('text', attr_name('ap_options["current_save_id"]'), attr_id('current-save-id'));
+            $child_html = parent::get_html();
+            $o .= $child_html;
+            $save = __( 'save' );
+            $o .= "<p class='submit'><input type='submit' class='button-primary' value='{$save}' /></p>";      
+        $o .= ct('form');
+        return $o;
     }
 }
 /**

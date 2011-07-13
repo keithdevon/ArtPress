@@ -65,7 +65,7 @@ $background_image_prefix = 'ap_image_';
 
 function artpress_theme_init() {
     global $background_image_prefix;
-    register_setting( 'artpress_options',     'ap_options', 'ap_options_validate2' );
+    register_setting( 'artpress_options',     'ap_options', 'ap_options_validate' );
     register_setting( 'artpress_image_options', 'ap_images',   'ap_image_validate' );
     
     add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'image_upload_slug' );
@@ -80,8 +80,9 @@ function artpress_theme_init() {
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_menu_page( __( 'ArtPress Options' ), __( 'ArtPress' ), 'edit_theme_options', 'theme_options_slug', 'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
-        add_submenu_page('theme_options_slug', __('image upload'), __('image upload'), 'edit_theme_options', 'image_upload_slug', 'ap_image_upload_page');
+        add_menu_page(                           __( 'ArtPress Options' ),    __( 'ArtPress' ),            'edit_theme_options', 'theme_options_slug', 'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
+        add_submenu_page('theme_options_slug',   __('manage configurations'), __('manage configurations'), 'edit_theme_options', 'configs_slug',       'ap_configs_page');
+        add_submenu_page('theme_options_slug',   __('image upload'),          __('image upload'),          'edit_theme_options', 'image_upload_slug',  'ap_image_upload_page');
 }
 
 function ap_bi_section_html() {
@@ -122,13 +123,18 @@ function get_settings_fields($option_group) {
 	return $o;
 }
 function ap_settings_page() {
-
+    if ( ! isset( $_REQUEST['updated'] ) )
+        $_REQUEST['updated'] = false;
+        
     // page title stuff
     screen_icon(); 
     echo ot('div', attr_class('wrap'));
-    echo h2( get_current_theme() . __( ' Options' ) ); 
-    if ( ! isset( $_REQUEST['updated'] ) ) $_REQUEST['updated'] = false;    
-    if ( false !== $_REQUEST['updated'] ) echo div( p(_e( 'Options saved' )), attr_class('updated fade') );
+    echo h2( get_current_theme() . __( ' Options' ) ); // TODO source of why k & j see differenet stuff
+    if ( false !== $_REQUEST['updated'] ) : ?>
+        <div class="updated fade"><p><strong><?php _e( 'Options saved' ); ?></strong></p></div>
+    <?php endif;
+    //if ( ! isset( $_REQUEST['updated'] ) ) $_REQUEST['updated'] = false;    
+    //if ( false !== $_REQUEST['updated'] ) echo div( p(_e( 'Options saved' )), attr_class('updated fade') );
 
     $maintabgroup = new Main_Tab_Group('main tab group', 'ap_options');
     $options = get_option('ap_options');
@@ -145,23 +151,42 @@ function ap_image_upload_page() {
                 <?php do_settings_sections('image_upload_slug'); ?>
                 <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Upload Images') ?>" /></p>
             </form>
-    	</div><?php   
+	</div><?php   
+}
+function ap_configs_page() {
+    echo h2('configurations');
+    // select a configuration
+    $options = get_option('ap_options');
+    if( $options && isset($options['saves'])) {
+        foreach (array_keys($options['saves']) as $save_name) {
+            echo $save_name;
+        }
+    }
+    
+    // create new configuration
+    
+    // select default configurations
+    
+    // upload/download configuration?
 }
 /** 
  * @var new_settings will either be what is passed to update_option
  * or what is returned from the options form
+ * 
+ * we need to merge the new settings with the old settings.
+ * if we were to populate our new form using only the new settings 
+ * provided by the client's browser, then checkboxes would disappear 
+ * as no record of unticked checkboxes are returned to the server    
+ * 
  * */
-function ap_options_validate2( $new_settings ) {
-    // we need to merge the new settings with the old settings.
-    // if we were to populate our new form using only the new settings
-    // provided by the client's browser, then checkboxes would disappear 
-    // as no record of unticked checkboxes are returned to the server
+function ap_options_validate( $new_settings ) {
+
     $options = get_option('ap_options');
     if ($options == null) {
         //$options = default_settings();
         $mtb = new Main_Tab_Group('mtb');
-        $default_settings = $mtb->get_setting_values_array();
-        $options = array( 'cs'=>$default_settings );
+        //$default_settings = $mtb->get_setting_values_array();
+        $options = array( 'cs'=>array() );
     }
     
     // SAVES
@@ -169,15 +194,20 @@ function ap_options_validate2( $new_settings ) {
         $options['saves'] = array();
         $options['saves']['default'] = $options['cs'];
         $options['current-save-id'] = 'default';
-    }    
-    
+    }
 
+    if( !isset($options['defaults']) ) {
+        $options['defaults'] = array();
+        
+    }
 
     $previous_save = $options['saves'][$options['current-save-id']];
     if ($new_settings == null ) {
         $new_settings = array('cs'=>array());
     }
+    // filter out default values
     $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
+    $merged_save = array_filter($merged_save); 
     
     // validate save
     

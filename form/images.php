@@ -64,9 +64,12 @@ class Section_Image extends CSS_Dropdown_Input {
     }    
     static function get_options() {
         $list = array('');
-        foreach (parent::get_options() as $image) {
-           $v = $image['url'];
-           $list[] = $v;
+        $options = parent::get_options();
+        if($options) {
+            foreach ($options as $image) {
+               $v = $image['url'];
+               $list[] = $v;
+            }
         }
         return $list;
     }

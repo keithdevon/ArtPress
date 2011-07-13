@@ -9,6 +9,7 @@ function attribute($name, $value) {
 function attr_action ($value)     { return attribute('action', $value); }
 function attr_alt ($value)        { return attribute('alt',    $value); }
 function attr_class ($value)      { return attribute('class',  $value); }
+function attr_for ($value)        { return attribute('for',    $value); }
 function attr_href ($value)       { return attribute('href',   $value); }
 function attr_id ($value)         { return attribute('id',     $value); }
 function attr_label ($value)      { return attribute('label',  $value); }
@@ -54,6 +55,7 @@ function h4($content, $attributes ="")          { return ot('h4', $attributes)  
 function h5($content, $attributes ="")          { return ot('h5', $attributes)    . $content . ct('h5'); }
 function h6($content, $attributes ="")          { return ot('h6', $attributes)    . $content . ct('h6'); }
 function input($type, $attributes ="")          { return bt('input', attr_type($type) . $attributes); }
+function label($for, $content, $attributes ="") { return ot('label', attr_for($for)  . $attributes) . $content . ct('label'); }
 function li($content, $attributes ="")          { return ot('li', $attributes)    . $content . ct('li'); }
 function optgroup($label, $options)             { return ot('optgroup', attr_label($label)) . $options . ct('optgroup'); }
 function option($value, $content)               { return ot('option', attr_value($value)) . $content . ct('option'); }
