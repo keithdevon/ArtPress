@@ -74,6 +74,8 @@ function artpress_theme_init() {
     add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '1');
     add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '2');
     add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '3');
+    
+    init_ap_options();
 }
 
 /**
@@ -136,10 +138,12 @@ function ap_settings_page() {
     //if ( ! isset( $_REQUEST['updated'] ) ) $_REQUEST['updated'] = false;    
     //if ( false !== $_REQUEST['updated'] ) echo div( p(_e( 'Options saved' )), attr_class('updated fade') );
 
-    $maintabgroup = new Main_Tab_Group('main tab group', 'ap_options');
+    
+    $maintabgroup = new Main_Tab_Group('main tab group');
     $options = get_option('ap_options');
     if ($options != null) {
-        $maintabgroup->inject_values($options['saves'][$options['current-save-id']]);
+        $maintabgroup->inject_values(array_merge(array('Current_Save_ID'=>$options['Current_Save_ID']), 
+                                                 $options['saves'][$options['Current_Save_ID']]));
     }
     echo $maintabgroup->get_html();
     echo ct('div');
@@ -169,6 +173,24 @@ function ap_configs_page() {
     
     // upload/download configuration?
 }
+function get_ap_options_defaults() {
+    $options = array( 'cs'=>array() );
+
+    $options['saves'] = array();
+    $options['Current_Save_ID'] = 'default';
+    $options['saves'][$options['Current_Save_ID']] = $options['cs'];
+
+    $options['defaults'] = array();
+    return $options;
+}
+function init_ap_options() {
+    $options = get_option('ap_options');
+    
+    if ($options == null) {
+        $options = get_ap_options_defaults();
+        add_option('ap_options', $options);
+    }
+}
 /** 
  * @var new_settings will either be what is passed to update_option
  * or what is returned from the options form
@@ -178,41 +200,43 @@ function ap_configs_page() {
  * provided by the client's browser, then checkboxes would disappear 
  * as no record of unticked checkboxes are returned to the server    
  * 
+ * Call scenarios:
+ * 1st time (return from form):
+ * 	- nothing in db, get_option will return null
+ *  - values in $new_setting will be returned
+ * 
+ * 2nd time (validation before save?)
+ *  - still nothing in db, get_option will return null
+ *  - new_settings contains everything previously set
+ * 
  * */
 function ap_options_validate( $new_settings ) {
-
-    $options = get_option('ap_options');
-    if ($options == null) {
-        //$options = default_settings();
-        $mtb = new Main_Tab_Group('mtb');
-        //$default_settings = $mtb->get_setting_values_array();
-        $options = array( 'cs'=>array() );
-    }
     
-    // SAVES
-    if( !isset($options['saves']) ) {   
-        $options['saves'] = array();
-        $options['saves']['default'] = $options['cs'];
-        $options['current-save-id'] = 'default';
-    }
+    $options = get_option('ap_options');
+    if( $options == null) $options = get_ap_options_defaults();
 
-    if( !isset($options['defaults']) ) {
-        $options['defaults'] = array();
-        
-    }
-
-    $previous_save = $options['saves'][$options['current-save-id']];
+    $previous_save = $options['saves'][$options['Current_Save_ID']];
     if ($new_settings == null ) {
         $new_settings = array('cs'=>array());
     }
-    // filter out default values
     $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
+    
+    // filter out default values
     $merged_save = array_filter($merged_save); 
     
     // validate save
+
+    // create save name if none supplied
+    if( $new_settings['Current_Save_ID'] == '' ) {
+        $d = getdate();
+        $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
+        $options['Current_Save_ID'] = $date;
+    } else {
+        $options['Current_Save_ID'] = $new_settings['Current_Save_ID'];
+    }
     
     // store save
-    $options['saves'][$options['current-save-id']] = $merged_save;
+    $options['saves'][$options['Current_Save_ID']] = $merged_save;
     
     return $options;
 }

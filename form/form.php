@@ -41,6 +41,7 @@ interface IValid_Input {
     function is_valid();
 }
 interface IValidate { static function validate($value); }
+interface Tab {}
 
 /**
  * 
@@ -70,6 +71,7 @@ abstract class Hierarchy {
     // GETTERS
     final function get_display_name() { return $this->display_name; }
     final function get_children()     { return $this->children;     }
+    final function get_child($n)      { return $this->children[$n]; }
     final function get_parent()       { return $this->parent;       }
     
     function get_parentage_array() {
@@ -218,7 +220,7 @@ class Lookup_Option_Group extends Option_Group {
         return $options;
     }
 }
-abstract class Sub_Tab extends Group  {
+abstract class Sub_Tab extends Group implements Tab {
     private $html_id;
     function __construct($display_name, $members=null) {
         parent::__construct($display_name, $members);
@@ -245,7 +247,7 @@ abstract class Sub_Tab extends Group  {
     function get_html_id()       { return $this->html_id;   }
     function set_html_id($value) { $this->html_id = $value; }
 }
-class Main_Tab extends Hierarchy implements Render_As_HTML {
+class Main_Tab extends Hierarchy implements Tab, Render_As_HTML {
     private $html_id;
     private $opt_group;
     protected $form_enctype = null;
@@ -287,10 +289,12 @@ class Tab_Group extends Group {
         $count = 1;
         if (null != $children) {
             foreach($children as $child) {
-                $n = $count++;
-                $child->set_html_id("{$id}-tabs-" . $n);
-                $links .= li( alink('#' . $child->get_html_id(), $child->get_display_name() ) );
-                $tabs  .= $child->get_html();
+                if($child instanceof Tab) {
+                    $n = $count++;
+                    $child->set_html_id("{$id}-tabs-" . $n);
+                    $links .= li( alink('#' . $child->get_html_id(), $child->get_display_name() ) );
+                    $tabs  .= $child->get_html();
+                }
             }
         }
         
@@ -307,15 +311,18 @@ class Tab_Group extends Group {
 }
 class Main_Tab_Group extends Tab_Group {
     function __construct($display_name, $members=array()) {
-    
-        $globalsettings = new Global_Settings();
-        $headertab = new Header_Tab();
-        $menutab = new Menu_Tab();
-        $bodytab = new Body_Tab();
-        $sidebartab = new Sidebar_Tab();
-        $footertab = new Footer_Tab();
-        
-        parent::__construct('main tab group', array($globalsettings, $headertab , $menutab , $bodytab , $sidebartab , $footertab));
+        if( $members == null ) {
+            $members = array(
+                new Current_Save_ID(),
+                new Global_Settings(), 
+                new Header_Tab(), 
+                new Menu_Tab(), 
+                new Body_Tab(), 
+                new Sidebar_Tab(),
+                new Footer_Tab()
+            );
+        }
+        parent::__construct('main tab group', $members); 
     }
     function to_array() {
         $children = parent::to_array();
@@ -372,12 +379,14 @@ class Main_Tab_Group extends Tab_Group {
         $o .= '<form method="post" ';
         $o .= 'action="options.php">';
             $o .= get_settings_fields('artpress_options');
-            $o .= label('current-save-id', 'save as');
-            $o .= input('text', attr_name('ap_options["current_save_id"]'), attr_id('current-save-id'));
+            
+            $csi = $this->get_child(0);
+            $o .= $csi->get_html();
+            $save = __( 'save' );
+            
+            $o .= "<span class='submit'><input type='submit' class='button-primary' value='{$save}' /></span>";      
             $child_html = parent::get_html();
             $o .= $child_html;
-            $save = __( 'save' );
-            $o .= "<p class='submit'><input type='submit' class='button-primary' value='{$save}' /></p>";      
         $o .= ct('form');
         return $o;
     }
@@ -506,6 +515,7 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
  *
  */
 abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
+    //private $identifier;
     protected $name;
     private $value;
 
@@ -545,6 +555,19 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
     }
     static function validate($value) {
         return true;
+    }
+}
+class Current_Save_ID extends Setting {
+    function __construct($value='') {
+        parent::__construct('save name', $value);
+    }
+    function get_html() {
+        $name = $this->get_name();
+        $o = label($name, 'Configuration name');
+        $attrs =  attr_id($name) .
+                    attr_value($this->get_value());
+        $o .= input('text',  attr_name("ap_options[{$name}]") . $attrs);
+        return $o;        
     }
 }
 /**
