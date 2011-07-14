@@ -299,7 +299,7 @@ class Tab_Group extends Group {
         }
         
         $ul = ul($links);
-        $script = "<script> $( function() { $( '#{$id}-tabs' ).tabs(); } ); </script>";
+        $script = "<script> jQuery( function() { jQuery( '#{$id}-tabs' ).tabs(); } ); </script>";
         
         $o = $script;
         $o .= div($ul . 
@@ -478,8 +478,8 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
     }
     function get_html() {
         $o = '<script> 
-            $(function() { 
-                $( "#' . $this->get_parentage_string() . '-accordion" ).accordion({
+            jQuery(function() { 
+                jQuery( "#' . $this->get_parentage_string() . '-accordion" ).accordion({
                     autoHeight: false,
                     collapsible: true,
                      active: false,
