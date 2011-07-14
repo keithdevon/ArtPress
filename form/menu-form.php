@@ -2,31 +2,16 @@
 
 class Menu_Base extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('', 'Menu Styling', $children=null);
+        parent::__construct('#access', 'Menu Styling', $children=null);
     }
 }
-class Menu_Links extends CSS_Selector {
-    function __construct($children=null) {
-        parent::__construct('a:link, a:visited', 'menu link', $children=null);
-    }
-}
-class Sub_Menu extends CSS_Selector {
-    function __construct($children=null) {
-        parent::__construct('ul.sub-menu, ul.sub-menu a:link, ul.sub-menu a:visited', 'drop downs', $children=null);
-    }
-}
-class Sub_Menu_Hover extends CSS_Selector {
-    function __construct($children=null) {
-        parent::__construct('ul.sub-menu a:hover, ul.sub-menu a:active', 'drop down hover', $children=null);
-    }
-}
-
 
 class Menu_Group extends CSS_Selector_Group {
     function __construct($children=null) {
         if( null == $children ) {
             $children[] = new Menu_Base();
-            $children[] = new Menu_Links();
+            $children[] = new Link();
+            $children[] = new Link_Hover();
             $children[] = new Sub_Menu();
             $children[] = new Sub_Menu_Hover();
         }
