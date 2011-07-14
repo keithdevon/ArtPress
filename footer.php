@@ -17,7 +17,7 @@
 	/* A sidebar in the footer? Yep. You can can customize
 	 * your footer with four columns of widgets.
 	 */
-	get_sidebar( 'footer' );
+	get_template_part( 'sidebars/sidebar-footer' );
 ?>
 
 			<div id="site-info" class="eightcol">

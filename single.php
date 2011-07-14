@@ -8,8 +8,6 @@
  */
 
 get_header(); ?>
-
-		
 		
 		<?php 
 		
@@ -27,7 +25,8 @@ get_header(); ?>
 
 			
 			         <div class="fourcol last">
-                        <?php get_sidebar(); ?>
+
+                        <?php get_template_part('sidebars/sidebar'); ?>
 			     
 			         </div>
 			         

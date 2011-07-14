@@ -29,8 +29,8 @@ get_header(); ?>
 			?>
 
 			</div><!-- #content -->
-			<div class="threecol"><?php get_sidebar();?></div>
-			<div class="threecol last"><?php get_template_part( 'second-sidebar' );?></div>
+			<div class="threecol"><?php get_template_part('sidebars/sidebar');?></div>
+			<div class="threecol last"><?php get_template_part( 'sidebars/second-sidebar' );?></div>
 			
 			<div class="clear"></div>
 			

@@ -386,7 +386,7 @@ function twentyten_widgets_init() {
     
 	// Sidebar A
 	register_sidebar( array(
-		'name' => __( 'Sidebar A', 'twentyten' ),
+		'name' => __( 'Post Sidebar', 'twentyten' ),
 		'id' => 'primary-widget-area',
 		'description' => __( 'The primary sidebar widget area and the default post sidebar', 'twentyten' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
@@ -397,7 +397,7 @@ function twentyten_widgets_init() {
 
 	// Sidebar B
 	register_sidebar( array(
-		'name' => __( 'Sidebar B', 'twentyten' ),
+		'name' => __( 'Page Sidebar', 'twentyten' ),
 		'id' => 'secondary-widget-area',
 		'description' => __( 'The secondary sidebar widget area and the default page sidebar', 'twentyten' ),
 		'before_widget' => '<li id="%1$s" class="widget-container %2$s">',
@@ -1114,7 +1114,7 @@ add_post_type_support( 'page', 'excerpt' );
 
 
 // Add sidebar picker
-// require_once 'ht-sidebar-picker.php';
+//require_once 'sidebars/ht-sidebar-picker.php';
 
 // Add social info
 require_once 'ht-functions/ht-socials.php';

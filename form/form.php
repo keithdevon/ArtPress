@@ -382,12 +382,13 @@ class Main_Tab_Group extends Tab_Group {
             
             $csi = $this->get_child(0);
             $o .= $csi->get_html();
-            $save = __( 'save' );
+            $save = __( 'Save Settings' );
             
             $o .= "<span class='submit'><input type='submit' class='button-primary' value='{$save}' /></span>";      
             $child_html = parent::get_html();
             $o .= $child_html;
         $o .= ct('form');
+        $o .= '</p>';
         return $o;
     }
 }
@@ -562,8 +563,9 @@ class Current_Save_ID extends Setting {
         parent::__construct('save name', $value);
     }
     function get_html() {
+        $o .= '<p>';
         $name = $this->get_name();
-        $o = label($name, 'Configuration name');
+        $o .= label($name, 'Configuration name ');
         $attrs =  attr_id($name) .
                     attr_value($this->get_value());
         $o .= input('text',  attr_name("ap_options[{$name}]") . $attrs);

@@ -1,5 +1,5 @@
 <?php
-	// A second sidebar for widgets, just because. ?>
+	// A fourth sidebar for widgets, just because. ?>
 
 		<div id="sidebar-D" class="sidebar widget-area" role="complementary">
 			<ul class="xoxo">

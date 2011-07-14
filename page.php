@@ -33,7 +33,7 @@ get_header(); ?>
 		        
                 
                 <div class="fourcol last"> 
-                    <?php get_template_part('second-sidebar'); ?>
+                    <?php get_template_part('sidebars/second-sidebar'); ?>
                 </div>
                 
                 <div class="clear"></div>
