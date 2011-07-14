@@ -13,6 +13,7 @@ class Body_Group extends CSS_Selector_Group {
             $children[] = new Body_Base();
             $children[] = new Page_Title();
             $children[] = new Entry_Title();
+            $children[] = new Widget_Title();
             $children[] = new H2();
             $children[] = new H3();
             $children[] = new H4();

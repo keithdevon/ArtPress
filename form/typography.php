@@ -20,6 +20,11 @@ class Text_Decoration extends CSS_Dropdown_Input {
         parent::__construct('text-decoration', 'text decoration', $value);
     }   
 }
+class Letter_Spacing extends CSS_Size_Text_Input {
+    function __construct($value='') {
+        parent::__construct('letter-spacing', 'letter spacing', $value);
+    }
+}
 
 // FONT
 class Global_Font_Family extends CSS_Dropdown_Input {
@@ -132,8 +137,7 @@ class Font_Weight extends CSS_Dropdown_Input {
 class Typography_Tab extends Sub_Tab {
     function __construct($display_name, $members=null, $html_id=null) {
         if ( null == $members ) { 
-            $members[] = new Section_Foreground_Color();
-            $members[] = new Section_Background_Color();        
+            $members[] = new Section_Foreground_Color();        
             $members[] = new Section_Font();
             $members[] = new Font_Size();
             $members[] = new Font_Style();
@@ -141,6 +145,7 @@ class Typography_Tab extends Sub_Tab {
             $members[] = new Text_Align();
             $members[] = new Text_Decoration();
             $members[] = new Text_Transform();
+            $members[] = new Letter_Spacing();
         }
         parent::__construct($display_name, $members);
     }    
