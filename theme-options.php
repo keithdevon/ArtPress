@@ -8,6 +8,7 @@ require_once 'heart-theme-utils.php';
 $full_dir = $dir . 'form/heart-theme-form-functions.php';
 include_once $full_dir;
 require_once $dir . 'form/form.php';
+require_once $dir . 'form/css-selectors.php';
 require_once $dir . 'form/global.php';
 require_once $dir . 'form/images.php';
 require_once $dir . 'form/color.php';
