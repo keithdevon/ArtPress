@@ -10,10 +10,10 @@ require_once('css-gen.php');
 //$options = get_option('artpress_theme_options');
 $background_images = get_option('ap_background_image_settings');
 
-$maintabgroup = new Main_Tab_Group('main tab group', 'ap_options');
+$maintabgroup = new Main_Tab_Group('main tab group');
 $options = get_option('ap_options');
 if ($options != null) {
-    $maintabgroup->inject_values($options['saves'][$options['current-save-id']]);
+    $maintabgroup->inject_values($options['saves'][$options['Current_Save_ID']]);
 }
 
 $selectors = $maintabgroup->get_css_selectors();
