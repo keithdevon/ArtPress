@@ -18,6 +18,7 @@ require_once $dir . 'form/menu-form.php';
 require_once $dir . 'form/body.php';
 require_once $dir . 'form/sidebar-form.php';
 require_once $dir . 'form/footer-form.php';
+require_once $dir . 'form/gallery-form.php';
 require_once $dir . 'form/typography.php';
 require_once $dir . 'form/layout.php';
 require_once $dir . 'form/effect.php';

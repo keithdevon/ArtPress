@@ -705,13 +705,6 @@ body.category-galleries .entry-meta {
     
 body.category-galleries div.format-gallery .entry-content p, body.category-galleries div.format-gallery .entry-meta, body.category-galleries div.format-gallery .entry-utility {
     /*display:none; TODO remove this when options are present */
-    text-align:left;
-    }
-    
-body.category-galleries body.category-galleries #content div.format-gallery .entry-title {
-    text-align: center;
-    font-size:1em;
-    border: none;
     }
         
 body.category-galleries div.format-gallery {
@@ -1495,3 +1488,15 @@ a.tutorial-image:link {
 td.label {
     width:200px;
     }
+    
+div.category-galleries div.gallery-thumb {
+    text-align:center;
+    }
+    
+.category-galleries .gallery-title a {
+    display:block;
+    }
+    
+body {
+   font-size: 100%;
+   }
