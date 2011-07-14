@@ -73,7 +73,8 @@
     color: #ffffff; 
     font-weight: bold; }
 .ui-widget-header a { color: #ffffff; }
-.wrap div#-tabs>div>form>div>div, .wrap div#-tabs>div>form>div>h4 {
+
+.wrap div#-tabs>div>div>div, .wrap div#-tabs>div>div>h4 {
     border:none;
     }
 
