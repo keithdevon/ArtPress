@@ -7,7 +7,7 @@ class Page_Title extends CSS_Selector {
 }
 class Entry_Title extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('.entry-title, .entry-title a:link, .entry-title a:visited', 'entry title', $children=null);
+        parent::__construct('.entry-title a:link, .entry-title a:visited', 'entry title', $children=null);
     }
 }
 class H2 extends CSS_Selector {
