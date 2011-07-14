@@ -81,8 +81,8 @@ function artpress_theme_init() {
  */
 function theme_options_add_page() {
         add_menu_page(                           __( 'ArtPress Options' ),    __( 'ArtPress' ),            'edit_theme_options', 'theme_options_slug', 'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
-        add_submenu_page('theme_options_slug',   __('manage configurations'), __('manage configurations'), 'edit_theme_options', 'configs_slug',       'ap_configs_page');
-        add_submenu_page('theme_options_slug',   __('image upload'),          __('image upload'),          'edit_theme_options', 'image_upload_slug',  'ap_image_upload_page');
+        add_submenu_page('theme_options_slug',   __('Manage Configurations'), __('Manage Configurations'), 'edit_theme_options', 'configs_slug',       'ap_configs_page');
+        add_submenu_page('theme_options_slug',   __('Manage Images'),         __('Manage Images'),         'edit_theme_options', 'image_upload_slug',  'ap_image_upload_page');
 }
 
 function ap_bi_section_html() {
