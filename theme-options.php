@@ -49,8 +49,6 @@ function artpress_options_load_scripts() {
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
     
     add_action('init', 'ht_init_method');
-    
-
 }
 /**
  * Init plugin options to white list our options
@@ -59,15 +57,15 @@ $background_image_prefix = 'ap_image_';
 
 function artpress_theme_init() {
     global $background_image_prefix;
-    register_setting( 'artpress_options',     'ap_options', 'ap_options_validate' );
-    register_setting( 'artpress_image_options', 'ap_images',   'ap_image_validate' );
+    register_setting( 'artpress_options',       'ap_options', 'ap_options_validate' );
+    register_setting( 'artpress_image_options', 'ap_images',  'ap_image_validate' );
     
-    add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'image_upload_slug' );
+    add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'manage_images' );
     
-    add_settings_field( 'logo-image',                   'Logo image',         'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '0');
-    add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '1');
-    add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '2');
-    add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_bi_html', 'image_upload_slug', 'ap_bi_section', '3');
+    add_settings_field( 'logo-image',                   'Logo image',         'ap_bi_html', 'manage_images', 'ap_bi_section', '0');
+    add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_bi_html', 'manage_images', 'ap_bi_section', '1');
+    add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_bi_html', 'manage_images', 'ap_bi_section', '2');
+    add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_bi_html', 'manage_images', 'ap_bi_section', '3');
     
     init_ap_options();
 }
@@ -76,9 +74,9 @@ function artpress_theme_init() {
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_menu_page(                           __( 'ArtPress Options' ),    __( 'ArtPress' ),            'edit_theme_options', 'theme_options_slug', 'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
-        add_submenu_page('theme_options_slug',   __('manage configurations'), __('manage configurations'), 'edit_theme_options', 'configs_slug',       'ap_configs_page');
-        add_submenu_page('theme_options_slug',   __('image upload'),          __('image upload'),          'edit_theme_options', 'image_upload_slug',  'ap_image_upload_page');
+        add_menu_page(                           __( 'ArtPress Options' ),    __( 'ArtPress' ),            'edit_theme_options', 'artpress',    'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
+        add_submenu_page('artpress',   __('Manage Configurations'), __('Manage Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');
+        add_submenu_page('artpress',   __('Manage Images'),         __('Manage Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
 }
 
 function ap_bi_section_html() {
@@ -146,26 +144,44 @@ function ap_image_upload_page() {
     ?><div class="wrap">
             <form method="post" enctype="multipart/form-data" action="options.php">
        	        <?php settings_fields('artpress_image_options'); ?>
-                <?php do_settings_sections('image_upload_slug'); ?>
+                <?php do_settings_sections('manage_images'); ?>
                 <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Upload Images') ?>" /></p>
             </form>
 	</div><?php   
 }
 function ap_configs_page() {
-    echo h2('configurations');
-    // select a configuration
     $options = get_option('ap_options');
+    $o = '';
+    $o .= h2('configurations');
+    
+    $o .= label( 'Current_Save_ID', __('current configuration') );
+    $o .= input( 'text', attr_readonly() . attr_value( $options['Current_Save_ID'] ) );
+    
+    // select a configuration
+    
+    $o .= '<form method="post" action="options.php">';
+    $o .= get_settings_fields('artpress_options');
+    $o .= input('hidden', attr_name('ap_options[change_Current_Save_ID]') . attr_value('true') );
     if( $options && isset($options['saves'])) {
+        $o .= label('load_configuration',__('load a configuration'));
+        $html_opts = '';
         foreach (array_keys($options['saves']) as $save_name) {
-            echo $save_name;
+            $html_opts .= option($save_name, $save_name);
         }
+        $o .= select('ap_options[Current_Save_ID]', $html_opts, attr_id('load_configuration'));
     }
+    
+    $load = __( 'load' );  
+    $o .= 	"<span class='submit'><input type='submit' class='button-primary' value='{$load}' /></span>";      
+    $o .= ct('form');
+    $div = div($o, attr_class('wrap'));
     
     // create new configuration
     
     // select default configurations
     
     // upload/download configuration?
+    echo $div;
 }
 function get_ap_options_defaults() {
     $options = array( 'cs'=>array() );
@@ -207,6 +223,11 @@ function init_ap_options() {
 function ap_options_validate( $new_settings ) {
     
     $options = get_option('ap_options');
+    
+    if( $new_settings['change_Current_Save_ID'] ) {
+        $options['Current_Save_ID'] = $new_settings['Current_Save_ID'];
+        return $options;
+    }
     if( $options == null) $options = get_ap_options_defaults();
 
     $previous_save = $options['saves'][$options['Current_Save_ID']];
@@ -367,7 +388,7 @@ function ap_image_validate($input) {
         <div class="wrap">
             <form method="post" enctype="multipart/form-data" action="options.php">
        	        <?php settings_fields('artpress_options_bi'); ?>
-                <?php do_settings_sections('theme_options_slug'); ?>
+                <?php do_settings_sections('artpress'); ?>
                 <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Upload Images') ?>" /></p>
             </form>
     	</div>

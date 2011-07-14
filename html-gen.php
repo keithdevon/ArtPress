@@ -15,11 +15,12 @@ function attr_id ($value)         { return attribute('id',     $value); }
 function attr_label ($value)      { return attribute('label',  $value); }
 function attr_method ($value)     { return attribute('method', $value); }
 function attr_name ($value)       { return attribute('name',   $value); }
-function attr_value ($value)      { return attribute('value',  $value); }
+function attr_readonly ()         { return attribute('readonly', 'readonly'); }
 function attr_size ($value)       { return attribute('size',   $value); }
 function attr_src ($value)        { return attribute('src',    $value); }
 function attr_type ($value)       { return attribute('type',   $value); }
 function attr_valign ($value)     { return attribute('valign', $value); }
+function attr_value ($value)      { return attribute('value',  $value); }
 
 function attr_style ($value)      { 
     if( $value==true ) return attribute('style', $value);
@@ -60,10 +61,9 @@ function li($content, $attributes ="")          { return ot('li', $attributes)  
 function optgroup($label, $options)             { return ot('optgroup', attr_label($label)) . $options . ct('optgroup'); }
 function option($value, $content)               { return ot('option', attr_value($value)) . $content . ct('option'); }
 function p($content, $attributes ="")           { return ot('p', $attributes)      . $content . ct('p'); }
+function select($name, $content, $attributes=""){ return ot('select', attr_name($name) . $attributes ) . $content . ct('select'); }
 function table($content, $attributes ="")       { return ot('table', $attributes)  . $content . ct('table'); }
 function td($content, $attributes ="")          { return ot('td', $attributes)     . $content . ct('td'); }
 function tr($content, $attributes ="")          { return ot('tr', $attributes)     . $content . ct('tr'); }
 function ul($content, $attributes='')           { return ot('ul', $attributes)     . $content . ct('ul'); }
-
-
 ?>
