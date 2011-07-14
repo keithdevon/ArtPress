@@ -22,8 +22,7 @@ get_header(); ?>
 			 */
 			get_template_part( 'loop', 'single' );
 			?>
-
-			
+						
 			         <div class="fourcol last">
 
                         <?php get_template_part('sidebars/sidebar'); ?>
