@@ -563,12 +563,13 @@ class Current_Save_ID extends Setting {
         parent::__construct('save name', $value);
     }
     function get_html() {
-        $o .= '<p>';
+        $o = '';
         $name = $this->get_name();
         $o .= label($name, 'Configuration name ');
         $attrs =  attr_id($name) .
                     attr_value($this->get_value());
         $o .= input('text',  attr_name("ap_options[{$name}]") . $attrs);
+        $o = p($o);
         return $o;        
     }
 }
