@@ -62,10 +62,10 @@ function artpress_theme_init() {
     
     add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'manage_images' );
     
-    add_settings_field( $background_image_prefix . '0', 'Logo image',         'ap_bi_html', 'manage_images', 'ap_bi_section', '0');
-    add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_bi_html', 'manage_images', 'ap_bi_section', '1');
-    add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_bi_html', 'manage_images', 'ap_bi_section', '2');
-    add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_bi_html', 'manage_images', 'ap_bi_section', '3');
+    add_settings_field( $background_image_prefix . '0', 'Logo image',         'ap_image_html', 'manage_images', 'ap_bi_section', '0');
+    add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_image_html', 'manage_images', 'ap_bi_section', '1');
+    add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_image_html', 'manage_images', 'ap_bi_section', '2');
+    add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_image_html', 'manage_images', 'ap_bi_section', '3');
     
     init_ap_options();
 }
@@ -74,7 +74,7 @@ function artpress_theme_init() {
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_menu_page(                           __( 'ArtPress Options' ),    __( 'ArtPress' ),            'edit_theme_options', 'artpress',    'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
+        add_menu_page(                 __( 'ArtPress Options' ),    __( 'ArtPress' ),            'edit_theme_options', 'artpress',    'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
         add_submenu_page('artpress',   __('Manage Configurations'), __('Manage Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');
         add_submenu_page('artpress',   __('Manage Images'),         __('Manage Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
 }
@@ -92,20 +92,24 @@ function ap_reset_html() { ?>
 <?php }
 
 /** Displays the html form elements for selecting a background image */
-function ap_bi_html($number) {
+function ap_image_html($number) {
     global $background_image_prefix;
     $file_id = $background_image_prefix . $number;
     $file_paths = get_option('ap_images');
-    $path = ''; $image = ''; $url_label ='';
+    $path = ''; $image = ''; $url_label =''; $cb = '';
     if (isset($file_paths[$file_id]['url'])) {
         $url = $file_paths[$file_id]['url'];
         $path = $file_paths[$file_id]['file'];
-        $image = "<img src='{$url}' height='40' />";
+        $image = "<img src='{$url}' height='50' />";
         $url_label = p(alink($url, $path));
         $path_label = "<p>({$path})</p>";
+        
+        $cb_id = 'ap_images[delete][' . $file_id . ']';
+        $cb_label = label($cb_id, 'delete image');
+        $cb = $cb_label . checkbox($cb_id, false);
     }
     $input = "<input type='file' name='{$file_id}' size='40' value=''/>";
-    echo $image . $url_label . $input;
+    echo $image . $url_label . $cb . $input;
 }
 /** 
  * HACK ALERT! creating my own 'settings_fields' that doesn't echo but returns its contents.
@@ -183,6 +187,9 @@ function ap_configs_page() {
     // upload/download configuration?
     echo $div;
 }
+/** 
+ * Creates a valid options array of stub, empty values.
+ * */
 function get_ap_options_defaults() {
     $options = array( 'cs'=>array() );
 
@@ -193,6 +200,9 @@ function get_ap_options_defaults() {
     $options['defaults'] = array();
     return $options;
 }
+/**
+ * Function to create the options array in the db if not already created.
+ */
 function init_ap_options() {
     $options = get_option('ap_options');
     
@@ -267,6 +277,10 @@ function ap_image_validate($input) {
             $file = wp_handle_upload($_FILES[$file_name], $override_defaults); // store the file in the database
             $options[$file_name] = $file;
         }
+    }
+    
+    if(isset($input['delete'])) {
+    
     }
     return $options;
 }

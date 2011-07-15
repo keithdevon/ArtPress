@@ -14,7 +14,7 @@ function ht_th($value, $scope = "")       {
         return ot('th', attribute('scope', $scope)) . $value . ct('th');
 }
 function ht_input($id, $type, $attributes) {
-    return bt('input', attr_type($type) . attr_id('artpress_theme_options' . $id) . attr_name('artpress_theme_options' . $id) . $attributes );
+    return bt('input', attr_type($type) . attr_id('ap_options' . $id) . attr_name('ap_options' . $id) . $attributes );
 }
 function ht_select($id, $options, $attributes='') {
     return ot('select', attr_id('artpress_theme_options' . $id) . attr_name('artpress_theme_options' . $id) . $attributes) 

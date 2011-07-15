@@ -48,6 +48,7 @@ function ct($tag_name)                 { return '</' . $tag_name . '>'; }       
 
 /* Specific HTML element functions */
 function alink($href, $content, $attributes="") { return ot('a', attr_href($href) . $attributes ) . $content . ct('a');}
+function checkbox($name, $checked, $attributes="") { return bt('input', attr_type('checkbox') . attr_name($name) . attr_checked($checked) . $attributes); }
 function div($content, $attributes ="")         { return ot('div', $attributes)   . $content . ct('div'); }
 function h1($content, $attributes ="")          { return ot('h1', $attributes)    . $content . ct('h1'); }
 function h2($content, $attributes ="")          { return ot('h2', $attributes)    . $content . ct('h2'); }
