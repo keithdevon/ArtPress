@@ -21,7 +21,7 @@ $selectors = $maintabgroup->get_css_selectors();
 $output = "";
 foreach ( $selectors as $selector ) {
     $selector_string = get_full_selector_string( get_full_selector_array($selector) );
-    $settings = get_setting_instances($selector);
+    $settings = get_setting_instances($selector, false);
     $declarations = '';
     foreach( $settings as $setting ) {
         $declarations .= $setting->get_css_declaration();

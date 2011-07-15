@@ -188,6 +188,13 @@ class Option_Group extends Group {
         return table($children_html, attr_class('form-table'));
     }
 }
+/** 
+ * This accepts different settings and can display them as one group,
+ * one display name with multiple values.
+ * 
+ * @example the border settings has one label 'border' but multiple
+ * text boxes to enter the color, style or width.
+ * */
 class Option_Row_Group extends Group {
     function __construct($display_name, $members=array()) {
         parent::__construct($display_name, $members);
@@ -329,16 +336,16 @@ class Main_Tab_Group extends Tab_Group {
         return array('cs'=>$children);
     }
 
-    function get_setting_values_array() {
-        $setting_values = array();
-        $settings = get_setting_instances($this);
-        foreach( $settings as $setting ) {
-            $name = $setting->get_name();
-            $value = $setting->get_value();
-            $setting_values[$name] = $value;
-        }
-        return $setting_values;
-    }
+//    function get_setting_values_array() {
+//        $setting_values = array();
+//        $settings = get_setting_instances($this);
+//        foreach( $settings as $setting ) {
+//            $name = $setting->get_name();
+//            $value = $setting->get_value();
+//            $setting_values[$name] = $value;
+//        }
+//        return $setting_values;
+//    }
     /** 
      * Recursive function to get CSS Selector objects
      * 
@@ -349,7 +356,7 @@ class Main_Tab_Group extends Tab_Group {
         } else if( $thing instanceof CSS_Selector) {
             $selectors[] = $thing;
             return $selectors;
-        } else if ( $thing instanceof Hierarchy ) { 
+        } else if ( $thing instanceof Hierarchy ) {
             $children = $thing->get_children();
             if( $children!= null ) {
                 foreach ( $children as $child ) {
@@ -358,12 +365,12 @@ class Main_Tab_Group extends Tab_Group {
                 }
             }
             return $selectors;            
-        }
+        }  
         
     }
     
     function inject_values($values) {
-        $settings = get_setting_instances($this);
+        $settings = get_setting_instances($this, true);
         foreach( array_keys($settings) as $setting_key ) {
             // Do a check first to see that setting key exists in the existing supplied $values
             // which will be false for new settings in new versions
@@ -395,22 +402,32 @@ class Main_Tab_Group extends Tab_Group {
 /**
  * Recursive function to return an array of all the setting objects.
  */
-function get_setting_instances($hierarchy_obj, $settings_array=null) {
+function get_setting_instances($hierarchy_obj, $unpack_composites, $settings_array=null) {
     if( !is_array($settings_array) ) {
-        return get_setting_instances($hierarchy_obj, array());
-    } else if( $hierarchy_obj instanceof Setting ) {
+        return get_setting_instances($hierarchy_obj, $unpack_composites, array());
+    } 
+    // the following test must come before the Setting test because,
+    // CSS_Composite is a 'Setting' object but has children
+    // therefore if we do this test first, we descend into its children
+    // and get all their names
+    // instead of just returning the name of the CSS_Composite object
+    else if( ( $hierarchy_obj instanceof Setting ) && 
+    
+             !( ($hierarchy_obj instanceof CSS_Composite) && $unpack_composites ) 
+             
+            ) {
         $name = $hierarchy_obj->get_name();
         $settings_array[$name] = $hierarchy_obj;
         return $settings_array;
-    } else if ( $hierarchy_obj instanceof Hierarchy ) {
+    } 
+    // GET CHILDREN
+    else if ( $hierarchy_obj instanceof Hierarchy ) {
         $children = $hierarchy_obj->get_children();
-        if( $children!= null ) {
-            foreach ( $children as $child ) {
-                $settings_array = get_setting_instances($child, $settings_array);
-            }
+        foreach ( $children as $child ) {
+            $settings_array = get_setting_instances($child, $unpack_composites, $settings_array);
         }
         return $settings_array;
-    }
+    } 
 }
 class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
     private $css_selector;
@@ -421,7 +438,7 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
                 new Typography_Tab('typography'), 
                 new Layout_Tab('layout'), 
                 new Border_Tab('border'),
-                new Background_Image_Tab('background'), 
+                new Background_Image_Tab('background'),
                 new Effect_Tab('effects')
             ));
         }
@@ -487,7 +504,7 @@ function get_full_selector_array($icss_selector) {
     
     // for each of the comma separated selectors
     // create a full css selector array 
-    $selectors = explode(',', $icss_selector->get_css());
+    $selectors = explode(', ', $icss_selector->get_css());
     foreach( $selectors as $selector ) {
         $full_selector[] = array_merge($parent_selectors, array($selector));
     }
@@ -506,13 +523,16 @@ function get_full_selector_string($selectors_array) {
         if($first) {
             $first = false;
         } else {
-            $output .= ',';
+            $output .= ', ';
         }
         
         // build selector from array
         foreach ($selector_arr as $selector) {
-            $output .= ' ' . $selector;
+            if($selector) { // don't include empty selectors
+                $output .= $selector . ' ';
+            }
         }
+        $output = rtrim($output);
     }        
     return $output;
 }
@@ -584,9 +604,8 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
     }
     
     function get_full_name() {
-        $parents = '';
         $local_name = $this->get_name();
-        $full_name = $parents . '[' . $local_name . ']';
+        $full_name = '[' . $local_name . ']';
         return $full_name;        
     }
     function get_html_name() {
@@ -658,18 +677,66 @@ abstract class CSS_Setting extends Setting implements CSS {
         $name .= $this->get_css();
         return $name; 
     }
-}
-class CSS_Option_Row_Group extends Option_Row_Group implements CSS {
-    private $css_property;
-    
-    function __construct($display_name, $common_css_property, $members=array()) {
-        $this->css_property = $common_css_property;
-        parent::__construct($display_name, $members);
-    }
-    function get_css() {
+    function get_css_property() {
         return $this->css_property;
     }
+    function set_css_property($property_name) {
+        $this->css_property = $property_name;
+    }
 }
+
+class CSS_Composite extends CSS_Setting {  
+    /** 
+     * @param $members 
+     * array The css_property of each supplied member is merely used as a unique identifer.
+     * It needn't be an actual css property. Indeed this class was created because for 
+     * certain css properties like 'box shadow blur radius' or 'text box color' there is no
+     * unique css property.
+     * 
+     * */
+    function __construct($display_name, $common_css_property, $members=array()) {
+        foreach ($members as $child) {
+            //$this_css_property = $common_css_property;
+            //$child_css_property = $child->get_css_property();
+            //$new_property = $this_css_property . '-' . $child_css_property;
+            //$child->set_css_property($new_property);
+            $this->add_child($child);
+        }
+        parent::__construct($common_css_property, $display_name, null);
+    }
+    function get_css_value() {
+        $value = '';
+        foreach($this->get_children() as $child) {
+            $value .= ' ' . $child->get_css_value();
+        }
+        return $value;
+    }
+    function get_html() {
+        $children_html = '';
+        $children = $this->get_children();
+        if ( null != $children) {
+            foreach($children as $child) {
+                $children_html .= $child->get_html();  
+            }
+        }
+        return $children_html;
+    } 
+    function get_css_declaration() {
+        $property = $this->get_css_property();
+        
+        $values = '';
+        foreach( $this->get_children() as $child ){
+            $css_value = $child->get_css_value();
+            if($css_value) {
+                $values .= ' ' . $css_value;            
+            }
+        }
+        if($values) {
+            return "\n{$property}:{$values};";
+        }
+    }
+}
+
 abstract class CSS_Text_Input extends CSS_Setting {
     function __construct($css_property, $display_name, $value) {
         parent::__construct($css_property, $display_name, $value);        

@@ -6,7 +6,7 @@ function dec($property, $value) { // TODO include validation
 }
 /** css declaration block */
 function decblock($declarations) {
-    return "{" . $declarations . "}\n";
+    return "{" . $declarations . " }\n";
 }
 /** css rule */
 function rule($selectors, $declaration_block) { // TODO validate selector
