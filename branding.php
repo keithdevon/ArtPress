@@ -10,11 +10,11 @@
     		<a href="<?php echo home_url( '/' ); ?>" 
     		   title="<?php echo $name ?>" 
     		   rel="home"><?php  
-    		       /*$settings = get_option('artpress_theme_options');
-    		       if( $settings['section_settings']['site title']['logo-image-use']['value'] == 'on' ) {
-    		           $bg_images = get_option('ap_background_image_settings');
-    		           echo bt('image', attr_src($bg_images[$background_image_prefix . '0']['url']) . attr_alt($name)); // FIXME using ugly hardcoded reference
-    		       } else echo $name;*/
+    		       $settings = get_option('ap_images');
+    		       if( $settings && isset($settings['ap_image_0']['url']) ) {
+    		           $img_url = $settings['ap_image_0']['url'];
+    		           echo bt('image', attr_src($img_url) . attr_alt($name));
+    		       } else echo $name;
     		       ?>
     		   
     		</a>

@@ -62,7 +62,7 @@ function artpress_theme_init() {
     
     add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'manage_images' );
     
-    add_settings_field( 'logo-image',                   'Logo image',         'ap_bi_html', 'manage_images', 'ap_bi_section', '0');
+    add_settings_field( $background_image_prefix . '0', 'Logo image',         'ap_bi_html', 'manage_images', 'ap_bi_section', '0');
     add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_bi_html', 'manage_images', 'ap_bi_section', '1');
     add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_bi_html', 'manage_images', 'ap_bi_section', '2');
     add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_bi_html', 'manage_images', 'ap_bi_section', '3');
