@@ -34,7 +34,7 @@ class Global_Color extends CSS_Text_Input {
         return parent::get_html( attr_class('colorwell') );
     }
 }
-abstract class Section_Color extends CSS_Dropdown_Input {
+abstract class Section_Color extends CSS_Dropdown_Input implements ISetting_Depends_On_Global_Setting {
     function __construct($css_property, $display_name, $value=0) { // TODO should this not fix the css_property to color?
         parent::__construct($css_property, $display_name, $value);
     }
@@ -49,7 +49,7 @@ abstract class Section_Color extends CSS_Dropdown_Input {
 }
 class Section_Foreground_Color extends Section_Color {
     function __construct($value=0) {
-        parent::__construct('color', 'color select', $value); 
+        parent::__construct('color', 'color', $value); 
     }
 }
 /**
@@ -59,7 +59,7 @@ class Section_Foreground_Color extends Section_Color {
  */
 class Section_Background_Color extends Section_Color {
     function __construct($value=0) {
-        parent::__construct('background-color', 'background color select', $value); 
+        parent::__construct('background-color', 'background color', $value); 
     }
     static function get_options() {
         $options = parent::get_options();

@@ -22,7 +22,7 @@ class Text_Decoration extends CSS_Dropdown_Input {
 }
 
 // FONT
-class Global_Font_Family extends CSS_Dropdown_Input {
+class Global_Font_Family extends CSS_Dropdown_Input  {
     private static $global_font_family_instances = array();
     static $options = array('', 
                             array('Arial, “Helvetica Neue”, Helvetica, sans-serif','paragraph or title'),
@@ -89,11 +89,11 @@ class Global_Font_Family extends CSS_Dropdown_Input {
  * @author jsd
  *
  */
-class Section_Font extends CSS_Dropdown_Input {
+class Section_Font extends CSS_Dropdown_Input implements ISetting_Depends_On_Global_Setting {
     static $options;
 
     function __construct($value=0) {
-        parent::__construct('font-family', 'font select', $value); 
+        parent::__construct('font-family', 'font family', $value); 
         self::$options = Global_Font_Family::get_global_font_family_instances();
     }    
     static function get_options() {

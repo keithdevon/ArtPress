@@ -43,6 +43,16 @@ interface IValid_Input {
 interface IValidate { static function validate($value); }
 interface Tab {}
 
+/** 
+ * Settings that depends on other settings being set,
+ * eg Section_Font_Family depends on Global_Font_Family being set,
+ * have slightly different dropdown menus. 
+ * The options in the drop down menu also include the name of the Global setting
+ * which is where the option's value originates.
+ * 
+ * This interface is used to identify these particular settings. 
+ * */
+interface ISetting_Depends_On_Global_Setting {}
 /**
  * 
  * This class maintains a notion of elements in a hierarchy.
@@ -808,7 +818,8 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
         $html_options = '';        
         $is_optgroup = false;
         $content = '';
-        $potential_options = static::get_options(); // TODO this isn't a static method but works ...
+        $potential_options = static::get_options();
+        $i = 1;
         foreach (array_keys($potential_options) as $opt) {
             if (is_array($potential_options[$opt])) {
                 if($is_optgroup) { // if this has already been set ... 
@@ -835,6 +846,9 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
             $html_options .= ot('option', 
                             attr_selected( ((string)$opt == $this->get_value()) ? true : false ) . 
                             attr_value((string)$opt));
+            if($content && ($this instanceof ISetting_Depends_On_Global_Setting) ) {                            
+                $html_options .= $i++ . '&nbsp; &nbsp; ';
+            }
             $html_options .= $content;
             $html_options .= ct('option');
         }
