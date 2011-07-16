@@ -741,8 +741,8 @@ abstract class CSS_Text_Input extends CSS_Setting {
     function __construct($css_property, $display_name, $value) {
         parent::__construct($css_property, $display_name, $value);        
     }
-    function get_html() {
-        $input = input('text', $this->get_html_name() . attr_value($this->get_value()));
+    function get_html($attributes = '') {
+        $input = input('text', $this->get_html_name() . attr_value($this->get_value()) . $attributes);
         return $input;
     }
 }

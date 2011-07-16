@@ -30,6 +30,9 @@ class Global_Color extends CSS_Text_Input {
         return $options;       
     }
     function get_name() { return $this->name; }
+    function get_html() {
+        return parent::get_html( attr_class('colorwell') );
+    }
 }
 abstract class Section_Color extends CSS_Dropdown_Input {
     function __construct($css_property, $display_name, $value=0) { // TODO should this not fix the css_property to color?

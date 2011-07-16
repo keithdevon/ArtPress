@@ -21,10 +21,6 @@ class Text_Shadow_Color extends Section_Color {
     function __construct($value=0) {
         parent::__construct('color', 'text shadow color select', $value); 
     }
-    function get_name() {
-        $name = parent::get_name();
-        return $name;
-    }
 }
 
 class Box_Shadow_Horizontal extends CSS_Size_Text_Input {
