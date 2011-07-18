@@ -26,7 +26,7 @@ class Body_Group extends CSS_Selector_Group {
             $children[] = new Crumb_Hover(); 
             $children[] = new Entry_Meta();
         }
-        parent::__construct('', 'body', $children);
+        parent::__construct('body', 'body', $children);
     }
 }
 
