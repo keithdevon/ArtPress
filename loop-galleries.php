@@ -91,7 +91,7 @@ if( $g_cat_layout == 'grid' ) {?>
 
 <div class="entry-meta">
     <?php twentyten_posted_on(); ?>
-   <?php printf( _n( '<a %1$s>%2$s photo</a>.', '<a %1$s>| %2$s photos</a>.', $total_images, 'twentyten' ),
+   <?php printf( _n( '<a %1$s>%2$s photo</a>.', '| <a %1$s>%2$s photos</a>.', $total_images, 'twentyten' ),
 								'href="' . get_permalink() . '" title="' . sprintf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ) . '" rel="bookmark"',
 								number_format_i18n( $total_images )
 							); ?>
