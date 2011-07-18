@@ -80,7 +80,11 @@ class Layout_Tab extends Sub_Tab {
         }
         parent::__construct($display_name, $members);
     }
+    function get_html() {
+        return parent::get_html();
+    }
 }
+
 //$mt = new Margin_Top(null, "1em");
 //echo "\n" . $mt->get_html();
 //echo "\n" . $mt::is_valid($mt->get_value());

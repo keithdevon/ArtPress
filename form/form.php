@@ -42,6 +42,7 @@ interface IValid_Input {
 }
 interface IValidate { static function validate($value); }
 interface Tab {}
+interface IComposite {}
 
 /** 
  * Settings that depends on other settings being set,
@@ -79,10 +80,27 @@ abstract class Hierarchy {
     }
     
     // GETTERS
-    final function get_display_name() { return $this->display_name; }
-    final function get_children()     { return $this->children;     }
-    final function get_child($n)      { return $this->children[$n]; }
-    final function get_parent()       { return $this->parent;       }
+    function get_display_name() { return $this->display_name; }
+    function get_children($test=null) {
+        $children = $this->children;
+        if( $children ) {
+            if ( $test == null ) {
+                return $children;
+            } else {
+                $specific_children = array();
+                foreach ( $children as $child ) {
+                    $specific_children = array_merge($specific_children, $child->get_children($test) );
+                }
+                return $specific_children;
+            } 
+        } 
+        
+        if( $test && $test($this) ) {
+            return array($this->get_name() => $this);
+        }
+    }
+    function get_child($n)      { return $this->children[$n]; }
+    function get_parent()       { return $this->parent;       }
     
     function get_parentage_array() {
         $p = $this->get_parent();
@@ -186,13 +204,19 @@ class Option_Group extends Group {
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {
-                $child_name = $child->get_display_name();
-                $child_html = $child->get_html();  
-                $row = ot('tr');
-                $row .= td($child_name, " style='width:200px;'");
-                $row .= td($child_html);
-                $row .= ct('tr');
-                $children_html .= $row;
+                //$child_name = $child->get_display_name();
+                //$child_html = $child->get_html();  
+                //$row = ot('tr');
+                //$row .= td($child_name, " style='width:200px;'");
+                //$row .= td($child_html);
+                //$row .= ct('tr');
+                //$children_html .= $row;
+                if( $child instanceof Setting && !($child instanceof IComposite ) ) {
+                    $child_html = get_setting_row( $child );
+                } else {
+                    $child_html = $child->get_html();
+                }
+                $children_html .= $child_html;
             }
         }
         return table($children_html, attr_class('form-table'));
@@ -217,7 +241,7 @@ class Option_Row_Group extends Group {
                 $children_html .= $child->get_html();  
             }
         }
-        return $children_html;
+        return get_row($this->get_display_name(), $children_html);
     }    
 }
 class Lookup_Option_Group extends Option_Group {
@@ -380,7 +404,15 @@ class Main_Tab_Group extends Tab_Group {
     }
     
     function inject_values($values) {
-        $settings = get_setting_instances($this, true);
+        //$settings = get_setting_instances($this, true);
+        $test = function($child) {
+            if ( $child instanceof Setting ) { 
+                return true;
+            } else {
+                return false;
+            }
+        };
+        $settings = $this->get_children($test);
         foreach( array_keys($settings) as $setting_key ) {
             // Do a check first to see that setting key exists in the existing supplied $values
             // which will be false for new settings in new versions
@@ -421,11 +453,9 @@ function get_setting_instances($hierarchy_obj, $unpack_composites, $settings_arr
     // therefore if we do this test first, we descend into its children
     // and get all their names
     // instead of just returning the name of the CSS_Composite object
-    else if( ( $hierarchy_obj instanceof Setting ) && 
+    else if( ( $hierarchy_obj instanceof Setting ) && // FIXME this is disgusting!!
     
-             !( ($hierarchy_obj instanceof CSS_Composite) && $unpack_composites ) 
-             
-            ) {
+             !($hierarchy_obj instanceof IComposite) ) {
         $name = $hierarchy_obj->get_name();
         $settings_array[$name] = $hierarchy_obj;
         return $settings_array;
@@ -587,6 +617,18 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
         return $this->css_selector;
     }
 }
+function get_setting_row( $setting ) {
+    $child_name = $setting->get_display_name();
+    $child_html = $setting->get_html();  
+    return get_row($child_name, $child_html);
+}
+function get_row( $label, $content ) {
+    $row = ot('tr');
+    $row .= td($label, " style='width:200px;'");
+    $row .= td($content);
+    $row .= ct('tr');
+    return $row;   
+}
 /**
  * 
  * This class represents a setting. It only introduces one new attribute: value.
@@ -651,6 +693,57 @@ class Current_Save_ID extends Setting {
         return $o;        
     }
 }
+/** 
+ * This setting contains a bunch of different sub settings.
+ * If this setting is on, the sub settings will be used, 
+ * otherwise the sub setting's values will be ignored,
+ * eg the won't be use to generate CSS
+ * */
+abstract class Toggle_Group extends Setting implements IComposite {
+    
+    function __construct($display_name, $on, $members=array()) {
+        foreach ($members as $child) {
+            $this->add_child($child);
+        }
+        parent::__construct($display_name, $on);
+    }
+    function get_html() {
+        $html_name = $this->get_html_name();
+        $value = $this->get_value();
+        $html = '';
+        $html = 
+                input('hidden', $html_name . attr_value('0')) .
+                input('checkbox', $html_name . attr_value($this->get_value()));
+            //. td( ht_input_checkbox( $id, $value , 'on')
+            //. ht_label ('description', $id, $field_blurb) );
+        $children = parent::get_children();
+        if ( null != $children ) {
+            foreach($children as $child) {
+                $html .= get_setting_row( $child );  
+            }
+        }
+        return $html;
+    } 
+    function get_children() {
+        if($this->get_value()) {
+            return parent::get_children();
+        }
+    }
+    function get_name() { 
+        $name = '';
+        $parents = $this->get_parentage_array();    
+        foreach ( $parents as $parent ) {
+            if( $parent instanceof CSS ) {
+                $name =  $parent->get_css() . '__' . $name;
+            }
+        }
+        $name .= parent::get_name();
+        return $name; 
+    }
+    function set_value($value) {
+        parent::set_value($value);
+    }
+}
 /**
  * 
  * This class represents settings whose values will ultimately be rendered to css
@@ -695,7 +788,7 @@ abstract class CSS_Setting extends Setting implements CSS {
     }
 }
 
-class CSS_Composite extends CSS_Setting {  
+class CSS_Composite extends CSS_Setting implements IComposite {  
     /** 
      * @param $members 
      * array The css_property of each supplied member is merely used as a unique identifer.

@@ -24,15 +24,22 @@ class Background_Vertical_Position extends CSS_Horizontal_Position_Text_Input {
         parent::__construct('background-position', 'vertical background position', $value );
     }
 }
+class Background_Image_Toggle extends Toggle_Group {
+    function __construct($on, $members=array()) {
+    	parent::__construct('use background image', $on, $members);
+    }
+}
 class Background_Image_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
         if ( null == $members ) { 
-            $members[] = new Section_Image();
-            $members[] = new Background_Repeat();
-            $members[] = new Background_Attachment();
-            $members[] = new Background_Horizontal_Position();
-            $members[] = new Background_Vertical_Position();        
+            $members = array(
+                new Section_Image(),
+                new Background_Repeat(),
+                new Background_Attachment(),
+                new Background_Horizontal_Position(),
+                new Background_Vertical_Position() );
         }
-        parent::__construct($display_name, $members);
+        parent::__construct($display_name, new Background_Image_Toggle(true, $members));
     }
+
 }
