@@ -181,6 +181,7 @@ hr {
     
 #site-title, h1, h2, h3, h4 {
 	text-rendering: optimizeLegibility; 
+	font-size:1em;
 	}
 
 /* { 
@@ -204,22 +205,22 @@ hr {
     margin:1.5em 0 1.17em;
     }
 h2 { 
-    font-size:1.5em;
+    /*font-size:1.5em;*/
     line-height: 1em;
     margin:1.88em 0 1.15em;
     }
 h3 { 
-    font-size:1.313em; 
+   /* font-size:1.313em; */
     line-height: 1.143em;
     margin:2.2em 0 1.27em; 
     }
 h4 { 
-    font-size:1.125em; 
+   /* font-size:1.125em; */
     line-height: 1.3328em;
     margin:2.65em 0 1.42em;
     }
 h5 { 
-    font-size:1em; 
+   /* font-size:1em; */
     line-height: 1.5em;
     margin:0;
     }
@@ -354,7 +355,6 @@ h1#site-title, #site-title {
 	text-decoration: none;
 }
 #site-description {
-	font-style: italic;
 	float:left;
 	line-height:1.5em;
 	margin-bottom:0;
@@ -705,13 +705,6 @@ body.category-galleries .entry-meta {
     
 body.category-galleries div.format-gallery .entry-content p, body.category-galleries div.format-gallery .entry-meta, body.category-galleries div.format-gallery .entry-utility {
     /*display:none; TODO remove this when options are present */
-    text-align:left;
-    }
-    
-body.category-galleries body.category-galleries #content div.format-gallery .entry-title {
-    text-align: center;
-    font-size:1em;
-    border: none;
     }
         
 body.category-galleries div.format-gallery {
@@ -1495,3 +1488,15 @@ a.tutorial-image:link {
 td.label {
     width:200px;
     }
+    
+div.category-galleries div.gallery-thumb {
+    text-align:center;
+    }
+    
+.category-galleries .gallery-title a {
+    display:block;
+    }
+    
+body {
+   font-size: 100%;
+   }

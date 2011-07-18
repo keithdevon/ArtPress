@@ -784,7 +784,14 @@ function ht_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 	return $html;
 }*/
 
+// ADD new image sizes
 
+add_image_size( 'Gallery list', 350, 200, false );
+add_image_size( 'full-width', 1140, '', false );
+add_image_size( 'six-col', 548, '', false );
+add_image_size( 'four-col', 300, '', false );
+add_image_size( 'three-col', 252, '', false );
+add_image_size( 'two-col', 154, '', false );
 
 
 remove_shortcode( 'gallery' );
@@ -897,19 +904,19 @@ function ht_gallery_shortcode($attr) {
 	foreach ( $attachments as $id => $attachment ) {
 	   switch ($columns) {
         case 1:
-            $ht_thumnail_size = "full-width";
+            $ht_thumnail_size = 'full-width';
             break;
         case 2:
-            $ht_thumnail_size = "six-col";
+            $ht_thumnail_size = 'six-col';
             break;
         case 3:
-            $ht_thumnail_size = "four-col";
+            $ht_thumnail_size = 'four-col';
             break;
         case 4:
-            $ht_thumnail_size = "three-col";
+            $ht_thumnail_size = 'three-col';
             break;
         case 6:
-            $ht_thumnail_size = "two-col";
+            $ht_thumnail_size = 'two-col';
             break;
         }
 		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $ht_thumnail_size, false) : wp_get_attachment_link($id, $size, true, false); 
@@ -971,21 +978,13 @@ function ht_gallery_shortcode($attr) {
 	$output .= "
 			<br style='clear: both;' />
 		</div></div>\n";
+	
+	// for testing TODO remove before launch	
+    // $output .= 'Number of columns: '.$columns.'<br />';
+    // $output .= 'Image size : '.$ht_thumnail_size;
 
 	return $output;
 }
-
-
-// ADD new image sizes
-
-add_image_size( 'Gallery list', 350, 200, true );
-add_image_size( 'full-width', 1140, '', false );
-add_image_size( 'six-col', 548, '', false );
-add_image_size( 'four-col', 300, '', false );
-add_image_size( 'three-col', 252, '', false );
-add_image_size( 'two-col', 154, '', false );
-
-
 
 // Remove height and width from images
 
