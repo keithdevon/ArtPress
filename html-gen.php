@@ -65,6 +65,7 @@ function p($content, $attributes ="")           { return ot('p', $attributes)   
 function select($name, $content, $attributes=""){ return ot('select', attr_name($name) . $attributes ) . $content . ct('select'); }
 function table($content, $attributes ="")       { return ot('table', $attributes)  . $content . ct('table'); }
 function td($content, $attributes ="")          { return ot('td', $attributes)     . $content . ct('td'); }
+function th($content, $attributes ="")          { return ot('th', $attributes)     . $content . ct('th'); }
 function tr($content, $attributes ="")          { return ot('tr', $attributes)     . $content . ct('tr'); }
 function ul($content, $attributes='')           { return ot('ul', $attributes)     . $content . ct('ul'); }
 ?>
