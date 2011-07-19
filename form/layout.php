@@ -65,14 +65,14 @@ class Layout_Tab extends Sub_Tab {
                 new Option_Row_Group('margin',  
                     array(
                         new Margin_Top(), 
-                        new Margin_Bottom(), 
                         new Margin_Right(), 
+                        new Margin_Bottom(), 
                         new Margin_Left()) ),
                 new Option_Row_Group('padding', 
                     array(
                         new Padding_Top(), 
-                        new Padding_Bottom(), 
                         new Padding_Right(), 
+                        new Padding_Bottom(), 
                         new Padding_Left()) ),
                 new Display()
                 ));
