@@ -81,13 +81,3 @@ class Layout_Tab extends Sub_Tab {
         parent::__construct($display_name, $members);
     }
 }
-//$mt = new Margin_Top(null, "1em");
-//echo "\n" . $mt->get_html();
-//echo "\n" . $mt::is_valid($mt->get_value());
-//$mt = new Margin_Top(null, "3px");
-//echo "\n" . $mt->get_html();
-//echo "\n" . $mt::is_valid($mt->get_value()); 
-//$mt = new Margin_Top(null, "4");
-//echo "\n" . $mt->get_html();
-//$v = $mt::is_valid($mt->get_value());
-//echo "\n" .  $v;

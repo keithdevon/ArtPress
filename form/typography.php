@@ -142,6 +142,6 @@ class Typography_Tab extends Sub_Tab {
             $members[] = new Text_Decoration();
             $members[] = new Text_Transform();
         }
-        parent::__construct($display_name, $members);
+        parent::__construct($display_name, new Option_Group('', $members));
     }    
 }

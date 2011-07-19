@@ -251,7 +251,7 @@ function ap_options_validate( $new_settings ) {
         return $options;
     }
     if ( $new_settings['create_new_configuration'] ) {
-        //$options = get_ap_options_defaults();
+
         $new_config_name = $new_settings['Current_Save_ID'];
         $options['Current_Save_ID'] = $new_config_name;
         $options['saves'][$options['Current_Save_ID']] = array();
@@ -270,6 +270,7 @@ function ap_options_validate( $new_settings ) {
     
     // validate save
 
+    // set the Current_Save_ID
     // create save name if none supplied
     if( $new_settings['Current_Save_ID'] == '' ) {
         $d = getdate();
