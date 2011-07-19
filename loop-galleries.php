@@ -128,7 +128,7 @@ if( $g_cat_layout == 'grid' ) {?>
             <div class="clear"></div>
 </div>
 <?php endif; ?>
-<? } 
+<?php } 
 
 
 

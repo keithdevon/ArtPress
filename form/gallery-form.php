@@ -8,7 +8,7 @@ class Gallery_Base extends CSS_Selector {
 
 class Gallery_Title extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('h2.gallery-title', 'gallery titles', $children=null);
+        parent::__construct('h2.gallery-title a', 'gallery titles', $children=null);
     }
 }
 

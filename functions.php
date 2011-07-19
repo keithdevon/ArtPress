@@ -913,10 +913,10 @@ function ht_gallery_shortcode($attr) {
             $ht_thumnail_size = 'four-col';
             break;
         case 4:
-            $ht_thumnail_size = 'three-col';
+            $ht_thumnail_size = 'four-col';
             break;
         case 6:
-            $ht_thumnail_size = 'two-col';
+            $ht_thumnail_size = 'four-col';
             break;
         }
 		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $ht_thumnail_size, false) : wp_get_attachment_link($id, $size, true, false); 
@@ -1120,3 +1120,14 @@ require_once 'ht-functions/ht-socials.php';
 
 // Add address widget
 //require_once 'ht-widgets/ht-contact-widget.php';
+
+
+// Change the editor font
+
+add_action( 'admin_head-post.php', 'cwc_fix_html_editor_font' );
+add_action( 'admin_head-post-new.php', 'cwc_fix_html_editor_font' );
+
+function cwc_fix_html_editor_font() { ?>
+
+<style type="text/css">#editorcontainer #content, #wp_mce_fullscreen { font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif; }</style>
+<?php }

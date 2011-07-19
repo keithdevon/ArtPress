@@ -70,7 +70,7 @@ DESCRIPTION: Two-column fixed layout with one sidebar right of content
 	padding-bottom: 1.5em;
 }
 .row {
-    padding-top:1.5em;
+    /*padding-top:1.5em; removed so that stacked galleries can be formatted individually */
     overflow: visible;
     }
 .internal-col {
@@ -198,29 +198,57 @@ hr {
     font-size:3em; 
     line-height: 1em;
     margin:1em 0 1em;
-    }*/
+    }
 #site-title, h1 { 
     font-size:2.25em;
     line-height: 1.334em;
     margin:1.5em 0 1.17em;
     }
+
 h2 { 
-    /*font-size:1.5em;*/
+    font-size:1.5em;
     line-height: 1em;
     margin:1.88em 0 1.15em;
     }
 h3 { 
-   /* font-size:1.313em; */
+    font-size:1.313em;
     line-height: 1.143em;
     margin:2.2em 0 1.27em; 
     }
 h4 { 
-   /* font-size:1.125em; */
+    font-size:1.125em;
     line-height: 1.3328em;
     margin:2.65em 0 1.42em;
     }
 h5 { 
-   /* font-size:1em; */
+    font-size:1em;
+    line-height: 1.5em;
+    margin:0;
+    }*/
+    
+#site-title, h1 { 
+    font-size:2.25em;
+    line-height: 1.334em;
+    margin:1.5em 0 1.17em;
+    }
+
+h2 { 
+    font-size:1.5em;
+    line-height: 1em;
+    margin:1.88em 0 1.15em;
+    }
+h3 { 
+    font-size:1.313em;
+    line-height: 1.143em;
+    margin:2.2em 0 1.27em; 
+    }
+h4 { 
+    font-size:1.125em;
+    line-height: 1.3328em;
+    margin:2.65em 0 1.42em;
+    }
+h5 { 
+    font-size:1em;
     line-height: 1.5em;
     margin:0;
     }
@@ -719,6 +747,10 @@ div.list div.gallery-thumb {
     
 .gallery-row {
     clear: both;
+    }
+    
+.gallery-item {
+    margin-bottom:1.5em;
     }
     
 
