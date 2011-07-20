@@ -74,9 +74,9 @@ function artpress_theme_init() {
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_menu_page(                 __( 'ArtPress Options' ),    __( 'ArtPress' ),            'edit_theme_options', 'artpress',    'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
-        add_submenu_page('artpress',   __('Manage Configurations'), __('Manage Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');
-        add_submenu_page('artpress',   __('Manage Images'),         __('Manage Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
+        add_menu_page(                 __( 'ArtPress Options' ),    __( 'Artpress' ),            'edit_theme_options', 'artpress',    'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
+        add_submenu_page('artpress',   __('Configurations'), __('Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');
+        add_submenu_page('artpress',   __('Images'),         __('Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
 }
 
 function ap_bi_section_html() {
@@ -93,6 +93,9 @@ function ap_reset_html() { ?>
 
 /** Displays the html form elements for selecting a background image */
 function ap_image_html($number) {
+        //wp_nonce_url
+    ///wp/wp-admin/upload.php?deleted=1
+    //http://localhost/wp/wp-admin/post.php?action=delete&post=78&_wpnonce=b0cb2fedda
     global $background_image_prefix;
     $file_id = $background_image_prefix . $number;
     $file_paths = get_option('ap_images');

@@ -21,6 +21,57 @@ class Text_Decoration extends CSS_Dropdown_Input {
     }   
 }
 
+class Global_Font_Size extends CSS_Size_Text_Input {
+    static $global_font_size_instance;
+    function __construct($value) {
+        parent::__construct('font-size', 'base font size', $value);
+        self::$global_font_size_instance = $this;
+    }
+    static function get_global_font_size() {
+        $instance = self::$global_font_size_instance;
+        $size = $instance->get_value();
+        return $size;
+    }
+}
+class Global_Font_Size_Ratio extends CSS_Dropdown_Input {
+    static $global_font_size_ratio_instance;
+    static $options = array(array('golden', 1.618), array('musical fifths', 1.5), array('musical forths', 1.4));
+    function __construct($value=0) { 
+        parent::__construct('font-size-ratio', 'font size ratio', $value);
+        self::$global_font_size_ratio_instance = $this;
+    }
+    //static function get_options() {
+    //    
+    //}
+    static function get_global_font_size_ratio() {
+        $instance = self::$global_font_size_ratio_instance;
+        $value = $instance->get_value();
+        $options = self::$options;
+        $ratio = $options[$value][1];
+        return $ratio;
+    }       
+}
+
+class Section_Font_Size extends CSS_Dropdown_Input {
+    function __construct($value='10') {
+        parent::__construct('font-size', 'font size', $value);
+    }
+    static function get_options() {
+        $global_size = Global_Font_Size::get_global_font_size();
+        $ratio = Global_Font_Size_Ratio::get_global_font_size_ratio();
+        
+        $options[0] = '';
+        $start = -3;
+        $end   = 4;
+        
+        for($i = $start; $i < $end; $i++) {
+            $options[] = round($global_size * pow($ratio, $i), 2) . 'px';  
+        }
+        
+        return $options;
+    }
+}
+
 // FONT
 class Global_Font_Family extends CSS_Dropdown_Input  {
     private static $global_font_family_instances = array();
@@ -111,7 +162,7 @@ class Section_Font extends CSS_Dropdown_Input implements ISetting_Depends_On_Glo
         return $list;
     } 
 }
-class Font_Size extends CSS_Dropdown_Input {
+class Font_Size extends CSS_Dropdown_Input { // TODO delete?
     static $options = array('', '0.8em', '1em', '1.2em', '1.5em', '2em', '3em', '4em');
     function __construct($value=0) { 
         parent::__construct('font-size', 'font size', $value); 
@@ -135,7 +186,7 @@ class Typography_Tab extends Sub_Tab {
             $members[] = new Section_Foreground_Color();
             $members[] = new Section_Background_Color();        
             $members[] = new Section_Font();
-            $members[] = new Font_Size();
+            $members[] = new Section_Font_Size();
             $members[] = new Font_Style();
             $members[] = new Font_Weight();
             $members[] = new Text_Align();
