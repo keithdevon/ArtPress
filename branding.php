@@ -9,12 +9,13 @@
     	<span>
     		<a href="<?php echo home_url( '/' ); ?>" 
     		   title="<?php echo $name ?>" 
-    		   rel="home"><?php  
-    		       $settings = get_option('ap_images');
-    		       if( $settings && isset($settings['ap_image_0']['url']) ) {
-    		           $img_url = $settings['ap_image_0']['url'];
-    		           echo bt('image', attr_src($img_url) . attr_alt($name));
-    		       } else echo $name;
+    		   rel="home"><?php 
+                    $options = get_option('ap_options');
+                    $images = get_option('ap_images');
+                    if( isset($options['saves'][$options['Current_Save_ID']]['Logo_Toggle']) && $images && isset($images['ap_image_0']['url']) ) {
+                       $img_url = $images['ap_image_0']['url'];
+                       echo bt('image', attr_src($img_url) . attr_alt($name));
+                    } else echo $name;
     		       ?>
     		   
     		</a>

@@ -704,6 +704,20 @@ class Current_Save_ID extends Setting {
         return $o;        
     }
 }
+abstract class Toggle extends Setting {
+    function __construct($display_name, $v) {
+        parent::__construct($display_name, $v);
+    }
+    function get_html() {
+        $html_name = $this->get_html_name();
+        $value = $this->get_value();
+        $html = '';
+        $html = 
+                input('hidden', $html_name . attr_value('0')) .
+                input('checkbox', $html_name . attr_value($value) . attr_checked($value));
+        return $html;
+    }                
+}
 abstract class Number_Setting extends Setting {
     function __construct($display_name, $value='') {
         parent::__construct($display_name, $value);        
