@@ -1205,9 +1205,9 @@ function kd_type_gen() {
 
 function ht_show_feedback_form() {
 ?>
-    <div id="feedback-form"><form method="post" id="captcha_form" name="captcha_form" action="mailform.php">
+    <div id="feedback-form"><form method="post" id="captcha_form" name="captcha_form" action="<?php bloginfo('stylesheet_directory');?>/feedback-form/mailform.php">
 
-	<div style="padding-bottom: 1em;">From: <br /><input type="text" name="email" id="email" value="" />
+	<div style="padding-bottom: 1em;">Your email: <br /><input type="text" name="email" id="email" value="" />
 	</div>
 <div style="padding-bottom: 1em;">Subject: <br /><select name="subject" id="subject">
 	<option value=0></option>
@@ -1215,13 +1215,12 @@ function ht_show_feedback_form() {
 		<option value=2>Feature Request</option>
 		</select>
 	</div>
-		<div style="padding-bottom: 1em;">Enter the text contained in the image into the text box:
-					<br /><img src="captcha.php" />
+		<div style="padding-bottom: 1em;">Enter the text contained in the image into the text box (case sensitive):
+					<br /><img src="<?php bloginfo('stylesheet_directory');?>/feedback-form/captcha.php" />
 					<br /><input type="text" name="userpass" value="" />
 	</div>
 	<div style="padding-bottom: 1em;">Message:
 					<br /><textarea name="message" id="message" rows="10" cols="60"><?php echo "</tex" . "tarea>"; ?>
-						<br /><a href="http://www.addressmunger.com/contact_form_generator/" style="">Free contact form from AddressMunger.com</a>
 	</div>
 	
 	<div style="padding-bottom: 1em;"><input name="submit" type="submit" value="Submit" />
