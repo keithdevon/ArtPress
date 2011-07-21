@@ -68,7 +68,10 @@ function artpress_theme_init() {
     add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_image_html', 'manage_images', 'ap_bi_section', '1');
     add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_image_html', 'manage_images', 'ap_bi_section', '2');
     add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_image_html', 'manage_images', 'ap_bi_section', '3');
-    
+    add_settings_field( $background_image_prefix . '4', 'Background image 4', 'ap_image_html', 'manage_images', 'ap_bi_section', '4');
+    add_settings_field( $background_image_prefix . '5', 'Background image 5', 'ap_image_html', 'manage_images', 'ap_bi_section', '5');
+    add_settings_field( $background_image_prefix . '6', 'Background image 6', 'ap_image_html', 'manage_images', 'ap_bi_section', '6');
+        
     init_ap_options();
 }
 
