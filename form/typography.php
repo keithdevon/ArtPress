@@ -40,34 +40,27 @@ class Global_Font_Size extends Number_Setting {
     function get_html() {
         return parent::get_html();
     }
+    static function get_global_font_size_instance() {
+        return self::$global_font_size_instance;   
+    }
 }
 class Global_Font_Size_Ratio extends CSS_Dropdown_Input {
+    static $start = -1;
+    static $size   = 8;   
     static $global_font_size_ratio_instance;
     static $options = array(array('golden', 1.618), array('musical fifths', 1.5), array('musical forths', 1.4));
+    
     function __construct($value=0) { 
         parent::__construct('font-size-ratio', 'Font size ratio', $value);
         self::$global_font_size_ratio_instance = $this;
     }
-    //static function get_options() {
-    //    
-    //}
+
     static function get_global_font_size_ratio() {
         $instance = self::$global_font_size_ratio_instance;
         $value = $instance->get_value();
         $options = self::$options;
         $ratio = $options[$value][1];
         return $ratio;
-    }       
-}
-
-class Section_Font_Size extends CSS_Dropdown_Input {
-    static $start = -1;
-    static $size   = 8;    
-    function __construct($value=0) {
-        parent::__construct('font-size', 'font size', $value);
-    }
-    static function get_options() {
-        return array_slice(self::create_scale(), 0, self::$size -1 );
     }
     static function create_scale() {
         $global_size = Global_Font_Size::get_global_font_size();
@@ -82,6 +75,29 @@ class Section_Font_Size extends CSS_Dropdown_Input {
         
         return $options;
     }
+    /** 
+     * @example to return size below base font size, set $plus_n equal to -1
+     * @example to return the base font size, set $plus_n equal to 0
+     * @example to return the size two above the base font size, set $plus_n equal to 2
+     * */
+    static function get_font_size($plus_n) {
+        $n = $plus_n - self::$start;
+        $scale = self::create_scale();
+        return $scale[$n];
+    }
+}
+
+class Section_Font_Size extends CSS_Dropdown_Input {
+ 
+    function __construct($value=0) {
+        parent::__construct('font-size', 'font size', $value);
+    }
+    static function get_options() {
+        $scale = Global_Font_Size_Ratio::create_scale();
+        $scale_size = sizeof($scale);
+        return array_slice($scale, 0, $scale_size -1 );
+    }
+
     function get_css_value() {
         return parent::get_css_value();
     }
@@ -90,7 +106,7 @@ class Section_Font_Size extends CSS_Dropdown_Input {
         if ($value) {
             $decs  = dec($this->get_css_property(), $this->get_css_value());
             
-            $scale = self::create_scale();
+            $scale = Global_Font_Size_Ratio::create_scale();
             $decs .= dec('line-height', $scale[$value + 1]);
             return $decs;
         } else return '';        

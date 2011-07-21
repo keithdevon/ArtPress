@@ -479,6 +479,7 @@ function get_setting_instances($hierarchy_obj, $unpack_composites, $settings_arr
     } 
 }
 class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
+    static private $css_selectors = array();
     private $css_selector;
     function __construct($css_selector, $display_name, $children=null) {
         $this->css_selector = $css_selector;
@@ -492,6 +493,7 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
             ));
         }
         parent::__construct($display_name, $children);
+        self::$css_selectors[] = $this;
     }
     function get_css_selector() { 
         return $this->get_css();
@@ -511,6 +513,10 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
     }
     function create_css_rule() {
         $full_selector = get_full_selector($this);
+    }
+    static function get_css_selectors() {
+        $selectors = self::$css_selectors; 
+        return $selectors;
     }
 }
 /** 
@@ -646,6 +652,7 @@ function get_row( $label, $content ) {
  */
 abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
     //private $identifier;
+    private static $registered_settings = array();
     protected $name;
     private $value;
 
@@ -688,6 +695,9 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
     static function validate($value) {
         return true;
     }
+    static function register_setting($setting) {
+        self::$registered_settings[] = $setting;
+    }
 }
 class Current_Save_ID extends Setting {
     function __construct($value='') {
@@ -718,18 +728,7 @@ abstract class Toggle extends Setting {
         return $html;
     }                
 }
-abstract class Number_Setting extends Setting {
-    function __construct($display_name, $value='') {
-        parent::__construct($display_name, $value);        
-    }
-    static function validate($value) {
-         return is_numeric($value);
-    }
-    function get_html($attributes='') {
-        $input = input('text', $this->get_html_name() . attr_value($this->get_value()) . $attributes);
-        return $input;        
-    }     
-}
+
 /** 
  * This setting contains a bunch of different sub settings.
  * If this setting is on, the sub settings will be used, 
@@ -1017,6 +1016,19 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
        $options = static::get_options();
        return $options[$value];
    }
+}
+
+abstract class Number_Setting extends Setting {
+    function __construct($display_name, $value='') {
+        parent::__construct($display_name, $value);        
+    }
+    static function validate($value) {
+         return is_numeric($value);
+    }
+    function get_html($attributes='') {
+        $input = input('text', $this->get_html_name() . attr_value($this->get_value()) . $attributes);
+        return $input;        
+    }     
 }
 
 // LIST

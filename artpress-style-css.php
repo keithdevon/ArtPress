@@ -6,16 +6,32 @@
 
 require_once('../../../wp-load.php');
 require_once('css-gen.php');
+$output = "";
 
 $maintabgroup = new Main_Tab_Group('main tab group');
 $options = get_option('ap_options');
+$current_save = $options['saves'][$options['Current_Save_ID']];
 if ($options != null) {
-    $maintabgroup->inject_values($options['saves'][$options['Current_Save_ID']]);
+    $maintabgroup->inject_values($current_save);
 }
 
-$selectors = $maintabgroup->get_css_selectors();
+// customized functionality for Global Settings css
+// headers
+$font_size = Global_Font_Size_Ratio::get_font_size(1);
+$selector_string = 'h1, h2, h3, h4, h5, h6';
+$declarations = dec('margin-top', 2 * $font_size);
+$declarations .= dec('margin-bottom', $font_size);
+$output .= rule($selector_string, decblock($declarations));
 
-$output = "";
+// paragraph
+$selector_string = 'p';
+$declarations = dec('margin-bottom', $font_size);
+$output .= rule($selector_string, decblock($declarations));
+
+// standard functionality for all other settings 
+//$selectors = $maintabgroup->get_css_selectors();
+$selectors = CSS_Selector::get_css_selectors(); 
+
 foreach ( $selectors as $selector ) {
     $selector_string = get_full_selector_string( get_full_selector_array($selector) );
         $recurse_test = function($child) {

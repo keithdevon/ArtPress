@@ -51,7 +51,7 @@ class Logo_Toggle extends Toggle {
         parent::__construct('Use logo image',  $value);
     }
 }
-class Global_Settings extends Main_Tab {
+class Global_Settings extends Main_Tab  {
     function __construct($members=null) {
         if ( null == $members ) {       
             $gc1 = new Global_Color('Color 1', '#000000');
@@ -73,5 +73,6 @@ class Global_Settings extends Main_Tab {
         }
         parent::__construct('global settings', 'artpress_options', $members);
     }
+    
 }
 
