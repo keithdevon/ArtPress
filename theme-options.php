@@ -76,9 +76,9 @@ function artpress_theme_init() {
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_menu_page(                 __( 'ArtPress Options' ),    __( 'ArtPress' ),            'edit_theme_options', 'artpress',    'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
-        add_submenu_page('artpress',   __('Manage Configurations'), __('Manage Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');
-        add_submenu_page('artpress',   __('Manage Images'),         __('Manage Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
+        add_menu_page(                 __( 'ArtPress Options' ),    __( 'Artpress' ),            'edit_theme_options', 'artpress',    'ap_settings_page', '', 0 ); // TODO stop Artpress Options from being displayed on the form
+        add_submenu_page('artpress',   __('Configurations'), __('Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');
+        add_submenu_page('artpress',   __('Images'),         __('Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
 }
 
 function ap_bi_section_html() {
@@ -95,6 +95,9 @@ function ap_reset_html() { ?>
 
 /** Displays the html form elements for selecting a background image */
 function ap_image_html($number) {
+        //wp_nonce_url
+    ///wp/wp-admin/upload.php?deleted=1
+    //http://localhost/wp/wp-admin/post.php?action=delete&post=78&_wpnonce=b0cb2fedda
     global $background_image_prefix;
     $file_id = $background_image_prefix . $number;
     $file_paths = get_option('ap_images');
@@ -159,30 +162,42 @@ function ap_configs_page() {
     $options = get_option('ap_options');
     $o = '';
     $o .= h2('configurations');
-    
-    $o .= label( 'Current_Save_ID', __('current configuration') );
-    $o .= input( 'text', attr_readonly() . attr_value( $options['Current_Save_ID'] ) );
-    
-    // select a configuration
-    
+    $o .= ot('table');
+    $o .= tr( td(label( 'Current_Save_ID', __('current configuration') ) ) .
+              td(input( 'text', attr_readonly() . attr_value( $options['Current_Save_ID'] ) ) ) );
+              
+    // select a configuration  
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
     $o .= input('hidden', attr_name('ap_options[change_Current_Save_ID]') . attr_value('true') );
     if( $options && isset($options['saves'])) {
-        $o .= label('load_configuration',__('load a configuration'));
-        $html_opts = '';
+        $first = true;
+        $first_col = 'load configuration';
         foreach (array_keys($options['saves']) as $save_name) {
-            $html_opts .= option($save_name, $save_name);
-        }
-        $o .= select('ap_options[Current_Save_ID]', $html_opts, attr_id('load_configuration'));
+            $o .= tr( td($first_col) . td( input( 'button', attr_name("ap_options[Current_Save_ID]") .attr_value($save_name))));
+            if($first) {
+                $first = false;
+                $first_col = '';
+            }
+        }   
     }
-    
-    $load = __( 'load' );  
-    $o .= 	"<span class='submit'><input type='submit' class='button-primary' value='{$load}' /></span>";      
     $o .= ct('form');
-    $div = div($o, attr_class('wrap'));
     
     // create new configuration
+    $o .= '<form method="post" action="options.php">';
+    $o .= get_settings_fields('artpress_options');
+    $o .= input('hidden', attr_name('ap_options[create_new_configuration]') . attr_value('true') );
+
+    $o .= ot('tr');
+    $o .= td(label('new_configuration',__('create new configuration')));
+    $o .= td(input('text', attr_name('ap_options[Current_Save_ID]'), attr_id('new_configuration')));
+    $load = __( 'create' );  
+    $o .= td("<span class='submit'><input type='submit' class='button-primary' value='{$load}' /></span>");
+    $o .= ct('tr');      
+    $o .= ct('form');
+    
+    $o .= ct('table');
+    $div = div($o, attr_class('wrap'));
     
     // select default configurations
     
@@ -240,6 +255,13 @@ function ap_options_validate( $new_settings ) {
         $options['Current_Save_ID'] = $new_settings['Current_Save_ID'];
         return $options;
     }
+    if ( $new_settings['create_new_configuration'] ) {
+
+        $new_config_name = $new_settings['Current_Save_ID'];
+        $options['Current_Save_ID'] = $new_config_name;
+        $options['saves'][$options['Current_Save_ID']] = array();
+        return $options;
+    }
     if( $options == null) $options = get_ap_options_defaults();
 
     $previous_save = $options['saves'][$options['Current_Save_ID']];
@@ -253,6 +275,7 @@ function ap_options_validate( $new_settings ) {
     
     // validate save
 
+    // set the Current_Save_ID
     // create save name if none supplied
     if( $new_settings['Current_Save_ID'] == '' ) {
         $d = getdate();
