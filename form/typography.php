@@ -21,10 +21,10 @@ class Text_Decoration extends CSS_Dropdown_Input {
     }   
 }
 
-class Global_Font_Size extends CSS_Size_Text_Input {
+class Global_Font_Size extends Number_Setting {
     static $global_font_size_instance;
     function __construct($value) {
-        parent::__construct('font-size', 'Base font size', $value);
+        parent::__construct('Base font size', $value);
         self::$global_font_size_instance = $this;
     }
     static function get_global_font_size() {
@@ -56,7 +56,7 @@ class Global_Font_Size_Ratio extends CSS_Dropdown_Input {
 }
 
 class Section_Font_Size extends CSS_Dropdown_Input {
-    static $start = -3;
+    static $start = -1;
     static $size   = 8;    
     function __construct($value=0) {
         parent::__construct('font-size', 'font size', $value);
@@ -72,7 +72,7 @@ class Section_Font_Size extends CSS_Dropdown_Input {
         $end = self::$start + self::$size;
         
         for($i = self::$start; $i < $end; $i++) {
-            $options[] = round($global_size * pow($ratio, $i), 2) . 'px';  
+            $options[] = round($global_size * pow($ratio, $i), 0) . 'px';  
         }
         
         return $options;

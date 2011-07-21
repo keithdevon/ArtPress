@@ -703,6 +703,18 @@ class Current_Save_ID extends Setting {
         return $o;        
     }
 }
+abstract class Number_Setting extends Setting {
+    function __construct($display_name, $value='') {
+        parent::__construct($display_name, $value);        
+    }
+    static function validate($value) {
+         return is_numeric($value);
+    }
+    function get_html($attributes='') {
+        $input = input('text', $this->get_html_name() . attr_value($this->get_value()) . $attributes);
+        return $input;        
+    }     
+}
 /** 
  * This setting contains a bunch of different sub settings.
  * If this setting is on, the sub settings will be used, 
