@@ -202,7 +202,8 @@ class Font_Weight extends CSS_Dropdown_Input {
 class Typography_Tab extends Sub_Tab {
     function __construct($display_name, $members=null, $html_id=null) {
         if ( null == $members ) { 
-            $members[] = new Section_Foreground_Color();        
+            $members[] = new Section_Foreground_Color();  
+            $members[] = new Section_Background_Color();      
             $members[] = new Section_Font();
             $members[] = new Section_Font_Size();
             $members[] = new Font_Style();
