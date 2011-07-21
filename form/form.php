@@ -763,6 +763,12 @@ abstract class Toggle_Group extends Setting implements IComposite {
     }
     
 }
+function create_css_declaration($css_setting) {
+    $value = $css_setting->get_css_value();
+    if ($value) {
+        return dec($css_setting->get_css_property(), $value);
+    } else return '';
+}
 /**
  * 
  * This class represents settings whose values will ultimately be rendered to css
@@ -777,10 +783,7 @@ abstract class CSS_Setting extends Setting implements CSS {
         parent::__construct($display_name, $value);
     }
     function get_css_declaration() {
-        $value = $this->get_css_value();
-        if ($value) {
-            return dec($this->css_property, $value);
-        } else return '';
+        return create_css_declaration($this);
     }
     function get_css() {
         return $this->css_property;
@@ -969,7 +972,8 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
     }
     
     static function validate($value) {
-        $size = sizeof(static::get_options());
+        $options = static::get_options();
+        $size = sizeof($options);
         if( ($value < $size) && ($value >= 0) ) {
             return true;         
         } else {

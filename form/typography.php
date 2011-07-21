@@ -24,7 +24,7 @@ class Text_Decoration extends CSS_Dropdown_Input {
 class Global_Font_Size extends CSS_Size_Text_Input {
     static $global_font_size_instance;
     function __construct($value) {
-        parent::__construct('font-size', 'base font size', $value);
+        parent::__construct('font-size', 'Base font size', $value);
         self::$global_font_size_instance = $this;
     }
     static function get_global_font_size() {
@@ -32,12 +32,15 @@ class Global_Font_Size extends CSS_Size_Text_Input {
         $size = $instance->get_value();
         return $size;
     }
+    function get_html() {
+        return parent::get_html();
+    }
 }
 class Global_Font_Size_Ratio extends CSS_Dropdown_Input {
     static $global_font_size_ratio_instance;
     static $options = array(array('golden', 1.618), array('musical fifths', 1.5), array('musical forths', 1.4));
     function __construct($value=0) { 
-        parent::__construct('font-size-ratio', 'font size ratio', $value);
+        parent::__construct('font-size-ratio', 'Font size ratio', $value);
         self::$global_font_size_ratio_instance = $this;
     }
     //static function get_options() {
@@ -53,22 +56,39 @@ class Global_Font_Size_Ratio extends CSS_Dropdown_Input {
 }
 
 class Section_Font_Size extends CSS_Dropdown_Input {
-    function __construct($value='10') {
+    static $start = -3;
+    static $size   = 8;    
+    function __construct($value=0) {
         parent::__construct('font-size', 'font size', $value);
     }
     static function get_options() {
+        return array_slice(self::create_scale(), 0, self::$size -1 );
+    }
+    static function create_scale() {
         $global_size = Global_Font_Size::get_global_font_size();
         $ratio = Global_Font_Size_Ratio::get_global_font_size_ratio();
         
         $options[0] = '';
-        $start = -3;
-        $end   = 4;
+        $end = self::$start + self::$size;
         
-        for($i = $start; $i < $end; $i++) {
+        for($i = self::$start; $i < $end; $i++) {
             $options[] = round($global_size * pow($ratio, $i), 2) . 'px';  
         }
         
         return $options;
+    }
+    function get_css_value() {
+        return parent::get_css_value();
+    }
+    function get_css_declaration() {
+        $value = $this->get_value();
+        if ($value) {
+            $decs  = dec($this->get_css_property(), $this->get_css_value());
+            
+            $scale = self::create_scale();
+            $decs .= dec('line-height', $scale[$value + 1]);
+            return $decs;
+        } else return '';        
     }
 }
 
@@ -116,19 +136,19 @@ class Global_Font_Family extends CSS_Dropdown_Input  {
         $name = $this_class . '__' . $number_of_global_font_family_instances;
         $this->set_name( $name );
     }
-    static function get_dropdown_font_family_options() {
-        $list = array();
-        foreach (self::$global_font_family_instances as $global_font) {
-           $v = $global_font->get_value();
-           $font = self::$options[$v];
-           if (is_array( $font ) ) {
-               $list[] = $font[0];
-           } else {
-               $list[] = $font;
-           }
-        }
-        return $list;
-    }
+    //static function get_dropdown_font_family_options() {
+    //    $list = array();
+    //    foreach (self::$global_font_family_instances as $global_font) {
+    //       $v = $global_font->get_value();
+    //       $font = self::$options[$v];
+    //       if (is_array( $font ) ) {
+    //           $list[] = $font[0];
+    //       } else {
+    //           $list[] = $font;
+    //       }
+    //    }
+    //    return $list;
+    //}
     static function get_global_font_family_instances() {
         $instances = static::$global_font_family_instances;
         return $instances;
@@ -161,12 +181,6 @@ class Section_Font extends CSS_Dropdown_Input implements ISetting_Depends_On_Glo
         }
         return $list;
     } 
-}
-class Font_Size extends CSS_Dropdown_Input { // TODO delete?
-    static $options = array('', '0.8em', '1em', '1.2em', '1.5em', '2em', '3em', '4em');
-    function __construct($value=0) { 
-        parent::__construct('font-size', 'font size', $value); 
-    }    
 }
 class Font_Style extends CSS_Dropdown_Input {
     static $options = array('', 'normal', 'italic', 'oblique');

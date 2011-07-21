@@ -58,7 +58,7 @@ class Global_Settings extends Main_Tab {
             
             $gfs = new Global_Font_Size(10);
             $gfss = new Global_Font_Size_Ratio();
-            $members[] = new Option_Group($gfs, $gfss);
+            $members[] = new Option_Group('Global Font Size', array($gfs, $gfss));
             $gf1 = new Global_Font_Family('Font family 1', 0);
             $gf2 = new Global_Font_Family('Font family 2', 0);
             $gf3 = new Global_Font_Family('Font family 3', 0);
