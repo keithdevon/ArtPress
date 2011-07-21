@@ -786,7 +786,7 @@ function ht_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 
 // ADD new image sizes
 
-add_image_size( 'Gallery list', 350, 200, false );
+add_image_size( 'Gallery list', 350, 200, true );
 add_image_size( 'full-width', 1140, '', false );
 add_image_size( 'six-col', 548, '', false );
 add_image_size( 'four-col', 300, '', false );
@@ -1131,3 +1131,71 @@ function cwc_fix_html_editor_font() { ?>
 
 <style type="text/css">#editorcontainer #content, #wp_mce_fullscreen { font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif; }</style>
 <?php }
+
+
+// TYPOGRAPHY GENERATOR
+
+function kd_type_gen() {
+    $scale = 'musical fourth'; //type scale, golden, musical fifths or musical thirds
+    $base = 16; //base text size in pixels
+    
+    $ht_font_sizes = array();// create font size array
+    
+    switch($scale) { // change the multiplier based on the selected modular scale
+        case 'golden':
+            $multiplier = 1.618;
+            break;
+        case 'musical fifths':
+            $multiplier = 1.5;
+            break;
+        case 'musical fourth':
+            $multiplier = 1.33;
+            break;
+    }
+    
+    $count = -3;
+    $size = $base / $multiplier / $multiplier / $multiplier ;
+    while($count < 5):
+        $count ++;
+        $key = $count + 3;
+        $size = $size * $multiplier;
+        $font_info = array(
+            'font-size'=>round($size,0),
+            'line-height'=>''
+            );
+        $ht_font_sizes['Font '.$key] = $font_info;
+    endwhile;
+           
+    // set line heights
+    
+    $base_line_height = $ht_font_sizes['Font 4']['font-size'];
+    
+    foreach($ht_font_sizes as $key=>$font_info) {
+        if( ($ht_font_sizes[$key]['font-size'] <= $base_line_height) )
+            $ht_font_sizes[$key]['line-height'] = $base_line_height;
+        elseif( ($ht_font_sizes[$key]['font-size'] > $base_line_height) && ($ht_font_sizes[$key]['font-size'] < $base_line_height*2) )
+            $ht_font_sizes[$key]['line-height'] = $base_line_height*2;
+        elseif( ($ht_font_sizes[$key]['font-size'] > $base_line_height*2) && ($ht_font_sizes[$key]['font-size'] < $base_line_height*3) )
+            $ht_font_sizes[$key]['line-height'] = $base_line_height*3;
+        elseif( ($ht_font_sizes[$key]['font-size'] > $base_line_height*3) && ($ht_font_sizes[$key]['font-size'] < $base_line_height*4) )
+            $ht_font_sizes[$key]['line-height'] = $base_line_height*4;
+    
+    }
+    
+    echo '<br />Value = '.$font_info['line-height'];
+    
+    // echo out the details
+    echo '<br />';
+    echo '<br />Baseline size = '.$base_line_height;
+    echo '<br />';
+    
+    foreach($ht_font_sizes as $key=>$font_info) {
+        echo '<br />Key:'.$key;
+        echo '<br />Font Size:'.$font_info['font-size'];
+        echo '<br />Line Height:'.$font_info['line-height'];
+        echo '<br />';
+    }
+    
+    //print_r($ht_font_sizes);
+     
+}

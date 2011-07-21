@@ -8,13 +8,19 @@ class Gallery_Base extends CSS_Selector {
 
 class Gallery_Title extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('h2.gallery-title a', 'gallery titles', $children=null);
+        parent::__construct('.grid-single h2.gallery-title a', 'gallery titles', $children=null);
+    }
+}
+
+class Galleries_Entry_Meta extends CSS_Selector {
+    function __construct($children=null) {
+        parent::__construct('.grid-single .entry-meta', 'entry meta', $children=null);
     }
 }
 
 class Gallery_Image_Links extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('div.category-galleries div.gallery-thumb', 'gallery listings image', $children=null);
+        parent::__construct('div.gallery-icon', 'images', $children=null);
     }
 }
 
@@ -23,7 +29,7 @@ class Gallery_Group extends CSS_Selector_Group {
         if( null == $children ) {
             $children[] = new Gallery_Base();
             $children[] = new Gallery_Title();
-            $children[] = new Entry_Meta();
+            $children[] = new Galleries_Entry_Meta();
             $children[] = new Gallery_Image_Links();
         }
         parent::__construct('.category-galleries', 'gallery', $children);

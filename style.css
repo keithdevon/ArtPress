@@ -1505,11 +1505,12 @@ box-shadow:rgba(0,92,17,0.75) 0px 8px 24px;
 
 
 /* Gallery padding */
-
-div.gallery-icon {
-    padding:1em;
-    background: #eee;
-    }
+    
+.gallery-icon a img {
+    display: block;
+    } 
+    
+/* Tutorial links */
     
 a.tutorial-image:link {
     margin-left:1em;
