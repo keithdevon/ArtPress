@@ -784,7 +784,14 @@ function ht_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 	return $html;
 }*/
 
+// ADD new image sizes
 
+add_image_size( 'Gallery list', 350, 200, true );
+add_image_size( 'full-width', 1140, '', false );
+add_image_size( 'six-col', 548, '', false );
+add_image_size( 'four-col', 300, '', false );
+add_image_size( 'three-col', 252, '', false );
+add_image_size( 'two-col', 154, '', false );
 
 
 remove_shortcode( 'gallery' );
@@ -897,19 +904,19 @@ function ht_gallery_shortcode($attr) {
 	foreach ( $attachments as $id => $attachment ) {
 	   switch ($columns) {
         case 1:
-            $ht_thumnail_size = "full-width";
+            $ht_thumnail_size = 'full-width';
             break;
         case 2:
-            $ht_thumnail_size = "six-col";
+            $ht_thumnail_size = 'six-col';
             break;
         case 3:
-            $ht_thumnail_size = "four-col";
+            $ht_thumnail_size = 'four-col';
             break;
         case 4:
-            $ht_thumnail_size = "three-col";
+            $ht_thumnail_size = 'four-col';
             break;
         case 6:
-            $ht_thumnail_size = "two-col";
+            $ht_thumnail_size = 'four-col';
             break;
         }
 		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $ht_thumnail_size, false) : wp_get_attachment_link($id, $size, true, false); 
@@ -971,21 +978,13 @@ function ht_gallery_shortcode($attr) {
 	$output .= "
 			<br style='clear: both;' />
 		</div></div>\n";
+	
+	// for testing TODO remove before launch	
+    // $output .= 'Number of columns: '.$columns.'<br />';
+    // $output .= 'Image size : '.$ht_thumnail_size;
 
 	return $output;
 }
-
-
-// ADD new image sizes
-
-add_image_size( 'Gallery list', 350, 200, true );
-add_image_size( 'full-width', 1140, '', false );
-add_image_size( 'six-col', 548, '', false );
-add_image_size( 'four-col', 300, '', false );
-add_image_size( 'three-col', 252, '', false );
-add_image_size( 'two-col', 154, '', false );
-
-
 
 // Remove height and width from images
 
@@ -1121,3 +1120,113 @@ require_once 'ht-functions/ht-socials.php';
 
 // Add address widget
 //require_once 'ht-widgets/ht-contact-widget.php';
+
+
+// Change the editor font
+
+add_action( 'admin_head-post.php', 'cwc_fix_html_editor_font' );
+add_action( 'admin_head-post-new.php', 'cwc_fix_html_editor_font' );
+
+function cwc_fix_html_editor_font() { ?>
+
+<style type="text/css">#editorcontainer #content, #wp_mce_fullscreen { font-family: Georgia, "Times New Roman", "Bitstream Charter", Times, serif; }</style>
+<?php }
+
+
+// TYPOGRAPHY GENERATOR
+
+function kd_type_gen() {
+    $scale = 'musical fourth'; //type scale, golden, musical fifths or musical thirds
+    $base = 16; //base text size in pixels
+    
+    $ht_font_sizes = array();// create font size array
+    
+    switch($scale) { // change the multiplier based on the selected modular scale
+        case 'golden':
+            $multiplier = 1.618;
+            break;
+        case 'musical fifths':
+            $multiplier = 1.5;
+            break;
+        case 'musical fourth':
+            $multiplier = 1.33;
+            break;
+    }
+    
+    $count = -3;
+    $size = $base / $multiplier / $multiplier / $multiplier ;
+    while($count < 5):
+        $count ++;
+        $key = $count + 3;
+        $size = $size * $multiplier;
+        $font_info = array(
+            'font-size'=>round($size,0),
+            'line-height'=>''
+            );
+        $ht_font_sizes['Font '.$key] = $font_info;
+    endwhile;
+           
+    // set line heights
+    
+    $base_line_height = $ht_font_sizes['Font 4']['font-size'];
+    
+    foreach($ht_font_sizes as $key=>$font_info) {
+        if( ($ht_font_sizes[$key]['font-size'] <= $base_line_height) )
+            $ht_font_sizes[$key]['line-height'] = $base_line_height;
+        elseif( ($ht_font_sizes[$key]['font-size'] > $base_line_height) && ($ht_font_sizes[$key]['font-size'] < $base_line_height*2) )
+            $ht_font_sizes[$key]['line-height'] = $base_line_height*2;
+        elseif( ($ht_font_sizes[$key]['font-size'] > $base_line_height*2) && ($ht_font_sizes[$key]['font-size'] < $base_line_height*3) )
+            $ht_font_sizes[$key]['line-height'] = $base_line_height*3;
+        elseif( ($ht_font_sizes[$key]['font-size'] > $base_line_height*3) && ($ht_font_sizes[$key]['font-size'] < $base_line_height*4) )
+            $ht_font_sizes[$key]['line-height'] = $base_line_height*4;
+    
+    }
+    
+    echo '<br />Value = '.$font_info['line-height'];
+    
+    // echo out the details
+    echo '<br />';
+    echo '<br />Baseline size = '.$base_line_height;
+    echo '<br />';
+    
+    foreach($ht_font_sizes as $key=>$font_info) {
+        echo '<br />Key:'.$key;
+        echo '<br />Font Size:'.$font_info['font-size'];
+        echo '<br />Line Height:'.$font_info['line-height'];
+        echo '<br />';
+    }
+    
+    //print_r($ht_font_sizes);
+     
+}
+
+
+// Feedback form
+
+function ht_show_feedback_form() {
+?>
+    <div id="feedback-form"><form method="post" id="captcha_form" name="captcha_form" action="mailform.php">
+
+	<div style="padding-bottom: 1em;">From: <br /><input type="text" name="email" id="email" value="" />
+	</div>
+<div style="padding-bottom: 1em;">Subject: <br /><select name="subject" id="subject">
+	<option value=0></option>
+	<option value=1>Bug Report</option>
+		<option value=2>Feature Request</option>
+		</select>
+	</div>
+		<div style="padding-bottom: 1em;">Enter the text contained in the image into the text box:
+					<br /><img src="captcha.php" />
+					<br /><input type="text" name="userpass" value="" />
+	</div>
+	<div style="padding-bottom: 1em;">Message:
+					<br /><textarea name="message" id="message" rows="10" cols="60"><?php echo "</tex" . "tarea>"; ?>
+						<br /><a href="http://www.addressmunger.com/contact_form_generator/" style="">Free contact form from AddressMunger.com</a>
+	</div>
+	
+	<div style="padding-bottom: 1em;"><input name="submit" type="submit" value="Submit" />
+	</div>
+</form></div><?php
+}
+
+add_action('wp_footer', 'ht_show_feedback_form');

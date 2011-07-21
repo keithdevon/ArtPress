@@ -137,15 +137,15 @@ function ht_save_extra_profile_fields( $user_id ) {
 		return false;
 
 	/* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
-	update_usermeta( $user_id, 'twitter', $_POST['twitter'] );
-	update_usermeta( $user_id, 'flickr', $_POST['flickr'] );
-	update_usermeta( $user_id, 'linkedin', $_POST['linkedin'] );
-	update_usermeta( $user_id, 'facebook', $_POST['facebook'] );
-	update_usermeta( $user_id, 'company-name', $_POST['company-name'] );
-	update_usermeta( $user_id, 'address-line-1', $_POST['address-line-1'] );
-	update_usermeta( $user_id, 'address-line-2', $_POST['address-line-2'] );
-	update_usermeta( $user_id, 'address-city', $_POST['address-city'] );
-	update_usermeta( $user_id, 'address-county', $_POST['address-county'] );
-	update_usermeta( $user_id, 'address-code', $_POST['address-code'] );
-	update_usermeta( $user_id, 'address-country', $_POST['address-country'] );
+	update_user_meta( $user_id, 'twitter', $_POST['twitter'] );
+	update_user_meta( $user_id, 'flickr', $_POST['flickr'] );
+	update_user_meta( $user_id, 'linkedin', $_POST['linkedin'] );
+	update_user_meta( $user_id, 'facebook', $_POST['facebook'] );
+	update_user_meta( $user_id, 'company-name', $_POST['company-name'] );
+	update_user_meta( $user_id, 'address-line-1', $_POST['address-line-1'] );
+	update_user_meta( $user_id, 'address-line-2', $_POST['address-line-2'] );
+	update_user_meta( $user_id, 'address-city', $_POST['address-city'] );
+	update_user_meta( $user_id, 'address-county', $_POST['address-county'] );
+	update_user_meta( $user_id, 'address-code', $_POST['address-code'] );
+	update_user_meta( $user_id, 'address-country', $_POST['address-country'] );
 }

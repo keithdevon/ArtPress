@@ -34,7 +34,7 @@ get_header(); ?>
                 </div><!-- eightcol -->
 			
                 <div class="fourcol last">
-                    <?php get_sidebar(); ?>
+                    <?php get_template_part('sidebars/second-sidebar'); ?>
                 </div>
                 <div class="clear"></div>
             </div><!-- .row -->
