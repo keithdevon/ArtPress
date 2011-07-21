@@ -33,12 +33,14 @@ class Background_Image_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
         if ( null == $members ) { 
             $members = array(
+            new Section_Background_Color(),             
+            new Background_Image_Toggle(0, array(
                 new Section_Image(),
                 new Background_Repeat(),
                 new Background_Attachment(),
                 new Background_Horizontal_Position(),
-                new Background_Vertical_Position() );
+                new Background_Vertical_Position() ) ) );
         }
-        parent::__construct($display_name, new Background_Image_Toggle(0, $members));
+        parent::__construct($display_name, $members);
     }
 }
