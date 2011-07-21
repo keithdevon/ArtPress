@@ -443,7 +443,7 @@ class Main_Tab_Group extends Tab_Group {
             $o .= $csi->get_html();
             $save = __( 'Save Settings' );
             
-            $o .= "<span class='submit'><input type='submit' class='button-primary' value='{$save}' /></span>";      
+            $o .= "<span class='submit'><input type='submit' id='ht_save_options' class='button-primary' value='{$save}' /></span>";      
             $child_html = parent::get_html();
             $o .= $child_html;
         $o .= ct('form');
