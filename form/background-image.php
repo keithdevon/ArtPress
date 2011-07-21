@@ -33,6 +33,8 @@ class Background_Image_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
         if ( null == $members ) { 
             $members = array(
+      
+                new Section_Background_Color(); 
                 new Section_Image(),
                 new Background_Repeat(),
                 new Background_Attachment(),
