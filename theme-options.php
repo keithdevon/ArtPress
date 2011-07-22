@@ -177,13 +177,18 @@ function ap_configs_page() {
         $first = true;
         $first_col = 'load configuration';
         foreach (array_keys($options['saves']) as $save_name) {
-            $o .= tr( td($first_col) . td( input( 'button', attr_name("ap_options[Current_Save_ID]") .attr_value($save_name))));
+            $o .= tr( td($first_col)
+                        . td($save_name)
+                        . td( input( 'radio', attr_name("ap_options[Current_Save_ID]") .attr_value($save_name))));
             if($first) {
                 $first = false;
                 $first_col = '';
             }
         }   
     }
+    $load = __( 'load' );  
+    $o .= td(''). td(''). td("<span class='submit'><input type='submit' class='button-primary' value='{$load}' /></span>");
+    
     $o .= ct('form');
     
     // create new configuration
@@ -194,8 +199,8 @@ function ap_configs_page() {
     $o .= ot('tr');
     $o .= td(label('new_configuration',__('create new configuration')));
     $o .= td(input('text', attr_name('ap_options[Current_Save_ID]'), attr_id('new_configuration')));
-    $load = __( 'create' );  
-    $o .= td("<span class='submit'><input type='submit' class='button-primary' value='{$load}' /></span>");
+    $create = __( 'create' );  
+    $o .= td("<span class='submit'><input type='submit' class='button-primary' value='{$create}' /></span>");
     $o .= ct('tr');      
     $o .= ct('form');
     
