@@ -18,6 +18,7 @@ function attr_name ($value)       { return attribute('name',   $value); }
 function attr_readonly ()         { return attribute('readonly', 'readonly'); }
 function attr_size ($value)       { return attribute('size',   $value); }
 function attr_src ($value)        { return attribute('src',    $value); }
+function attr_title ($value)      { return attribute('title',  $value); }
 function attr_type ($value)       { return attribute('type',   $value); }
 function attr_valign ($value)     { return attribute('valign', $value); }
 function attr_value ($value)      { return attribute('value',  $value); }
