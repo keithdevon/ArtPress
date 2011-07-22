@@ -13,10 +13,6 @@ class Global_Color extends CSS_Text_Input {
     function __construct($display_name, $value='') {
         parent::__construct('color', $display_name, $value);
         self::$global_color_instances[] = $this;   
-        $this_class = get_class($this);
-        $number_of_global_color_instances = sizeof(self::$global_color_instances);
-        $name = $this_class . '__' . $number_of_global_color_instances;
-        $this->set_name( $name );
     }
     static function validate($value) {
         return preg_match('/^#[a-f0-9]{6}$/i', $value ); 

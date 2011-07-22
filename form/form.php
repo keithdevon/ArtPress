@@ -407,22 +407,7 @@ class Main_Tab_Group extends Tab_Group {
     }
     
     function inject_values($values) {
-        //$settings = get_setting_instances($this, true);
-        $recurse_test = function($child) {
-            if( $child->has_children() ) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-        $valid_child_test = function($child) {
-            if ( $child instanceof Setting ) { 
-                return true;
-            } else {
-                return false;
-            }
-        };
-        $settings = $this->get_children($recurse_test, $valid_child_test);
+        $settings = Setting::get_registered_settings();
         foreach( array_keys($settings) as $setting_key ) { // TODO iterate over $values instead? much smaller
             // Do a check first to see that setting key exists in the existing supplied $values
             // which will be false for new settings in new versions
@@ -660,6 +645,7 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
         $this->value = $v;
         parent::__construct($display_name, null);
         $this->name = get_class($this);
+        self::register_setting_instance($this);
     }
 
     function get_value()       { 
@@ -695,8 +681,19 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
     static function validate($value) {
         return true;
     }
-    static function register_setting($setting) {
-        self::$registered_settings[] = $setting;
+    static function register_setting_instance($setting) {
+        $name = $setting->get_name();
+        $new_name = $name;
+        $i = 2;
+        while(isset(self::$registered_settings[$new_name])) {
+            $new_name = $name . "__{$i}";
+            $i++;
+        }
+        $setting->set_name($new_name);
+        self::$registered_settings[$new_name] = $setting;
+    }
+    static function get_registered_settings() {
+        return self::$registered_settings;
     }
 }
 class Current_Save_ID extends Setting {
