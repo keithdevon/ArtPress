@@ -36,8 +36,6 @@ class Image extends CSS_Text_Input { // TODO this should probably be deleted
         }
         return $options;       
     }
-    function get_name() { return $this->name; }
-    
     function get_html() {
         $options = get_option('ap_options');
         $name = $this->get_name();

@@ -191,6 +191,28 @@ function ap_configs_page() {
     
     $o .= ct('form');
     
+    // delete a configuration  
+    $o .= '<form method="post" action="options.php">';
+    $o .= get_settings_fields('artpress_options');
+    $o .= input('hidden', attr_name('ap_options[delete_configuration]') . attr_value('true') );
+    if( $options && isset($options['saves'])) {
+        $first = true;
+        $first_col = 'delete configuration';
+        foreach (array_keys($options['saves']) as $save_name) {
+            $o .= tr( td($first_col)
+                        . td($save_name)
+                        . td( input( 'checkbox', attr_name("ap_options[dead_saves][${save_name}]") .attr_value($save_name))));
+            if($first) {
+                $first = false;
+                $first_col = '';
+            }
+        }   
+    }
+    $delete = __( 'delete' );  
+    $o .= td(''). td(''). td("<span class='submit'><input type='submit' class='button-primary' value='{$delete}' /></span>");
+    
+    $o .= ct('form');
+    
     // create new configuration
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
@@ -263,11 +285,25 @@ function ap_options_validate( $new_settings ) {
         $options['Current_Save_ID'] = $new_settings['Current_Save_ID'];
         return $options;
     }
-    if ( $new_settings['create_new_configuration'] ) {
-
+    if( $new_settings['create_new_configuration'] ) {
         $new_config_name = $new_settings['Current_Save_ID'];
         $options['Current_Save_ID'] = $new_config_name;
         $options['saves'][$options['Current_Save_ID']] = array();
+        return $options;
+    }
+    if( $new_settings['delete_configuration'] ) {
+        $dead_saves = $new_settings['dead_saves'];
+        foreach( array_keys($dead_saves) as $save ) {
+            unset($options['saves'][$save]);
+        }
+        $first_save = key($options['saves']);
+        if($first_save) {
+            $options['Current_Save_ID'] = $first_save;
+        } else {
+            $options['Current_Save_ID'] = 'default';
+            $options['saves'][$options['Current_Save_ID']] = array();
+        }
+               
         return $options;
     }
     if( $options == null) $options = get_ap_options_defaults();
@@ -281,7 +317,7 @@ function ap_options_validate( $new_settings ) {
     // filter out default values
     $merged_save = array_filter($merged_save); 
     
-    // validate save
+    // validate save TODO 
 
     // set the Current_Save_ID
     // create save name if none supplied

@@ -25,7 +25,6 @@ class Global_Color extends CSS_Text_Input {
         }
         return $options;       
     }
-    function get_name() { return $this->name; }
     function get_html() {
         return parent::get_html( attr_class('colorwell') );
     }

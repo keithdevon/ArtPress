@@ -157,7 +157,6 @@ class Global_Font_Family extends CSS_Dropdown_Input  {
         $instances = static::$global_font_family_instances;
         return $instances;
     }
-    function get_name() { return $this->name; }
 }
 /**
  * Class to represent a selector of one of the preselected font

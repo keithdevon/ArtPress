@@ -372,39 +372,6 @@ class Main_Tab_Group extends Tab_Group {
         $children = parent::to_array();
         return array('cs'=>$children);
     }
-
-//    function get_setting_values_array() {
-//        $setting_values = array();
-//        $settings = get_setting_instances($this);
-//        foreach( $settings as $setting ) {
-//            $name = $setting->get_name();
-//            $value = $setting->get_value();
-//            $setting_values[$name] = $value;
-//        }
-//        return $setting_values;
-//    }
-    /** 
-     * Recursive function to get CSS Selector objects
-     * 
-     */
-    function get_css_selectors($thing=null, $selectors=null) {
-        if( $thing==null ) {
-            return $this->get_css_selectors($this, array());
-        } else if( $thing instanceof CSS_Selector) {
-            $selectors[] = $thing;
-            return $selectors;
-        } else if ( $thing instanceof Hierarchy ) {
-            $children = $thing->get_children();
-            if( $children!= null ) {
-                foreach ( $children as $child ) {
-                    $new_selectors = $this->get_css_selectors($child, $selectors);
-                    $selectors = $new_selectors;
-                }
-            }
-            return $selectors;            
-        }  
-        
-    }
     
     function inject_values($values) {
         $settings = Setting::get_registered_settings();
@@ -659,6 +626,10 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
         }
     }
     
+    function get_differentiator () {
+        return get_class($this);
+    }
+    
     function get_full_name() {
         $local_name = $this->get_name();
         $full_name = '[' . $local_name . ']';
@@ -668,9 +639,7 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
         // TODO I don't like artpress_options being hard coded, not important for now though
         return attr_name('ap_options[cs]' . $this->get_full_name());
     }
-    function get_name() { 
-        return $this->name; 
-    }
+
     function set_name($name) { $this->name = $name; }
     
     function to_array() {
@@ -682,18 +651,30 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
         return true;
     }
     static function register_setting_instance($setting) {
-        $name = $setting->get_name();
-        $new_name = $name;
-        $i = 2;
-        while(isset(self::$registered_settings[$new_name])) {
-            $new_name = $name . "__{$i}";
-            $i++;
-        }
-        $setting->set_name($new_name);
-        self::$registered_settings[$new_name] = $setting;
+        self::$registered_settings[] = $setting;
     }
     static function get_registered_settings() {
-        return self::$registered_settings;
+        $settings = array();
+        $registererd_settings = self::$registered_settings;
+        foreach ( $registererd_settings as $setting ) {
+            $name = $setting->get_name();
+            $new_name = $name;
+            $i = 2;
+            while(isset($settings[$new_name])) {
+                $new_name = $name . "__{$i}";
+                $i++;
+            }
+            $setting->set_name($new_name); // give the setting its proper name
+            $settings[$new_name] = $setting;
+        }
+        return $settings;
+    }
+    function set_parent($parent) {
+        parent::set_parent($parent);
+    }
+    function get_css() { return ''; }
+    function get_name() { 
+        return $this->name;
     }
 }
 class Current_Save_ID extends Setting {
@@ -753,8 +734,6 @@ abstract class Toggle_Group extends Setting implements IComposite {
         $html = 
                 input('hidden', $html_name . attr_value('0')) .
                 input('checkbox', $html_name . attr_value($value) . attr_checked($value));
-            //. td( ht_input_checkbox( $id, $value , 'on')
-            //. ht_label ('description', $id, $field_blurb) );
         $children = parent::get_children();
         if ( null != $children ) {
             foreach($children as $child) {
@@ -763,17 +742,6 @@ abstract class Toggle_Group extends Setting implements IComposite {
         }
         return $html;
     } 
-    function get_name() { 
-        $name = '';
-        $parents = $this->get_parentage_array();    
-        foreach ( $parents as $parent ) {
-            if( $parent instanceof CSS ) {
-                $name =  $parent->get_css() . '__' . $name;
-            }
-        }
-        $name .= parent::get_name();
-        return $name; 
-    }
     function set_value($value) {
         parent::set_value($value);
     }
@@ -791,6 +759,16 @@ function create_css_declaration($css_setting) {
     if ($value) {
         return dec($css_setting->get_css_property(), $value);
     } else return '';
+}
+function get_css_parents($hierarchy_object) {
+    $name = '';
+    $parents = $hierarchy_object->get_parentage_array();    
+    foreach ( $parents as $parent ) {
+        if( $parent instanceof CSS ) {
+            $name =  $parent->get_css() . '__' . $name;
+        }
+    }
+    return $name;
 }
 /**
  * 
@@ -814,16 +792,8 @@ abstract class CSS_Setting extends Setting implements CSS {
     function get_css_value() {
         return $this->get_value();
     }
-    function get_name() { 
-        $name = '';
-        $parents = $this->get_parentage_array();    
-        foreach ( $parents as $parent ) {
-            if( $parent instanceof CSS ) {
-                $name =  $parent->get_css() . '__' . $name;
-            }
-        }
-        $name .= $this->get_css();
-        return $name; 
+    function get_differentiator() {
+        return $this-> get_css();
     }
     function get_css_property() {
         return $this->css_property;
@@ -844,10 +814,6 @@ class CSS_Composite extends CSS_Setting implements IComposite {
      * */
     function __construct($display_name, $common_css_property, $members=array()) {
         foreach ($members as $child) {
-            //$this_css_property = $common_css_property;
-            //$child_css_property = $child->get_css_property();
-            //$new_property = $this_css_property . '-' . $child_css_property;
-            //$child->set_css_property($new_property);
             $this->add_child($child);
         }
         parent::__construct($common_css_property, $display_name, null);
@@ -890,8 +856,11 @@ abstract class CSS_Text_Input extends CSS_Setting {
         parent::__construct($css_property, $display_name, $value);        
     }
     function get_html($attributes = '') {
-        $input = input('text', $this->get_html_name() . attr_value($this->get_value()) . attr_title($this->get_display_name()) . $attributes);
-        return $input;
+        $html_name = $this->get_html_name();
+        $value = attr_value($this->get_value());
+        $title = attr_title($this->get_display_name());
+        $i = input('text', $title . $html_name . $value . $attributes);
+        return $i;
     }
 }
 abstract class CSS_Size_Text_Input extends CSS_Text_Input {
