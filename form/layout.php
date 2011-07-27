@@ -47,14 +47,15 @@ class Padding_Left extends CSS_Size_Text_Input {
     }
 }
 
-// DISPLAY
-class Display extends CSS_Dropdown_Input {
-    static $options = array('', 'inherit', 'none', 'block', 'inline', 'inline-block', 'inline-table', 'list-item', 
+$display_options = array('', 'inherit', 'none', 'block', 'inline', 'inline-block', 'inline-table', 'list-item', 
         						'run-in', 'table', 'table-caption', 'table-cell', 'table-column', 
         						'table-column-group', 'table-footer-group', 'table-header-group', 
         						'table-row', 'table-row-group');
+// DISPLAY
+class Display extends CSS_Dropdown_Input {
     function __construct($value=0) { 
-        parent::__construct('display', 'display mode', $value);
+        global $display_options;
+        parent::__construct('display', 'display mode', $display_options, $value);
     }    
 }
 

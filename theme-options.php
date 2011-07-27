@@ -146,8 +146,8 @@ function ap_settings_page() {
     $maintabgroup = new Main_Tab_Group('main tab group');
     $options = get_option('ap_options');
     if ($options != null) {
-        $maintabgroup->inject_values(array_merge(array('Current_Save_ID'=>$options['Current_Save_ID']), 
-                                                 $options['saves'][$options['Current_Save_ID']]));
+        $maintabgroup->inject_values(array_merge(array('current-save-id'=>$options['current-save-id']), 
+                                                 $options['saves'][$options['current-save-id']]));
     }
     echo $maintabgroup->get_html();
     echo ct('div');
@@ -166,20 +166,20 @@ function ap_configs_page() {
     $o = '';
     $o .= h2('configurations');
     $o .= ot('table');
-    $o .= tr( td(label( 'Current_Save_ID', __('current configuration') ) ) .
-              td(input( 'text', attr_readonly() . attr_value( $options['Current_Save_ID'] ) ) ) );
+    $o .= tr( td(label( 'current-save-id', __('current configuration') ) ) .
+              td(input( 'text', attr_readonly() . attr_value( $options['current-save-id'] ) ) ) );
               
     // select a configuration  
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name('ap_options[change_Current_Save_ID]') . attr_value('true') );
+    $o .= input('hidden', attr_name('ap_options[change_current-save-id]') . attr_value('true') );
     if( $options && isset($options['saves'])) {
         $first = true;
         $first_col = 'load configuration';
         foreach (array_keys($options['saves']) as $save_name) {
             $o .= tr( td($first_col)
                         . td($save_name)
-                        . td( input( 'radio', attr_name("ap_options[Current_Save_ID]") .attr_value($save_name))));
+                        . td( input( 'radio', attr_name("ap_options[current-save-id]") .attr_value($save_name))));
             if($first) {
                 $first = false;
                 $first_col = '';
@@ -220,7 +220,7 @@ function ap_configs_page() {
 
     $o .= ot('tr');
     $o .= td(label('new_configuration',__('create new configuration')));
-    $o .= td(input('text', attr_name('ap_options[Current_Save_ID]'), attr_id('new_configuration')));
+    $o .= td(input('text', attr_name('ap_options[current-save-id]'), attr_id('new_configuration')));
     $create = __( 'create' );  
     $o .= td("<span class='submit'><input type='submit' class='button-primary' value='{$create}' /></span>");
     $o .= ct('tr');      
@@ -241,8 +241,8 @@ function get_ap_options_defaults() {
     $options = array( 'cs'=>array() );
 
     $options['saves'] = array();
-    $options['Current_Save_ID'] = 'default';
-    $options['saves'][$options['Current_Save_ID']] = $options['cs'];
+    $options['current-save-id'] = 'default';
+    $options['saves'][$options['current-save-id']] = $options['cs'];
 
     $options['defaults'] = array();
     return $options;
@@ -281,34 +281,34 @@ function ap_options_validate( $new_settings ) {
     
     $options = get_option('ap_options');
     
-    if( $new_settings['change_Current_Save_ID'] ) {
-        $options['Current_Save_ID'] = $new_settings['Current_Save_ID'];
+    if( isset($new_settings['change_current-save-id'] ) ) {
+        $options['current-save-id'] = $new_settings['current-save-id'];
         return $options;
     }
-    if( $new_settings['create_new_configuration'] ) {
-        $new_config_name = $new_settings['Current_Save_ID'];
-        $options['Current_Save_ID'] = $new_config_name;
-        $options['saves'][$options['Current_Save_ID']] = array();
+    if( isset($new_settings['create_new_configuration'] ) ) {
+        $new_config_name = $new_settings['current-save-id'];
+        $options['current-save-id'] = $new_config_name;
+        $options['saves'][$options['current-save-id']] = array();
         return $options;
     }
-    if( $new_settings['delete_configuration'] ) {
+    if( isset( $new_settings['delete_configuration'] ) ) {
         $dead_saves = $new_settings['dead_saves'];
         foreach( array_keys($dead_saves) as $save ) {
             unset($options['saves'][$save]);
         }
         $first_save = key($options['saves']);
         if($first_save) {
-            $options['Current_Save_ID'] = $first_save;
+            $options['current-save-id'] = $first_save;
         } else {
-            $options['Current_Save_ID'] = 'default';
-            $options['saves'][$options['Current_Save_ID']] = array();
+            $options['current-save-id'] = 'default';
+            $options['saves'][$options['current-save-id']] = array();
         }
                
         return $options;
     }
     if( $options == null) $options = get_ap_options_defaults();
 
-    $previous_save = $options['saves'][$options['Current_Save_ID']];
+    $previous_save = $options['saves'][$options['current-save-id']];
     if ($new_settings == null ) {
         $new_settings = array('cs'=>array());
     }
@@ -319,18 +319,18 @@ function ap_options_validate( $new_settings ) {
     
     // validate save TODO 
 
-    // set the Current_Save_ID
+    // set the current-save-id
     // create save name if none supplied
-    if( $new_settings['Current_Save_ID'] == '' ) {
+    if( $new_settings['current-save-id'] == '' ) {
         $d = getdate();
         $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-        $options['Current_Save_ID'] = $date;
+        $options['current-save-id'] = $date;
     } else {
-        $options['Current_Save_ID'] = $new_settings['Current_Save_ID'];
+        $options['current-save-id'] = $new_settings['current-save-id'];
     }
     
     // store save
-    $options['saves'][$options['Current_Save_ID']] = $merged_save;
+    $options['saves'][$options['current-save-id']] = $merged_save;
     
     return $options;
 }

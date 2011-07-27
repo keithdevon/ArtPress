@@ -6,11 +6,12 @@
 
 require_once('../../../wp-load.php');
 require_once('css-gen.php');
+
 $output = "";
 
 $maintabgroup = new Main_Tab_Group('main tab group');
 $options = get_option('ap_options');
-$current_save = $options['saves'][$options['Current_Save_ID']];
+$current_save = $options['saves'][$options['current-save-id']];
 if ($options != null) {
     $maintabgroup->inject_values($current_save);
 }
@@ -19,7 +20,7 @@ if ($options != null) {
 // headers
 $font_size = Global_Font_Size_Ratio::get_font_size(1);
 $selector_string = 'h1, h2, h3, h4, h5, h6';
-$declarations = dec('margin-top', 2 * $font_size);
+$declarations = dec('margin-top', 2 * $font_size . 'px'); // TODO hacky
 $declarations .= dec('margin-bottom', $font_size);
 $output .= rule($selector_string, decblock($declarations));
 
@@ -29,31 +30,28 @@ $declarations = dec('margin-bottom', $font_size);
 $output .= rule($selector_string, decblock($declarations));
 
 // standard functionality for all other settings 
-//$selectors = $maintabgroup->get_css_selectors();
 $selectors = CSS_Selector::get_css_selectors(); 
 
+class CSS_Setting_Visitor implements Visitor {
+    static function recurse($hierarchy) {
+        return $hierarchy->has_children();
+    }
+    static function valid_child($hierarchy) {
+        if ( $hierarchy instanceof CSS_Setting ) {
+            $parent = $hierarchy->get_parent();
+            if ( $parent instanceof Toggle_Group ) {
+                return $parent->is_on();
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+}
 foreach ( $selectors as $selector ) {
     $selector_string = get_full_selector_string( get_full_selector_array($selector) );
-        $recurse_test = function($child) {
-            if( $child->has_children() ) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-        $valid_child_test = function($child) {
-            if ( $child instanceof CSS_Setting ) {
-                $parent = $child->get_parent();
-                if ( $parent instanceof Toggle_Group ) {
-                    return $parent->is_on();
-                } else {
-                    return true;
-                }
-            } else {
-                return false;
-            }
-        };
-    $settings = $selector->get_children($recurse_test, $valid_child_test);
+    $settings = $selector->get_children(new CSS_Setting_Visitor());
     $declarations = '';
     foreach( $settings as $setting ) {
         $declarations .= $setting->get_css_declaration();

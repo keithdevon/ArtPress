@@ -4,7 +4,7 @@
 /* Generic HTML attribute functions */
 function attribute($name, $value) { 
     if ( $value == '' ) return null;
-    else return ' ' . $name . '="' . $value . '"';
+    else return ' ' . $name . '="' . $value . '"'; // TODO sanitise $value with esc_attr
 } 
 function attr_action ($value)     { return attribute('action', $value); }
 function attr_alt ($value)        { return attribute('alt',    $value); }

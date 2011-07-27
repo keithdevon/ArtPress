@@ -7,15 +7,15 @@ require_once 'form.php';
  * @author jsd
  *
  */
-class Global_Color extends CSS_Text_Input {
+class Global_Color extends Setting_Text {
     private static $global_color_instances = array();
     
     function __construct($display_name, $value='') {
         parent::__construct('color', $display_name, $value);
         self::$global_color_instances[] = $this;   
     }
-    static function validate($value) {
-        return preg_match('/^#[a-f0-9]{6}$/i', $value ); 
+    function validate($value) {
+        return preg_match('/^#[a-f0-9]{6}$/i', $value); 
     }
     static function get_dropdown_color_options() {
         $options = array('');
@@ -29,16 +29,30 @@ class Global_Color extends CSS_Text_Input {
         return parent::get_html( attr_class('colorwell') );
     }
 }
+
 abstract class Section_Color extends CSS_Dropdown_Input implements ISetting_Depends_On_Global_Setting {
-    function __construct($css_property, $display_name, $value=0) { // TODO should this not fix the css_property to color?
-        parent::__construct($css_property, $display_name, $value);
+    function __construct($css_property, $display_name, $value=0) {
+        parent::__construct($css_property, $display_name, null, $value);
     }
-    static function get_options() {
+    function get_opts() {
         return Global_Color::get_dropdown_color_options();
     }
     function get_css_value() {
-        $options = self::get_options();
+        $options = $this->get_opts();
         $value = $options[$this->get_value()];
+        return $value;
+    }
+}
+class Setting_Color extends Setting_Dropdown implements ISetting_Depends_On_Global_Setting {
+    function __construct($value=0) {
+        parent::__construct('color', 'color', null, $value);
+    }
+    function get_opts() {
+        return Global_Color::get_dropdown_color_options();
+    }
+    function get_value() {
+        $options = $this->get_opts();
+        $value = $options[parent::get_value()];
         return $value;
     }
 }
@@ -46,6 +60,9 @@ class Section_Foreground_Color extends Section_Color {
     function __construct($value=0) {
         parent::__construct('color', 'color', $value); 
     }
+    //function get_html() {
+    //    parent::get_html();
+    //}
 }
 /**
  * Class to chose one of the preselected colors as the background color

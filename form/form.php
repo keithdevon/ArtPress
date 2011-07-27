@@ -28,21 +28,17 @@ $dir = get_template_directory() . '/';
 require_once $dir . 'html-gen.php';
 require_once $dir . 'heart-theme-utils.php';
 
-interface Render_As_HTML {
-     function get_html();
+interface Render_As_HTML            { function get_html(); }
+interface CSS                       { function get_css(); }
+interface ICSS_Selector extends CSS { function get_css_selector(); }
+interface IValid_Input              { function is_valid(); }
+interface IValidate                 { function validate($value); }
+interface Tab                       {}
+interface IComposite                {}
+interface Visitor {
+    static function recurse($hierarchy);
+    static function valid_child($hierarchy);
 }
-interface CSS {
-    function get_css();
-}
-interface ICSS_Selector extends CSS {
-    function get_css_selector();
-}
-interface IValid_Input {
-    function is_valid();
-}
-interface IValidate { static function validate($value); }
-interface Tab {}
-interface IComposite {}
 
 /** 
  * Settings that depends on other settings being set,
@@ -81,22 +77,23 @@ abstract class Hierarchy {
     
     // GETTERS
     function get_display_name() { return $this->display_name; }
-    function get_children($recurse_test=null, $valid_child_test=null) {
+
+    function get_children($visitor=null) {
         $children = $this->children;
         $valid_children = array();
-        if ( $recurse_test == null && $valid_child_test == null ) {
+        if ( $visitor == null ) {
             return $children;
         }
-        if( $recurse_test && $recurse_test($this) ) {
+        if( $visitor && $visitor::recurse($this) ) {
             foreach ( $children as $child ) {
-                $grand_children = $child->get_children($recurse_test, $valid_child_test);
+                $grand_children = $child->get_children($visitor);
                 if( $grand_children ) {
                     $valid_children = array_merge($valid_children, $grand_children);
                 }
             }
         } 
         
-        if( $valid_child_test && $valid_child_test($this) ) {
+        if( $visitor && $visitor::valid_child($this) ) {
             $valid_children[$this->get_name()] = $this;
         }
         return $valid_children;
@@ -109,7 +106,10 @@ abstract class Hierarchy {
         }
     }
     function get_child($n)      { return $this->children[$n]; }
-    function get_parent()       { return $this->parent;       }
+    function get_parent()       { 
+        $parent = $this->parent;
+        return $parent;
+    }
     
     function get_parentage_array() {
         $p = $this->get_parent();
@@ -363,7 +363,7 @@ class Main_Tab_Group extends Tab_Group {
                 new Body_Tab(), 
                 new Sidebar_Tab(),
                 new Footer_Tab(),
-                new Gallery_Tab()
+                //new Gallery_Tab()
             );
         }
         parent::__construct('main tab group', $members); 
@@ -603,16 +603,15 @@ function get_row( $label, $content ) {
  *
  */
 abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
-    //private $identifier;
     private static $registered_settings = array();
     protected $name;
     private $value;
 
-    function __construct($display_name, $v) {
+    function __construct($name, $display_name, $v) {
         $this->value = $v;
         parent::__construct($display_name, null);
-        $this->name = get_class($this);
-        self::register_setting_instance($this);
+        $this->name = $name;
+        $this->register_self();
     }
 
     function get_value()       { 
@@ -620,8 +619,7 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
         return $v;
     }
     function set_value($value) {
-        $class = get_called_class();
-        if($class::validate($value)) {
+        if($this->validate($value)) {
             $this->value = $value; 
         }
     }
@@ -647,25 +645,31 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
         $value = $this->get_value();
         return array($key=>$value);
     }
-    static function validate($value) {
-        return true;
+    function register_self() {
+        self::$registered_settings[] = $this;
     }
-    static function register_setting_instance($setting) {
-        self::$registered_settings[] = $setting;
-    }
-    static function get_registered_settings() {
+    static function get_registered_settings($visitor=null) {
         $settings = array();
         $registererd_settings = self::$registered_settings;
         foreach ( $registererd_settings as $setting ) {
-            $name = $setting->get_name();
-            $new_name = $name;
-            $i = 2;
-            while(isset($settings[$new_name])) {
-                $new_name = $name . "__{$i}";
-                $i++;
+            if(!$visitor || $visitor->is_valid($setting)) {
+                $name = $setting->get_name();
+                $new_name = $name;
+                $i = 1;
+                if(!$setting instanceof CSS_Setting) {  
+                    // ensure that the name hasn't been used before
+                    // else append a unique number to the end                      
+                    while(isset($settings[$new_name])) {
+                        ++$i;
+                        $new_name = $name . "__{$i}";
+                    }
+                    if($i > 1) {
+                        // if the name has changed, set this new name
+                        $setting->set_name($new_name); 
+                    }
+                }
+                $settings[$new_name] = $setting;
             }
-            $setting->set_name($new_name); // give the setting its proper name
-            $settings[$new_name] = $setting;
         }
         return $settings;
     }
@@ -674,27 +678,34 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
     }
     function get_css() { return ''; }
     function get_name() { 
-        return $this->name;
+        $parents = get_css_parents($this);
+        return $parents . 
+        $this->name;
     }
 }
 class Current_Save_ID extends Setting {
     function __construct($value='') {
-        parent::__construct('save name', $value);
+        parent::__construct('current-save-id','save name', $value);
     }
     function get_html() {
         $o = '';
         $name = $this->get_name();
-        $o .= label($name, 'Configuration name ');
+        $o .= label($name, 'Configuration name');
         $attrs =  attr_id($name) .
                     attr_value($this->get_value());
         $o .= input('text',  attr_name("ap_options[{$name}]") . $attrs);
         $o = p($o);
         return $o;        
     }
+    function validate($value) {
+        $options = get_option('ap_options');
+        $saves = array_keys($options['saves']);
+        return in_array($value, $saves);
+    }
 }
 abstract class Toggle extends Setting {
-    function __construct($display_name, $v) {
-        parent::__construct($display_name, $v);
+    function __construct($name, $display_name, $v) {
+        parent::__construct($name, $display_name, $v);
     }
     function get_html() {
         $html_name = $this->get_html_name();
@@ -704,7 +715,11 @@ abstract class Toggle extends Setting {
                 input('hidden', $html_name . attr_value('0')) .
                 input('checkbox', $html_name . attr_value($value) . attr_checked($value));
         return $html;
-    }                
+    }
+    function validate($value) {
+        // TODO 
+        return true;
+    }           
 }
 
 /** 
@@ -720,11 +735,11 @@ abstract class Toggle_Group extends Setting implements IComposite {
         return self::$toggles;
     }
     
-    function __construct($display_name, $on, $members=array()) {
+    function __construct($name, $display_name, $on, $members=array()) {
         foreach ($members as $child) {
             $this->add_child($child);
         }
-        parent::__construct($display_name, $on);
+        parent::__construct($name, $display_name, $on);
         $toggles[$this->get_name()] = $this;
     }
     function get_html() {
@@ -744,6 +759,10 @@ abstract class Toggle_Group extends Setting implements IComposite {
     } 
     function set_value($value) {
         parent::set_value($value);
+    }
+    function validate($value) {
+        // TODO
+        return true;
     }
     function is_on() {
         if( $this->get_value() ) { 
@@ -777,33 +796,29 @@ function get_css_parents($hierarchy_object) {
  *
  */
 abstract class CSS_Setting extends Setting implements CSS {
-    private $css_property;
-    
+
     function __construct($css_property, $display_name, $value) {
-        $this->css_property = $css_property;
-        parent::__construct($display_name, $value);
+        $this->css_property = $css_property; // FIXME does this do anything
+        parent::__construct($css_property, $display_name, $value);
     }
     function get_css_declaration() {
         return create_css_declaration($this);
     }
     function get_css() {
-        return $this->css_property;
+        return $this->get_css_property();
     }
     function get_css_value() {
         return $this->get_value();
     }
     function get_differentiator() {
-        return $this-> get_css();
+        return $this->get_css_property();
     }
     function get_css_property() {
-        return $this->css_property;
-    }
-    function set_css_property($property_name) {
-        $this->css_property = $property_name;
+        return $this->name;
     }
 }
 
-class CSS_Composite extends CSS_Setting implements IComposite {  
+abstract class CSS_Composite extends CSS_Setting implements IComposite {  
     /** 
      * @param $members 
      * array The css_property of each supplied member is merely used as a unique identifer.
@@ -840,7 +855,7 @@ class CSS_Composite extends CSS_Setting implements IComposite {
         
         $values = '';
         foreach( $this->get_children() as $child ){
-            $css_value = $child->get_css_value();
+            $css_value = $child->get_value();
             if($css_value) {
                 $values .= ' ' . $css_value;            
             }
@@ -850,27 +865,45 @@ class CSS_Composite extends CSS_Setting implements IComposite {
         }
     }
 }
-
+function get_text_input_html($setting, $attributes='') {
+        $html_name = $setting->get_html_name();
+        $value = attr_value($setting->get_value());
+        $title = attr_title($setting->get_display_name());
+        $i = input('text', $title . $html_name . $value . $attributes);
+        return $i;
+}
+abstract class Setting_Text extends Setting {
+    function __construct($name, $display_name, $value='') {
+        parent::__construct($name, $display_name, $value);        
+    }
+    function get_html($attributes='') {
+        return get_text_input_html($this, $attributes);
+    }
+}
 abstract class CSS_Text_Input extends CSS_Setting {
     function __construct($css_property, $display_name, $value) {
         parent::__construct($css_property, $display_name, $value);        
     }
-    function get_html($attributes = '') {
-        $html_name = $this->get_html_name();
-        $value = attr_value($this->get_value());
-        $title = attr_title($this->get_display_name());
-        $i = input('text', $title . $html_name . $value . $attributes);
-        return $i;
+    function get_html($attributes='') {
+        return get_text_input_html($this, $attributes='');
     }
+}
+abstract class Setting_Size_Text_Input extends Setting_Text {
+    function __construct($name, $display_name, $value='') {
+        parent::__construct($name, $display_name, $value);        
+    }
+    
+    function validate($value) {
+         return is_valid_size_string($value); 
+    }    
 }
 abstract class CSS_Size_Text_Input extends CSS_Text_Input {
     function __construct($css_property, $display_name, $value='') {
         parent::__construct($css_property, $display_name, $value);        
     }
     
-    static function validate($value) {
-         if(is_valid_size_string($value)) return true; 
-         else return false;
+    function validate($value) {
+         return is_valid_size_string($value); 
     }
 }
 abstract class CSS_Horizontal_Position_Text_Input extends CSS_Size_Text_Input {
@@ -878,10 +911,8 @@ abstract class CSS_Horizontal_Position_Text_Input extends CSS_Size_Text_Input {
         parent::__construct($css_property, $display_name, $value);        
     }
     
-    function is_valid() {
-        $value = $this->get_value();
-
-        if(parent::is_valid() || in_array($value, array('left', 'center', 'right'))) {
+    function validate($value) {
+        if(parent::validate($value) || in_array($value, array('left', 'center', 'right'))) {
             return true; 
         } else {
             return false;
@@ -893,13 +924,84 @@ abstract class CSS_Vertical_Position_Text_Input extends CSS_Size_Text_Input {
         parent::__construct($css_property, $display_name, $value);        
     }
     
-    function is_valid() {
-        $value = $this->get_value();
-         if(parent::is_valid() || in_array($value, array('top', 'center', 'bottom'))) {
+    function validate($value) {
+         if(parent::validate($value) || in_array($value, array('top', 'center', 'bottom'))) {
              return true; 
          } else {
              return false;
          }
+    }
+}
+function dropdown_get_options_html($dropdown) {
+    $html_options = '';        
+    $is_optgroup = false;
+    $content = '';
+    $potential_options = $dropdown->get_opts();
+    $i = 1;
+    foreach (array_keys($potential_options) as $opt) {
+        if (is_array($potential_options[$opt])) {
+            if($is_optgroup) { // if this has already been set ... 
+                // ... then we need to close the previous opt group
+                $html_options .= ct('optgroup');          
+            }
+            // set to true as we have encountered an array which denotes
+            // an new optgroup
+            $is_optgroup = true; 
+            // create the new optgroup    
+            $html_options .= ot('optgroup', attr_label($potential_options[$opt][1]));
+            $content = $potential_options[$opt][0];
+        } else $content = $potential_options[$opt];
+        $attr = '';
+        // add any existing style attributes to the option group
+        //if ($form_style_attrs) {
+        //    foreach (array_keys($form_style_attrs) as $css_attr) {
+        //        $attr .= dec($css_attr, $form_style_attrs[$css_attr][$opt]);  
+        //    } 
+        //}        
+        //return ot( 'option',  attr_value((string)$value) . attr_selected($is_selected ) . $attr)
+        //. $content
+        //. ct( 'option' );
+        $html_options .= ot('option', 
+                        attr_selected( ((string)$opt == $dropdown->get_value()) ? true : false ) . 
+                        attr_value((string)$opt));
+        if($content && ($dropdown instanceof ISetting_Depends_On_Global_Setting) ) {                            
+            $html_options .= $i++ . '&nbsp; &nbsp; ';
+        }
+        $html_options .= $content;
+        $html_options .= ct('option');
+    }
+    if ($is_optgroup) $html_options .= ct('optgroup');
+    return $html_options;   
+}
+function get_select_html($dropdown) {
+    $select = ot('select', $dropdown->get_html_name());
+    $select .= dropdown_get_options_html($dropdown);
+    $select .= ct('select');
+    return $select;
+}
+function dropdown_validate($dropdown, $value) {
+    $options = $dropdown->get_opts();
+    $size = sizeof($options);
+    if( ($value < $size) && ($value >= 0) ) {
+        return true;         
+    } else {
+        return false;
+    }
+}
+abstract class Setting_Dropdown extends Setting {
+    function __construct($name, $display_name, $opts, $value=0) {
+        $this->opts = &$opts; 
+        parent::__construct($name, $display_name, $value);
+    }
+    function get_html() {
+        return get_select_html($this);    
+    }
+    function validate($value) {
+        return dropdown_validate($this, $value);
+    }
+    function get_opts() {
+        $opts = $this->opts;   
+        return $opts;
     }
 }
 /** 
@@ -910,85 +1012,37 @@ abstract class CSS_Vertical_Position_Text_Input extends CSS_Size_Text_Input {
  */
 abstract class CSS_Dropdown_Input extends CSS_Setting {
     private static $options;
+    protected $opts;
     
-    function __construct($css_property, $display_name, $value=0) { 
+    function __construct($css_property, $display_name, $opts, $value=0) {
+        $this->opts = &$opts; 
         parent::__construct($css_property, $display_name, $value);
     }
     
     function get_html() {
-        $select = ot('select', $this->get_html_name());
-        $select .= $this->get_html_options();
-        $select .= ct('select');
-        return $select;
-    }
-    private function get_html_options() {
-        $html_options = '';        
-        $is_optgroup = false;
-        $content = '';
-        $potential_options = static::get_options();
-        $i = 1;
-        foreach (array_keys($potential_options) as $opt) {
-            if (is_array($potential_options[$opt])) {
-                if($is_optgroup) { // if this has already been set ... 
-                    // ... then we need to close the previous opt group
-                    $html_options .= ct('optgroup');          
-                }
-                // set to true as we have encountered an array which denotes
-                // an new optgroup
-                $is_optgroup = true; 
-                // create the new optgroup    
-                $html_options .= ot('optgroup', attr_label($potential_options[$opt][1]));
-                $content = $potential_options[$opt][0];
-            } else $content = $potential_options[$opt];
-            $attr = '';
-            // add any existing style attributes to the option group
-            //if ($form_style_attrs) {
-            //    foreach (array_keys($form_style_attrs) as $css_attr) {
-            //        $attr .= dec($css_attr, $form_style_attrs[$css_attr][$opt]);  
-            //    } 
-            //}        
-            //return ot( 'option',  attr_value((string)$value) . attr_selected($is_selected ) . $attr)
-            //. $content
-            //. ct( 'option' );
-            $html_options .= ot('option', 
-                            attr_selected( ((string)$opt == $this->get_value()) ? true : false ) . 
-                            attr_value((string)$opt));
-            if($content && ($this instanceof ISetting_Depends_On_Global_Setting) ) {                            
-                $html_options .= $i++ . '&nbsp; &nbsp; ';
-            }
-            $html_options .= $content;
-            $html_options .= ct('option');
-        }
-        if ($is_optgroup) $html_options .= ct('optgroup');
-        return $html_options;    
+        return get_select_html($this);
     }
     
-    static function validate($value) {
-        $options = static::get_options();
-        $size = sizeof($options);
-        if( ($value < $size) && ($value >= 0) ) {
-            return true;         
-        } else {
-            return false;
-        }
+    function validate($value) {
+        return dropdown_validate($this, $value);
+    }
+    function get_opts() {
+        $opts = $this->opts;   
+        return $opts;
     }
        
-    static function get_options() { 
-        return static::$options;
-    }
-    
     function get_css_value() {
        $value = $this->get_value();
-       $options = static::get_options();
+       $options = $this->get_opts();
        return $options[$value];
    }
 }
 
-abstract class Number_Setting extends Setting {
-    function __construct($display_name, $value='') {
-        parent::__construct($display_name, $value);        
+abstract class Setting_Number extends Setting {
+    function __construct($name, $display_name, $value='') {
+        parent::__construct($name, $display_name, $value);        
     }
-    static function validate($value) {
+    function validate($value) {
          return is_numeric($value);
     }
     function get_html($attributes='') {
@@ -996,6 +1050,7 @@ abstract class Number_Setting extends Setting {
         return $input;        
     }     
 }
+
 
 // LIST
 class List_Style_Type extends CSS_Dropdown_Input {
@@ -1011,3 +1066,5 @@ class List_Style_Position extends CSS_Dropdown_Input {
         parent::__construct('list-style-position', 'list style position', $value);
     }    
 }
+
+

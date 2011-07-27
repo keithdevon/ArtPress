@@ -1,5 +1,4 @@
 <?php
-//require_once 'form.php';
 
 class Images_Tab extends Main_Tab {
     function __construct($members=null) {
@@ -25,7 +24,7 @@ class Image extends CSS_Text_Input { // TODO this should probably be deleted
         $name = $this_class . '__' . $number_of_global_image_instances;
         $this->set_name( $name );
     }
-    static function validate($value) {
+    function validate($value) {
         //TODO
     }
     static function get_dropdown_image_options() {
@@ -56,25 +55,19 @@ class Section_Image extends CSS_Dropdown_Input {
     static $options;
 
     function __construct($value=0) {
-        parent::__construct('background-image:url', 'image select', $value); 
-        $images = get_option('ap_images');
-        self::$options = $images;     
-    }    
-    static function get_options() {
-        $list = array('');
-        $options = parent::get_options();
-        if($options) {
-            foreach ($options as $image) {
-                if( isset($image['url']) ) {
-                   $v = $image['url'];
-                   $list[] = $v;
-                }
+        parent::__construct('background-image:url', 'image select', $value);
+        if(!self::$options) { 
+            $images = get_option('ap_images');
+            foreach ($images as $image) {
+                self::$options[] = $image['url'];
             }
-        }
-        return $list;
+        }     
+    }    
+    function get_opts() {
+        return self::$options;
     }
     function get_css_declaration() {
-        $options = self::get_options();
+        $options = self::$options;
         $value = $this->get_value();
         $file = $options[$value];
         if($file) {      

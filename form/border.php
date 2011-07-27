@@ -6,11 +6,11 @@ class Border_Color extends Section_Color {
         parent::__construct('border-color', 'border color', $value); 
     }
 }
+$border_style_options = array('', 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
 class Border_Style extends CSS_Dropdown_Input {
-    //global $ap_border_style_options; 
-    static $options = array('', 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
     function __construct($value=0) { 
-        parent::__construct('border-style', 'border style', $value);
+        global $border_style_options; 
+        parent::__construct('border-style', 'border style', $border_style_options, $value);
     }    
 }
 class Border_Width extends CSS_Size_Text_Input {
@@ -24,10 +24,11 @@ class Border_Top_Color extends Section_Color {
         parent::__construct('border-top-color', 'top border color', $value); 
     }
 }
+$border_style_options = array('', 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
 class Border_Top_Style extends CSS_Dropdown_Input {
-    static $options = array('', 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
     function __construct($value=0) { 
-        parent::__construct('border-top-style', 'top border style', $value);
+        global $border_style_options;
+        parent::__construct('border-top-style', 'top border style', $border_style_options, $value);
     }    
 }
 class Border_Top_Width extends CSS_Size_Text_Input {
@@ -43,9 +44,9 @@ class Border_Bottom_Color extends Section_Color {
     }
 }
 class Border_Bottom_Style extends CSS_Dropdown_Input {
-    static $options = array('', 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
     function __construct($value=0) { 
-        parent::__construct('border-bottom-style', 'bottom border style', $value);
+        global $border_style_options;        
+        parent::__construct('border-bottom-style', 'bottom border style', $border_style_options, $value);
     }    
 }
 class Border_Bottom_Width extends CSS_Size_Text_Input {
@@ -63,7 +64,8 @@ class Border_Left_Color extends Section_Color {
 class Border_Left_Style extends CSS_Dropdown_Input {
     static $options = array('', 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
     function __construct($value=0) { 
-        parent::__construct('border-left-style', 'left border style', $value);
+        global $border_style_options;
+        parent::__construct('border-left-style', 'left border style', $border_style_options, $value);
     }    
 }
 class Border_Left_Width extends CSS_Size_Text_Input {
@@ -81,7 +83,8 @@ class Border_Right_Color extends Section_Color {
 class Border_Right_Style extends CSS_Dropdown_Input {
     static $options = array('', 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'inherit');
     function __construct($value=0) { 
-        parent::__construct('border-right-style', 'right border style', $value);
+        global $border_style_options;
+        parent::__construct('border-right-style', 'right border style', $border_style_options, $value);
     }    
 }
 class Border_Right_Width extends CSS_Size_Text_Input {

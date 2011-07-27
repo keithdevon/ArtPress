@@ -48,7 +48,7 @@ class Color_Picker_Group extends Option_Group {
 }
 class Logo_Toggle extends Toggle {
     function __construct($value=0) {
-        parent::__construct('Use logo image',  $value);
+        parent::__construct('logo-toggle', 'Use logo image',  $value);
     }
 }
 class Global_Settings extends Main_Tab  {
