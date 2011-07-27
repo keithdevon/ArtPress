@@ -225,37 +225,6 @@ h5 {
     line-height: 1.5em;
     margin:0;
     }*/
-    
-#site-title, h1 { 
-    font-size:2.25em;
-    line-height: 1.334em;
-    margin:1.5em 0 1.17em;
-    }
-
-h2 { 
-    font-size:1.5em;
-    line-height: 1em;
-    margin:1.88em 0 1.15em;
-    }
-h3 { 
-    font-size:1.313em;
-    line-height: 1.143em;
-    margin:2.2em 0 1.27em; 
-    }
-h4 { 
-    font-size:1.125em;
-    line-height: 1.3328em;
-    margin:2.65em 0 1.42em;
-    }
-h5 { 
-    font-size:1em;
-    line-height: 1.5em;
-    margin:0;
-    }
-
-p {
-    margin-bottom:1.5em;
-    }
 
 ul {
 	list-style: square;
