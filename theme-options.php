@@ -146,8 +146,10 @@ function ap_settings_page() {
     $maintabgroup = new Main_Tab_Group('main tab group');
     $options = get_option('ap_options');
     if ($options != null) {
-        $maintabgroup->inject_values(array_merge(array('current-save-id'=>$options['current-save-id']), 
-                                                 $options['saves'][$options['current-save-id']]));
+        if (isset($options['saves'][$options['current-save-id']])) {
+            $maintabgroup->inject_values(array_merge(array('current-save-id'=>$options['current-save-id']), 
+                                                     $options['saves'][$options['current-save-id']]));
+            }
     }
     echo $maintabgroup->get_html();
     echo ct('div');
@@ -321,7 +323,7 @@ function ap_options_validate( $new_settings ) {
 
     // set the current-save-id
     // create save name if none supplied
-    if( $new_settings['current-save-id'] == '' ) {
+    if( $new_settings['current-save-id'] == '' || $new_settings['current-save-id'] == 'default' ) {
         $d = getdate();
         $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
         $options['current-save-id'] = $date;
