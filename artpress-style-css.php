@@ -35,10 +35,10 @@ $output .= rule($selector_string, decblock($declarations));
 $selectors = CSS_Selector::get_css_selectors(); 
 
 class CSS_Setting_Visitor implements Visitor {
-    static function recurse($hierarchy) {
+    function recurse($hierarchy) {
         return $hierarchy->has_children();
     }
-    static function valid_child($hierarchy) {
+    function valid_child($hierarchy) {
         if ( $hierarchy instanceof CSS_Setting ) {
             $parent = $hierarchy->get_parent();
             if ( $parent instanceof Toggle_Group ) {
