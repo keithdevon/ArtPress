@@ -11,9 +11,11 @@ $output = "";
 
 $maintabgroup = new Main_Tab_Group('main tab group');
 $options = get_option('ap_options');
-$current_save = $options['saves'][$options['current-save-id']];
 if ($options != null) {
-    $maintabgroup->inject_values($current_save);
+    if (isset($options['saves'][$options['current-save-id']])) {
+        $current_save = $options['saves'][$options['current-save-id']];
+        $maintabgroup->inject_values($current_save);
+    }
 }
 
 // customized functionality for Global Settings css
