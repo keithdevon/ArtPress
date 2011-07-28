@@ -36,8 +36,8 @@ interface IValidate                 { function validate($value); }
 interface Tab                       {}
 interface IComposite                {}
 interface Visitor {
-    static function recurse($hierarchy);
-    static function valid_child($hierarchy);
+    function recurse($hierarchy);
+    function valid_child($hierarchy);
 }
 
 /** 
@@ -84,7 +84,7 @@ abstract class Hierarchy {
         if ( $visitor == null ) {
             return $children;
         }
-        if( $visitor && $visitor::recurse($this) ) {
+        if( $visitor && $visitor->recurse($this) ) {
             foreach ( $children as $child ) {
                 $grand_children = $child->get_children($visitor);
                 if( $grand_children ) {
@@ -93,7 +93,7 @@ abstract class Hierarchy {
             }
         } 
         
-        if( $visitor && $visitor::valid_child($this) ) {
+        if( $visitor && $visitor->valid_child($this) ) {
             $valid_children[$this->get_name()] = $this;
         }
         return $valid_children;
