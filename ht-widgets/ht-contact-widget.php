@@ -20,13 +20,13 @@ class HTAddressWidget extends WP_Widget {
         //$thePostID = $wp_query->post->ID;
         //$theParentID = $wp_query->post->post_parent; 
 
-        <?php echo $before_widget; ?>
-        <?php if ( $title )
+        echo $before_widget;
+           if ( $title )
                 echo $before_title . $title . $after_title;
-            else echo '<h3 class="widget-title">' . get_the_title() . ' Menu</h3>'; ?>
+            else echo '<h3 class="widget-title">' . get_the_title() . ' Menu</h3>'; 
                
-            <?php echo $after_widget; ?>
-        <?php
+          echo $after_widget; 
+
         }
 
     /** @see WP_Widget::update */
