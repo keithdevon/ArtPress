@@ -40,9 +40,16 @@
 
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 
-<?php get_template_part( 'cssgrid' );           // CSS Grid files (cssgrid.php) ?>
-
-<?php
+<style type='text/css' media='screen'>
+<?php 
+$options = get_option('ap_options');
+if($options) {
+    $csi = $options['current-save-id'];
+    echo $options['css'][$csi];
+}
+?>
+</style>
+<?php get_template_part( 'cssgrid' );           // CSS Grid files (cssgrid.php) 
 	/* We add some JavaScript to pages with the comment form
 	 * to support sites with threaded comments (when in use).
 	 */

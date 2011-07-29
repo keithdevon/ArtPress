@@ -294,6 +294,7 @@ function ap_options_validate( $new_settings ) {
         return $options;
     }
     if( isset( $new_settings['delete_configuration'] ) ) {
+        // TODO also delete css
         $dead_saves = $new_settings['dead_saves'];
         foreach( array_keys($dead_saves) as $save ) {
             unset($options['saves'][$save]);
@@ -330,9 +331,12 @@ function ap_options_validate( $new_settings ) {
     } else {
         $options['current-save-id'] = $new_settings['current-save-id'];
     }
+    // create css
+    $css = create_css();
     
     // store save
     $options['saves'][$options['current-save-id']] = $merged_save;
+    $options['css'][$options['current-save-id']] = $css;
     
     return $options;
 }
@@ -354,6 +358,66 @@ function ap_image_validate($input) {
     
     }
     return $options;
+}
+
+class CSS_Setting_Visitor implements Visitor {
+    function recurse($hierarchy) {
+        return $hierarchy->has_children();
+    }
+    function valid_child($hierarchy) {
+        if ( $hierarchy instanceof CSS_Setting ) {
+            $parent = $hierarchy->get_parent();
+            if ( $parent instanceof Toggle_Group ) {
+                return $parent->is_on();
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+}
+function create_css() {
+    $output = "";
+    
+    $maintabgroup = new Main_Tab_Group('main tab group');
+    $options = get_option('ap_options');
+    if ($options != null) {
+        if (isset($options['saves'][$options['current-save-id']])) {
+            $current_save = $options['saves'][$options['current-save-id']];
+            $maintabgroup->inject_values($current_save);
+        }
+    }
+    
+    // customized functionality for Global Settings css
+    // headers
+    $font_size = Global_Font_Size_Ratio::get_font_size(1);
+    $selector_string = 'h1, h2, h3, h4, h5, h6';
+    $declarations = dec('margin-top', 2 * $font_size . 'px'); // TODO hacky
+    $declarations .= dec('margin-bottom', $font_size);
+    $output .= rule($selector_string, decblock($declarations));
+    
+    // paragraph
+    $selector_string = 'p';
+    $declarations = dec('margin-bottom', $font_size);
+    $output .= rule($selector_string, decblock($declarations));
+    
+    // standard functionality for all other settings 
+    $selectors = CSS_Selector::get_css_selectors(); 
+    
+    
+    foreach ( $selectors as $selector ) {
+        $selector_string = get_full_selector_string( get_full_selector_array($selector) );
+        $settings = $selector->get_children(new CSS_Setting_Visitor());
+        $declarations = '';
+        foreach( $settings as $setting ) {
+            $declarations .= $setting->get_css_declaration();
+        }
+        if($declarations) {
+            $output .= rule( $selector_string, decblock($declarations) );
+        }
+    }
+    return $output;  
 }
 //function ap_image_validate($input) {
 //    // IMAGES
