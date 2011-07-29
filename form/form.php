@@ -363,7 +363,7 @@ class Main_Tab_Group extends Tab_Group {
                 new Body_Tab(), 
                 new Sidebar_Tab(),
                 new Footer_Tab(),
-                //new Gallery_Tab()
+                new Gallery_Tab()
             );
         }
         parent::__construct('main tab group', $members); 
