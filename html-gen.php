@@ -61,7 +61,7 @@ function input($type, $attributes ="")          { return bt('input', attr_type($
 function label($for, $content, $attributes ="") { return ot('label', attr_for($for)  . $attributes) . $content . ct('label'); }
 function li($content, $attributes ="")          { return ot('li', $attributes)    . $content . ct('li'); }
 function optgroup($label, $options)             { return ot('optgroup', attr_label($label)) . $options . ct('optgroup'); }
-function option($value, $content)               { return ot('option', attr_value($value)) . $content . ct('option'); }
+function option($value, $content, $attributes=""){ return ot('option', attr_value($value) . $attributes) . $content . ct('option'); }
 function p($content, $attributes ="")           { return ot('p', $attributes)      . $content . ct('p'); }
 function select($name, $content, $attributes=""){ return ot('select', attr_name($name) . $attributes ) . $content . ct('select'); }
 function table($content, $attributes ="")       { return ot('table', $attributes)  . $content . ct('table'); }

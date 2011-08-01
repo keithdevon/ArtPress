@@ -42,10 +42,18 @@
 
 <style type='text/css' media='screen'>
 <?php 
-$options = get_option('ap_options');
-if($options) {
-    $csi = $options['current-save-id'];
-    echo $options['css'][$csi];
+// TODO http://core.trac.wordpress.org/ticket/14673
+// http://core.trac.wordpress.org/ticket/14365
+
+if($options = get_option('ap_options')) {
+    $has_capability = current_user_can('manage_options');
+    if ( $has_capability ) {
+        $csi = $options['current-save-id'];
+        echo $options['css'][$csi];
+    } else {
+        $li = $options['live-id'];
+        echo $options['css'][$li];
+    }
 }
 ?>
 </style>

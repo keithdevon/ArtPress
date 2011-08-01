@@ -168,29 +168,44 @@ function ap_configs_page() {
     $o = '';
     $o .= h2('configurations');
     $o .= ot('table');
-    $o .= tr( td(label( 'current-save-id', __('current configuration') ) ) .
+    $o .= tr( td(label( 'live-id', __('current live configuration') ) ) .
+              td(input( 'text', attr_readonly() . attr_value( $options['live-id'] ) ) ) );
+                         
+    $o .= tr( td(label( 'current-save-id', __('current editable configuration') ) ) .
               td(input( 'text', attr_readonly() . attr_value( $options['current-save-id'] ) ) ) );
-              
-    // select a configuration  
+      
+    // select live configuration
+    $o .= '<form method="post" action="options.php">';
+    $o .= get_settings_fields('artpress_options');
+    $o .= input('hidden', attr_name('ap_options[change_live-id]') . attr_value('true') );
+    if( $options && isset($options['saves'])) {
+        $opts = '';
+        foreach (array_keys($options['saves']) as $save_name) {
+            if($save_name != $options['live-id'])
+                $opts .= option($save_name, $save_name);          
+        }  
+        $o .=  tr(td('new live configuration') 
+                . td(select("ap_options[live-id]", $opts) )
+                . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'live' ) . "' /></span>")
+                );
+    }
+    $o .= ct('form');
+    
+    // select a configuration to edit
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
     $o .= input('hidden', attr_name('ap_options[change_current-save-id]') . attr_value('true') );
     if( $options && isset($options['saves'])) {
-        $first = true;
-        $first_col = 'load configuration';
+        $opts = '';
         foreach (array_keys($options['saves']) as $save_name) {
-            $o .= tr( td($first_col)
-                        . td($save_name)
-                        . td( input( 'radio', attr_name("ap_options[current-save-id]") .attr_value($save_name))));
-            if($first) {
-                $first = false;
-                $first_col = '';
-            }
-        }   
+            if($save_name != $options['current-save-id'])
+                $opts .= option($save_name, $save_name);          
+        }  
+        $o .=  tr(td('new configuration to edit') 
+                . td(select("ap_options[current-save-id]", $opts) )
+                . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'edit' ) . "' /></span>")
+                );
     }
-    $load = __( 'load' );  
-    $o .= td(''). td(''). td("<span class='submit'><input type='submit' class='button-primary' value='{$load}' /></span>");
-    
     $o .= ct('form');
     
     // delete a configuration  
@@ -244,6 +259,7 @@ function get_ap_options_defaults() {
 
     $options['saves'] = array();
     $options['current-save-id'] = 'default';
+    $options['live-id'] = 'default';
     $options['saves'][$options['current-save-id']] = $options['cs'];
 
     $options['defaults'] = array();
@@ -287,6 +303,10 @@ function ap_options_validate( $new_settings ) {
         $options['current-save-id'] = $new_settings['current-save-id'];
         return $options;
     }
+    if( isset($new_settings['change_live-id'] ) ) {
+        $options['live-id'] = $new_settings['live-id'];
+        return $options;
+    }
     if( isset($new_settings['create_new_configuration'] ) ) {
         $new_config_name = $new_settings['current-save-id'];
         $options['current-save-id'] = $new_config_name;
@@ -294,14 +314,16 @@ function ap_options_validate( $new_settings ) {
         return $options;
     }
     if( isset( $new_settings['delete_configuration'] ) ) {
-        // TODO also delete css
         $dead_saves = $new_settings['dead_saves'];
         foreach( array_keys($dead_saves) as $save ) {
             unset($options['saves'][$save]);
+            // TODO also delete css
+            unset($options['css'][$save]);
         }
         $first_save = key($options['saves']);
         if($first_save) {
             $options['current-save-id'] = $first_save;
+            $options['live-id'] = $first_save;
         } else {
             $options['current-save-id'] = 'default';
             $options['saves'][$options['current-save-id']] = array();
@@ -309,7 +331,7 @@ function ap_options_validate( $new_settings ) {
                
         return $options;
     }
-    if( $options == null) $options = get_ap_options_defaults();
+    if( $options == null) $options = get_ap_options_defaults(); // if options have never been set before create some default options
 
     $previous_save = $options['saves'][$options['current-save-id']];
     if ($new_settings == null ) {
@@ -331,11 +353,12 @@ function ap_options_validate( $new_settings ) {
     } else {
         $options['current-save-id'] = $new_settings['current-save-id'];
     }
-    // create css
-    $css = create_css();
     
     // store save
     $options['saves'][$options['current-save-id']] = $merged_save;
+    
+    // create css
+    $css = create_css($merged_save);
     $options['css'][$options['current-save-id']] = $css;
     
     return $options;
@@ -377,18 +400,12 @@ class CSS_Setting_Visitor implements Visitor {
         }
     }
 }
-function create_css() {
+function create_css($save) {
     $output = "";
     
     $maintabgroup = new Main_Tab_Group('main tab group');
-    $options = get_option('ap_options');
-    if ($options != null) {
-        if (isset($options['saves'][$options['current-save-id']])) {
-            $current_save = $options['saves'][$options['current-save-id']];
-            $maintabgroup->inject_values($current_save);
-        }
-    }
-    
+    $maintabgroup->inject_values($save);
+
     // customized functionality for Global Settings css
     // headers
     $font_size = Global_Font_Size_Ratio::get_font_size(1);
@@ -404,7 +421,6 @@ function create_css() {
     
     // standard functionality for all other settings 
     $selectors = CSS_Selector::get_css_selectors(); 
-    
     
     foreach ( $selectors as $selector ) {
         $selector_string = get_full_selector_string( get_full_selector_array($selector) );
