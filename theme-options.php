@@ -173,7 +173,8 @@ function ap_configs_page() {
                          
     $o .= tr( td(label( 'current-save-id', __('current editable configuration') ) ) .
               td(input( 'text', attr_readonly() . attr_value( $options['current-save-id'] ) ) ) );
-      
+
+
     // select live configuration
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
@@ -190,6 +191,7 @@ function ap_configs_page() {
                 );
     }
     $o .= ct('form');
+
     
     // select a configuration to edit
     $o .= '<form method="post" action="options.php">';
@@ -207,28 +209,25 @@ function ap_configs_page() {
                 );
     }
     $o .= ct('form');
+
     
     // delete a configuration  
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
     $o .= input('hidden', attr_name('ap_options[delete_configuration]') . attr_value('true') );
     if( $options && isset($options['saves'])) {
-        $first = true;
-        $first_col = 'delete configuration';
-        foreach (array_keys($options['saves']) as $save_name) {
-            $o .= tr( td($first_col)
-                        . td($save_name)
-                        . td( input( 'checkbox', attr_name("ap_options[dead_saves][${save_name}]") .attr_value($save_name))));
-            if($first) {
-                $first = false;
-                $first_col = '';
-            }
-        }   
+       $opts = '';
+       foreach (array_keys($options['saves']) as $save_name) {
+           if($save_name != 'default')
+               $opts .= option($save_name, $save_name);          
+       }  
+       $o .=  tr(td('delete configuration') 
+               . td(select("ap_options[delete-id]", $opts) )
+               . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'delete' ) . "' /></span>")
+               );
     }
-    $delete = __( 'delete' );  
-    $o .= td(''). td(''). td("<span class='submit'><input type='submit' class='button-primary' value='{$delete}' /></span>");
-    
     $o .= ct('form');
+    
     
     // create new configuration
     $o .= '<form method="post" action="options.php">';
@@ -314,19 +313,16 @@ function ap_options_validate( $new_settings ) {
         return $options;
     }
     if( isset( $new_settings['delete_configuration'] ) ) {
-        $dead_saves = $new_settings['dead_saves'];
-        foreach( array_keys($dead_saves) as $save ) {
-            unset($options['saves'][$save]);
-            // TODO also delete css
-            unset($options['css'][$save]);
-        }
+        $dead_save = $new_settings['delete-id'];
+        unset($options['saves'][$dead_save]);
+        unset($options['css'][$dead_save]);
         $first_save = key($options['saves']);
-        if($first_save) {
+        
+        if($dead_save == $options['current-save-id']) {
             $options['current-save-id'] = $first_save;
+        }
+        if($dead_save == $options['live-id']) {
             $options['live-id'] = $first_save;
-        } else {
-            $options['current-save-id'] = 'default';
-            $options['saves'][$options['current-save-id']] = array();
         }
                
         return $options;
