@@ -360,8 +360,7 @@ class Main_Tab_Group extends Tab_Group {
                 new Global_Settings(), 
                 new Header_Tab(), 
                 new Menu_Tab(), 
-                new Body_Tab(), 
-                new Gallery_Tab(),
+                new Body_Tab(),
                 new Sidebar_Tab(),
                 new Footer_Tab(),
                 new Gallery_Tab()
