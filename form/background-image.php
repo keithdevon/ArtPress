@@ -79,7 +79,8 @@ class Background_Image_Tab extends Sub_Tab {
                 new Section_Image(),
                 new Background_Repeat(),
                 new Background_Attachment(),
-                new Background_Position() ) ) );
+                new Background_Position()
+                 ) ) );
         }
         parent::__construct($display_name, $members);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying Category Archive pages.
+ * The template for displaying Gallery Archive pages.
  *
  * @package WordPress
  * @subpackage Twenty_Ten
