@@ -55,12 +55,23 @@ class Section_Image extends CSS_Dropdown_Input {
     static $options;
 
     function __construct($value=0) {
+        global $post;
         parent::__construct('background-image:url', 'image select', $value);
         if(!self::$options) { 
-            $images = get_option('ap_images');
-            foreach ($images as $image) {
-                self::$options[] = $image['url'];
-            }
+            // get the posts tagged with artpress
+            $my_posts = get_posts('tag=artpress&post_status=any&post_type=any');
+            // get the image attachments of these posts
+            foreach($my_posts as $post) {
+                setup_postdata($post);
+                $id = get_the_ID();
+                // ensure post has children
+                if($children =& get_children("post_parent={$id}&post_type=attachment") ) { 
+                    $attachment = array_shift(array_values($children)); 
+                    $aid = $attachment->ID;
+                    $url = wp_get_attachment_url($aid);
+                    self::$options[] = $url;
+                }
+            }         
         }     
     }    
     function get_opts() {
