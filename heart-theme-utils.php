@@ -70,11 +70,18 @@ function is_valid_size_string($str) {
 function is_valid_color_string($str) {
     return (strlen($str) == 7) && starts_with($str, '#') && ctype_xdigit(substr($str, 1));
 }
-function row($name, $content) {
+function row($content) {
     $o = ot('tr');
-    $o .= td($name);
-    $o .= td($content);
+    $o .= $content;
     $o .= ct('tr');
     return $o;    
 }
+function button_submit($button_text) {
+    return p(input('submit', 
+        attr_name('Submit') . 
+        attr_class('button-primary') . 
+        attr_type('submit') . 
+        attr_value(esc_attr($button_text))));
+}
+
 ?>

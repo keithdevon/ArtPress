@@ -50,6 +50,9 @@ function artpress_options_load_scripts() {
     wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.css' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
     
+    wp_register_style('image_form', get_bloginfo('template_url') . '/form/image.css');
+	wp_enqueue_style('image_form');
+	
     add_action('init', 'ht_init_method');
 }
 /**
@@ -61,17 +64,6 @@ function artpress_theme_init() {
     global $background_image_prefix;
     register_setting( 'artpress_options',       'ap_options', 'ap_options_validate' );
     register_setting( 'artpress_image_options', 'ap_images',  'ap_image_validate' );
-    
-    add_settings_section( 'ap_bi_section', '', 'ap_bi_section_html', 'manage_images' );
-    
-    add_settings_field( $background_image_prefix . '0', 'Logo image',         'ap_image_html', 'manage_images', 'ap_bi_section', '0');
-    add_settings_field( $background_image_prefix . '1', 'Background image 1', 'ap_image_html', 'manage_images', 'ap_bi_section', '1');
-    add_settings_field( $background_image_prefix . '2', 'Background image 2', 'ap_image_html', 'manage_images', 'ap_bi_section', '2');
-    add_settings_field( $background_image_prefix . '3', 'Background image 3', 'ap_image_html', 'manage_images', 'ap_bi_section', '3');
-    add_settings_field( $background_image_prefix . '4', 'Background image 4', 'ap_image_html', 'manage_images', 'ap_bi_section', '4');
-    add_settings_field( $background_image_prefix . '5', 'Background image 5', 'ap_image_html', 'manage_images', 'ap_bi_section', '5');
-    add_settings_field( $background_image_prefix . '6', 'Background image 6', 'ap_image_html', 'manage_images', 'ap_bi_section', '6');
-        
     init_ap_options();
 }
 
@@ -84,40 +76,123 @@ function theme_options_add_page() {
         add_submenu_page('artpress',   __('Images'),         __('Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
 }
 
-function ap_bi_section_html() {
-    echo "<p>Upload images here</p>";
-}
+function ap_image_upload_page() {
+    global $post;
+    $settings = get_option('ap_images');
+    $o = get_settings_fields('artpress_image_options');  
+   
+    // display existing artpress background images
+    
+    // get posts tagged with 'artpress'
+    $my_posts = get_posts( 'tag=artpress&post_status=any&post_type=any&numberposts=-1' );
 
-/** Displays the html form for selecting background images */
-function ap_reset_html() { ?>    
-    <form method="post" action="options.php"> <?php 
-        settings_fields( 'artpress_options' ); 
-        $settings = get_option( 'artpress_theme_options' );
-    ?> </form>
-<?php }
-
-/** Displays the html form elements for selecting a background image */
-function ap_image_html($number) {
-        //wp_nonce_url
-    ///wp/wp-admin/upload.php?deleted=1
-    //http://localhost/wp/wp-admin/post.php?action=delete&post=78&_wpnonce=b0cb2fedda
-    global $background_image_prefix;
-    $file_id = $background_image_prefix . $number;
-    $file_paths = get_option('ap_images');
-    $path = ''; $image = ''; $url_label =''; $cb = '';
-    if (isset($file_paths[$file_id]['url'])) {
-        $url = $file_paths[$file_id]['url'];
-        $path = $file_paths[$file_id]['file'];
-        $image = "<img src='{$url}' height='50' />";
-        $url_label = p(alink($url, $path));
-        $path_label = "<p>({$path})</p>";
+    // display table of images
+    $rows = row(
+        th('image name') . 
+        th('description') .
+        th('thumbnail') . 
+        th('use as logo') .
+        th('delete images'));
+    foreach($my_posts as $post) {
+        setup_postdata($post);
         
-        $cb_id = 'ap_images[delete][' . $file_id . ']';
-        $cb_label = label($cb_id, 'delete image');
-        $cb = $cb_label . checkbox($cb_id, false);
+        $id = get_the_ID();
+        $children =& get_children("post_parent={$id}&post_type=any");
+        $child = array_shift(array_values($children));
+        
+        if($child) {
+            $aid = $child->ID;     
+            $title = $child->post_title;
+            $desc = $child->post_content;
+            $img = wp_get_attachment_image($aid, 'thumbnail');
+            // display logo radio selector
+            $radio = input('radio', 
+                            attr_name("ap_images[logo-image]") 
+                            . attr_value($aid)
+                            // ensure the correct radio is checked
+                            . attr_checked(( isset($settings['logo-image']) && $aid == $settings['logo-image'])));
+            // display delete checkbox
+            $checkbox = input('checkbox', attr_name("ap_images[delete-image][{$aid}]") 
+            );
+            $rows .= row( td($title) .
+                td( $desc ) .
+                td( $img ) . 
+                td( $radio ) .
+                td( $checkbox ) 
+            ); 
+        }
     }
-    $input = "<input type='file' name='{$file_id}' size='40' value=''/>";
-    echo $image . $url_label . $cb . $input;
+    $o .= h3('Background images');
+    $o .= table($rows);
+    
+    // display new image selector
+    $o .= h3('Upload new background image'); 
+    $rows = row(td('select image') . td(input('file', attr_name('uploaded-image') . attr_size('40') )));
+    $rows .= row(td('optional description') . td(input('text', attr_name('ap_images[image-description]') . attr_size(30) )));
+    $o .= table($rows);
+
+	$o .= button_submit('submit');
+
+	$form = form( 'post', 'options.php', $o, 'multipart/form-data' );
+    $div = div($form, attr_class('wrap') );
+    echo $div;
+}
+function ap_image_validate($input) {
+    $new_settings = array();
+    if( $input ) {
+        // set the logo image value 
+        if( $logo = $input['logo-image'] ) {
+            $new_settings['logo-image'] = $logo;
+        }
+        // delete images
+        if( $delete = $input['delete-image']) {
+            foreach( array_keys($delete) as $aid ) {
+
+                wp_delete_attachment($aid);
+            
+                // delete logo-image from settings if the logo image is being deleted
+                if ( $logo == $aid ) unset( $new_settings['logo-image'] );
+                // TODO delete parent post as well
+
+            }
+        }
+    }
+    // first upload the file
+    $file = $_FILES['uploaded-image'];
+    // make sure the file is named correctly
+    if ($file && $file['name'] != "" ) {    
+        // get the artpress tag id
+        //$tag_id = 20;
+        
+        // create new post attributes
+        $postarr = array(
+            'post_title' => 'artpress background image',
+            'post_content' => 'This is an artpress background image.',
+            'tags_input'=>'artpress',
+            'post_status' => 'private'
+        );
+        // create new post
+        $new_post_id = wp_insert_post($postarr);
+        
+        // upload the file the uploads folder
+        $override_defaults = array('test_form' => false); 
+        $uploaded_file = wp_handle_upload($file, $override_defaults); 
+        $attachment_arr = array(
+			'post_mime_type' => $uploaded_file['type'],
+			'post_title' => preg_replace('/\.[^.]+$/', '', basename($uploaded_file['file'])),
+			'post_content' => '' . $input['image-description'],
+            'tags_input'=>'artpress',//$tag_id,
+			'post_status' => 'inherit');
+        $filename = $uploaded_file['file'];
+        $attach_id = wp_insert_attachment($attachment_arr, $filename, $new_post_id);
+        
+        // http://stackoverflow.com/questions/2674069/adding-posts-with-thumbnail-programatically-in-wordpress
+        $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
+        wp_update_attachment_metadata( $attach_id,  $attach_data );
+        
+        $new_attachment = get_post($attach_id);
+    }
+    return $new_settings;
 }
 /** 
  * HACK ALERT! creating my own 'settings_fields' that doesn't echo but returns its contents.
@@ -154,66 +229,72 @@ function ap_settings_page() {
     echo $maintabgroup->get_html();
     echo ct('div');
 }
-function ap_image_upload_page() {
-    ?><div class="wrap">
-            <form method="post" enctype="multipart/form-data" action="options.php">
-       	        <?php settings_fields('artpress_image_options'); ?>
-                <?php do_settings_sections('manage_images'); ?>
-                <p class="submit"><input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Upload Images') ?>" /></p>
-            </form>
-	</div><?php   
-}
+
 function ap_configs_page() {
     $options = get_option('ap_options');
     $o = '';
     $o .= h2('configurations');
     $o .= ot('table');
-    $o .= tr( td(label( 'current-save-id', __('current configuration') ) ) .
+    $o .= tr( td(label( 'live-id', __('current live configuration') ) ) .
+              td(input( 'text', attr_readonly() . attr_value( $options['live-id'] ) ) ) );
+                         
+    $o .= tr( td(label( 'current-save-id', __('current editable configuration') ) ) .
               td(input( 'text', attr_readonly() . attr_value( $options['current-save-id'] ) ) ) );
-              
-    // select a configuration  
+
+
+    // select live configuration
+    $o .= '<form method="post" action="options.php">';
+    $o .= get_settings_fields('artpress_options');
+    $o .= input('hidden', attr_name('ap_options[change_live-id]') . attr_value('true') );
+    if( $options && isset($options['saves'])) {
+        $opts = '';
+        foreach (array_keys($options['saves']) as $save_name) {
+            if($save_name != $options['live-id'])
+                $opts .= option($save_name, $save_name);          
+        }  
+        $o .=  tr(td('new live configuration') 
+                . td(select("ap_options[live-id]", $opts) )
+                . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'live' ) . "' /></span>")
+                );
+    }
+    $o .= ct('form');
+
+    
+    // select a configuration to edit
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
     $o .= input('hidden', attr_name('ap_options[change_current-save-id]') . attr_value('true') );
     if( $options && isset($options['saves'])) {
-        $first = true;
-        $first_col = 'load configuration';
+        $opts = '';
         foreach (array_keys($options['saves']) as $save_name) {
-            $o .= tr( td($first_col)
-                        . td($save_name)
-                        . td( input( 'radio', attr_name("ap_options[current-save-id]") .attr_value($save_name))));
-            if($first) {
-                $first = false;
-                $first_col = '';
-            }
-        }   
+            if($save_name != $options['current-save-id'])
+                $opts .= option($save_name, $save_name);          
+        }  
+        $o .=  tr(td('new configuration to edit') 
+                . td(select("ap_options[current-save-id]", $opts) )
+                . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'edit' ) . "' /></span>")
+                );
     }
-    $load = __( 'load' );  
-    $o .= td(''). td(''). td("<span class='submit'><input type='submit' class='button-primary' value='{$load}' /></span>");
-    
     $o .= ct('form');
+
     
     // delete a configuration  
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
     $o .= input('hidden', attr_name('ap_options[delete_configuration]') . attr_value('true') );
     if( $options && isset($options['saves'])) {
-        $first = true;
-        $first_col = 'delete configuration';
-        foreach (array_keys($options['saves']) as $save_name) {
-            $o .= tr( td($first_col)
-                        . td($save_name)
-                        . td( input( 'checkbox', attr_name("ap_options[dead_saves][${save_name}]") .attr_value($save_name))));
-            if($first) {
-                $first = false;
-                $first_col = '';
-            }
-        }   
+       $opts = '';
+       foreach (array_keys($options['saves']) as $save_name) {
+           if($save_name != 'default')
+               $opts .= option($save_name, $save_name);          
+       }  
+       $o .=  tr(td('delete configuration') 
+               . td(select("ap_options[delete-id]", $opts) )
+               . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'delete' ) . "' /></span>")
+               );
     }
-    $delete = __( 'delete' );  
-    $o .= td(''). td(''). td("<span class='submit'><input type='submit' class='button-primary' value='{$delete}' /></span>");
-    
     $o .= ct('form');
+    
     
     // create new configuration
     $o .= '<form method="post" action="options.php">';
@@ -244,6 +325,7 @@ function get_ap_options_defaults() {
 
     $options['saves'] = array();
     $options['current-save-id'] = 'default';
+    $options['live-id'] = 'default';
     $options['saves'][$options['current-save-id']] = $options['cs'];
 
     $options['defaults'] = array();
@@ -287,6 +369,10 @@ function ap_options_validate( $new_settings ) {
         $options['current-save-id'] = $new_settings['current-save-id'];
         return $options;
     }
+    if( isset($new_settings['change_live-id'] ) ) {
+        $options['live-id'] = $new_settings['live-id'];
+        return $options;
+    }
     if( isset($new_settings['create_new_configuration'] ) ) {
         $new_config_name = $new_settings['current-save-id'];
         $options['current-save-id'] = $new_config_name;
@@ -294,21 +380,21 @@ function ap_options_validate( $new_settings ) {
         return $options;
     }
     if( isset( $new_settings['delete_configuration'] ) ) {
-        $dead_saves = $new_settings['dead_saves'];
-        foreach( array_keys($dead_saves) as $save ) {
-            unset($options['saves'][$save]);
-        }
+        $dead_save = $new_settings['delete-id'];
+        unset($options['saves'][$dead_save]);
+        unset($options['css'][$dead_save]);
         $first_save = key($options['saves']);
-        if($first_save) {
+        
+        if($dead_save == $options['current-save-id']) {
             $options['current-save-id'] = $first_save;
-        } else {
-            $options['current-save-id'] = 'default';
-            $options['saves'][$options['current-save-id']] = array();
+        }
+        if($dead_save == $options['live-id']) {
+            $options['live-id'] = $first_save;
         }
                
         return $options;
     }
-    if( $options == null) $options = get_ap_options_defaults();
+    if( $options == null) $options = get_ap_options_defaults(); // if options have never been set before create some default options
 
     $previous_save = $options['saves'][$options['current-save-id']];
     if ($new_settings == null ) {
@@ -334,26 +420,65 @@ function ap_options_validate( $new_settings ) {
     // store save
     $options['saves'][$options['current-save-id']] = $merged_save;
     
+    // create css
+    $css = create_css($merged_save);
+    $options['css'][$options['current-save-id']] = $css;
+    
     return $options;
 }
-function ap_image_validate($input) {
-    global $background_image_prefix;
-    $override_defaults = array('test_form' => false); 
-    $options = get_option('ap_images');
-    
-    foreach(array_keys($_FILES) as $file_name) {
-        $prefix = substr($file_name, 0, strlen($background_image_prefix)); 
-        if ( $prefix == $background_image_prefix // make sure the file is named correctly 
-             && $_FILES[$file_name]['name'] != "" ) {    // make sure that it isn't empty TODO how do we handle deleting a file?
-            $file = wp_handle_upload($_FILES[$file_name], $override_defaults); // store the file in the database
-            $options[$file_name] = $file;
+
+
+class CSS_Setting_Visitor implements Visitor {
+    function recurse($hierarchy) {
+        return $hierarchy->has_children();
+    }
+    function valid_child($hierarchy) {
+        if ( $hierarchy instanceof CSS_Setting ) {
+            $parent = $hierarchy->get_parent();
+            if ( $parent instanceof Toggle_Group ) {
+                return $parent->is_on();
+            } else {
+                return true;
+            }
+        } else {
+            return false;
         }
     }
+}
+function create_css($save) {
+    $output = "";
     
-    if(isset($input['delete'])) {
+    $maintabgroup = new Main_Tab_Group('main tab group');
+    $maintabgroup->inject_values($save);
+
+    // customized functionality for Global Settings css
+    // headers
+    $font_size = Global_Font_Size_Ratio::get_font_size(1);
+    $selector_string = 'h1, h2, h3, h4, h5, h6';
+    $declarations = dec('margin-top', 2 * $font_size . 'px'); // TODO hacky
+    $declarations .= dec('margin-bottom', $font_size);
+    $output .= rule($selector_string, decblock($declarations));
     
+    // paragraph
+    $selector_string = 'p';
+    $declarations = dec('margin-bottom', $font_size);
+    $output .= rule($selector_string, decblock($declarations));
+    
+    // standard functionality for all other settings 
+    $selectors = CSS_Selector::get_css_selectors(); 
+    
+    foreach ( $selectors as $selector ) {
+        $selector_string = get_full_selector_string( get_full_selector_array($selector) );
+        $settings = $selector->get_children(new CSS_Setting_Visitor());
+        $declarations = '';
+        foreach( $settings as $setting ) {
+            $declarations .= $setting->get_css_declaration();
+        }
+        if($declarations) {
+            $output .= rule( $selector_string, decblock($declarations) );
+        }
     }
-    return $options;
+    return $output;  
 }
 //function ap_image_validate($input) {
 //    // IMAGES

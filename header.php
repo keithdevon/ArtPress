@@ -40,9 +40,24 @@
 
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 
-<?php get_template_part( 'cssgrid' );           // CSS Grid files (cssgrid.php) ?>
+<style type='text/css' media='screen'>
+<?php 
+// TODO http://core.trac.wordpress.org/ticket/14673
+// http://core.trac.wordpress.org/ticket/14365
 
-<?php
+if($options = get_option('ap_options')) {
+    $has_capability = current_user_can('manage_options');
+    if ( $has_capability ) {
+        $csi = $options['current-save-id'];
+        echo $options['css'][$csi];
+    } else {
+        $li = $options['live-id'];
+        echo $options['css'][$li];
+    }
+}
+?>
+</style>
+<?php get_template_part( 'cssgrid' );           // CSS Grid files (cssgrid.php) 
 	/* We add some JavaScript to pages with the comment form
 	 * to support sites with threaded comments (when in use).
 	 */
