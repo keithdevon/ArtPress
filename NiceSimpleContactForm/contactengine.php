@@ -1,10 +1,9 @@
 <?php
 
-$EmailFrom = "chriscoyier@gmail.com";
+$EmailFrom = Trim(stripslashes($_POST['Email']));
 $EmailTo = "keithdevon@gmail.com";
-$Subject = "Nice & Simple Contact Form by CSS-Tricks";
-$Name = Trim(stripslashes($_POST['Name'])); 
-$Tel = Trim(stripslashes($_POST['Tel'])); 
+$Subject = "ArtPress Feedback";
+$Name = Trim(stripslashes($_POST['Name']));
 $Email = Trim(stripslashes($_POST['Email'])); 
 $Message = Trim(stripslashes($_POST['Message'])); 
 
@@ -19,9 +18,6 @@ if (!$validationOK) {
 $Body = "";
 $Body .= "Name: ";
 $Body .= $Name;
-$Body .= "\n";
-$Body .= "Tel: ";
-$Body .= $Tel;
 $Body .= "\n";
 $Body .= "Email: ";
 $Body .= $Email;

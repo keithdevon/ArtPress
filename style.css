@@ -1316,7 +1316,6 @@ ul#breadcrumbs {
 ul#breadcrumbs li {
     float:left;
     margin:0px;
-    letter-spacing:1px;
     }
     
 span.crumb-divider {
@@ -1477,6 +1476,7 @@ box-shadow:rgba(0,92,17,0.75) 0px 8px 24px;
     
 .gallery-icon a img {
     display: block;
+    margin:0 auto;
     } 
     
 /* Tutorial links */
