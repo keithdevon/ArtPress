@@ -1225,7 +1225,7 @@ function ht_show_feedback_form() { ?>
 
 
 
-// AJAXified Admin Section
+// AJAXified Admin Section -- from http://return-true.com/2010/01/using-ajax-in-your-wordpress-theme-admin/
 
     // Add the admin page
 
