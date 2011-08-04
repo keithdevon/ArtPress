@@ -58,24 +58,22 @@ class Section_Image extends CSS_Dropdown_Input {
         global $post;
         parent::__construct('background-image:url', 'image select', $value);
         if(!self::$options) { 
-            // get the posts tagged with artpress
-            $my_posts = get_posts('tag=artpress&post_status=any&post_type=any');
-            // get the image attachments of these posts
-            foreach($my_posts as $post) {
-                setup_postdata($post);
-                $id = get_the_ID();
-                // ensure post has children
-                if($children =& get_children("post_parent={$id}&post_type=attachment") ) { 
-                    $attachment = array_shift(array_values($children)); 
-                    $aid = $attachment->ID;
-                    $url = wp_get_attachment_url($aid);
-                    self::$options[] = $url;
+            self::$options[0] = '';
+            if($option = get_option('ap_images') ){
+                if( $images = $option['images']) {
+                    foreach( array_keys($images) as $aid ) {
+                        $url = wp_get_attachment_url($aid);
+                        self::$options[$aid] = $url;
+                    }
                 }
             }         
         }     
     }    
     function get_opts() {
         return self::$options;
+    }
+    function validate($value) {
+        return (in_array($value, array_keys(self::$options)));
     }
     function get_css_declaration() {
         $options = self::$options;

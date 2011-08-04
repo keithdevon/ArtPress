@@ -82,51 +82,46 @@ function ap_image_upload_page() {
     $o = get_settings_fields('artpress_image_options');  
    
     // display existing artpress background images
-    
-    // get posts tagged with 'artpress'
-    $my_posts = get_posts( 'tag=artpress&post_status=any&post_type=any&numberposts=-1' );
-
-    // display table of images
     $rows = row(
         th('image name') . 
         th('description') .
         th('thumbnail') . 
         th('use as logo') .
         th('delete images'));
-    foreach($my_posts as $post) {
-        setup_postdata($post);
-        
-        $id = get_the_ID();
-        $children =& get_children("post_parent={$id}&post_type=any");
-        $child = array_shift(array_values($children));
-        
-        if($child) {
-            $aid = $child->ID;     
-            $title = $child->post_title;
-            $desc = $child->post_content;
-            $img = wp_get_attachment_image($aid, 'thumbnail');
-            // display logo radio selector
-            $radio = input('radio', 
-                            attr_name("ap_images[logo-image]") 
-                            . attr_value($aid)
-                            // ensure the correct radio is checked
-                            . attr_checked(( isset($settings['logo-image']) && $aid == $settings['logo-image'])));
-            // display delete checkbox
-            $checkbox = input('checkbox', attr_name("ap_images[delete-image][{$aid}]") 
-            );
-            $rows .= row( td($title) .
-                td( $desc ) .
-                td( $img ) . 
-                td( $radio ) .
-                td( $checkbox ) 
-            ); 
+
+    // display table of images
+    if(isset($settings['images']) && $images = $settings['images']) {
+        foreach( array_keys($images) as $image_id ) {
+            if($image = get_post($image_id) ) {
+                $aid = $image->ID;     
+                $title = $image->post_title;
+                $desc = $image->post_content;
+                $img = wp_get_attachment_image($aid, 'thumbnail');
+                // display logo radio selector
+                $radio = input('radio', 
+                                attr_name("ap_images[logo-image]") 
+                                . attr_value($aid)
+                                // ensure the correct radio is checked
+                                . attr_checked(( isset($settings['logo-image']) && $aid == $settings['logo-image'])));
+                // display delete checkbox
+                $checkbox = input('checkbox', attr_name("ap_images[delete-image][{$aid}]") 
+                );
+                $rows .= row( td($title) .
+                    td( $desc ) .
+                    td( $img ) . 
+                    td( $radio ) .
+                    td( $checkbox ) 
+                ); 
+            }
         }
+        $o .= h3('Background images');
+        $o .= table($rows);
+    } else {
+        $o .= p("Uploaded images will be displayed here.");
     }
-    $o .= h3('Background images');
-    $o .= table($rows);
     
     // display new image selector
-    $o .= h3('Upload new background image'); 
+    $o .= h3('Upload new image'); 
     $rows = row(td('select image') . td(input('file', attr_name('uploaded-image') . attr_size('40') )));
     $rows .= row(td('optional description') . td(input('text', attr_name('ap_images[image-description]') . attr_size(30) )));
     $o .= table($rows);
@@ -161,18 +156,16 @@ function ap_image_validate($input) {
     $file = $_FILES['uploaded-image'];
     // make sure the file is named correctly
     if ($file && $file['name'] != "" ) {    
-        // get the artpress tag id
-        //$tag_id = 20;
         
         // create new post attributes
-        $postarr = array(
-            'post_title' => 'artpress background image',
-            'post_content' => 'This is an artpress background image.',
-            'tags_input'=>'artpress',
-            'post_status' => 'private'
-        );
-        // create new post
-        $new_post_id = wp_insert_post($postarr);
+        //$postarr = array(
+        //    'post_title' => 'artpress background image',
+        //    'post_content' => 'This is an artpress background image.',
+        //    'tags_input'=>'artpress',
+        //    'post_status' => 'private'
+        //);
+        //// create new post
+        //$new_post_id = wp_insert_post($postarr);
         
         // upload the file the uploads folder
         $override_defaults = array('test_form' => false); 
@@ -184,13 +177,17 @@ function ap_image_validate($input) {
             'tags_input'=>'artpress',//$tag_id,
 			'post_status' => 'inherit');
         $filename = $uploaded_file['file'];
-        $attach_id = wp_insert_attachment($attachment_arr, $filename, $new_post_id);
+        $attach_id = wp_insert_attachment($attachment_arr, $filename); //, $new_post_id);
         
         // http://stackoverflow.com/questions/2674069/adding-posts-with-thumbnail-programatically-in-wordpress
         $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
         wp_update_attachment_metadata( $attach_id,  $attach_data );
         
-        $new_attachment = get_post($attach_id);
+        //$new_attachment = get_post($attach_id);
+        //if(!isset($new_settings['images'])) $new_settings['images'] = array();
+        $previous_settings = get_option('ap_images');
+        $new_settings = array_merge_recursive_distinct($previous_settings, $new_settings);
+        $new_settings['images'][$attach_id] = wp_get_attachment_url($attach_id);
     }
     return $new_settings;
 }

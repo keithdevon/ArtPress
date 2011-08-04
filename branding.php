@@ -13,7 +13,7 @@
                     $options = get_option('ap_options');
                     $images = get_option('ap_images');
                     if( isset($options['saves'][$options['current-save-id']]['logo-toggle']) && $images && isset($images['logo-image']) ) {
-                       $img_url = $images['ap_image_0']['url'];
+                       $img_url = $images['images'][$images['logo_image']];
                        echo bt('image', attr_src($img_url) . attr_alt($name));
                     } else echo $name;
     		       ?>
