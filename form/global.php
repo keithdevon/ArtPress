@@ -46,11 +46,6 @@ class Color_Picker_Group extends Option_Group {
         return table($children_html, attr_class('form-table'));
     }
 }
-class Logo_Toggle extends Toggle {
-    function __construct($value=0) {
-        parent::__construct('logo-toggle', 'Use logo image',  $value);
-    }
-}
 class Global_Settings extends Main_Tab  {
     function __construct($members=null) {
         if ( null == $members ) {       
@@ -64,12 +59,13 @@ class Global_Settings extends Main_Tab  {
             $gfs = new Global_Font_Size(10);
             $gfss = new Global_Font_Size_Ratio();
             $members[] = new Option_Group('Global Font Size', array($gfs, $gfss));
+            
             $gf1 = new Global_Font_Family('Font family 1', 0);
             $gf2 = new Global_Font_Family('Font family 2', 0);
             $gf3 = new Global_Font_Family('Font family 3', 0);
             $members[] = new Lookup_Option_Group('Global Fonts', array($gf1, $gf2, $gf3));
             
-            $members[] = new Option_Group('Logo settings', new Logo_Toggle());
+            $members[] = new Option_Group('Logo settings', new Logo_Image_Dropdown());
         }
         parent::__construct('global settings', 'artpress_options', $members);
     }

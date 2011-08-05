@@ -51,12 +51,12 @@ class Image extends CSS_Text_Input { // TODO this should probably be deleted
         
     }
 }
-class Section_Image extends CSS_Dropdown_Input {
+abstract class CSS_Image_Dropdown extends CSS_Dropdown_Input {
     static $options;
 
-    function __construct($value=0) {
+    function __construct($css_property, $display_name, $value=0) {
         global $post;
-        parent::__construct('background-image:url', 'image select', $value);
+        parent::__construct($css_property, $display_name, null, $value);
         if(!self::$options) { 
             self::$options[0] = '';
             if($option = get_option('ap_images') ){
@@ -72,6 +72,7 @@ class Section_Image extends CSS_Dropdown_Input {
     function get_opts() {
         return self::$options;
     }
+    
     function validate($value) {
         return (in_array($value, array_keys(self::$options)));
     }
@@ -83,5 +84,15 @@ class Section_Image extends CSS_Dropdown_Input {
             $dec = "\nbackground-image:url('{$file}');";
             return $dec;
         }
+    }
+}
+class Background_Image_Dropdown extends CSS_Image_Dropdown {
+    function __construct($value=0) {
+        parent::__construct('background-image:url', 'image select', $value);
+    }
+}
+class Logo_Image_Dropdown extends CSS_Image_Dropdown {
+    function __construct($value=0) {
+        parent::__construct('background-image:url', 'Logo image select', $value);  
     }
 }

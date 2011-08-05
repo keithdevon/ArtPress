@@ -9,8 +9,8 @@ $full_dir = $dir . 'form/heart-theme-form-functions.php';
 include_once $full_dir;
 require_once $dir . 'form/form.php';
 require_once $dir . 'form/css-selectors.php';
-require_once $dir . 'form/global.php';
 require_once $dir . 'form/images.php';
+require_once $dir . 'form/global.php';
 require_once $dir . 'form/color.php';
 require_once $dir . 'form/border.php';
 require_once $dir . 'form/header-form.php';
@@ -86,7 +86,6 @@ function ap_image_upload_page() {
         th('image name') . 
         th('description') .
         th('thumbnail') . 
-        th('use as logo') .
         th('delete images'));
 
     // display table of images
@@ -98,20 +97,12 @@ function ap_image_upload_page() {
                 $desc = $image->post_content;
                 $img = wp_get_attachment_image($aid, 'thumbnail');
                 
-                // display logo radio selector
-                $radio = input('radio', 
-                                attr_name("ap_images[logo-image]") 
-                                . attr_value($aid)
-                                // ensure the correct radio is checked
-                                . attr_checked(( isset($settings['logo-image']) && $aid == $settings['logo-image'])));
-                                
                 // display delete checkbox
                 $checkbox = input('checkbox', attr_name("ap_images[delete-image][{$aid}]") 
                 );
                 $rows .= row( td($title) .
                     td( $desc ) .
                     td( $img ) . 
-                    td( $radio ) .
                     td( $checkbox ) 
                 ); 
             }

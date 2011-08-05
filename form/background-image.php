@@ -76,7 +76,7 @@ class Background_Image_Tab extends Sub_Tab {
             $members = array(
             new Section_Background_Color(),             
             new Background_Image_Toggle(0, array(
-                new Section_Image(),
+                new Background_Image_Dropdown(),
                 new Background_Repeat(),
                 new Background_Attachment(),
                 new Background_Position() ) ) );
