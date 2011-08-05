@@ -60,7 +60,7 @@ class Section_Image extends CSS_Dropdown_Input {
         if(!self::$options) { 
             self::$options[0] = '';
             if($option = get_option('ap_images') ){
-                if( $images = $option['images']) {
+                if( isset($option['images']) && $images = $option['images'] ) {
                     foreach( array_keys($images) as $aid ) {
                         $url = wp_get_attachment_url($aid);
                         self::$options[$aid] = $url;
