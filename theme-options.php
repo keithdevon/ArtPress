@@ -50,7 +50,7 @@ function artpress_options_load_scripts() {
     wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.css' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
     
-    wp_register_style('image_form', get_bloginfo('template_url') . '/form/image.css');
+    wp_register_style('image_form', get_bloginfo('template_url') . '/form/image-form.css');
 	wp_enqueue_style('image_form');
 	
     add_action('init', 'ht_init_method');

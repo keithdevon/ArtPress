@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+.imageupload table {
+	/*padding: 0px;
+	margin: 0px;
+	cellspacing: 0px;
+    border-spacing:0px; 
+    */
+    border-collapse: separate;
+    }
+.imageupload td, .imageupload th {
+    background-color: #eeeeee; 
+    padding: 0.5em;
+	/*
+	border: 1px solid #bbbbbb;
+	*/
+}
