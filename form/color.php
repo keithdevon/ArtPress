@@ -30,6 +30,11 @@ class Global_Color extends Setting_Text {
     }
 }
 
+function get_css_dropdown_value($obj) {
+        $options = $obj->get_opts();
+        $value = $options[$obj->get_value()];
+        return $value;
+}
 abstract class Section_Color extends CSS_Dropdown_Input implements ISetting_Depends_On_Global_Setting {
     function __construct($css_property, $display_name, $value=0) {
         parent::__construct($css_property, $display_name, null, $value);
@@ -38,9 +43,7 @@ abstract class Section_Color extends CSS_Dropdown_Input implements ISetting_Depe
         return Global_Color::get_dropdown_color_options();
     }
     function get_css_value() {
-        $options = $this->get_opts();
-        $value = $options[$this->get_value()];
-        return $value;
+        return get_css_dropdown_value($this);
     }
 }
 class Setting_Color extends Setting_Dropdown implements ISetting_Depends_On_Global_Setting {
@@ -50,10 +53,8 @@ class Setting_Color extends Setting_Dropdown implements ISetting_Depends_On_Glob
     function get_opts() {
         return Global_Color::get_dropdown_color_options();
     }
-    function get_value() {
-        $options = $this->get_opts();
-        $value = $options[parent::get_value()];
-        return $value;
+    function get_css_value() {
+        return get_css_dropdown_value($this);
     }
 }
 class Section_Foreground_Color extends Section_Color {

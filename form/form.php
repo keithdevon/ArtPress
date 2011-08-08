@@ -378,7 +378,8 @@ class Main_Tab_Group extends Tab_Group {
         foreach( array_keys($settings) as $setting_key ) { // TODO iterate over $values instead? much smaller
             // Do a check first to see that setting key exists in the existing supplied $values
             // which will be false for new settings in new versions
-            if( key_exists($setting_key, $values)) {
+            $exists = key_exists($setting_key, $values);
+            if( $exists ) {
                 $setting = $settings[$setting_key];
                 $value = $values[$setting_key];
                 $setting->set_value($value);
