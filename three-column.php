@@ -15,7 +15,7 @@
 get_header(); ?>
     <div id="content" class="container">
 		<div class="three-columns row">
-		  <div class="threecol"><?php get_template_part('sidebars/sidebar');?></div>
+		  <div class="threecol"><?php get_template_part('sidebar');?></div>
 			<div id="content" class="sixcol" role="main">
 			
 			<?php get_template_part( 'ht-crumbs' );?>
