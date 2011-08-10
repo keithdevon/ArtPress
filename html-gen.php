@@ -53,9 +53,9 @@ function ct($tag_name)                 { return '</' . $tag_name . '>'; }       
 function alink($href, $content, $attributes="") { return ot('a', attr_href($href) . $attributes ) . $content . ct('a');}
 function checkbox($name, $checked, $attributes="") { return bt('input', attr_type('checkbox') . attr_name($name) . attr_checked($checked) . $attributes); }
 function div($content, $attributes ="")         { return ot('div', $attributes)   . $content . ct('div'); }
-function form($method, $action, $content, $enctype) {
+function form($method, $action, $content, $enctype, $attributes='') {
     $o = ot('form', 
-        attr_method($method) . attr_action($action) . attr_enctype($enctype) ) ;
+        attr_method($method) . attr_action($action) . attr_enctype($enctype) . $attributes) ;
     $o .= $content;
     return $o . ct('form');    
 }
@@ -73,6 +73,7 @@ function optgroup($label, $options)             { return ot('optgroup', attr_lab
 function option($value, $content, $attributes=""){ return ot('option', attr_value($value) . $attributes) . $content . ct('option'); }
 function p($content, $attributes ="")           { return ot('p', $attributes)      . $content . ct('p'); }
 function select($name, $content, $attributes=""){ return ot('select', attr_name($name) . $attributes ) . $content . ct('select'); }
+function span($content, $attributes ="")         { return ot('spa n', $attributes)   . $content . ct('span'); }
 function table($content, $attributes ="")       { return ot('table', $attributes)  . $content . ct('table'); }
 function td($content, $attributes ="")          { return ot('td', $attributes)     . $content . ct('td'); }
 function th($content, $attributes ="")          { return ot('th', $attributes)     . $content . ct('th'); }

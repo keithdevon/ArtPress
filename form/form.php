@@ -386,22 +386,17 @@ class Main_Tab_Group extends Tab_Group {
             }
         }
     }
+    
     function get_html() {
-        $o = '';
-        $o .= '<form method="post" ';
-        $o .= 'action="options.php">';
-            $o .= get_settings_fields('artpress_options');
-            
-            $csi = $this->get_child(0);
-            $o .= $csi->get_html();
-            $save = __( 'Save Settings' );
-            
-            $o .= "<span class='submit'><input type='submit' id='ht_save_options' class='button-primary' value='{$save}' /></span>";      
-            $child_html = parent::get_html();
-            $o .= $child_html;
-        $o .= ct('form');
-        $o .= '</p>';
-        return $o;
+        $o = get_settings_fields('artpress_options');
+        
+        $csi = $this->get_child(0);
+        $o .= $csi->get_html();
+        $o .= button_submit(__('Save'));      
+        $child_html = parent::get_html();
+        $o .= $child_html;
+        $form = form('post', 'options.php', $o, null, attr_id('ap_options_form'));
+        return $form;
     }
 }
 /**
@@ -691,11 +686,11 @@ class Current_Save_ID extends Setting {
     function get_html() {
         $o = '';
         $name = $this->get_name();
-        $o .= label($name, 'Configuration name');
+        $o .= label($name, 'Save configuration as');
         $attrs =  attr_id($name) .
                     attr_value($this->get_value());
         $o .= input('text',  attr_name("ap_options[{$name}]") . $attrs);
-        $o = p($o);
+        //$o = p($o);
         return $o;        
     }
     function validate($value) {

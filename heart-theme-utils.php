@@ -77,11 +77,11 @@ function row($content) {
     return $o;    
 }
 function button_submit($button_text) {
-    return p(input('submit', 
+    return input('submit', 
         attr_name('Submit') . 
         attr_class('button-primary') . 
         attr_type('submit') . 
-        attr_value(esc_attr($button_text))));
+        attr_value(esc_attr($button_text)));
 }
 
 ?>
