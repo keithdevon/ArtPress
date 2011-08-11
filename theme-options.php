@@ -56,10 +56,7 @@ function artpress_options_load_scripts() {
 /**
  * Init plugin options to white list our options
  */
-$background_image_prefix = 'ap_image_';
-
 function artpress_theme_init() {
-    global $background_image_prefix;
     register_setting( 'artpress_options',       'ap_options', 'ap_options_validate' );
     register_setting( 'artpress_image_options', 'ap_images',  'ap_image_validate' );
     init_ap_options();
