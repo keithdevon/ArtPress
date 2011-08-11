@@ -35,8 +35,8 @@ function artpress_options_load_scripts() {
 
     // register styles
     wp_register_style( 'ArtPressOptionsStylesheet', $template_url . '/scripts/farbtastic/farbtastic.css' );
-    wp_register_style( 'jqueryui1814css', $template_dir. '/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css' );  
-    wp_register_style('image_form', $template_url . '/form/image-form.css');
+    wp_register_style( 'jqueryui1814css',           $template_dir. '/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css' );  
+    wp_register_style('image_form',                 $template_url . '/form/image-form.css');
 
     // enqueue script
     wp_enqueue_script('jqueryui1814');
