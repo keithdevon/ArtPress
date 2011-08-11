@@ -1,12 +1,8 @@
 <?php
-$dir1 = get_bloginfo('template_directory') . '/';
-$dir2 = $_SERVER['DOCUMENT_ROOT'];
-$dir3 = get_theme_root();
 $dir = get_template_directory() . '/';
-$dir5 = get_template_directory_uri();
+
 require_once 'heart-theme-utils.php';
-$full_dir = $dir . 'form/heart-theme-form-functions.php';
-include_once $full_dir;
+include_once $dir . 'form/heart-theme-form-functions.php';
 require_once $dir . 'form/form.php';
 require_once $dir . 'form/css-selectors.php';
 require_once $dir . 'form/images.php';
