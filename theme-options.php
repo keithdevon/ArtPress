@@ -35,7 +35,7 @@ function artpress_options_load_scripts() {
 
     // register styles
     wp_register_style( 'ArtPressOptionsStylesheet', $template_url . '/scripts/farbtastic/farbtastic.css' );
-    wp_register_style( 'jqueryui1814css',           $template_dir. '/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css' );  
+    wp_register_style( 'jqueryui1814css',           $template_dir . '/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css' );  
     wp_register_style('image_form',                 $template_url . '/form/image-form.css');
 
     // enqueue script
@@ -62,9 +62,9 @@ function artpress_theme_init() {
  * Load up the menu page
  */
 function theme_options_add_page() {
-        add_menu_page(                 __( 'ArtPress Options' ),    __( 'Artpress' ),            'edit_theme_options', 'artpress',    'ap_settings_page', '', 0 );
-        add_submenu_page('artpress',   __('Configurations'), __('Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');
-        add_submenu_page('artpress',   __('Images'),         __('Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
+    add_menu_page(               __( 'ArtPress Options' ), __( 'Artpress' ),     'edit_theme_options', 'artpress',              'ap_settings_page', '', 0 );
+    add_submenu_page('artpress', __('Configurations'),     __('Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');
+    add_submenu_page('artpress', __('Images'),             __('Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
 }
 
 function ap_image_upload_page() {
