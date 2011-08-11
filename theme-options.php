@@ -31,28 +31,26 @@ add_action( 'admin_menu', 'theme_options_add_page' );
 // Load our scripts
 function artpress_options_load_scripts() {
     
-    wp_register_script('jqueryui1814',
-    //js/ui1814/css/ui-lightness/images/ui-bg_diagonals-thick_18_b81900_40x40.png
-    
-    get_bloginfo('template_directory') . '/js/ui1814/js/jquery-ui-1.8.14.custom.min.js',
-    array('jquery')
-    //'1.0' 
-    );       
-    
-    wp_register_style( 'jqueryui1814css', 
-                        get_bloginfo('template_directory') . 
-                        	'/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css' );  
-                                              
-    wp_enqueue_script('jqueryui1814');
-    wp_enqueue_style( 'jqueryui1814css' );  
+    $template_dir = get_bloginfo('template_directory');
+    $template_url = get_bloginfo('template_url');
 
-    wp_enqueue_script('farbtastic', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.js', array('jquery'));
-    wp_register_style( 'ArtPressOptionsStylesheet', get_bloginfo('template_url') . '/scripts/farbtastic/farbtastic.css' );
+    // register scripts
+    wp_register_script('jqueryui1814', $template_dir . '/js/ui1814/js/jquery-ui-1.8.14.custom.min.js', array('jquery') );
+
+    // register styles
+    wp_register_style( 'ArtPressOptionsStylesheet', $template_url . '/scripts/farbtastic/farbtastic.css' );
+    wp_register_style( 'jqueryui1814css', $template_dir. '/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css' );  
+    wp_register_style('image_form', $template_url . '/form/image-form.css');
+
+    // enqueue script
+    wp_enqueue_script('jqueryui1814');
+    wp_enqueue_script('farbtastic', $template_dir . '/scripts/farbtastic/farbtastic.js', array('jquery'));
+
+    // enqueue style
+    wp_enqueue_style( 'jqueryui1814css' );  
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
-    
-    wp_register_style('image_form', get_bloginfo('template_url') . '/form/image-form.css');
 	wp_enqueue_style('image_form');
-	
+    	
     add_action('init', 'ht_init_method');
 }
 /**
