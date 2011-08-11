@@ -388,8 +388,16 @@ class Main_Tab_Group extends Tab_Group {
     }
     
     function get_html() {
-        $o = get_settings_fields('artpress_options');
-        
+        $o = "<script type=\"text/javascript\"> 
+            // wait for the DOM to be loaded 
+            jQuery(document).ready(function() { 
+                // bind 'myForm' and provide a simple callback function 
+                jQuery('#ap_options_form').ajaxForm(function() { 
+                    alert(\"Thank you for your comment!\"); 
+                }); 
+            }); 
+        </script>"; 
+        $o .= get_settings_fields('artpress_options');
         $csi = $this->get_child(0);
         $o .= $csi->get_html();
         $o .= button_submit(__('Save'));      
