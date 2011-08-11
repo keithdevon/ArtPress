@@ -16,6 +16,7 @@ function attr_id ($value)         { return attribute('id',     $value); }
 function attr_label ($value)      { return attribute('label',  $value); }
 function attr_method ($value)     { return attribute('method', $value); }
 function attr_name ($value)       { return attribute('name',   $value); }
+function attr_on_change ($value)  { return attribute('onchange', $value); }
 function attr_readonly ()         { return attribute('readonly', 'readonly'); }
 function attr_size ($value)       { return attribute('size',   $value); }
 function attr_src ($value)        { return attribute('src',    $value); }

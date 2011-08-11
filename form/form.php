@@ -389,13 +389,46 @@ class Main_Tab_Group extends Tab_Group {
     
     function get_html() {
         $o = "<script type=\"text/javascript\"> 
+        	changedEls = [];
+        	successColor = '#8F8';
+        	failColor    = '#F88';
             // wait for the DOM to be loaded 
             jQuery(document).ready(function() { 
                 // bind 'myForm' and provide a simple callback function 
                 jQuery('#ap_options_form').ajaxForm(function() { 
-                    alert(\"Thank you for your comment!\"); 
+                    //alert(\"Thank you for your comment!\");
+                    //$('#myElement').animate({backgroundColor: '#FF0000'}, 'slow');
+                    for (i = 0; i < changedEls.length; i++) {
+                    	el = changedEls[i];
+                    	jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
+                   	}
                 }); 
             }); 
+            function trimWhiteSpace(str) {
+    			return str.replace(/^\s+|\s+$/g, '') ;
+    		}
+            function isValidSize(val) {
+            	if(parseInt(val)) {
+    				return val.match('px$|em$|%$');
+    			} else { 
+    				if (parseFloat(val)) {
+						return val.match('em$|%$');
+    				} else { 
+    					return false; 
+    				}    				
+    			}
+    		}
+            function checkValidSize(sizeInputEl) {
+            	changedEls.push(sizeInputEl);
+    			var val = trimWhiteSpace(sizeInputEl.value);
+    			if(isValidSize(val)) {
+    				//this.css('background', 'green');
+    				sizeInputEl.style.background = successColor;	
+    			} else {
+    				//this.css('background', 'red');
+    				sizeInputEl.style.background = failColor;
+    			}
+    		}
         </script>"; 
         $o .= get_settings_fields('artpress_options');
         $csi = $this->get_child(0);
@@ -876,12 +909,16 @@ function get_text_input_html($setting, $attributes='') {
         $i = input('text', $title . $html_name . $value . $attributes);
         return $i;
 }
+function get_size_text_input_html($setting, $attributes=''){
+    return get_text_input_html($setting, $attributes . attr_class('size') .
+    attr_on_change('checkValidSize(this);'));
+}
 abstract class Setting_Text extends Setting {
     function __construct($name, $display_name, $value='') {
         parent::__construct($name, $display_name, $value);        
     }
     function get_html($attributes='') {
-        return get_text_input_html($this, $attributes);
+        return get_size_text_input_html($this, $attributes);
     }
 }
 abstract class CSS_Text_Input extends CSS_Setting {
@@ -889,7 +926,7 @@ abstract class CSS_Text_Input extends CSS_Setting {
         parent::__construct($css_property, $display_name, $value);        
     }
     function get_html($attributes='') {
-        return get_text_input_html($this, $attributes='');
+        return get_size_text_input_html($this, $attributes='');
     }
 }
 abstract class Setting_Size_Text_Input extends Setting_Text {

@@ -18,7 +18,7 @@ class Color_Picker_Group extends Option_Group {
                 if($first) {
                     $row .= td(div('', 
                                     attr_id('picker')),
-                                    attribute('rowspan', '6') . attr_valign('top'));
+                               attribute('rowspan', '5') . attr_valign('top'));
                     $first = false;
                 }
                 $row .= ct('tr');
@@ -43,7 +43,7 @@ class Color_Picker_Group extends Option_Group {
                       });
                   });
              </script>";
-        return table($children_html, attr_class('form-table'));
+        return table($children_html, attr_class('form-table')) . "<br/>";
     }
 }
 class Global_Settings extends Main_Tab  {
