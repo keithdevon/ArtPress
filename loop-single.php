@@ -21,7 +21,7 @@
 				        <div class="eightcol">
 				            <?php get_template_part( 'ht-crumbs' );?>
 					       <h1 class="page-title"><?php the_title(); ?></h1>
-                        
+
 					       <div class="entry-meta twelvecol last">
 					    	  <?php twentyten_posted_on(); ?>
 					       </div><!-- .entry-meta -->
@@ -30,7 +30,7 @@
 					       	<?php the_content(); ?>
 					       	<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'twentyten' ), 'after' => '</div>' ) ); ?>
 					       </div><!-- .entry-content -->
-                           
+
 <?php if ( get_the_author_meta( 'description' ) ) : // If a user has filled out their description, show a bio on their entries  ?>
 					       <div id="entry-author-info">
 					           <h2>About the author</h2>
@@ -53,7 +53,7 @@
 					       	<?php twentyten_posted_in(); ?>
 					       	<?php edit_post_link( __( 'Edit', 'twentyten' ), '<span class="edit-link">', '</span>' ); ?>
 					       </div><!-- .entry-utility -->
-				        
+
 
 				        <div id="nav-below" class="navigation">
 				            <div class="nav-previous"><?php previous_post_link( '%link', '<span class="meta-nav">' . _x( '&larr;', 'Previous post link', 'twentyten' ) . '</span> %title' ); ?></div>

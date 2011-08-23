@@ -15,9 +15,9 @@
 get_header(); ?>
 
         <div id="content" class="container" role="main">
-        
+
             <div class="row">
-            
+
                 <div class="eightcol">
                     <?php get_template_part( 'ht-crumbs' );?>
 
@@ -28,18 +28,18 @@ get_header(); ?>
 			        */
 			       get_template_part( 'loop', 'page' );
 			       ?>
-                   
+
                 </div>
-		        
-                
-                <div class="fourcol last"> 
+
+
+                <div class="fourcol last">
                     <?php get_template_part('sidebars/second-sidebar'); ?>
                 </div>
-                
+
                 <div class="clear"></div>
-            
+
             </div>
-            
+
         </div><!-- .container -->
-        
+
 <?php get_footer(); ?>

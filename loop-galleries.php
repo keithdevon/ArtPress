@@ -46,7 +46,7 @@
 $g_cat_layout = 'grid';
 if( $g_cat_layout == 'grid' ) {?>
 
-<?php $post_count = 0; 
+<?php $post_count = 0;
         $numItems = ($wp_query->post_count);
         $postnumber = 0;
 ?>
@@ -62,8 +62,8 @@ if( $g_cat_layout == 'grid' ) {?>
 	<?php if($post_count == 1) echo '<div class="row">';?>
 	<div class="fourcol <?php if($post_count == 3) echo ' last';?>">
 		<div id="post-<?php the_ID(); ?>" <?php post_class('grid-single'); ?>>
-           
-			
+
+
 
 			<div class="entry-content">
 <?php if ( post_password_required() ) : ?>
@@ -80,7 +80,7 @@ if( $g_cat_layout == 'grid' ) {?>
 						<div class="gallery-icon">
 							<a class="size-thumbnail" href="<?php the_permalink(); ?>"><?php echo $image_img_tag; ?></a>
 						</div><!-- .gallery-thumb -->
-						
+
 <h2 class="gallery-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 
 <div class="entry-meta">
@@ -92,11 +92,11 @@ if( $g_cat_layout == 'grid' ) {?>
 </div>
 				<?php endif; ?>
 						<?php the_excerpt();?>
-						
+
 <?php endif; ?>
-                
+
 			</div><!-- .entry-content -->
-			
+
 		</div><!-- #post-## -->
     </div><!-- .twocol -->
     <?php if($post_count == 3 || $postnumber == $numItems) echo ' <div class="clear"></div></div>';?>
@@ -111,7 +111,7 @@ if( $g_cat_layout == 'grid' ) {?>
 
 <?php /* Display navigation to next/previous pages when applicable */ ?>
 <?php if (  $wp_query->max_num_pages > 1 ) : ?>
-            
+
 				<div id="nav-below" class="navigation row">
 				    <div class="twelvecol last">
 					   <div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older galleries', 'twentyten' ) ); ?></div>
@@ -122,7 +122,7 @@ if( $g_cat_layout == 'grid' ) {?>
             <div class="clear"></div>
 </div>
 <?php endif; ?>
-<?php } 
+<?php }
 
 
 // LIST LAYOUT
@@ -153,7 +153,7 @@ elseif($g_cat_layout == 'list') {
 						<div class="gallery-thumb threecol">
 							<a class="size-thumbnail" href="<?php the_permalink(); ?>"><?php echo $image_img_tag; ?></a>
 						</div><!-- .gallery-thumb -->
-						
+
 						<div class="entry-meta">
 				            <?php twentyten_posted_on(); ?>
 						  <p><?php printf( _n( 'This gallery contains <a %1$s>%2$s photo</a>.', 'This gallery contains <a %1$s>%2$s photos</a>.', $total_images, 'twentyten' ),
@@ -164,7 +164,7 @@ elseif($g_cat_layout == 'list') {
 				<?php endif; ?>
 						<?php the_excerpt(); ?>
 <?php endif; ?>
-			
+
 		</div><!-- .entry-content -->
     </div><!-- #post-## -->
 
@@ -178,7 +178,7 @@ elseif($g_cat_layout == 'list') {
 
 <?php /* Display navigation to next/previous pages when applicable */ ?>
 <?php if (  $wp_query->max_num_pages > 1 ) : ?>
-            
+
 				<div id="nav-below" class="navigation row">
 				    <div class="twelvecol last">
 					   <div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older galleries', 'twentyten' ) ); ?></div>
@@ -195,5 +195,5 @@ elseif($g_cat_layout == 'list') {
 
 <?php } ?>
 
-    
+
 </div><!-- row -->

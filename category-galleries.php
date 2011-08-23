@@ -30,7 +30,7 @@ get_header(); ?>
 				get_template_part( 'loop', 'galleries' );
 				?>
 
-			
+
 		</div><!-- #container -->
 
 

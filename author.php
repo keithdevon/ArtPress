@@ -56,7 +56,7 @@ if ( get_the_author_meta( 'description' ) ) : ?>
 	 get_template_part( 'loop', 'author' );
 ?>
 			</div><!-- #content -->
-			
+
 			<div class="fourcol last">
 			 <?php get_sidebar(); ?>
             </div>

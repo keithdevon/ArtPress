@@ -15,9 +15,9 @@
 get_header(); ?>
     <div id="content" class="container">
 		<div class="row">
-		  
+
 			<div class="sixcol" role="main">
-			
+
 			<?php get_template_part( 'ht-crumbs' );?>
 
 			<?php
@@ -31,9 +31,9 @@ get_header(); ?>
 			</div><!-- #content -->
 			<div class="threecol"><?php get_template_part('sidebar');?></div>
 			<div class="threecol last"><?php get_template_part( 'sidebars/second-sidebar' );?></div>
-			
+
 			<div class="clear"></div>
-			
+
 		</div><!-- #container -->
     </div>
 <?php get_footer(); ?>

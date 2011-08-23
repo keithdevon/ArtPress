@@ -17,12 +17,12 @@
 
 <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 
-				
-				
+
+
 					<?php if ( is_front_page() ) { ?>
-						
+
 					<?php } else { ?>
-					   
+
 						<h1 class="page-title"><?php the_title(); ?></h1>
 						<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<?php } ?>
@@ -30,7 +30,7 @@
 					<div class="entry-content">
 						<?php the_content(); ?>
 						<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'twentyten' ), 'after' => '</div>' ) ); ?>
-					
+
 					</div><!-- .entry-content -->
 				</div><!-- #post-## -->
 

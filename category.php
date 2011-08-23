@@ -28,13 +28,13 @@ get_header(); ?>
 				?>
 
 			</div><!-- .eightcol -->
-			
+
 			<div class="fourcol last">
 			 <?php get_template_part('sidebar'); ?>
             </div>
-            
+
             <div class="clear"></div>
-			
+
 		</div><!-- .row -->
     </div>
 

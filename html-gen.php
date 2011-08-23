@@ -2,10 +2,10 @@
 
 /** Generic HTML generating functions */
 /* Generic HTML attribute functions */
-function attribute($name, $value) { 
+function attribute($name, $value) {
     if ( $value == '' ) return null;
     else return ' ' . $name . '="' . $value . '"'; // TODO sanitise $value with esc_attr
-} 
+}
 function attr_action        ($value) { return attribute('action',      $value);     }
 function attr_alt           ($value) { return attribute('alt',         $value);     }
 function attr_class         ($value) { return attribute('class',       $value);     }
@@ -29,9 +29,9 @@ function attr_valign        ($value) { return attribute('valign',      $value); 
 function attr_value         ($value) { return attribute('value',       $value);     }
 function attr_width         ($value) { return attribute('width',       $value);     }
 
-function attr_style ($value)      { 
+function attr_style ($value)      {
     if( $value==true ) return attribute('style', $value);
-    else return ''; 
+    else return '';
 }
 function attr_checked ($value)    {
     if( $value == true ){
@@ -58,10 +58,10 @@ function alink($href, $content, $attributes="") { return ot('a', attr_href($href
 function checkbox($name, $checked, $attributes="") { return bt('input', attr_type('checkbox') . attr_name($name) . attr_checked($checked) . $attributes); }
 function div($content, $attributes ="")         { return ot('div', $attributes)   . $content . ct('div'); }
 function form($method, $action, $content, $enctype, $attributes='') {
-    $o = ot('form', 
+    $o = ot('form',
         attr_method($method) . attr_action($action) . attr_enctype($enctype) . $attributes) ;
     $o .= $content;
-    return $o . ct('form');    
+    return $o . ct('form');
 }
 function h1($content, $attributes ="")          { return ot('h1', $attributes)    . $content . ct('h1'); }
 function h2($content, $attributes ="")          { return ot('h2', $attributes)    . $content . ct('h2'); }
@@ -69,7 +69,7 @@ function h3($content, $attributes ="")          { return ot('h3', $attributes)  
 function h4($content, $attributes ="")          { return ot('h4', $attributes)    . $content . ct('h4'); }
 function h5($content, $attributes ="")          { return ot('h5', $attributes)    . $content . ct('h5'); }
 function h6($content, $attributes ="")          { return ot('h6', $attributes)    . $content . ct('h6'); }
-function img($src, $attributes="")              { return bt('img', attr_src($src) . $attributes); }   
+function img($src, $attributes="")              { return bt('img', attr_src($src) . $attributes); }
 function input($type, $attributes ="")          { return bt('input', attr_type($type) . $attributes); }
 function label($for, $content, $attributes ="") { return ot('label', attr_for($for)  . $attributes) . $content . ct('label'); }
 function li($content, $attributes ="")          { return ot('li', $attributes)    . $content . ct('li'); }

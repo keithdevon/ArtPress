@@ -41,7 +41,7 @@ $ht_css_font_family = array(
 	'Futura, “Century Gothic”, AppleGothic, sans-serif',
 	'Impact, Haettenschweiler, “Arial Narrow Bold”, sans-serif',
 	'“Lucida Sans”, “Lucida Grande”, “Lucida Sans Unicode”, sans-serif',
-	'Times, “Times New Roman”, Georgia, serif', 
+	'Times, “Times New Roman”, Georgia, serif',
 	array('Baskerville, “Times New Roman”, Times, serif','paragraph'),
 	'Garamond, “Hoefler Text”, Times New Roman, Times, serif',
 	'Geneva, “Lucida Sans”, “Lucida Grande”, “Lucida Sans Unicode”, Verdana, sans-serif',
