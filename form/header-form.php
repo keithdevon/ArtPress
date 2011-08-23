@@ -24,9 +24,9 @@ class Site_Description extends CSS_Selector {
 class Header_Group extends CSS_Selector_Group {
     function __construct($children=null) {
         if( null == $children ) {
-            $children[] = new Header_Base(); 
+            $children[] = new Header_Base();
             $children[] = new Site_Title();
-            $children[] = new Site_Title_Hover();   
+            $children[] = new Site_Title_Hover();
             $children[] = new Site_Description();
         }
         parent::__construct('#header', 'header', $children);
@@ -36,7 +36,7 @@ class Header_Group extends CSS_Selector_Group {
 class Header_Tab extends Main_Tab {
     function __construct($children=null) {
         if( null == $children ) {
-             $children[] = new Header_Group();   
+             $children[] = new Header_Group();
         }
         parent::__construct('header', 'artpress_options', $children);
     }

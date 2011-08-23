@@ -29,7 +29,7 @@ class Menu_Group extends CSS_Selector_Group {
 class Menu_Tab extends Main_Tab {
     function __construct($children=null) {
         if( null == $children ) {
-             $children[] = new Menu_Group();   
+             $children[] = new Menu_Group();
         }
         parent::__construct('menu', 'artpress_options', $children);
     }

@@ -7,18 +7,18 @@ class Images_Tab extends Main_Tab {
             $i2 = new Image('image 2');
             $i3 = new Image('image 3');
             $members[] = new Option_Group('Images',  array($i1, $i2, $i3));
-        } 
+        }
         parent::__construct('images', 'artpress_options', $members);
         $this->form_enctype = "multipart/form-data";
-    }  
+    }
 }
 
 class Image extends CSS_Text_Input { // TODO this should probably be deleted
     private static $global_image_instances = array();
-    
+
     function __construct($display_name, $value='') {
         parent::__construct('color', $display_name, $value);
-        self::$global_image_instances[] = $this;   
+        self::$global_image_instances[] = $this;
         $this_class = get_class($this);
         $number_of_global_image_instances = sizeof(self::$global_image_instances);
         $name = $this_class . '__' . $number_of_global_image_instances;
@@ -33,7 +33,7 @@ class Image extends CSS_Text_Input { // TODO this should probably be deleted
             $v = $image->get_value();
             $options[] = $v;
         }
-        return $options;       
+        return $options;
     }
     function get_html() {
         $options = get_option('ap_options');
@@ -48,7 +48,7 @@ class Image extends CSS_Text_Input { // TODO this should probably be deleted
         return $input;
     }
     function set_value($value) {
-        
+
     }
 }
 abstract class CSS_Image_Dropdown extends CSS_Dropdown_Input {
@@ -57,7 +57,7 @@ abstract class CSS_Image_Dropdown extends CSS_Dropdown_Input {
     function __construct($css_property, $display_name, $value=0) {
         global $post;
         parent::__construct($css_property, $display_name, null, $value);
-        if(!self::$options) { 
+        if(!self::$options) {
             self::$options[0] = '';
             if($option = get_option('ap_images') ){
                 if( isset($option['images']) && $images = $option['images'] ) {
@@ -66,13 +66,13 @@ abstract class CSS_Image_Dropdown extends CSS_Dropdown_Input {
                         self::$options[$aid] = $url;
                     }
                 }
-            }         
-        }     
-    }    
+            }
+        }
+    }
     function get_opts() {
         return self::$options;
     }
-    
+
     function validate($value) {
         return (in_array($value, array_keys(self::$options)));
     }
@@ -80,7 +80,7 @@ abstract class CSS_Image_Dropdown extends CSS_Dropdown_Input {
         $options = self::$options;
         $value = $this->get_value();
         $file = $options[$value];
-        if($file) {      
+        if($file) {
             $dec = "\nbackground-image:url('{$file}');";
             return $dec;
         }
@@ -93,6 +93,6 @@ class Background_Image_Dropdown extends CSS_Image_Dropdown {
 }
 class Logo_Image_Dropdown extends CSS_Image_Dropdown {
     function __construct($value=0) {
-        parent::__construct('background-image:url', 'Logo image select', $value);  
+        parent::__construct('background-image:url', 'Logo image select', $value);
     }
 }

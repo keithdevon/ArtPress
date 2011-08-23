@@ -39,7 +39,7 @@ class Gallery_Group extends CSS_Selector_Group {
 class Gallery_Tab extends Main_Tab {
     function __construct($children=null) {
         if( null == $children ) {
-             $children[] = new Gallery_Group();   
+             $children[] = new Gallery_Group();
         }
         parent::__construct('gallery', 'artpress_options', $children);
     }

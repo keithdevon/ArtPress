@@ -22,8 +22,8 @@ class Body_Group extends CSS_Selector_Group {
             $children[] = new OL();
             $children[] = new Link();
             $children[] = new Link_Hover();
-            $children[] = new Crumbs();  
-            $children[] = new Crumb_Hover(); 
+            $children[] = new Crumbs();
+            $children[] = new Crumb_Hover();
             $children[] = new Entry_Meta();
         }
         parent::__construct('body', 'body', $children);
@@ -33,7 +33,7 @@ class Body_Group extends CSS_Selector_Group {
 class Body_Tab extends Main_Tab {
     function __construct($children=null) {
         if( null == $children ) {
-             $children[] = new Body_Group();   
+             $children[] = new Body_Group();
         }
         parent::__construct('body', 'artpress_options', $children);
     }

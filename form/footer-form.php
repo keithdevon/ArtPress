@@ -22,7 +22,7 @@ class Footer_Group extends CSS_Selector_Group {
 class Footer_Tab extends Main_Tab {
     function __construct($children=null) {
         if( null == $children ) {
-             $children[] = new Footer_Group();   
+             $children[] = new Footer_Group();
         }
         parent::__construct('footer', 'artpress_options', $children);
     }

@@ -4,24 +4,24 @@ require_once 'form.php';
 // TEXT
 $text_transform_options = array('', 'none', 'uppercase', 'lowercase', 'capitalize');
 class Text_Transform extends CSS_Dropdown_Input {
-    function __construct($value=0) { 
+    function __construct($value=0) {
         global $text_transform_options;
         parent::__construct('text-transform', 'text transform', $text_transform_options, $value);
-    }    
+    }
 }
-$text_align_options = array('', 'left', 'right', 'center', 'justify'); 
+$text_align_options = array('', 'left', 'right', 'center', 'justify');
 class Text_Align extends CSS_Dropdown_Input {
     function __construct($value=0) {
         global $text_align_options;
         parent::__construct('text-align', 'text align', $text_align_options, $value);
-    }    
+    }
 }
 $text_decoration_options = array('', 'none', 'underline', 'overline', 'line-through', 'blink');
 class Text_Decoration extends CSS_Dropdown_Input {
-    function __construct($value=0) { 
-        global $text_decoration_options; 
+    function __construct($value=0) {
+        global $text_decoration_options;
         parent::__construct('text-decoration', 'text decoration', $text_decoration_options, $value);
-    }   
+    }
 }
 class Letter_Spacing extends CSS_Size_Text_Input {
     function __construct($value='') {
@@ -43,16 +43,16 @@ class Global_Font_Size extends Setting_Number {
         return parent::get_html(attr_class('globalFontSize') . attr_on_change("updateDependentsOf_Global_Font_Size_Group()"));
     }
     static function get_global_font_size_instance() {
-        return self::$global_font_size_instance;   
+        return self::$global_font_size_instance;
     }
 }
 $font_size_ratio_options = array(array('golden', 1.618), array('musical fifths', 1.5), array('musical forths', 1.4));
 class Global_Font_Size_Ratio extends Setting_Dropdown {
     static $start = -1;
-    static $size   = 8;   
+    static $size   = 8;
     static $global_font_size_ratio_instance;
-   
-    function __construct($value=0) { 
+
+    function __construct($value=0) {
         global $font_size_ratio_options;
         parent::__construct('font-size-ratio', 'Font size ratio', $font_size_ratio_options, $value);
         self::$global_font_size_ratio_instance = $this;
@@ -68,17 +68,17 @@ class Global_Font_Size_Ratio extends Setting_Dropdown {
     static function create_scale() {
         $global_size = Global_Font_Size::get_global_font_size();
         $ratio = Global_Font_Size_Ratio::get_global_font_size_ratio();
-        
+
         $options[0] = '';
         $end = self::$start + self::$size;
-        
+
         for($i = self::$start; $i < $end; $i++) {
-            $options[] = round($global_size * pow($ratio, $i), 0) . 'px';  
+            $options[] = round($global_size * pow($ratio, $i), 0) . 'px';
         }
-        
+
         return $options;
     }
-    /** 
+    /**
      * @example to return size below base font size, set $plus_n equal to -1
      * @example to return the base font size, set $plus_n equal to 0
      * @example to return the size two above the base font size, set $plus_n equal to 2
@@ -96,7 +96,7 @@ class Global_Font_Size_Ratio extends Setting_Dropdown {
 class Section_Font_Size extends CSS_Dropdown_Input {
     function __construct($value=0) {
         parent::__construct('font-size', 'font size', $value);
-        Global_Font_Size_Group::$singleton->add_dependent($this); 
+        Global_Font_Size_Group::$singleton->add_dependent($this);
     }
     function get_opts() {
         $scale = Global_Font_Size_Ratio::create_scale();
@@ -111,14 +111,14 @@ class Section_Font_Size extends CSS_Dropdown_Input {
         $value = $this->get_value();
         if ($value) {
             $decs  = dec($this->get_css_property(), $this->get_css_value());
-            
+
             $scale = Global_Font_Size_Ratio::create_scale();
             $decs .= dec('line-height', $scale[$value + 1]);
             return $decs;
-        } else return '';        
+        } else return '';
     }
 }
-$font_family_options = array('', 
+$font_family_options = array('',
                             array('Arial, “Helvetica Neue”, Helvetica, sans-serif','paragraph or title fonts'),
                         	'Cambria, Georgia, Times, “Times New Roman”, serif',
                         	'“Century Gothic”, “Apple Gothic”, sans-serif',
@@ -129,7 +129,7 @@ $font_family_options = array('',
                         	'Futura, “Century Gothic”, AppleGothic, sans-serif',
                         	'Impact, Haettenschweiler, “Arial Narrow Bold”, sans-serif',
                         	'“Lucida Sans”, “Lucida Grande”, “Lucida Sans Unicode”, sans-serif',
-                        	'Times, “Times New Roman”, Georgia, serif', 
+                        	'Times, “Times New Roman”, Georgia, serif',
                         	array('Baskerville, “Times New Roman”, Times, serif','paragraph fonts'),
                         	'Garamond, “Hoefler Text”, Times New Roman, Times, serif',
                         	'Geneva, “Lucida Sans”, “Lucida Grande”, “Lucida Sans Unicode”, Verdana, sans-serif',
@@ -157,7 +157,7 @@ class Global_Font_Family extends Setting_Dropdown {
 
     function __construct($display_name, $value=0) {
         global $font_family_options;
-        parent::__construct('font-family', $display_name, $font_family_options, $value); 
+        parent::__construct('font-family', $display_name, $font_family_options, $value);
         self::$global_font_family_instances[] = $this;
     }
 
@@ -173,7 +173,7 @@ class Global_Font_Family extends Setting_Dropdown {
                $list[] = $font;
            }
         }
-        return $list;    
+        return $list;
     }
     function get_html() {
         return parent::get_html(attr_class('globalFont') . attr_on_change("updateDependentsOf_Global_Font_Group()"));
@@ -189,7 +189,7 @@ class Section_Font extends CSS_Dropdown_Input implements ISetting_Depends_On_Glo
     function __construct($value=0) {
         parent::__construct('font-family', 'font family', null, $value);
         Global_Font_Group::$singleton->add_dependent($this);
-    }    
+    }
 
     function get_opts() {
         return Global_Font_Family::get_global_font_family_options();
@@ -202,20 +202,20 @@ $font_style_options = array('', 'normal', 'italic', 'oblique');
 class Font_Style extends CSS_Dropdown_Input {
     function __construct($value=0) {
         global $font_style_options;
-        parent::__construct('font-style', 'font style', $font_style_options, $value); 
-    }    
+        parent::__construct('font-style', 'font style', $font_style_options, $value);
+    }
 }
 $font_weight_options = array('', 'normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500', '600', '700', '800', '900');
 class Font_Weight extends CSS_Dropdown_Input {
-    function __construct($value=0) { 
+    function __construct($value=0) {
         global $font_weight_options;
-        parent::__construct('font-weight', 'font weight', $font_weight_options, $value); 
-    }    
+        parent::__construct('font-weight', 'font weight', $font_weight_options, $value);
+    }
 }
 class Typography_Tab extends Sub_Tab {
     function __construct($display_name, $members=null, $html_id=null) {
-        if ( null == $members ) { 
-            $members[] = new Section_Foreground_Color();        
+        if ( null == $members ) {
+            $members[] = new Section_Foreground_Color();
             $members[] = new Section_Font();
             $members[] = new Section_Font_Size();
             $members[] = new Font_Style();
@@ -226,5 +226,5 @@ class Typography_Tab extends Sub_Tab {
             $members[] = new Letter_Spacing();
         }
         parent::__construct($display_name, new Option_Group('', $members));
-    }    
+    }
 }
