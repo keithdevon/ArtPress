@@ -26,18 +26,19 @@ class Global_Color extends Setting_Text {
         return $options;       
     }
     function get_html() {
-        return parent::get_html( attr_class('colorwell') );
+        return parent::get_html( attr_class('colorwell globalColor') );
     }
 }
 
 function get_css_dropdown_value($obj) {
-        $options = $obj->get_opts();
-        $value = $options[$obj->get_value()];
-        return $value;
+    $options = $obj->get_opts();
+    $value = $options[$obj->get_value()];
+    return $value;
 }
 abstract class Section_Color extends CSS_Dropdown_Input implements ISetting_Depends_On_Global_Setting {
     function __construct($css_property, $display_name, $value=0) {
         parent::__construct($css_property, $display_name, null, $value);
+        Global_Color_Group::$singleton->add_dependent($this);
     }
     function get_opts() {
         return Global_Color::get_dropdown_color_options();
@@ -49,6 +50,7 @@ abstract class Section_Color extends CSS_Dropdown_Input implements ISetting_Depe
 class Setting_Color extends Setting_Dropdown implements ISetting_Depends_On_Global_Setting {
     function __construct($value=0) {
         parent::__construct('color', 'color', null, $value);
+        Global_Color_Group::$singleton->add_dependent($this);        
     }
     function get_opts() {
         return Global_Color::get_dropdown_color_options();

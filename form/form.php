@@ -50,6 +50,35 @@ interface Visitor {
  * This interface is used to identify these particular settings. 
  * */
 interface ISetting_Depends_On_Global_Setting {}
+
+/** Some settings like (and perhaps only) the Global settings have dependents 
+ * insomuch that if the global setting values change, the displayed html values of the 
+ * dependents also have to change 
+ * eg section colors and fonts are dependent on global colors and fonts.
+ * 
+ *  These kinds of settings should implement this interface, to ensure that these
+ *  settings have knowledge of their dependents so that the dependents can be updated 
+ *  if the */
+interface IHas_Dependents{
+    function add_dependent($setting);
+    function get_dependents();
+}
+function get_html_dependents($setting) {
+    $the_class = get_class($setting);
+    $o = '<script type="text/javascript">';
+    $o .= "dependentsOf_{$the_class} = new Array(";
+    $arr = '';
+    foreach($setting->get_dependents() as $dep) {
+        //$o .= input('hidden', attr_class($setting->get_name()'') . attr_value($dep->get_name()));
+        $name = $dep->get_name();
+        $arr .= "'${name}',";
+    }
+    //$size = count($arr);
+    $names  = substr($arr, 0, strlen($arr) -1);
+    
+    $o .= "{$names});</script>";
+    return $o;
+}
 /**
  * 
  * This class maintains a notion of elements in a hierarchy.
@@ -246,23 +275,6 @@ class Option_Row_Group extends Group {
         return get_row($this->get_display_name(), $children_html);
     }    
 }
-class Lookup_Option_Group extends Option_Group {
-    /**
-     * specifically created for font options
-     */
-    function __construct($display_name, $members=array()) {
-        parent::__construct($display_name, $members);
-    } 
-    function get_options() { 
-        $options = array();
-        foreach ($this->get_children() as $member) {
-            $member_options = $member->get_options();
-            $n = $member->get_value();
-            $options[$n] = $member_options[$n];
-        }
-        return $options;
-    }
-}
 abstract class Sub_Tab extends Group implements Tab {
     private $html_id;
     function __construct($display_name, $members=null) {
@@ -298,7 +310,7 @@ class Main_Tab extends Hierarchy implements Tab, Render_As_HTML {
         parent::__construct($display_name, $members);
         $this->opt_group = $opt_group;
     }  
-    function get_html() {
+    function get_html($pre=null, $post=null) {
         $children_html = '';
         $children = $this->get_children();
         if ( null != $children) {
@@ -307,7 +319,9 @@ class Main_Tab extends Hierarchy implements Tab, Render_As_HTML {
             }
         }
         $o = ot( 'div', attr_id( $this->get_html_id() ) );
+        $o .= $pre;
         $o .= $children_html;
+        $o .= $post;
         $o .= ct('div');
         return $o;
     }
@@ -390,8 +404,8 @@ class Main_Tab_Group extends Tab_Group {
     function get_html() {
         $o = "<script type=\"text/javascript\"> 
         	changedEls = [];
-        	successColor = '#8F8';
-        	failColor    = '#F88';
+        	successColor = '#AFA';
+        	failColor    = '#FAA';
             // wait for the DOM to be loaded 
             jQuery(document).ready(function() { 
                 // bind 'myForm' and provide a simple callback function 
@@ -918,33 +932,37 @@ abstract class Setting_Text extends Setting {
         parent::__construct($name, $display_name, $value);        
     }
     function get_html($attributes='') {
-        return get_size_text_input_html($this, $attributes);
-    }
+        return get_text_input_html($this, $attributes);
+    } 
 }
 abstract class CSS_Text_Input extends CSS_Setting {
     function __construct($css_property, $display_name, $value) {
         parent::__construct($css_property, $display_name, $value);        
     }
     function get_html($attributes='') {
-        return get_size_text_input_html($this, $attributes='');
+        return get_text_input_html($this, $attributes);
     }
 }
 abstract class Setting_Size_Text_Input extends Setting_Text {
     function __construct($name, $display_name, $value='') {
         parent::__construct($name, $display_name, $value);        
     }
-    
     function validate($value) {
          return is_valid_size_string($value); 
-    }    
+    }
+    function get_html($attributes='') {
+        return get_size_text_input_html($this, $attributes);
+    }   
 }
 abstract class CSS_Size_Text_Input extends CSS_Text_Input {
     function __construct($css_property, $display_name, $value='') {
         parent::__construct($css_property, $display_name, $value);        
     }
-    
     function validate($value) {
          return is_valid_size_string($value); 
+    }
+    function get_html($attributes='') {
+        return get_size_text_input_html($this, $attributes='');
     }
 }
 abstract class CSS_Horizontal_Position_Text_Input extends CSS_Size_Text_Input {
@@ -1014,8 +1032,8 @@ function dropdown_get_options_html($dropdown) {
     if ($is_optgroup) $html_options .= ct('optgroup');
     return $html_options;   
 }
-function get_select_html($dropdown) {
-    $select = ot('select', $dropdown->get_html_name());
+function get_select_html($dropdown, $attributes='') {
+    $select = ot('select', $dropdown->get_html_name() . $attributes);
     $select .= dropdown_get_options_html($dropdown);
     $select .= ct('select');
     return $select;
@@ -1034,8 +1052,8 @@ abstract class Setting_Dropdown extends Setting {
         $this->opts = &$opts; 
         parent::__construct($name, $display_name, $value);
     }
-    function get_html() {
-        return get_select_html($this);    
+    function get_html($attributes='') {
+        return get_select_html($this, $attributes);    
     }
     function validate($value) {
         return dropdown_validate($this, $value);

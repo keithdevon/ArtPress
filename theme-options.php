@@ -32,7 +32,7 @@ function artpress_options_load_scripts() {
 
     // register scripts
     wp_register_script('jqueryui1814', $template_dir . '/js/ui1814/js/jquery-ui-1.8.14.custom.min.js', array('jquery') );
-    wp_register_script('jQuery.form', $template_dir . '/js/jquery.form.js', null, '2.83', true);
+    wp_register_script('jQuery.form',  $template_dir . '/js/jquery.form.js', null, '2.83', true);
     
     // register styles
     wp_register_style( 'ArtPressOptionsStylesheet', $template_url . '/scripts/farbtastic/farbtastic.css' );
@@ -66,7 +66,7 @@ function artpress_theme_init() {
 function theme_options_add_page() {
     // set up main settings page
     $ap_settings_page = add_menu_page( __( 'ArtPress Options' ), __( 'Artpress' ),     'edit_theme_options', 'artpress',              'ap_settings_page', '', 0 );
-    add_action( 'admin_footer-'. $ap_settings_page, 'myplugin_admin_footer' );
+    //add_action( 'admin_footer-'. $ap_settings_page, 'myplugin_admin_footer' );
     
     // set up configurations page
     add_submenu_page('artpress', __('Configurations'),     __('Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');

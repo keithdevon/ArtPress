@@ -40,7 +40,7 @@ class Global_Font_Size extends Setting_Number {
         return $size;
     }
     function get_html() {
-        return parent::get_html();
+        return parent::get_html(attr_class('globalFontSize') . attr_on_change("updateDependentsOf_Global_Font_Size_Group()"));
     }
     static function get_global_font_size_instance() {
         return self::$global_font_size_instance;   
@@ -88,11 +88,15 @@ class Global_Font_Size_Ratio extends Setting_Dropdown {
         $scale = self::create_scale();
         return $scale[$n];
     }
+    function get_html() {
+        return parent::get_html(attr_class('globalFontSizeRatio') . attr_on_change("updateDependentsOf_Global_Font_Size_Group()"));
+    }
 }
 
 class Section_Font_Size extends CSS_Dropdown_Input {
     function __construct($value=0) {
         parent::__construct('font-size', 'font size', $value);
+        Global_Font_Size_Group::$singleton->add_dependent($this); 
     }
     function get_opts() {
         $scale = Global_Font_Size_Ratio::create_scale();
@@ -171,6 +175,9 @@ class Global_Font_Family extends Setting_Dropdown {
         }
         return $list;    
     }
+    function get_html() {
+        return parent::get_html(attr_class('globalFont') . attr_on_change("updateDependentsOf_Global_Font_Group()"));
+    }
 }
 /**
  * Class to represent a selector of one of the preselected font
@@ -180,7 +187,8 @@ class Global_Font_Family extends Setting_Dropdown {
 class Section_Font extends CSS_Dropdown_Input implements ISetting_Depends_On_Global_Setting {
 
     function __construct($value=0) {
-        parent::__construct('font-family', 'font family', null, $value); 
+        parent::__construct('font-family', 'font family', null, $value);
+        Global_Font_Group::$singleton->add_dependent($this);
     }    
 
     function get_opts() {

@@ -6,25 +6,28 @@ function attribute($name, $value) {
     if ( $value == '' ) return null;
     else return ' ' . $name . '="' . $value . '"'; // TODO sanitise $value with esc_attr
 } 
-function attr_action ($value)     { return attribute('action', $value); }
-function attr_alt ($value)        { return attribute('alt',    $value); }
-function attr_class ($value)      { return attribute('class',  $value); }
-function attr_enctype ($value)    { return attribute('enctype', $value);}
-function attr_for ($value)        { return attribute('for',    $value); }
-function attr_href ($value)       { return attribute('href',   $value); }
-function attr_id ($value)         { return attribute('id',     $value); }
-function attr_label ($value)      { return attribute('label',  $value); }
-function attr_method ($value)     { return attribute('method', $value); }
-function attr_name ($value)       { return attribute('name',   $value); }
-function attr_on_change ($value)  { return attribute('onchange', $value); }
-function attr_readonly ()         { return attribute('readonly', 'readonly'); }
-function attr_size ($value)       { return attribute('size',   $value); }
-function attr_src ($value)        { return attribute('src',    $value); }
-function attr_title ($value)      { return attribute('title',  $value); }
-function attr_type ($value)       { return attribute('type',   $value); }
-function attr_valign ($value)     { return attribute('valign', $value); }
-function attr_value ($value)      { return attribute('value',  $value); }
-function attr_width ($value)      { return attribute('width',  $value); }
+function attr_action        ($value) { return attribute('action',      $value);     }
+function attr_alt           ($value) { return attribute('alt',         $value);     }
+function attr_class         ($value) { return attribute('class',       $value);     }
+function attr_enctype       ($value) { return attribute('enctype',     $value);     }
+function attr_for           ($value) { return attribute('for',         $value);     }
+function attr_href          ($value) { return attribute('href',        $value);     }
+function attr_id            ($value) { return attribute('id',          $value);     }
+function attr_label         ($value) { return attribute('label',       $value);     }
+function attr_method        ($value) { return attribute('method',      $value);     }
+function attr_name          ($value) { return attribute('name',        $value);     }
+function attr_on_blur       ($value) { return attribute('onblur',      $value);     }
+function attr_on_change     ($value) { return attribute('onchange',    $value);     }
+function attr_on_load       ($value) { return attribute('onload',      $value);     }
+function attr_on_mouse_over ($value) { return attribute('onmouseover', $value);     }
+function attr_readonly      ()       { return attribute('readonly',    'readonly'); }
+function attr_size          ($value) { return attribute('size',        $value);     }
+function attr_src           ($value) { return attribute('src',         $value);     }
+function attr_title         ($value) { return attribute('title',       $value);     }
+function attr_type          ($value) { return attribute('type',        $value);     }
+function attr_valign        ($value) { return attribute('valign',      $value);     }
+function attr_value         ($value) { return attribute('value',       $value);     }
+function attr_width         ($value) { return attribute('width',       $value);     }
 
 function attr_style ($value)      { 
     if( $value==true ) return attribute('style', $value);
