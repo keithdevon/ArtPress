@@ -40,7 +40,7 @@ class Global_Font_Size extends Setting_Number {
         return $size;
     }
     function get_html() {
-        return parent::get_html(attr_class('globalFontSize') . attr_on_change("updateDependentsOf_Global_Font_Size_Group()"));
+        return parent::get_html(attr_class('globalFontSize') . ToolTips::get($this) . attr_on_change("updateDependentsOf_Global_Font_Size_Group()"));
     }
     static function get_global_font_size_instance() {
         return self::$global_font_size_instance;

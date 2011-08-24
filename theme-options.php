@@ -3,6 +3,7 @@ $dir = get_template_directory() . '/';
 
 require_once 'heart-theme-utils.php';
 include_once $dir . 'form/heart-theme-form-functions.php';
+require_once $dir . 'form/tooltips.php';
 require_once $dir . 'form/form.php';
 require_once $dir . 'form/css-selectors.php';
 require_once $dir . 'form/images.php';

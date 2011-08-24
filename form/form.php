@@ -104,9 +104,9 @@ abstract class Hierarchy {
         }
     }
 
-    // GETTERS
     function get_display_name() { return $this->display_name; }
-
+    function set_tool_tip    () { return $this->tool_tip; }
+    
     function get_children($visitor=null) {
         $children = $this->children;
         $valid_children = array();
@@ -179,7 +179,6 @@ abstract class Hierarchy {
         return get_class($this);
     }
 }
-
 /**
  *
  * This class is used to store a group of setting objects
@@ -349,7 +348,7 @@ class Tab_Group extends Group {
                 if($child instanceof Tab) {
                     $n = $count++;
                     $child->set_html_id("{$id}-tabs-" . $n);
-                    $links .= li( alink('#' . $child->get_html_id(), $child->get_display_name() ) );
+                    $links .= li( alink('#' . $child->get_html_id(), $child->get_display_name() ) , ToolTips::get($child));
                     $tabs  .= $child->get_html();
                 }
             }
@@ -617,7 +616,8 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
         $children = $this->get_children();
         foreach ($children as $child) {
             $child_name = $child->get_display_name();
-            $link = h4( alink('#', $child_name) );
+            
+            $link = h4( alink('#', $child_name), ToolTips::get($child) );
             $child_html = $child->get_html();
             $o .= $link;
             $o .= div(
@@ -919,8 +919,7 @@ abstract class CSS_Composite extends CSS_Setting implements IComposite {
 function get_text_input_html($setting, $attributes='') {
         $html_name = $setting->get_html_name();
         $value = attr_value($setting->get_value());
-        $title = attr_title($setting->get_display_name());
-        $i = input('text', $title . $html_name . $value . $attributes);
+        $i = input('text', ToolTips::get($setting) . $html_name . $value . $attributes);
         return $i;
 }
 function get_size_text_input_html($setting, $attributes=''){
@@ -1033,7 +1032,7 @@ function dropdown_get_options_html($dropdown) {
     return $html_options;
 }
 function get_select_html($dropdown, $attributes='') {
-    $select = ot('select', $dropdown->get_html_name() . $attributes);
+    $select = ot('select', $dropdown->get_html_name() . ToolTips::get($dropdown) . $attributes);
     $select .= dropdown_get_options_html($dropdown);
     $select .= ct('select');
     return $select;
