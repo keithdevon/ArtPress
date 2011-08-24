@@ -1,6 +1,6 @@
 <?php
 /** converts a list to an nested array key in string form
- * eg ('foo','bar','baz') -> [foo][bar][baz] 
+ * eg ('foo','bar','baz') -> [foo][bar][baz]
  */
 function am($array, $thing, $second_thing=null) {
     if ($second_thing) {
@@ -48,7 +48,7 @@ function is_suffix_string($str, $suffix) {
     if (ends_with($str, $suffix)) {
         $prefix = get_prefix($str, $suffix);
         $return = is_numeric($prefix);
-    } 
+    }
     return $return;
 }
 function is_em_string($str) {
@@ -74,13 +74,13 @@ function row($content) {
     $o = ot('tr');
     $o .= $content;
     $o .= ct('tr');
-    return $o;    
+    return $o;
 }
 function button_submit($button_text) {
-    return input('submit', 
-        attr_name('Submit') . 
-        attr_class('button-primary') . 
-        attr_type('submit') . 
+    return input('submit',
+        attr_name('Submit') .
+        attr_class('button-primary') .
+        attr_type('submit') .
         attr_value(esc_attr($button_text)));
 }
 

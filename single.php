@@ -8,9 +8,9 @@
  */
 
 get_header(); ?>
-		
-		<?php 
-		
+
+		<?php
+
 		  global $post;
             $post_id = $post->ID;
 		  if(get_post_format( $post_id ) != 'gallery') { ?>
@@ -22,21 +22,21 @@ get_header(); ?>
 			 */
 			get_template_part( 'loop', 'single' );
 			?>
-						
+
 			         <div class="fourcol last">
 
                         <?php get_template_part('sidebar'); ?>
-			     
+
 			         </div>
-			         
+
 			         <div class="clear"></div>
-			
+
                 </div><!-- row -->
                 </div><!-- container -->
-                
+
             <?php }
             else { get_template_part( 'gallery-layout' );} ?>
-            
-            
+
+
 
 <?php get_footer(); ?>

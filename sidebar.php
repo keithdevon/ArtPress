@@ -9,7 +9,7 @@
 ?>
 
 		<div id="sidebar-A" class="sidebar widget-area" role="complementary">
-		
+
 			<ul class="xoxo">
 
 <?php
@@ -20,9 +20,9 @@
 	 */
 	if ( ! dynamic_sidebar( 'primary-widget-area' ) ) : ?>
 
-			
+
 
 		<?php endif; // end primary widget area ?>
-		
+
 			</ul>
 		</div><!-- #primary .widget-area -->

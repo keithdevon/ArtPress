@@ -53,15 +53,15 @@ get_header(); ?>
 	 * called loop-archive.php and that will be used instead.
 	 */
 	 get_template_part( 'loop', 'archive' );
-?>                  
-              
-              
+?>
+
+
 			</div>
-			
+
 			<div class="fourcol last">
 			  <?php get_sidebar(); ?>
             </div>
-			
+
 		</div><!-- .row -->
 		  <div class="clear"></div>
     </div><!-- .container -->

@@ -22,7 +22,7 @@ class Sidebar_Group extends CSS_Selector_Group {
 class Sidebar_Tab extends Main_Tab {
     function __construct($children=null) {
         if( null == $children ) {
-             $children[] = new Sidebar_Group();   
+             $children[] = new Sidebar_Group();
         }
         parent::__construct('sidebar', 'artpress_options', $children);
     }

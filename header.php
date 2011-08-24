@@ -33,14 +33,14 @@
 		echo ' | ' . sprintf( __( 'Page %s', 'twentyten' ), max( $paged, $page ) );
 
 	?></title>
-	
 
-	
+
+
 <link rel="profile" href="http://gmpg.org/xfn/11" />
 
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 
-<?php get_template_part( 'cssgrid' );           // CSS Grid files (cssgrid.php) 
+<?php get_template_part( 'cssgrid' );           // CSS Grid files (cssgrid.php)
 	/* We add some JavaScript to pages with the comment form
 	 * to support sites with threaded comments (when in use).
 	 */
@@ -55,7 +55,7 @@
 	wp_head();
 ?>
 <style type='text/css' media='screen'>
-<?php 
+<?php
 // TODO http://core.trac.wordpress.org/ticket/14673
 // http://core.trac.wordpress.org/ticket/14365
 
@@ -76,19 +76,19 @@ if($options = get_option('ap_options')) {
 <body <?php body_class(); ?>>
 
     <div id="header" class="container hfeed">
-		<div id="masthead" class="row">	
+		<div id="masthead" class="row">
             <div class="twelvecol">
                 <?php get_template_part( 'branding' ); // Logo file (branding.php) ?>
-            </div> 
+            </div>
         </div>
-            
+
         <div class="row">
             <div id="main-nav" class="twelvecol">
                 <?php get_template_part( 'main-nav' );   // Main Nav file (main-nav.php) ?>
             </div>
         </div>
-            
-                                     
+
+
 			<div class="clear"></div>
 		</div><!-- #masthead -->
 	</div><!-- #header -->

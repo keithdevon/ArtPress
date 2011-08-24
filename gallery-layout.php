@@ -3,7 +3,7 @@
                             <div class=" twelvecol last">
                                 <?php get_template_part( 'ht-crumbs' );?>
                                 <h1 class="page-title"><?php the_title(); ?></h1>
-                        
+
                                 <div class="entry-meta">
                                    <?php twentyten_posted_on(); ?>
                                 </div><!-- .entry-meta -->
@@ -13,13 +13,13 @@
                                 <?php the_content(); ?>
                             </div>
                         </div><!-- row -->
-                        
-                    
-					       	
-                        
-					       	
+
+
+
+
+
 					       	<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'twentyten' ), 'after' => '</div>' ) ); ?>
-                           
+
                         <div class="row">
                             <div class="twelvecol">
 <?php if ( get_the_author_meta( 'description' ) ) : // If a user has filled out their description, show a bio on their entries  ?>
@@ -44,14 +44,14 @@
 					       	<?php twentyten_posted_in(); ?>
 					       	<?php edit_post_link( __( 'Edit', 'twentyten' ), '<span class="edit-link">', '</span>' ); ?>
 					       </div><!-- .entry-utility -->
-				        
+
 
 				        <div id="nav-below" class="navigation">
 				            <div class="nav-previous"><?php previous_post_link( '%link', '<span class="meta-nav">' . _x( '&larr;', 'Previous post link', 'twentyten' ) . '</span> %title' ); ?></div>
 				            <div class="nav-next"><?php next_post_link( '%link', '%title <span class="meta-nav">' . _x( '&rarr;', 'Next post link', 'twentyten' ) . '</span>' ); ?></div>
 				        </div><!-- #nav-below -->
 				        </div><!-- row -->
-				        
+
 				        <div class="row">
 				            <div class="sixcol">
 				                <?php comments_template( '', true ); ?>

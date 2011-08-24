@@ -383,7 +383,7 @@ function twentyten_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
-    
+
 	// Sidebar A
 	register_sidebar( array(
 		'name' => __( 'Post Sidebar', 'twentyten' ),
@@ -405,7 +405,7 @@ function twentyten_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
-		
+
 	// Area 7, located on the home page. Empty by default.
 	register_sidebar( array(
 		'name' => __( 'Home Widget Area 1/2', 'twentyten' ),
@@ -416,7 +416,7 @@ function twentyten_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
-	
+
 	// Area 8, located on the home page. Empty by default.
 	register_sidebar( array(
 		'name' => __( 'Home Widget Area 2/2', 'twentyten' ),
@@ -427,7 +427,7 @@ function twentyten_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
-	
+
 	// Area 9, located on the home page. Empty by default.
 	register_sidebar( array(
 		'name' => __( 'Home Widget Area 1/3', 'twentyten' ),
@@ -438,7 +438,7 @@ function twentyten_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
-	
+
 	// Area 10, located on the home page. Empty by default.
 	register_sidebar( array(
 		'name' => __( 'Home Widget Area 2/3', 'twentyten' ),
@@ -449,7 +449,7 @@ function twentyten_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
-	
+
 	// Area 11, located on the home page. Empty by default.
 	register_sidebar( array(
 		'name' => __( 'Home Widget Area 3/3', 'twentyten' ),
@@ -460,7 +460,7 @@ function twentyten_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
-	
+
 	// Area 3, located in the footer. Empty by default.
 	register_sidebar( array(
 		'name' => __( 'First Footer Widget Area', 'twentyten' ),
@@ -504,7 +504,7 @@ function twentyten_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
-	
+
 }
 /** Register sidebars by running twentyten_widgets_init() on the widgets_init hook. */
 add_action( 'widgets_init', 'twentyten_widgets_init' );
@@ -730,7 +730,7 @@ function ht_col4of4_shortcode( $atts, $content = null ) {
 add_shortcode( 'boxout', 'ht_boxout_shortcode' );
 
 function ht_boxout_shortcode( $atts, $content = null ) {
-    
+
 $options = get_option('artpress_theme_options');//extract this from the functions file before launch
     extract( shortcode_atts( array(
       'float' => 'boxout',
@@ -919,7 +919,7 @@ function ht_gallery_shortcode($attr) {
             $ht_thumnail_size = 'four-col';
             break;
         }
-		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $ht_thumnail_size, false) : wp_get_attachment_link($id, $size, true, false); 
+		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $ht_thumnail_size, false) : wp_get_attachment_link($id, $size, true, false);
 	   $break = '';
         $i++;
         $output .= "<{$itemcol} class='gallery-item ";
@@ -972,14 +972,14 @@ function ht_gallery_shortcode($attr) {
 		$output .= $break;
 		/*if ( $columns > 0 && ++$i % $columns == 0 )
 			$output .= '<br style="clear: both" />';removed to allow the columns to do their thing! kdev */
-        
+
 	}
 
 	$output .= "
 			<br style='clear: both;' />
 		</div></div>\n";
-	
-	// for testing TODO remove before launch	
+
+	// for testing TODO remove before launch
     // $output .= 'Number of columns: '.$columns.'<br />';
     // $output .= 'Image size : '.$ht_thumnail_size;
 
@@ -1039,10 +1039,10 @@ class HTChildMenu extends WP_Widget {
     function widget($args, $instance) {
         extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
-       
+
         global $wp_query;
         $thePostID = $wp_query->post->ID;
-        $theParentID = $wp_query->post->post_parent; 
+        $theParentID = $wp_query->post->post_parent;
 
         $children = wp_list_pages('title_li=&child_of='.$thePostID.'&echo=0'.'&depth=2');
         if ($children) { ?>
@@ -1058,7 +1058,7 @@ class HTChildMenu extends WP_Widget {
                         <br />
                         <a style="font-size:.8em" href="<?php echo get_permalink($theParentID); ?>">Back up to <?php echo get_the_title($theParentID); ?></a>
                         <?php } ?>
-        <?php } 
+        <?php }
         elseif ($wp_query->post->post_parent == TRUE) { ?>
         <?php $children = wp_list_pages('title_li=&child_of='.$theParentID.'&echo=0'.'&depth=2'); ?>
              <?php echo $before_widget; ?>
@@ -1072,7 +1072,7 @@ class HTChildMenu extends WP_Widget {
                         <br />
                         <a style="font-size:.8em" href="<?php echo get_permalink($theParentID); ?>">Back up to <?php echo get_the_title($theParentID); ?></a>
           <?php  }?>
-               
+
         <?php echo $after_widget; ?>
         <?php
     }
@@ -1089,10 +1089,10 @@ class HTChildMenu extends WP_Widget {
         $title = esc_attr($instance['title']);
         ?>
          <p>
-          <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label> 
+          <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
           <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
         </p>
-        <?php 
+        <?php
     }
 
 } // class HTChildMenu
@@ -1135,9 +1135,9 @@ function cwc_fix_html_editor_font() { ?>
 function kd_type_gen() {
     $scale = 'musical fourth'; //type scale, golden, musical fifths or musical thirds
     $base = 16; //base text size in pixels
-    
+
     $ht_font_sizes = array();// create font size array
-    
+
     switch($scale) { // change the multiplier based on the selected modular scale
         case 'golden':
             $multiplier = 1.618;
@@ -1149,7 +1149,7 @@ function kd_type_gen() {
             $multiplier = 1.33;
             break;
     }
-    
+
     $count = -3;
     $size = $base / $multiplier / $multiplier / $multiplier ;
     while($count < 5):
@@ -1162,11 +1162,11 @@ function kd_type_gen() {
             );
         $ht_font_sizes['Font '.$key] = $font_info;
     endwhile;
-           
+
     // set line heights
-    
+
     $base_line_height = $ht_font_sizes['Font 4']['font-size'];
-    
+
     foreach($ht_font_sizes as $key=>$font_info) {
         if( ($ht_font_sizes[$key]['font-size'] <= $base_line_height) )
             $ht_font_sizes[$key]['line-height'] = $base_line_height;
@@ -1176,23 +1176,23 @@ function kd_type_gen() {
             $ht_font_sizes[$key]['line-height'] = $base_line_height*3;
         elseif( ($ht_font_sizes[$key]['font-size'] > $base_line_height*3) && ($ht_font_sizes[$key]['font-size'] < $base_line_height*4) )
             $ht_font_sizes[$key]['line-height'] = $base_line_height*4;
-    
+
     }
-    
+
     echo '<br />Value = '.$font_info['line-height'];
-    
+
     // echo out the details
     echo '<br />';
     echo '<br />Baseline size = '.$base_line_height;
     echo '<br />';
-    
+
     foreach($ht_font_sizes as $key=>$font_info) {
         echo '<br />Key:'.$key;
         echo '<br />Font Size:'.$font_info['font-size'];
         echo '<br />Line Height:'.$font_info['line-height'];
         echo '<br />';
     }
-    
+
     //print_r($ht_font_sizes);
-     
+
 }

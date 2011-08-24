@@ -17,7 +17,7 @@ get_header(); ?>
 		<div class="three-columns row">
 		  <div class="threecol"><?php get_template_part('sidebar');?></div>
 			<div id="content" class="sixcol" role="main">
-			
+
 			<?php get_template_part( 'ht-crumbs' );?>
 
 			<?php
@@ -29,11 +29,11 @@ get_header(); ?>
 			?>
 
 			</div><!-- #content -->
-			
+
 			<div class="threecol last"><?php get_template_part( 'sidebars/second-sidebar' );?></div>
-			
+
 			<div class="clear"></div>
-			
+
 		</div><!--  -->
     </div><!-- #content -->
 <?php get_footer(); ?>

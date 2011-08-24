@@ -19,13 +19,13 @@ class Text_Shadow_Blur_Radius extends Setting_Size_Text_Input {
 }
 class Text_Shadow_Color extends Setting_Color {
     function __construct($value=0) {
-        parent::__construct($value); 
+        parent::__construct($value);
     }
 }
 class Text_Shadow extends CSS_Composite {
     function __construct() {
-        parent::__construct('text shadow', 'text-shadow', 
-            array(            
+        parent::__construct('text shadow', 'text-shadow',
+            array(
                 new Text_Shadow_Horizontal(),
                 new Text_Shadow_Vertical(),
                 new Text_Shadow_Blur_Radius(),
@@ -34,7 +34,7 @@ class Text_Shadow extends CSS_Composite {
         );
     }
     function validate($value) {
-        
+
     }
 }
 class Box_Shadow_Horizontal extends Setting_Size_Text_Input {
@@ -54,13 +54,13 @@ class Box_Shadow_Blur_Radius extends Setting_Size_Text_Input {
 }
 class Box_Shadow_Color extends Setting_Color {
     function __construct($value=0) {
-        parent::__construct($value); 
+        parent::__construct($value);
     }
 }
 class Box_Shadow extends CSS_Composite {
     function __construct() {
-        parent::__construct('box shadow', 'box-shadow', 
-            array(            
+        parent::__construct('box shadow', 'box-shadow',
+            array(
                 new Box_Shadow_Horizontal(),
                 new Box_Shadow_Vertical(),
                 new Box_Shadow_Blur_Radius(),
@@ -69,7 +69,7 @@ class Box_Shadow extends CSS_Composite {
         );
     }
     function validate($value) {
-        
+
     }
 }
 class Border_Radius extends CSS_Size_Text_Input {
@@ -81,10 +81,10 @@ class Border_Radius extends CSS_Size_Text_Input {
 
 class Effect_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
-        if ( null == $members ) { 
+        if ( null == $members ) {
             $members[]  = new Border_Radius();
             $members[] = new Text_Shadow();
-            $members[] = new Box_Shadow();           
+            $members[] = new Box_Shadow();
         }
         parent::__construct($display_name, $members);
     }

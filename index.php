@@ -19,7 +19,7 @@ get_header(); ?>
 			<div class="eightcol" role="main">
 			      <?php get_template_part( 'ht-crumbs' );?>
                 <h1 class="page-title">Blog</h1>
-               
+
 			<?php
 			/* Run the loop to output the posts.
 			 * If you want to overload this in a child theme then include a file
@@ -28,10 +28,10 @@ get_header(); ?>
 			 get_template_part( 'loop', 'index' );
 			?>
 			</div><!-- #content -->
-			
+
 			<div class="fourcol last"><?php get_sidebar(); ?></div>
 			<div class="clear"></div>
-			
+
 		</div><!-- #container -->
     </div>
 <?php get_footer(); ?>

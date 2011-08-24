@@ -32,7 +32,7 @@ get_header(); ?>
 				</div><!-- #post-0 -->
 <?php endif; ?>
                 </div><!-- eightcol -->
-			
+
                 <div class="fourcol last">
                     <?php get_template_part('sidebars/second-sidebar'); ?>
                 </div>

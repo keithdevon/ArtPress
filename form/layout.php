@@ -47,33 +47,33 @@ class Padding_Left extends CSS_Size_Text_Input {
     }
 }
 
-$display_options = array('', 'inherit', 'none', 'block', 'inline', 'inline-block', 'inline-table', 'list-item', 
-        						'run-in', 'table', 'table-caption', 'table-cell', 'table-column', 
-        						'table-column-group', 'table-footer-group', 'table-header-group', 
+$display_options = array('', 'inherit', 'none', 'block', 'inline', 'inline-block', 'inline-table', 'list-item',
+        						'run-in', 'table', 'table-caption', 'table-cell', 'table-column',
+        						'table-column-group', 'table-footer-group', 'table-header-group',
         						'table-row', 'table-row-group');
 // DISPLAY
 class Display extends CSS_Dropdown_Input {
-    function __construct($value=0) { 
+    function __construct($value=0) {
         global $display_options;
         parent::__construct('display', 'display mode', $display_options, $value);
-    }    
+    }
 }
 
 class Layout_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
-        if ( null == $members ) {                                             
+        if ( null == $members ) {
             $og = new Option_Group('', array(
-                new Option_Row_Group('margin',  
+                new Option_Row_Group('margin',
                     array(
-                        new Margin_Top(), 
-                        new Margin_Right(), 
-                        new Margin_Bottom(), 
+                        new Margin_Top(),
+                        new Margin_Right(),
+                        new Margin_Bottom(),
                         new Margin_Left()) ),
-                new Option_Row_Group('padding', 
+                new Option_Row_Group('padding',
                     array(
-                        new Padding_Top(), 
-                        new Padding_Right(), 
-                        new Padding_Bottom(), 
+                        new Padding_Top(),
+                        new Padding_Right(),
+                        new Padding_Bottom(),
                         new Padding_Left()) ),
                 new Display()
                 ));
