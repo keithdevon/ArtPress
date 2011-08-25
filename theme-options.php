@@ -25,6 +25,7 @@ add_action( 'admin_init', 'artpress_options_load_scripts' );
 add_action( 'admin_init', 'artpress_theme_init' );
 add_action( 'admin_menu', 'theme_options_add_page' );
 
+
 // Load our scripts
 function artpress_options_load_scripts() {
 
@@ -61,12 +62,15 @@ function artpress_theme_init() {
     init_ap_options();
 }
 
+$ap_settings_page = null;
 /**
  * Load up the menu page
  */
 function theme_options_add_page() {
     // set up main settings page
+    global $ap_settings_page;
     $ap_settings_page = add_menu_page( __( 'ArtPress Options' ), __( 'Artpress' ),     'edit_theme_options', 'artpress',              'ap_settings_page', '', 0 );
+
     //add_action( 'admin_footer-'. $ap_settings_page, 'myplugin_admin_footer' );
 
     // set up configurations page

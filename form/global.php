@@ -9,11 +9,15 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
             self::$singleton = $this;
         }
     }
-
-    function get_dependents()              { return $this->dependents; }
-    function add_dependent($section_color) { $this->dependents[] = $section_color; }
-
+    function get_dependents() {
+        return $this->dependents;
+    }
+    function add_dependent($section_color) {
+        $this->dependents[] = $section_color;
+    }
     function get_html() {
+        global $ap_settings_page;
+        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
         $children_html = get_html_dependents($this);
         $children = $this->get_children();
         $first = true;
@@ -35,17 +39,18 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
                 $children_html .= $row;
             }
         }
-        $the_class = get_class($this);
-        $scripts =
-"<script>
-	function updateDependentsOf_{$the_class}() {
+        return table($children_html, attr_class('form-table'));
+    }
+    static function script() { ?>
+<script>
+	function updateDependentsOf_<?php echo __CLASS__ ?>() {
 		var colors = jQuery('.globalColor');
 
     	// add the null option to the array
 		colors.splice(0,0,'');
 
 		// create the new options
-		var spaces = \"\u00A0\u00A0\u00A0\"
+		var spaces = "\u00A0\u00A0\u00A0";
 		var options = new Option('', 0).outerHTML;
 		for ( i = 1; i < colors.size(); i++ ) {
 			var colorVal = colors[i].value;
@@ -54,12 +59,12 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
     	}
 
     	// inject the options into the dependent selects
-    	var deps = dependentsOf_{$the_class};
+    	var deps = dependentsOf_<?php echo __CLASS__ ?>;
     	var depsSize = deps.length;
     	for ( i = 0; i < depsSize; i++ ) {
     		var val = deps[i];
     		// get a hold of the select
-    		var selectString = 'select[name=\"ap_options[cs][' + val + ']\"]';
+    		var selectString = 'select[name="ap_options[cs][' + val + ']"]';
     		var select = jQuery(selectString);
 
     		// find out what option it is currently selected
@@ -89,17 +94,14 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
                             f.linkTo(this);
                             p.css('opacity', 1);
                             jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
-          });" .
-		// the user will not have selected the last global color text input field
-		// yet it remains linked to the color picker
-		// therefore unlink the last color text box by supplying an empty function
-		"f.linkTo(function(){});" .
-        // add a callback to the color picker to update the dependent section color dropdowns
-        "p.bind('mouseleave', updateDependentsOf_{$the_class});
-      });
-
- </script>";
-        return table($scripts . $children_html, attr_class('form-table'));
+          });
+          <?php /* the user will not have selected the last global color text input field
+					yet it remains linked to the color picker
+					therefore unlink the last color text box by supplying an empty function*/ ?>
+		f.linkTo(function(){});
+        <?php // add a callback to the color picker to update the dependent section color dropdowns ?>
+        p.bind('mouseleave', updateDependentsOf_<?php echo __CLASS__ ?>);
+      });</script><?php
     }
 }
 class Global_Font_Group extends Option_Group {
@@ -112,10 +114,12 @@ class Global_Font_Group extends Option_Group {
             self::$singleton = $this;
         }
     }
-
-    function get_dependents()                { return $this->dependents; }
-    function add_dependent($section_font)    { $this->dependents[] = $section_font; }
-
+    function get_dependents() {
+        return $this->dependents;
+    }
+    function add_dependent($section_font) {
+        $this->dependents[] = $section_font;
+    }
     function get_options() {
         $options = array();
         foreach ($this->get_children() as $member) {
@@ -126,6 +130,9 @@ class Global_Font_Group extends Option_Group {
         return $options;
     }
     function get_html() {
+        global $ap_settings_page;
+        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+
         $children_html = get_html_dependents($this);
         $children = $this->get_children();
         if ( null != $children) {
@@ -138,10 +145,11 @@ class Global_Font_Group extends Option_Group {
                 $children_html .= $child_html;
             }
         }
-        $the_class = get_class($this);
-        $scripts =
-"<script type='text/javascript'>
-	function updateDependentsOf_{$the_class}() {
+        return table($children_html, attr_class('form-table'));
+    }
+    static function script() { ?>
+<script type='text/javascript'>
+	function updateDependentsOf_<?php echo __CLASS__ ?>() {
 		// get the global fonts
 		var fonts = jQuery('.globalFont');
 
@@ -149,23 +157,23 @@ class Global_Font_Group extends Option_Group {
 		fonts.splice(0,0,'');
 
 		// create the new options
-		var spaces = \"\u00A0\u00A0\u00A0\"
+		var spaces = "\u00A0\u00A0\u00A0";
 		var options = new Option('', 0).outerHTML;
 		for ( i = 1; i < fonts.size(); i++ ) {
 			var num = fonts[i].value;
-    		var selectString = \"option[value='\" + num + \"']\";
+    		var selectString = "option[value='" + num + "']";
     		var optHTMLVal = i + spaces + jQuery(fonts[i]).find(selectString).html();
 			var opt = new Option(optHTMLVal, i);
 			options += opt.outerHTML;
     	}
 
     	// inject the options into the dependent selects
-    	var deps = dependentsOf_{$the_class};
+    	var deps = dependentsOf_<?php echo __CLASS__ ?>;
     	var depsSize = deps.length;
     	for ( i = 0; i < depsSize; i++ ) {
     		var val = deps[i];
     		// get a hold of the select
-    		var selectString = 'select[name=\"ap_options[cs][' + val + ']\"]';
+    		var selectString = 'select[name="ap_options[cs][' + val + ']"]';
     		var select = jQuery(selectString);
 
     		// find out what option it is currently selected
@@ -176,14 +184,12 @@ class Global_Font_Group extends Option_Group {
 
     		// set the selected value
     		select.val(cur);
-
-
     	}
     }
-</script>";
-        return table($scripts . $children_html, attr_class('form-table'));
+</script><?php
     }
 }
+
 class Global_Font_Size_Group extends Option_Group {
     static $singleton;
     private $dependents = array();
@@ -192,13 +198,15 @@ class Global_Font_Size_Group extends Option_Group {
         if(!self::$singleton) {
             parent::__construct($display_name, $members);
             self::$singleton = $this;
+
         }
     }
 
     function get_dependents()                     { return $this->dependents; }
     function add_dependent($section_font_size)    { $this->dependents[] = $section_font_size; }
     function get_html() {
-        global $font_size_ratio_options;
+        global $ap_settings_page;
+        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
         $children_html = get_html_dependents($this);
         $children = $this->get_children();
         if ( null != $children) {
@@ -211,6 +219,11 @@ class Global_Font_Size_Group extends Option_Group {
                 $children_html .= $child_html;
             }
         }
+        return table( $children_html, attr_class('form-table'));
+    }
+
+    static function script() {
+        global $font_size_ratio_options;
         // create an array of ratios to be used by the javascript functions
         $ratio_arr = "var ratioArr = [";
         foreach ($font_size_ratio_options as $ratio) {
@@ -222,54 +235,50 @@ class Global_Font_Size_Group extends Option_Group {
         $start = Global_Font_Size_Ratio::$start;
         $size = Global_Font_Size_Ratio::$size;
         $end = $start + $size;
+        ?><script type='text/javascript'>
+function updateDependentsOf_<?php echo __CLASS__ ; ?>() {
+	<?php echo $ratio_arr ?>
 
-        $the_class = get_class($this);
-        $scripts =
-"<script type='text/javascript'>
-	function updateDependentsOf_{$the_class}() {
-		${ratio_arr}
+	// get the global font size
+	var fontSize = jQuery('.globalFontSize')[0].value;
 
-		// get the global font size
-		var fontSize = jQuery('.globalFontSize')[0].value;
+	// get the global font size ratio
+	var fontSizeRatio = jQuery('.globalFontSizeRatio option:selected')[0].value;
+	var ratio = ratioArr[fontSizeRatio];
 
-		// get the global font size ratio
-		var fontSizeRatio = jQuery('.globalFontSizeRatio option:selected')[0].value;
-		var ratio = ratioArr[fontSizeRatio];
-
-		// calculate the new font sizes and create the new html options
-		var options = [''];
-        for(i = {$start}; i < {$end}; i++) {
-            options.push( Math.round(fontSize * Math.pow(ratio, i)) + 'px' );
-        }
-
-		// create the new HTML options
-		var optionsHTML = new Option('', 0).outerHTML;
-		for (var i = 1; i < options.length; i++ ) {
-			var opt = new Option(options[i], i);
-			optionsHTML += opt.outerHTML;
-    	}
-
-    	// inject the options into the dependent selects
-    	var deps = dependentsOf_{$the_class};
-    	var depsSize = deps.length;
-    	for ( i = 0; i < depsSize; i++ ) {
-    		var val = deps[i];
-    		// get a hold of the select
-    		var selectString = 'select[name=\"ap_options[cs][' + val + ']\"]';
-    		var select = jQuery(selectString);
-
-    		// find out what option it is currently selected
-    		var cur = select.find('option[selected]').val();
-
-    		// replace the existing options with the new options
-    		select.html(optionsHTML);
-
-    		// set the selected value
-    		select.val(cur);
-    	}
+	// calculate the new font sizes and create the new html options
+	var options = [''];
+    for(i = <?php echo $start ?>; i < <?php echo $end ?>; i++) {
+        options.push( Math.round(fontSize * Math.pow(ratio, i)) + 'px' );
     }
-</script>";
-        return table($scripts . $children_html, attr_class('form-table'));
+
+	// create the new HTML options
+	var optionsHTML = new Option('', 0).outerHTML;
+	for (var i = 1; i < options.length; i++ ) {
+		var opt = new Option(options[i], i);
+		optionsHTML += opt.outerHTML;
+	}
+
+	// inject the options into the dependent selects
+	var deps = dependentsOf_<?php echo __CLASS__ ?>;
+	var depsSize = deps.length;
+	for ( i = 0; i < depsSize; i++ ) {
+		var val = deps[i];
+		// get a hold of the select
+		var selectString = 'select[name="ap_options[cs][' + val + ']"]';
+		var select = jQuery(selectString);
+
+		// find out what option it is currently selected
+		var cur = select.find('option[selected]').val();
+
+		// replace the existing options with the new options
+		select.html(optionsHTML);
+
+		// set the selected value
+		select.val(cur);
+	}
+}
+</script><?php ;
     }
 }
 class Global_Settings extends Main_Tab  {

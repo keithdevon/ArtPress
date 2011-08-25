@@ -4,7 +4,7 @@ class ToolTips {
         ////Top Level
         "Global_Settings" => "Set the global colours, fonts and logo." 				  ,
         "Header_Tab"      => "Edit the header area, site title and site description." ,
-        "Body_Tab"        => "Edit the main body of the site"                         ,   
+        "Body_Tab"        => "Edit the main body of the site"                         ,
         "Menu_Tab"        => "Edit the main site navigation."                         ,
         "Sidebar_Tab"     => "Edit the site side bars."                               ,
         "Footer_Tab"      => "Edit the footer area."                                  ,
@@ -15,7 +15,7 @@ class ToolTips {
         "Global_Font_Size_Ratio" => "Select the modular scale that you wish to use. This will determine the available font sizes and line spacing.",
         "Global_Font_Family"     => "Select a font family (typeface) to be used throughout the site. You can select from a number of font stacks that produce the most consistent results across all systems.",
         "Logo_Image_Dropdown"    => "If you are have uploaded a logo image from ArtPress -> Images, you can use it by selecting it here.",
-        
+
         //Background
         "Background_Image_Tab"           => "Background color and image settings",
         "Section_Background_Color"       => "Select the background color of the element from a list of Global Colors",
@@ -26,7 +26,7 @@ class ToolTips {
         "Background_Position"            => "Set the position of the background image in the horizontal and vertical axis. You can use pixels, ems or percentages (E.g. 10px, 1.2em or 25%).",
         "Background_Horizontal_Position" => "Set the horizontal position of the background image. You can use pixels, ems or percentages (E.g. 10px, 1.2em or 25%).",
         "Background_Vertical_Position"   => "Set the vertical position of the background image. You can use pixels, ems or percentages (E.g. 10px, 1.2em or 25%).",
-        
+
         ////Typography
         "Typography_Tab"		   => "Font and text settings",
         "Section_Foreground_Color" => "Select the text color of the element. Colors can be set in Global Settings",
@@ -38,7 +38,7 @@ class ToolTips {
         "Text_Decoration"          => "Apply underlines, strikethroughs, and more to the element. Note - underlines should normally be used only on links!",
         "Text_Transform"           => "Make your text all uppercase, lowercase or capitalized.",
         "Letter_Spacing"           => "Add or remove horizontal space from between the letters.",
-        
+
         ////Header
         "Header_Base"      => "The default settings for the header area.",
         "Site_Title"       => "If you are not using a logo image, you can style the site title here.",
@@ -52,7 +52,7 @@ class ToolTips {
         "Sub_Menu"          => "If you are using sub-menus, you can style the drop-down list here.",
         "Sub_Menu_Hover"    =>  "Style the hover state of drop-down elements here.",
         "Current_Menu_Item" => "Style the menu link of the currently selected page. This is great for providing feedback on where the user is within the site.",
-     
+
         ////Body
         "Body_Base"        => "The body is the page as a whole. You can apply styles to it here. They will be inherited by most other elements unless they are over-written.",
         "Page_Title"       => "The title of the current page can be styled here.",
@@ -75,20 +75,20 @@ class ToolTips {
         "Widget_Title" => "Style the sidebar widget titles here.",
         //"Link" "Style the sidebar links here."
         //"Link hover" "Style the sidebar link mouse hover state here."
-        
+
         //Footer
         "Footer_Base" => "The default style settings of the footer area.",
         "Widget_Title" => "Style the footer widget titles here.",
         //"Link" "Style the footer links here."
         //"Link hover" "Style the footer link mouse hover state here."
-        
+
         //Galleries
         "Gallery_Base" => "The default style settings of the gallery pages.",
         "Gallery_Title" => "Style the galleries page titles here.",
         "Galleries_Entry_Meta" => "Style the galleries page gallery meta information here.",
         "Gallery_Image_Links" => "Style the gallery images here.",
-        
-        
+
+
         ////Layout
         "Layout_Tab" => "Element spacing settings",
         //"margin" "Create space outside the border of the element."
@@ -96,13 +96,13 @@ class ToolTips {
     	"Margin_Bottom" => "(Bottom) Specify the amount of space in px ems or % between this element and the element below it",
         "Margin_Right"  => "(Right)  Specify the amount of space in px ems or % between this element and the element to the right of it",
         "Margin_Left"   => "(Left)   Specify the amount of space in px ems or % between this element and the element to the left of it",
-         
+
         //"padding" "Create space within the border of an element."
     	"Padding_Top"    => "(Top)    Specify the amount of space in px ems or % between the top of this element and its content",
     	"Padding_Bottom" => "(Bottom) Specify the amount of space in px ems or % between the bottom of this element and its content",
         "Padding_Right"  => "(Right)  Specify the amount of space in px ems or % between the right edge of this element and its content",
         "Padding_Left"   => "(Left)   Specify the amount of space in px ems or % between the left edge of this element and its content",
-         
+
     	"Display" => "For more advanced users. Can be used to remove elements or change their positioning.",
 
         ////Border
@@ -116,17 +116,17 @@ class ToolTips {
         "Border_Top_Style" => "Select the top border style of this element",
         "Border_Top_Width" => "Specify the top border width in px ems or % of this element",
         //"bottom border" "Add a border to the bottom of the element, you can edit the colour, style and thickness of a border."
-        "Border_Bottom_Color" => "Select the color for the bottom border of this element",          
-        "Border_Bottom_Style" => "Select the bottom border style of this element",                  
-        "Border_Bottom_Width" => "Specify the bottom border width in px ems or % of this element",  
+        "Border_Bottom_Color" => "Select the color for the bottom border of this element",
+        "Border_Bottom_Style" => "Select the bottom border style of this element",
+        "Border_Bottom_Width" => "Specify the bottom border width in px ems or % of this element",
         ////"left border" "Add a border to the left of the element, you can edit the colour, style and thickness of a border."
-        "Border_Left_Color" => "Select the color for the left border of this element",          
-        "Border_Left_Style" => "Select the left border style of this element",                  
-        "Border_Left_Width" => "Specify the left border width in px ems or % of this element",             
+        "Border_Left_Color" => "Select the color for the left border of this element",
+        "Border_Left_Style" => "Select the left border style of this element",
+        "Border_Left_Width" => "Specify the left border width in px ems or % of this element",
         ////"right border" "Add a border to the right of the element, you can edit the colour, style and thickness of a border."         }
-        "Border_Right_Color" => "Select the color for the right border of this element",          
-        "Border_Right_Style" => "Select the right border style of this element",                  
-        "Border_Right_Width" => "Specify the right border width in px ems or % of this element",   
+        "Border_Right_Color" => "Select the color for the right border of this element",
+        "Border_Right_Style" => "Select the right border style of this element",
+        "Border_Right_Width" => "Specify the right border width in px ems or % of this element",
 
          ////Effects
         "Effect_Tab" => "Additional styling effect settings",
@@ -141,9 +141,9 @@ class ToolTips {
         "Text_Shadow_Horizontal"  => "Horizontal offset (px ems or %)",
         "Text_Shadow_Vertical"    => "Vertical offset (px ems or %)",
         "Text_Shadow_Blur_Radius" => "Blur radius (px ems or %)",
-        "Text_Shadow_Color"       => "Color"        
+        "Text_Shadow_Color"       => "Color"
 	   );
-	/** 
+	/**
 	 * returns the relevant tooltip for the given object
 	 * @param string $object
 	 * @return string tooltip

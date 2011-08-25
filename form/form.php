@@ -106,7 +106,7 @@ abstract class Hierarchy {
 
     function get_display_name() { return $this->display_name; }
     function set_tool_tip    () { return $this->tool_tip; }
-    
+
     function get_children($visitor=null) {
         $children = $this->children;
         $valid_children = array();
@@ -616,7 +616,7 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
         $children = $this->get_children();
         foreach ($children as $child) {
             $child_name = $child->get_display_name();
-            
+
             $link = h4( alink('#', $child_name), ToolTips::get($child) );
             $child_html = $child->get_html();
             $o .= $link;
