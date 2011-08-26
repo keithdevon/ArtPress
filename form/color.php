@@ -46,6 +46,9 @@ abstract class Section_Color extends CSS_Dropdown_Input implements ISetting_Depe
     function get_css_value() {
         return get_css_dropdown_value($this);
     }
+    function get_html($attributes='') {
+        return parent::get_html($attributes . attr_class('section_color'));
+    }
 }
 class Setting_Color extends Setting_Dropdown implements ISetting_Depends_On_Global_Setting {
     function __construct($value=0) {
@@ -76,10 +79,13 @@ class Section_Background_Color extends Section_Color {
     function __construct($value=0) {
         parent::__construct('background-color', 'background color', $value);
     }
-    static function get_options() {
-        $options = parent::get_options();
+    function get_opts() {
+        $options = parent::get_opts();
         $options[] = 'transparent';
         return $options;
+    }
+    function get_html($attributes='') {
+        return parent::get_html($attributes . attr_class('section_background_color')); // TODO will this override the parent's class attribute?
     }
 }
 

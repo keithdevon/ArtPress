@@ -64,17 +64,21 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
     	for ( i = 0; i < depsSize; i++ ) {
     		var val = deps[i];
     		// get a hold of the select
-    		var selectString = 'select[name="ap_options[cs][' + val + ']"]';
-    		var select = jQuery(selectString);
-
-    		// find out what option it is currently selected
-    		var cur = select.find('option[selected]').val();
-
+    		var name = 'ap_options[cs][' + val + ']';
+    		//var selectString = 'select[name="ap_options[cs][' + val + ']"]';
+    		//var select = jQuery(selectString);
+            //
+    		//// find out what option it is currently selected
+    		//var cur = select.find('option[selected]').val();
+    		el = document.getElementsByName(name)[0];
+			cur = el.value;
     		// replace the existing options with the new options
-    		select.html(options);
+    		//select.html(options);
+    		el.innerHTML = options;
 
     		// set the selected value
-    		select.val(cur);
+    		//select.val(cur);
+    		el.value = cur;
     	}
     }
 

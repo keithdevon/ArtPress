@@ -1077,8 +1077,8 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
         parent::__construct($css_property, $display_name, $value);
     }
 
-    function get_html() {
-        return get_select_html($this);
+    function get_html($attributes='') {
+        return get_select_html($this, $attributes);
     }
 
     function validate($value) {
