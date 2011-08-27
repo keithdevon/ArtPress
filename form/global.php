@@ -42,26 +42,10 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
         return table($children_html, attr_class('form-table'));
     }
     static function script() { ?><script>
-    	function getGlobalColorOptions() {
-    		var colors = jQuery('.globalColor');
-    	    
-        	// add the null option to the array
-    		colors.splice(0,0,'');
-    
-    		// create the new options
-    		var spaces = "\u00A0\u00A0\u00A0";
-    		var options = [new Option('', 0).outerHTML];
-    		for ( i = 1; i < colors.size(); i++ ) {
-    			var colorVal = colors[i].value;
-    			var opt = new Option(i + spaces + colorVal, i);
-    			options.push(opt.outerHTML);
-        	}
-        	return options;
-       	}
-    	// update section color function
+
 		function updateSectionColors(section) {
             // get global colors
-    		var colors = getGlobalColorOptions();
+    		var colors = getGlobalOptionsHTML(jQuery('.globalColor'));
     		var colorOptions = colors.join(); 
 
 			// work out if update needs to happen
@@ -352,10 +336,25 @@ class Global_Settings extends Main_Tab  {
     function script() {
     
         ?><script type='text/javascript'>
+function getGlobalOptionsHTML(globalOptions) {
+	// add the null option to the array
+	globalOptions.splice(0,0,'');
+
+	// create the new options
+	var spaces = "\u00A0\u00A0\u00A0";
+	var options = [new Option('', 0).outerHTML];
+	for ( i = 1; i < globalOptions.size(); i++ ) {
+		var val = globalOptions[i].value;
+		var opt = new Option(i + spaces + val, i);
+		options.push(opt.outerHTML);
+	}
+	return options;
+}         
 function updateDependents(section) {
 	updateSectionColors(section);
 
     // update font families
+    // updateSectionFontFamilies(section);
     
     // update font sizes
 }</script><?php
