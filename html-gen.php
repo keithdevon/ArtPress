@@ -18,6 +18,7 @@ function attr_method        ($value) { return attribute('method',      $value); 
 function attr_name          ($value) { return attribute('name',        $value);     }
 function attr_on_blur       ($value) { return attribute('onblur',      $value);     }
 function attr_on_change     ($value) { return attribute('onchange',    $value);     }
+function attr_on_click      ($value) { return attribute('onclick',     $value);     }
 function attr_on_load       ($value) { return attribute('onload',      $value);     }
 function attr_on_mouse_over ($value) { return attribute('onmouseover', $value);     }
 function attr_readonly      ()       { return attribute('readonly',    'readonly'); }

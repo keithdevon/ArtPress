@@ -46,6 +46,15 @@ abstract class Section_Color extends CSS_Dropdown_Input implements ISetting_Depe
     function get_css_value() {
         return get_css_dropdown_value($this);
     }
+    function get_html() {
+        return parent::get_html(attr_class('section_color'));
+    }
+    /** 
+     * Hacky method to allow me to call a super super method.
+     * */
+    function get_parent_html($attributes=null) {
+        return parent::get_html($attributes);
+    }
 }
 class Setting_Color extends Setting_Dropdown implements ISetting_Depends_On_Global_Setting {
     function __construct($value=0) {
@@ -80,6 +89,9 @@ class Section_Background_Color extends Section_Color {
         $options = parent::get_opts();
         $options[] = 'transparent';
         return $options;
+    }
+    function get_html() {
+        return parent::get_parent_html(attr_class('section_color section_background_color'));
     }
 }
 

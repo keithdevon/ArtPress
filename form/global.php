@@ -41,67 +41,102 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
         }
         return table($children_html, attr_class('form-table'));
     }
-    static function script() { ?>
-<script>
-	function updateDependentsOf_<?php echo __CLASS__ ?>() {
-		var colors = jQuery('.globalColor');
+    static function script() { ?><script>
+    	function getGlobalColorOptions() {
+    		var colors = jQuery('.globalColor');
+    	    
+        	// add the null option to the array
+    		colors.splice(0,0,'');
+    
+    		// create the new options
+    		var spaces = "\u00A0\u00A0\u00A0";
+    		var options = [new Option('', 0).outerHTML];
+    		for ( i = 1; i < colors.size(); i++ ) {
+    			var colorVal = colors[i].value;
+    			var opt = new Option(i + spaces + colorVal, i);
+    			options.push(opt.outerHTML);
+        	}
+        	return options;
+       	}
+    	// update section color function
+		function updateSectionColors(section) {
+            // get global colors
+    		var colors = getGlobalColorOptions();
+    		var colorOptions = colors.join(); 
 
-    	// add the null option to the array
-		colors.splice(0,0,'');
+			// work out if update needs to happen
+            // get ahold of one section color
+        	var sectionDiv = section.nextSibling;
+            // get all section colors
+        	var section_colors = jQuery(sectionDiv).find('.section_color');
 
-		// create the new options
-		var spaces = "\u00A0\u00A0\u00A0";
-		var options = new Option('', 0).outerHTML;
-		for ( i = 1; i < colors.size(); i++ ) {
-			var colorVal = colors[i].value;
-			var opt = new Option(i + spaces + colorVal, i);
-			options += opt.outerHTML;
-    	}
+        	// compare the global color options with a section color's options 
+        	// to see if they are consistent 
+        	var first= section_colors[0];
+        	if (colorOptions != first.innerHTML) {
+            	for (var i = 0; i < section_colors.length; i++) {
+                	var sc = section_colors[i]; 
+                    // store currently selected option
+                	var select_value = sc.value;    
 
-    	// inject the options into the dependent selects
-    	var deps = dependentsOf_<?php echo __CLASS__ ?>;
-    	var depsSize = deps.length;
-    	for ( i = 0; i < depsSize; i++ ) {
-    		var val = deps[i];
-    		// get a hold of the select
-    		var selectString = 'select[name="ap_options[cs][' + val + ']"]';
-    		var select = jQuery(selectString);
+                    // replace options
+                    sc.innerHTML = colors;
+                	if( jQuery(sc).hasClass('section_background_color') ) {
+						sc.innerHTML += new Option(i + '\u00A0\u00A0\u00A0transparent', colors.length).outerHTML;					
+                	}
+                    // reset selected option
+                    sc.value = select_value;
+            	}
+        	}
+		}
+    	function updateDependentsOf_<?php echo __CLASS__ ?>() {
 
-    		// find out what option it is currently selected
-    		var cur = select.find('option[selected]').val();
-
-    		// replace the existing options with the new options
-    		select.html(options);
-
-    		// set the selected value
-    		select.val(cur);
-    	}
-    }
-
-	// farbtastic
-    jQuery(document).ready(function() {
-        var f = jQuery.farbtastic('#picker');
-        var p = jQuery('#picker').css('opacity', 0.25);
-        var selected;
-        jQuery('.colorwell')
-          .each(function () {
-          						f.linkTo(this);
-          						jQuery(this).css('opacity', 0.75); })
-          .focus(function() {
-                            if (selected) {
-                              jQuery(selected).css('opacity', 0.75).removeClass('colorwell-selected');
-                            }
-                            f.linkTo(this);
-                            p.css('opacity', 1);
-                            jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
-          });
-          <?php /* the user will not have selected the last global color text input field
-					yet it remains linked to the color picker
-					therefore unlink the last color text box by supplying an empty function*/ ?>
-		f.linkTo(function(){});
-        <?php // add a callback to the color picker to update the dependent section color dropdowns ?>
-        p.bind('mouseleave', updateDependentsOf_<?php echo __CLASS__ ?>);
-      });</script><?php
+        	var options = getGlobalColorOptions();
+    
+        	// inject the options into the dependent selects
+        	var deps = dependentsOf_<?php echo __CLASS__ ?>;
+        	var depsSize = deps.length;
+        	for ( i = 0; i < depsSize; i++ ) {
+        		var val = deps[i];
+        		// get a hold of the select
+        		var selectString = 'select[name="ap_options[cs][' + val + ']"]';
+        		var select = jQuery(selectString);
+    
+        		// find out what option it is currently selected
+        		var cur = select.find('option[selected]').val();
+    
+        		// replace the existing options with the new options
+        		select.html(options);
+    
+        		// set the selected value
+        		select.val(cur);
+        	}
+        }
+    
+    	// farbtastic
+        jQuery(document).ready(function() {
+            var f = jQuery.farbtastic('#picker');
+            var p = jQuery('#picker').css('opacity', 0.25);
+            var selected;
+            jQuery('.colorwell')
+              .each(function () {
+              						f.linkTo(this);
+              						jQuery(this).css('opacity', 0.75); })
+              .focus(function() {
+                                if (selected) {
+                                  jQuery(selected).css('opacity', 0.75).removeClass('colorwell-selected');
+                                }
+                                f.linkTo(this);
+                                p.css('opacity', 1);
+                                jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
+              });
+              <?php /* the user will not have selected the last global color text input field
+    					yet it remains linked to the color picker
+    					therefore unlink the last color text box by supplying an empty function*/ ?>
+    		f.linkTo(function(){});
+            <?php // add a callback to the color picker to update the dependent section color dropdowns ?>
+            //p.bind('mouseleave', updateDependentsOf_<?php echo __CLASS__ ?>);
+          });</script><?php
     }
 }
 class Global_Font_Group extends Option_Group {
@@ -147,48 +182,53 @@ class Global_Font_Group extends Option_Group {
         }
         return table($children_html, attr_class('form-table'));
     }
-    static function script() { ?>
-<script type='text/javascript'>
-	function updateDependentsOf_<?php echo __CLASS__ ?>() {
-		// get the global fonts
-		var fonts = jQuery('.globalFont');
+    
+    
+    
+    static function script() {
+?><script type='text/javascript'>
+function updateDependentsOf_<?php echo __CLASS__ ?>() {
+	// get the global fonts
+	var fonts = jQuery('.globalFont');
 
-		// add the null option to the array
-		fonts.splice(0,0,'');
+	// add the null option to the array
+	fonts.splice(0,0,'');
 
-		// create the new options
-		var spaces = "\u00A0\u00A0\u00A0";
-		var options = new Option('', 0).outerHTML;
-		for ( i = 1; i < fonts.size(); i++ ) {
-			var num = fonts[i].value;
-    		var selectString = "option[value='" + num + "']";
-    		var optHTMLVal = i + spaces + jQuery(fonts[i]).find(selectString).html();
-			var opt = new Option(optHTMLVal, i);
-			options += opt.outerHTML;
-    	}
+	// create the new options
+	var spaces = "\u00A0\u00A0\u00A0";
+	var options = new Option('', 0).outerHTML;
+	for ( i = 1; i < fonts.size(); i++ ) {
+		var num = fonts[i].value;
+		var selectString = "option[value='" + num + "']";
+		var optHTMLVal = i + spaces + jQuery(fonts[i]).find(selectString).html();
+		var opt = new Option(optHTMLVal, i);
+		options += opt.outerHTML;
+	}
 
-    	// inject the options into the dependent selects
-    	var deps = dependentsOf_<?php echo __CLASS__ ?>;
-    	var depsSize = deps.length;
-    	for ( i = 0; i < depsSize; i++ ) {
-    		var val = deps[i];
-    		// get a hold of the select
-    		var selectString = 'select[name="ap_options[cs][' + val + ']"]';
-    		var select = jQuery(selectString);
+	// inject the options into the dependent selects
+	var deps = dependentsOf_<?php echo __CLASS__ ?>;
+	var depsSize = deps.length;
+	for ( i = 0; i < depsSize; i++ ) {
+		var val = deps[i];
+		// get a hold of the select
+		var selectString = 'select[name="ap_options[cs][' + val + ']"]';
+		var select = jQuery(selectString);
 
-    		// find out what option it is currently selected
-    		var cur = select.find('option[selected]').val();
+		// find out what option it is currently selected
+		var cur = select.find('option[selected]').val();
 
-    		// replace the existing options with the new options
-    		select.html(options);
+		// replace the existing options with the new options
+		select.html(options);
 
-    		// set the selected value
-    		select.val(cur);
-    	}
-    }
+		// set the selected value
+		select.val(cur);
+	}
+}
 </script><?php
     }
 }
+
+
 
 class Global_Font_Size_Group extends Option_Group {
     static $singleton;
@@ -278,7 +318,7 @@ function updateDependentsOf_<?php echo __CLASS__ ; ?>() {
 		select.val(cur);
 	}
 }
-</script><?php ;
+</script><?php
     }
 }
 class Global_Settings extends Main_Tab  {
@@ -303,6 +343,22 @@ class Global_Settings extends Main_Tab  {
             $members[] = new Option_Group('Logo settings', new Logo_Image_Dropdown());
         }
         parent::__construct('global settings', 'artpress_options', $members);
+    }
+    function get_html($pre=null, $post=null) {
+        global $ap_settings_page;
+        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+        return parent::get_html();
+    }
+    function script() {
+    
+        ?><script type='text/javascript'>
+function updateDependents(section) {
+	updateSectionColors(section);
+
+    // update font families
+    
+    // update font sizes
+}</script><?php
     }
 }
 
