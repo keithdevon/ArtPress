@@ -182,6 +182,11 @@ hr {
 #site-title, h1, h2, h3, h4 {
 	text-rendering: optimizeLegibility;
 	}
+	
+#site-title {
+    margin:1em 0 .5em;
+    font-size:2em;
+    }
 
 /* { 
     font-size:4.5em; 
