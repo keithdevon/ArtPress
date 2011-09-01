@@ -33,7 +33,7 @@ interface CSS                       { function get_css(); }
 interface ICSS_Selector extends CSS { function get_css_selector(); }
 interface IValid_Input              { function is_valid(); }
 interface IValidate                 { function validate($value); }
-interface Tab                       {}
+interface Tab                       { function get_link_html($attributes=null); }
 interface IComposite                {}
 interface Visitor {
     function recurse($hierarchy);
@@ -65,20 +65,44 @@ interface IHas_Dependents{
 }
 function get_html_dependents($setting) {
     $the_class = get_class($setting);
-    $o = '<script type="text/javascript">';
+    $o = "\n<script type=\"text/javascript\">\n";
     $o .= "dependentsOf_{$the_class} = new Array(";
     $arr = '';
     foreach($setting->get_dependents() as $dep) {
         //$o .= input('hidden', attr_class($setting->get_name()'') . attr_value($dep->get_name()));
         $name = $dep->get_name();
         $arr .= "'${name}',";
-    }
-    //$size = count($arr);
-    $names  = substr($arr, 0, strlen($arr) -1);
-
-    $o .= "{$names});</script>";
-    return $o;
 }
+//$size = count($arr);
+$names  = substr($arr, 0, strlen($arr) -1);
+
+$o .= "{$names});</script>";
+return $o;
+}
+//class Attributes {
+//    private $attributes;
+//    function __construct() {
+//        $attributes = func_get_args();
+//    }
+//    function addAttributes() {
+//        $attributes = array_merge($attributes, func_get_args());
+//    }
+//}
+//abstract class Attribute {
+//    private $values;
+//    function __construct() {
+//        $values = func_get_args();
+//    }
+//    function addValues() {
+//         $values = array_merge($values, func_get_args());
+//    }
+//    function getValues() { return $values; }
+//    function getValuesAsString() { return join(' ', $values); }
+//    abstract function getHTML();
+//}
+//class ClassAttr extends Attribute {
+//    function getHTML() { return attr_class($this->getValuesAsString() ); }
+//}
 /**
  *
  * This class maintains a notion of elements in a hierarchy.
@@ -92,6 +116,7 @@ abstract class Hierarchy {
     private $display_name;
     private $parent;
     private $children;
+    //private $attributes;
 
     function __construct($display_name, $children=array()) {
         $this->display_name   = $display_name;
@@ -103,7 +128,12 @@ abstract class Hierarchy {
             } else $this->add_child($children);
         }
     }
-
+    //function __construct() {
+    //    $attributes = func_get_args();
+    //}
+    function addAttributes() {
+        $attributes = array_merge($attributes, func_get_args());
+    }
     function get_display_name() { return $this->display_name; }
     function set_tool_tip    () { return $this->tool_tip; }
 
@@ -274,13 +304,18 @@ class Option_Row_Group extends Group {
         return get_row($this->get_display_name(), $children_html);
     }
 }
+function get_link_html($tab, $attributes=null) {
+    $link_attrs = ToolTips::get($tab) . $attributes;
+    return "\n" . li( alink('#' . $tab->get_html_id(), $tab->get_display_name() ) , $link_attrs );
+}
 abstract class Sub_Tab extends Group implements Tab {
     private $html_id;
     function __construct($display_name, $members=null) {
         parent::__construct($display_name, $members);
     }
     function get_html() {
-
+        //global $ap_settings_page;
+        //add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
         $o = '';
         $children_html = '';
         $children = $this->get_children();
@@ -295,13 +330,18 @@ abstract class Sub_Tab extends Group implements Tab {
         if ($children[0] instanceof Setting) {
             $children_html = table( $children_html, attr_class('form-table') );
         }
-        $o = div( $children_html, attr_id( $this->get_html_id() ) );
+        $id = $this->get_html_id();
+        $o = div( $children_html, attr_id( $id ) . attr_class('sub-tab') 
+        );
         return $o;
     }
     function get_html_id()       { return $this->html_id;   }
     function set_html_id($value) { $this->html_id = $value; }
+    function get_link_html($attributes=null) { return get_link_html($this, $attributes //. attr_class("sub-tab") 
+    ); }
+    //function script() {}
 }
-class Main_Tab extends Hierarchy implements Tab, Render_As_HTML {
+abstract class Main_Tab extends Hierarchy implements Tab, Render_As_HTML {
     private $html_id;
     private $opt_group;
     protected $form_enctype = null;
@@ -317,7 +357,7 @@ class Main_Tab extends Hierarchy implements Tab, Render_As_HTML {
                 $children_html .= $child->get_html();
             }
         }
-        $o = ot( 'div', attr_id( $this->get_html_id() ) );
+        $o = ot( 'div', attr_id( $this->get_html_id() ) . attr_class("main-tab"));
         $o .= $pre;
         $o .= $children_html;
         $o .= $post;
@@ -326,15 +366,33 @@ class Main_Tab extends Hierarchy implements Tab, Render_As_HTML {
     }
     function get_html_id()       { return $this->html_id;   }
     function set_html_id($value) { $this->html_id = $value; }
+    function get_link_html($attributes=null) { 
+        $name = $this->get_display_name();
+        return get_link_html($this, //attr_on_mouse_down("alert('updating dependents');updateDependents(getOpenAccordion('{$name}')); return;") .
+         $attributes);
+    }
 }
 
-class Tab_Group extends Group {
+abstract class Tab_Group extends Group {
+
+    private $onmousedown;
 
     function __construct($display_name, $members=array()) {
         parent::__construct($display_name, $members);
     }
 
+    //function set_on_mouse_down($fun) { $this->onmousedown = $fun; }
+    //function get_on_mouse_down()     { 
+    //    if ($md = $this->onmousedown) {
+    //        $attr = attr_on_mouse_down($md); 
+    //         return $attr;
+    //    }
+    //}
+
     function get_html() {
+        //global $ap_settings_page;
+        //add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+
         $child_tabs_html = '';
         $links = '';
         $tabs = '';
@@ -348,37 +406,54 @@ class Tab_Group extends Group {
                 if($child instanceof Tab) {
                     $n = $count++;
                     $child->set_html_id("{$id}-tabs-" . $n);
-                    $links .= li( alink('#' . $child->get_html_id(), $child->get_display_name() ) , ToolTips::get($child));
+                    //$link_attrs = ToolTips::get($child) . attr_class(get_class($this)) /*. attr_on_mouse_down("jQuery(this).mousedown(function() { alert('tab'); } );")*/;
+                    $links .= $child->get_link_html(); //$this->get_on_mouse_down());//li( alink('#' . $child->get_html_id(), $child->get_display_name() ) , $link_attrs );
                     $tabs  .= $child->get_html();
                 }
             }
         }
 
         $ul = ul($links);
-        $script = "<script> jQuery( function() { jQuery( '#{$id}-tabs' ).tabs(); } ); </script>";
+        $script = "\n<script type='text/javascript'> jQuery( function() { jQuery( '#{$id}-tabs' ).tabs(); } ); </script>";
 
         $o = $script;
         $o .= div($ul .
-                 $tabs,
-                  attr_id("{$id}-tabs")
-                );
+            $tabs,
+            attr_id("{$id}-tabs")
+        );
         return $o;
+    }
+
+}
+class Sub_Tab_Group extends Tab_Group {
+    function __construct($display_name, $members=array()) {
+        if( $members == null ) {
+            $members = array(
+                new Typography_Tab('typography'),
+                new Layout_Tab('layout'),
+                new Border_Tab('border'),
+                new Background_Image_Tab('background'),
+                new Effect_Tab('effects')
+            );
+        }
+        parent::__construct('main tab group', $members);
     }
 }
 class Main_Tab_Group extends Tab_Group {
     function __construct($display_name, $members=array()) {
         if( $members == null ) {
             $members = array(
-                new Current_Save_ID(),
-                new Global_Settings(),
-                new Header_Tab(),
-                new Menu_Tab(),
-                new Body_Tab(),
-                new Sidebar_Tab(),
-                new Footer_Tab(),
-                new Gallery_Tab()
+            new Current_Save_ID(),
+            new Global_Settings(),
+            new Header_Tab(),
+            new Menu_Tab(),
+            new Body_Tab(),
+            new Sidebar_Tab(),
+            new Footer_Tab(),
+            new Gallery_Tab()
             );
         }
+        //$this->set_on_mouse_down("mainTabClick(this)");
         parent::__construct('main tab group', $members);
     }
     function to_array() {
@@ -401,7 +476,48 @@ class Main_Tab_Group extends Tab_Group {
     }
 
     function get_html() {
-        $o = "<script type=\"text/javascript\">
+        global $ap_settings_page;
+        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+        $o = get_settings_fields('artpress_options');
+        $csi = $this->get_child(0);
+        $o .= $csi->get_html();
+        $o .= button_submit(__('Save'));
+        //$child_html = parent::get_html();
+        $child_tabs_html = '';
+        $links = '';
+        $tabs = '';
+
+        $id = $this->get_parentage_string();
+        $children = $this->get_children();
+
+        $count = 1;
+        if (null != $children) {
+            foreach($children as $child) {
+                if($child instanceof Tab) {
+                    $n = $count++;
+                    $child->set_html_id("{$id}-tabs-" . $n);
+                    //$link_attrs = ToolTips::get($child) . attr_class(get_class($this)) /*. attr_on_mouse_down("jQuery(this).mousedown(function() { alert('tab'); } );")*/;
+                    $links .= $child->get_link_html();//li( alink('#' . $child->get_html_id(), $child->get_display_name() ) , $link_attrs );
+                    $tabs  .= $child->get_html();
+                }
+            }
+        }
+
+        $ul = ul($links);
+        $script = "\n<script type='text/javascript'> jQuery( function() { jQuery( '#{$id}-tabs' ).tabs(); } ); </script>";
+
+        $o .= $script;
+        $o .= div($ul .
+                    $tabs,
+                    attr_id("{$id}-tabs")
+                   );
+        //return $o;
+        
+        //$o .= $child_html;
+        $form = form('post', 'options.php', $o, null, attr_id('ap_options_form'));
+        return $form;
+    }
+    static function script() {?><script type='text/javascript'>
         	changedEls = [];
         	successColor = '#AFA';
         	failColor    = '#FAA';
@@ -409,8 +525,6 @@ class Main_Tab_Group extends Tab_Group {
             jQuery(document).ready(function() {
                 // bind 'myForm' and provide a simple callback function
                 jQuery('#ap_options_form').ajaxForm(function() {
-                    //alert(\"Thank you for your comment!\");
-                    //$('#myElement').animate({backgroundColor: '#FF0000'}, 'slow');
                     for (i = 0; i < changedEls.length; i++) {
                     	el = changedEls[i];
                     	jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
@@ -442,15 +556,57 @@ class Main_Tab_Group extends Tab_Group {
     				sizeInputEl.style.background = failColor;
     			}
     		}
-        </script>";
-        $o .= get_settings_fields('artpress_options');
-        $csi = $this->get_child(0);
-        $o .= $csi->get_html();
-        $o .= button_submit(__('Save'));
-        $child_html = parent::get_html();
-        $o .= $child_html;
-        $form = form('post', 'options.php', $o, null, attr_id('ap_options_form'));
-        return $form;
+    		openAccordions = [];
+            function setOpenAccordion(tabName, accordionLink) { 
+                openAccordions[tabName] = accordionLink;
+        	}
+            function getOpenAccordion(tabName) {
+                var oa = openAccordions[tabName]  
+            	return oa;
+        	}
+    		function mainTabClick(tab) {
+    			updateDependents(getOpenAccordion());
+    		}
+    		function accordionClick(accordionLink) {
+        		var tabName = jQuery('.ui-tabs-selected').first().children().html();
+        		setOpenAccordion(tabName, accordionLink);
+        		updateDependents(accordionLink);
+    		}
+    		jQuery(document).ready(
+            	function() {
+                	//alert('about to bind to tabsselect');
+                	//'input[name*="man"]'
+                	jQuery('div[id="-tabs"]').bind(  'tabsshow', 
+                        	function(event, ui) { 
+                    			//alert('main  tab show');
+                    			// get the open accordion for this tab
+                    			var tabName = ui.tab.innerHTML;
+                    			var oa = getOpenAccordion(tabName);
+								// call updateDependents on the accordion
+								if (oa) {
+									updateDependents(oa);
+									}
+                    			});
+                	//jQuery('div[id$="__-tabs"]').bind('tabsselect', 
+                    //    	function(event, ui) {
+                    //			var mytui = ui.tab;
+                    //			var tp  = ui.panel;
+                    //			var ti  = ui.index; 
+                    //			alert('sub tabs select\ntui: ' + mytui + 
+                    //        			'\ntp: ' + tp +
+                    //        			'\nti: ' + ti);
+                    //			// get name of main tab
+                    //			var mainTabID = jQuery(tp).parent().parent().parent().parent().parent().attr('id');
+                    //
+                    //			// setOpenAccordion
+                    //			setOpenAccordion(mainTabID, mytui);
+                	//		});
+                	
+                	
+            		//jQuery('.sub-tab'        ).bind('tabsshow', function(){alert('showing sub tab' );});
+            		//jQuery('.ui-tabs-panel').bind('tabsshow', function(){alert('showing tab');});
+            	});
+        </script><?php
     }
 }
 /**
@@ -466,7 +622,7 @@ function get_setting_instances($hierarchy_obj, $unpack_composites, $settings_arr
     // and get all their names
     // instead of just returning the name of the CSS_Composite object
     else if( ( $hierarchy_obj instanceof Setting ) &&
-             !($hierarchy_obj instanceof IComposite) ) {
+    !($hierarchy_obj instanceof IComposite) ) {
         $name = $hierarchy_obj->get_name();
         $settings_array[$name] = $hierarchy_obj;
         return $settings_array;
@@ -479,6 +635,7 @@ function get_setting_instances($hierarchy_obj, $unpack_composites, $settings_arr
         }
         return $settings_array;
     }
+   
 }
 class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
     static private $css_selectors = array();
@@ -486,13 +643,7 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
     function __construct($css_selector, $display_name, $children=null) {
         $this->css_selector = $css_selector;
         if ( null == $children ) {
-            $children[] = new Tab_Group('sub tab group', array(
-                new Typography_Tab('typography'),
-                new Layout_Tab('layout'),
-                new Border_Tab('border'),
-                new Background_Image_Tab('background'),
-                new Effect_Tab('effects')
-            ));
+            $children[] = new Sub_Tab_Group('Sub Tab Group', null);
         }
         parent::__construct($display_name, $children);
         self::$css_selectors[] = $this;
@@ -529,22 +680,22 @@ class CSS_Selector extends Hierarchy implements Render_As_HTML, ICSS_Selector {
  * @param ICSS_Selector
  *
  * @example the input with selector ".link, a" may return an array that var_dumps:
-<pre>array(2) {
-  [0]=>
-  array(2) {
-    [0]=>
-    string(4) "body"
-    [1]=>
-    string(5) ".link"
-  }
-  [1]=>
-  array(2) {
-    [0]=>
-    string(4) "body"
-    [1]=>
-    string(1) "a"
-  }
-}</pre>
+ <pre>array(2) {
+ [0]=>
+ array(2) {
+ [0]=>
+ string(4) "body"
+ [1]=>
+ string(5) ".link"
+ }
+ [1]=>
+ array(2) {
+ [0]=>
+ string(4) "body"
+ [1]=>
+ string(1) "a"
+ }
+ }</pre>
  */
 function get_full_selector_array($icss_selector) {
 
@@ -602,26 +753,34 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
         parent::__construct($display_name, $children);
     }
     function get_html() {
-        $o = '<script>
-            jQuery(function() {
-                jQuery( "#' . $this->get_parentage_string() . '-accordion" ).accordion({
+        $the_class = get_class($this);
+        $parentage_string = $this->get_parentage_string();
+        $o = "\n<script type='text/javascript'>\n" .
+        /* The following functions are used to record which accordion is currently open.
+         * This is necessary as updates to the contents of accordions are normally performed
+         * only when clicking the accordion's title to open it.
+         * However if the accordion is already open and its contents visible
+         * we need to ensure they're still updated */
+        "jQuery(function() {
+                jQuery( \"#{$parentage_string}-accordion\" ).accordion({
                     autoHeight: false,
                     collapsible: true,
                      active: false,
                     });
             });
-	    </script>';
+	    </script>";
         $o .= ot('div', attr_id($this->get_parentage_string() . '-accordion'));
 
         $children = $this->get_children();
         foreach ($children as $child) {
             $child_name = $child->get_display_name();
-
-            $link = h4( alink('#', $child_name), ToolTips::get($child) . attr_on_click("updateDependents(this);"));
+            $onclick = attr_on_click("accordionClick(this)");
+            $link = h4( alink('#', $child_name), ToolTips::get($child) . $onclick
+            );
             $child_html = $child->get_html();
             $o .= $link;
             $o .= div(
-                $child_html
+            $child_html
             );
         }
         $o .= ct('div');
@@ -743,7 +902,7 @@ class Current_Save_ID extends Setting {
         $name = $this->get_name();
         $o .= label($name, 'Save configuration as');
         $attrs =  attr_id($name) .
-                    attr_value($this->get_value());
+        attr_value($this->get_value());
         $o .= input('text',  attr_name("ap_options[{$name}]") . $attrs);
         //$o = p($o);
         return $o;
@@ -763,8 +922,8 @@ abstract class Toggle extends Setting {
         $value = $this->get_value();
         $html = '';
         $html =
-                input('hidden', $html_name . attr_value('0')) .
-                input('checkbox', $html_name . attr_value($value) . attr_checked($value));
+        input('hidden', $html_name . attr_value('0')) .
+        input('checkbox', $html_name . attr_value($value) . attr_checked($value));
         return $html;
     }
     function validate($value) {
@@ -798,8 +957,8 @@ abstract class Toggle_Group extends Setting implements IComposite {
         $value = $this->get_value();
         $html = '';
         $html =
-                input('hidden', $html_name . attr_value('0')) .
-                input('checkbox', $html_name . attr_value($value) . attr_checked($value));
+        input('hidden', $html_name . attr_value('0')) .
+        input('checkbox', $html_name . attr_value($value) . attr_checked($value));
         $children = parent::get_children();
         if ( null != $children ) {
             foreach($children as $child) {
@@ -917,10 +1076,10 @@ abstract class CSS_Composite extends CSS_Setting implements IComposite {
     }
 }
 function get_text_input_html($setting, $attributes='') {
-        $html_name = $setting->get_html_name();
-        $value = attr_value($setting->get_value());
-        $i = input('text', ToolTips::get($setting) . $html_name . $value . $attributes);
-        return $i;
+    $html_name = $setting->get_html_name();
+    $value = attr_value($setting->get_value());
+    $i = input('text', ToolTips::get($setting) . $html_name . $value . $attributes);
+    return $i;
 }
 function get_size_text_input_html($setting, $attributes=''){
     return get_text_input_html($setting, $attributes . attr_class('size') .
@@ -947,7 +1106,7 @@ abstract class Setting_Size_Text_Input extends Setting_Text {
         parent::__construct($name, $display_name, $value);
     }
     function validate($value) {
-         return is_valid_size_string($value);
+        return is_valid_size_string($value);
     }
     function get_html($attributes='') {
         return get_size_text_input_html($this, $attributes);
@@ -958,7 +1117,7 @@ abstract class CSS_Size_Text_Input extends CSS_Text_Input {
         parent::__construct($css_property, $display_name, $value);
     }
     function validate($value) {
-         return is_valid_size_string($value);
+        return is_valid_size_string($value);
     }
     function get_html($attributes='') {
         return get_size_text_input_html($this, $attributes='');
@@ -983,11 +1142,11 @@ abstract class CSS_Vertical_Position_Text_Input extends CSS_Size_Text_Input {
     }
 
     function validate($value) {
-         if(parent::validate($value) || in_array($value, array('top', 'center', 'bottom'))) {
-             return true;
-         } else {
-             return false;
-         }
+        if(parent::validate($value) || in_array($value, array('top', 'center', 'bottom'))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 function dropdown_get_options_html($dropdown) {
@@ -1020,15 +1179,15 @@ function dropdown_get_options_html($dropdown) {
         //. $content
         //. ct( 'option' );
         $html_options .= ot('option',
-                        attr_selected( ((string)$opt == $dropdown->get_value()) ? true : false ) .
-                        attr_value((string)$opt));
+        attr_selected( ((string)$opt == $dropdown->get_value()) ? true : false ) .
+        attr_value((string)$opt));
         if($content && ($dropdown instanceof ISetting_Depends_On_Global_Setting) ) {
-            $html_options .= $i++ . '&nbsp; &nbsp; ';
+            $html_options .= $i++ . '&nbsp;&nbsp;&nbsp;';
         }
         $html_options .= $content;
-        $html_options .= ct('option');
+        $html_options .= ct('option') . "\n";
     }
-    if ($is_optgroup) $html_options .= ct('optgroup');
+    if ($is_optgroup) $html_options .= ct('optgroup') . "\n";
     return $html_options;
 }
 function get_select_html($dropdown, $attributes='') {
@@ -1090,10 +1249,10 @@ abstract class CSS_Dropdown_Input extends CSS_Setting {
     }
 
     function get_css_value() {
-       $value = $this->get_value();
-       $options = $this->get_opts();
-       return $options[$value];
-   }
+        $value = $this->get_value();
+        $options = $this->get_opts();
+        return $options[$value];
+    }
 }
 
 abstract class Setting_Number extends Setting {
@@ -1101,7 +1260,7 @@ abstract class Setting_Number extends Setting {
         parent::__construct($name, $display_name, $value);
     }
     function validate($value) {
-         return is_numeric($value);
+        return is_numeric($value);
     }
     function get_html($attributes='') {
         $input = input('text', $this->get_html_name() . attr_value($this->get_value()) . $attributes);
