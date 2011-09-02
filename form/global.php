@@ -73,29 +73,6 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
                }
            }
       }
-       //function updateDependentsOf_<?php echo __CLASS__ ?>() {
-        //
-        //   var options = getGlobalColorOptions();
-        //
-        //   // inject the options into the dependent selects
-        //   var deps = dependentsOf_<?php echo __CLASS__ ?>;
-        //   var depsSize = deps.length;
-        //   for ( i = 0; i < depsSize; i++ ) {
-        //      var val = deps[i];
-        //      // get a hold of the select
-        //      var selectString = 'select[name="ap_options[cs][' + val + ']"]';
-        //      var select = jQuery(selectString);
-        //
-        //      // find out what option it is currently selected
-        //      var cur = select.find('option[selected]').val();
-        //
-        //      // replace the existing options with the new options
-        //      select.html(options);
-        //
-        //      // set the selected value
-        //      select.val(cur);
-        //   }
-        //}
 
        // farbtastic
         jQuery(document).ready(function() {
@@ -168,47 +145,45 @@ class Global_Font_Group extends Option_Group {
     }
 
     static function script() { ?><script type='text/javascript'>
-       function updateSectionFontFamilies(section) {
+        function updateSectionFontFamilies(section) {
 
            // get the global fonts
            var fonts = jQuery('.globalFont');
 
            // create the new options
-
-           var spaces = "\u00A0\u00A0\u00A0";
-           // add the null option to the array
-           var options = new Option('', 0).outerHTML;
-           for ( i = 0; i < fonts.size(); i++ ) {
-              var num = fonts[i].value;
-              var selectString = "option[value='" + num + "']";
-              var optHTMLVal = i + spaces + jQuery(fonts[i]).find(selectString).html();
-              var opt = new Option(optHTMLVal, i);
-              options += opt.outerHTML;
-           }
-
-         // decide if update needs to happen
-            // get ahold of one section font
-           var sectionDiv = section.nextSibling;
-            // get all section fonts
-           var section_fonts = jQuery(sectionDiv).find('.section_font');
-
-           // compare the global font options with a section font's options
-           // to see if they are consistent
-           var first= section_fonts[0];
-           if (options != first.innerHTML) {
-               for (var i = 0; i < section_fonts.length; i++) {
-                   var sf = section_fonts[i];
-                    // store currently selected option
-                   var select_value = sf.value;
-
-                    // replace options
-                    sf.innerHTML = options;
-
-                    // reset selected option
-                    sf.value = select_value;
+               var spaces = "\u00A0\u00A0\u00A0";
+               // add the null option to the array
+               var options = new Option('', 0).outerHTML;
+               for ( i = 0; i < fonts.size(); i++ ) {
+                  var num = fonts[i].value;
+                  var selectString = "option[value='" + num + "']";
+                  var optHTMLVal = i + spaces + jQuery(fonts[i]).find(selectString).html();
+                  var opt = new Option(optHTMLVal, i);
+                  options += opt.outerHTML;
                }
-           }
-          }
+
+            // decide if update needs to happen
+                var sectionDiv = section.nextSibling;
+                // get all section fonts
+                var section_fonts = jQuery(sectionDiv).find('.section_font');
+
+                // compare the global font options with a section font's options
+                // to see if they are consistent
+                var first= section_fonts[0];
+                if (options != first.innerHTML) {
+                   for (var i = 0; i < section_fonts.length; i++) {
+                       var sf = section_fonts[i];
+                        // store currently selected option
+                       var select_value = sf.value;
+
+                        // replace options
+                        sf.innerHTML = options;
+
+                        // reset selected option
+                        sf.value = select_value;
+					}
+                }
+			}
         </script><?php
     }
 }
@@ -261,49 +236,53 @@ class Global_Font_Size_Group extends Option_Group {
         $size = Global_Font_Size_Ratio::$size;
         $end = $start + $size;
         ?><script type='text/javascript'>
-//function updateDependentsOf_<?php echo __CLASS__ ; ?>() {
-//   <?php echo $ratio_arr ?>
-//
-//   // get the global font size
-//   var fontSize = jQuery('.globalFontSize')[0].value;
-//
-//   // get the global font size ratio
-//   var fontSizeRatio = jQuery('.globalFontSizeRatio option:selected')[0].value;
-//   var ratio = ratioArr[fontSizeRatio];
-//
-//   // calculate the new font sizes and create the new html options
-//   var options = [''];
-//    for(i = <?php echo $start ?>; i < <?php echo $end ?>; i++) {
-//        options.push( Math.round(fontSize * Math.pow(ratio, i)) + 'px' );
-//    }
-//
-//   // create the new HTML options
-//   var optionsHTML = new Option('', 0).outerHTML;
-//   for (var i = 1; i < options.length; i++ ) {
-//      var opt = new Option(options[i], i);
-//      optionsHTML += opt.outerHTML;
-//   }
-//
-//   // inject the options into the dependent selects
-//   var deps = dependentsOf_<?php echo __CLASS__ ?>;
-//   var depsSize = deps.length;
-//   for ( i = 0; i < depsSize; i++ ) {
-//      var val = deps[i];
-//      // get a hold of the select
-//      var selectString = 'select[name="ap_options[cs][' + val + ']"]';
-//      var select = jQuery(selectString);
-//
-//      // find out what option it is currently selected
-//      var cur = select.find('option[selected]').val();
-//
-//      // replace the existing options with the new options
-//      select.html(optionsHTML);
-//
-//      // set the selected value
-//      select.val(cur);
-//   }
-//}
-</script><?php
+            function updateSectionFontSizes(section) {
+               <?php echo $ratio_arr ?>
+
+               // get the global font size
+               var fontSize = jQuery('.globalFontSize')[0].value;
+
+               // get the global font size ratio
+               var fontSizeRatio = jQuery('.globalFontSizeRatio option:selected')[0].value;
+               var ratio = ratioArr[fontSizeRatio];
+
+               // calculate the new font sizes and create the new html options
+               var options = [''];
+                for(i = <?php echo $start ?>; i < <?php echo $end ?>; i++) {
+                    options.push( Math.round(fontSize * Math.pow(ratio, i)) + 'px' );
+                }
+
+               // create the new HTML options
+               var optionsHTML = new Option('', 0).outerHTML;
+               for (var i = 1; i < options.length - 1; i++ ) {
+                  var opt = new Option(options[i], i);
+                  optionsHTML += opt.outerHTML;
+               }
+
+               // inject the options into the dependent selects
+                // get all section fonts
+                var sectionDiv = section.nextSibling;
+                var section_font_sizes = jQuery(sectionDiv).find('.section_font_size');
+
+                // compare the global font options with a section font's options
+                // to see if they are consistent
+                var first= section_font_sizes[0];
+                if (optionsHTML != first.innerHTML) {
+                   for (var i = 0; i < section_font_sizes.length; i++) {
+                       var sfs = section_font_sizes[i];
+                        // store currently selected option
+                       var select_value = sfs.value;
+
+                        // replace options
+                        sfs.innerHTML = optionsHTML;
+
+                        // reset selected option
+                        sfs.value = select_value;
+					}
+                }
+
+            }
+		</script><?php
     }
 }
 class Global_Settings extends Main_Tab  {
@@ -358,6 +337,7 @@ function updateDependents(section) {
         updateSectionFontFamilies(section);
 
         // update font sizes
+        updateSectionFontSizes(section);
    }
    return;
 }</script><?php

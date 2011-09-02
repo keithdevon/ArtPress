@@ -119,6 +119,9 @@ class Section_Font_Size extends CSS_Dropdown_Input {
             return $decs;
         } else return '';
     }
+    function get_html() {
+        return parent::get_html(attr_class('section_font_size'));
+    }
 }
 $font_family_options = array('',
                             array('Arial, “Helvetica Neue”, Helvetica, sans-serif','paragraph or title fonts'),
