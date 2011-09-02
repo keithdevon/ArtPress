@@ -565,7 +565,10 @@ class Main_Tab_Group extends Tab_Group {
             	return oa;
         	}
     		function mainTabClick(tab) {
-    			updateDependents(getOpenAccordion());
+    			var oa = getOpenAccordion();
+    			if (oa) {
+        			updateDependents();
+    			}
     		}
     		function accordionClick(accordionLink) {
         		var tabName = jQuery('.ui-tabs-selected').first().children().html();

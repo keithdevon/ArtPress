@@ -198,7 +198,7 @@ class Section_Font extends CSS_Dropdown_Input implements ISetting_Depends_On_Glo
         return Global_Font_Family::get_global_font_family_options();
     }
     function get_html() {
-        return parent::get_html();
+        return parent::get_html(attr_class('section_font'));
     }
 }
 $font_style_options = array('', 'normal', 'italic', 'oblique');
