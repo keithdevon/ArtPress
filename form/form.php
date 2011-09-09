@@ -511,24 +511,29 @@ class Main_Tab_Group extends Tab_Group {
                     $tabs,
                     attr_id("{$id}-tabs")
                    );
-        //return $o;
-        
-        //$o .= $child_html;
+
         $form = form('post', 'options.php', $o, null, attr_id('ap_options_form'));
         return $form;
     }
     static function script() {?><script type='text/javascript'>
         	changedEls = [];
         	successColor = '#AFA';
+        	waitingColor = '#FF9';
         	failColor    = '#FAA';
             // wait for the DOM to be loaded
             jQuery(document).ready(function() {
                 // bind 'myForm' and provide a simple callback function
+                jQuery('#current-save-id').next().click(function(){ 
+                    jQuery(this).prev().css('background-color', waitingColor); 
+                    });
+
                 jQuery('#ap_options_form').ajaxForm(function() {
                     for (i = 0; i < changedEls.length; i++) {
                     	el = changedEls[i];
                     	jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
                    	}
+                   	// make save name flash green
+                    jQuery('#current-save-id').css('background-color', successColor).animate({'background-color': '#FFF'}, 'slow');
                 });
             });
             function trimWhiteSpace(str) {
@@ -578,11 +583,8 @@ class Main_Tab_Group extends Tab_Group {
     		}
     		jQuery(document).ready(
             	function() {
-                	//alert('about to bind to tabsselect');
-                	//'input[name*="man"]'
                 	jQuery('div[id="-tabs"]').bind(  'tabsshow', 
                         	function(event, ui) { 
-                    			//alert('main  tab show');
                     			// get the open accordion for this tab
                     			var tabName = ui.tab.innerHTML;
                     			var oa = getOpenAccordion(tabName);
@@ -591,24 +593,6 @@ class Main_Tab_Group extends Tab_Group {
 									updateDependents(oa);
 									}
                     			});
-                	//jQuery('div[id$="__-tabs"]').bind('tabsselect', 
-                    //    	function(event, ui) {
-                    //			var mytui = ui.tab;
-                    //			var tp  = ui.panel;
-                    //			var ti  = ui.index; 
-                    //			alert('sub tabs select\ntui: ' + mytui + 
-                    //        			'\ntp: ' + tp +
-                    //        			'\nti: ' + ti);
-                    //			// get name of main tab
-                    //			var mainTabID = jQuery(tp).parent().parent().parent().parent().parent().attr('id');
-                    //
-                    //			// setOpenAccordion
-                    //			setOpenAccordion(mainTabID, mytui);
-                	//		});
-                	
-                	
-            		//jQuery('.sub-tab'        ).bind('tabsshow', function(){alert('showing sub tab' );});
-            		//jQuery('.ui-tabs-panel').bind('tabsshow', function(){alert('showing tab');});
             	});
         </script><?php
     }
