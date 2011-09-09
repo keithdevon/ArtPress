@@ -554,6 +554,7 @@ class Main_Tab_Group extends Tab_Group {
     			} else {
     				//this.css('background', 'red');
     				sizeInputEl.style.background = failColor;
+    				sizeInputEl.value = '';
     			}
     		}
     		openAccordions = [];
