@@ -756,12 +756,6 @@ add_shortcode('gallery', 'ht_gallery_shortcode');
 /**
  * The Gallery shortcode.
  *
- * This overwrites the core WP gallery shortcode and spits out all the images in rows and columns. Yum!
- *
- * @since 2.5.0
- *
- * @param array $attr Attributes attributed to the shortcode.
- * @return string HTML content to display gallery.
  */
 function ht_gallery_shortcode($attr) {
 	global $post, $wp_locale;
