@@ -889,10 +889,10 @@ class Current_Save_ID extends Setting {
         $o = '';
         $name = $this->get_name();
         $o .= label($name, 'Save configuration as');
-        $attrs =  attr_id($name) .
-        attr_value($this->get_value());
+        $attrs =    attr_id($name) .
+                    attr_value($this->get_value()) .
+                    attr_size(35);
         $o .= input('text',  attr_name("ap_options[{$name}]") . $attrs);
-        //$o = p($o);
         return $o;
     }
     function validate($value) {
