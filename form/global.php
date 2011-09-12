@@ -66,7 +66,7 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
                     // replace options
                     sc.innerHTML = colors;
                    if( jQuery(sc).hasClass('section_background_color') ) {
-                  sc.innerHTML += new Option(i + '\u00A0\u00A0\u00A0transparent', colors.length).outerHTML;
+                  sc.innerHTML += outerHTML(new Option(i + '\u00A0\u00A0\u00A0transparent', colors.length));
                    }
                     // reset selected option
                     sc.value = select_value;
@@ -153,13 +153,13 @@ class Global_Font_Group extends Option_Group {
            // create the new options
                var spaces = "\u00A0\u00A0\u00A0";
                // add the null option to the array
-               var options = new Option('', 0).outerHTML;
+               var options = outerHTML(new Option('', 0));
                for ( i = 0; i < fonts.size(); i++ ) {
                   var num = fonts[i].value;
                   var selectString = "option[value='" + num + "']";
                   var optHTMLVal = i + spaces + jQuery(fonts[i]).find(selectString).html();
                   var opt = new Option(optHTMLVal, i);
-                  options += opt.outerHTML;
+                  options += outerHTML(opt);
                }
 
             // decide if update needs to happen
@@ -253,10 +253,10 @@ class Global_Font_Size_Group extends Option_Group {
                 }
 
                // create the new HTML options
-               var optionsHTML = new Option('', 0).outerHTML;
+               var optionsHTML = outerHTML(new Option('', 0));
                for (var i = 1; i < options.length - 1; i++ ) {
                   var opt = new Option(options[i], i);
-                  optionsHTML += opt.outerHTML;
+                  optionsHTML += outerHTML(opt);
                }
 
                // inject the options into the dependent selects
@@ -315,32 +315,35 @@ class Global_Settings extends Main_Tab  {
     }
     static function script() {
         ?><script type='text/javascript'>
-function getGlobalOptionsHTML(globalOptions) {
-   // add the null option to the array
-   globalOptions.splice(0,0,'');
-
-   // create the new options
-   var spaces = "\u00A0\u00A0\u00A0";
-   var options = [new Option('', 0).outerHTML];
-   for ( i = 1; i < globalOptions.size(); i++ ) {
-      var val = globalOptions[i].value;
-      var opt = new Option(i + spaces + val, i);
-      options.push(opt.outerHTML);
-   }
-   return options;
-}
-function updateDependents(section) {
-   if(section) {
-       updateSectionColors(section);
-
-        // update font families
-        updateSectionFontFamilies(section);
-
-        // update font sizes
-        updateSectionFontSizes(section);
-   }
-   return;
-}</script><?php
+        function outerHTML(node){
+            return node.outerHTML || new XMLSerializer().serializeToString(node);
+        }
+        function getGlobalOptionsHTML(globalOptions) {
+           // add the null option to the array
+           globalOptions.splice(0,0,'');
+        
+           // create the new options
+           var spaces = "\u00A0\u00A0\u00A0";
+           var options = [outerHTML(new Option('', 0))];
+           for ( i = 1; i < globalOptions.size(); i++ ) {
+              var val = globalOptions[i].value;
+              var opt = new Option(i + spaces + val, i);
+              options.push(outerHTML(opt));
+           }
+           return options;
+        }
+        function updateDependents(section) {
+           if(section) {
+               updateSectionColors(section);
+        
+                // update font families
+                updateSectionFontFamilies(section);
+        
+                // update font sizes
+                updateSectionFontSizes(section);
+           }
+           return;
+        }</script><?php
     }
 }
 
