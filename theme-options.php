@@ -403,7 +403,8 @@ function ap_options_validate( $new_settings ) {
 
         return $options;
     }
-    if( $options == null) $options = get_ap_options_defaults(); // if options have never been set before create some default options
+    // if options have never been set before create some default options
+    if( $options == null) $options = get_ap_options_defaults(); 
 
     $previous_save = $options['saves'][$options['current-save-id']];
     if ($new_settings == null ) {
@@ -435,8 +436,6 @@ function ap_options_validate( $new_settings ) {
 
     return $options;
 }
-
-
 class CSS_Setting_Visitor implements Visitor {
     function recurse($hierarchy) {
         return $hierarchy->has_children();
