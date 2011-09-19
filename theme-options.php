@@ -21,6 +21,7 @@ require_once $dir . 'form/typography.php';
 require_once $dir . 'form/layout.php';
 require_once $dir . 'form/effect.php';
 require_once $dir . 'form/background-image.php';
+require_once $dir . 'form/default-configurations.php';
 
 add_action( 'admin_init', 'artpress_options_load_scripts' );
 add_action( 'admin_init', 'artpress_theme_init' );
@@ -221,6 +222,30 @@ function ap_settings_page() {
     echo $maintabgroup->get_html();
     echo ct('div');
 }
+function create_config_form($options, $flag, $setting_name, $setting_label, $submit_button_text) {
+    $o = '<form method="post" action="options.php">';
+    $o .= get_settings_fields('artpress_options');
+    $o .= input('hidden', attr_name("ap_options[{$flag}]") . attr_value('true') );
+    if( $options && isset($options['saves'])) {
+        $opts = '';
+        foreach (array_keys($options['defaults']) as $default_name) {
+            $opts .= option($default_name, $default_name);
+        }
+        $optgroups = optgroup('default configurations', $opts);
+        $opts = '';
+        foreach (array_keys($options['saves']) as $save_name) {
+            if($save_name != $options[$setting_name])
+                $opts .= option($save_name, $save_name);
+        }
+        $optgroups .= optgroup('user configurations', $opts);
+        $o .=  tr(td($setting_label)
+                . td(select("ap_options[{$setting_name}]", $optgroups) )
+                . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( $submit_button_text ) . "' /></span>")
+                );
+    }
+    $o .= ct('form');
+    return $o;
+}
 
 function ap_configs_page() {
     $options = get_option('ap_options');
@@ -233,42 +258,11 @@ function ap_configs_page() {
     $o .= tr( td(label( 'current-save-id', __('current editable configuration') ) ) .
               td(input( 'text', attr_readonly() . attr_value( $options['current-save-id'] ) ) ) );
 
+    // create 'live configuration' selector
+    $o .= create_config_form($options, 'change_live-id', 'live-id', 'new live configuration', 'live');
 
-    // select live configuration
-    $o .= '<form method="post" action="options.php">';
-    $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name('ap_options[change_live-id]') . attr_value('true') );
-    if( $options && isset($options['saves'])) {
-        $opts = '';
-        foreach (array_keys($options['saves']) as $save_name) {
-            if($save_name != $options['live-id'])
-                $opts .= option($save_name, $save_name);
-        }
-        $o .=  tr(td('new live configuration')
-                . td(select("ap_options[live-id]", $opts) )
-                . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'live' ) . "' /></span>")
-                );
-    }
-    $o .= ct('form');
-
-
-    // select a configuration to edit
-    $o .= '<form method="post" action="options.php">';
-    $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name('ap_options[change_current-save-id]') . attr_value('true') );
-    if( $options && isset($options['saves'])) {
-        $opts = '';
-        foreach (array_keys($options['saves']) as $save_name) {
-            if($save_name != $options['current-save-id'])
-                $opts .= option($save_name, $save_name);
-        }
-        $o .=  tr(td('new configuration to edit')
-                . td(select("ap_options[current-save-id]", $opts) )
-                . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'edit' ) . "' /></span>")
-                );
-    }
-    $o .= ct('form');
-
+    // create 'configuration to edit' selector
+    $o .= create_config_form($options, 'change_current-save-id', 'current-save-id', 'configuration to edit', 'edit');
 
     // delete a configuration
     $o .= '<form method="post" action="options.php">';
@@ -277,7 +271,6 @@ function ap_configs_page() {
     if( $options && isset($options['saves'])) {
        $opts = '';
        foreach (array_keys($options['saves']) as $save_name) {
-           if($save_name != 'default')
                $opts .= option($save_name, $save_name);
        }
        $o .=  tr(td('delete configuration')
@@ -313,6 +306,8 @@ function ap_configs_page() {
  * Creates a valid options array of stub, empty values for ap_options
  * */
 function get_ap_options_defaults() {
+    global $ap_configuration_defaults;
+    
     $options = array( 'cs'=>array() );
 
     $options['saves'] = array();
@@ -320,7 +315,8 @@ function get_ap_options_defaults() {
     $options['live-id'] = 'default';
     $options['saves'][$options['current-save-id']] = $options['cs'];
 
-    $options['defaults'] = array();
+    $options['defaults'] = $ap_configuration_defaults;
+
     return $options;
 }
 /**

@@ -1,10 +1,9 @@
 <?php
 
 /** Generic HTML generating functions */
-/* Generic HTML attribute functions */
 function attribute($name, $value) {
     if ( $value == '' ) return null;
-    else return ' ' . $name . '="' . $value . '"'; // TODO sanitise $value with esc_attr
+    else return ' ' . $name . '="' . $value . '"';
 }
 function attr_action        ($value) { return attribute('action',      $value);     }
 function attr_alt           ($value) { return attribute('alt',         $value);     }

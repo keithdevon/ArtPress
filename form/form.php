@@ -72,12 +72,12 @@ function get_html_dependents($setting) {
         //$o .= input('hidden', attr_class($setting->get_name()'') . attr_value($dep->get_name()));
         $name = $dep->get_name();
         $arr .= "'${name}',";
-}
-//$size = count($arr);
-$names  = substr($arr, 0, strlen($arr) -1);
-
-$o .= "{$names});</script>";
-return $o;
+    }
+    //$size = count($arr);
+    $names  = substr($arr, 0, strlen($arr) -1);
+    
+    $o .= "{$names});</script>";
+    return $o;
 }
 //class Attributes {
 //    private $attributes;
