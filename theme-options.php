@@ -70,17 +70,38 @@ $ap_settings_page = null;
  * Load up the menu page
  */
 function theme_options_add_page() {
+
     // set up main settings page
     global $ap_settings_page;
-    $ap_settings_page = add_menu_page( __( 'ArtPress Options' ), __( 'Artpress' ),     'edit_theme_options', 'artpress',              'ap_settings_page', '', 0 );
-
-    //add_action( 'admin_footer-'. $ap_settings_page, 'myplugin_admin_footer' );
+    $ap_settings_page = add_menu_page( 
+        __( 'ArtPress Options' ),    // page title
+        __( 'Artpress' ),            // menu title
+        'edit_theme_options',        // capability
+        'artpress',                  // menu slug                      
+        'ap_settings_page',          // page rendering function
+        '',                          // icon URL
+        0                            // menu position
+        );
 
     // set up configurations page
-    add_submenu_page('artpress', __('Configurations'),     __('Configurations'), 'edit_theme_options', 'manage_configurations', 'ap_configs_page');
+    add_submenu_page(
+    	'artpress',                  // parent slug
+        __('Configurations'),        // page title  
+        __('Configurations'),        // menu title
+        'edit_theme_options',        // capability
+        'manage_configurations',     // menu slug
+        'ap_configs_page'            // page rendering function
+        );
 
     // set up images page
-    add_submenu_page('artpress', __('Images'),             __('Images'),         'edit_theme_options', 'manage_images',         'ap_image_upload_page');
+    add_submenu_page(
+    	'artpress',                  // parent slug            
+        __('Images'),                // page title             
+        __('Images'),                // menu title             
+        'edit_theme_options',        // capability             
+        'manage_images',             // menu slug              
+        'ap_image_upload_page'       // page rendering function
+        );
 }
 
 
