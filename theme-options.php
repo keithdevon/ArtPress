@@ -123,19 +123,17 @@ function theme_options_add_page() {
         );
 }
 
-
 /**
  * HACK ALERT! creating my own 'settings_fields' that doesn't echo but returns its contents.
  * Seems to work pretty well though!
  * */
 function get_settings_fields($option_group) {
-    //$o =  "<input type='hidden' name='option_page' value='" . esc_attr($option_group) . "' />";
     $o = input('hidden', attr_name('option_page') . attr_value(esc_attr($option_group)));
-    //$o .= '<input type="hidden" name="action" value="update" />';
     $o = input('hidden', attr_name('action') . attr_value('update'));
 	$o .= wp_nonce_field("$option_group-options", "_wpnonce", true, false);
 	return $o;
 }
+
 function ap_settings_page() {
     if ( ! isset( $_REQUEST['updated'] ) )
         $_REQUEST['updated'] = false;
@@ -144,12 +142,6 @@ function ap_settings_page() {
     screen_icon();
     echo ot('div', attr_class('wrap'));
     echo h2( get_current_theme() . __( ' Options' ) ); // TODO source of why k & j see differenet stuff
-    if ( false !== $_REQUEST['updated'] ) : ?>
-        <div class="updated fade"><p><strong><?php _e( 'Options saved' ); ?></strong></p></div>
-    <?php endif;
-    //if ( ! isset( $_REQUEST['updated'] ) ) $_REQUEST['updated'] = false;
-    //if ( false !== $_REQUEST['updated'] ) echo div( p(_e( 'Options saved' )), attr_class('updated fade') );
-
 
     $configuration = new Configuration('main tab group');
     $options = get_option('ap_options');
