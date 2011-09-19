@@ -245,29 +245,19 @@ function init_ap_options() {
     }
 
 }
-/**
- * @var new_settings will either be what is passed to update_option
- * or what is returned from the options form
- *
- * we need to merge the new settings with the old settings.
- * if we were to populate our new form using only the new settings
- * provided by the client's browser, then checkboxes would disappear
- * as no record of unticked checkboxes are returned to the server
- *
- * Call scenarios:
- * 1st time (return from form):
- * 	- nothing in db, get_option will return null
- *  - values in $new_setting will be returned
- *
- * 2nd time (validation before save?)
- *  - still nothing in db, get_option will return null
- *  - new_settings contains everything previously set
- *
+/** 
+ * This function handles macro changes to the configurations ie
+ * - creating a new configuration
+ * - choosing a new live configuration
+ * - choosing which configuration to edit
+ * - deleting a configuration
+ * 
+ * If none of these operations have been requested, the function returns false.
  * */
-function ap_options_validate( $new_settings ) {
-
+function handle_configuration_management_options($new_settings) {
+    
     $options = get_option('ap_options');
-
+    
     if( isset($new_settings['change_current-save-id'] ) ) {
         $options['current-save-id'] = $new_settings['current-save-id'];
         return $options;
@@ -297,6 +287,33 @@ function ap_options_validate( $new_settings ) {
 
         return $options;
     }
+    return false;
+}
+/**
+ * @var new_settings will either be what is passed to update_option
+ * or what is returned from the options form
+ *
+ * we need to merge the new settings with the old settings.
+ * if we were to populate our new form using only the new settings
+ * provided by the client's browser, then checkboxes would disappear
+ * as no record of unticked checkboxes are returned to the server
+ *
+ * Call scenarios:
+ * 1st time (return from form):
+ * 	- nothing in db, get_option will return null
+ *  - values in $new_setting will be returned
+ *
+ * 2nd time (validation before save?)
+ *  - still nothing in db, get_option will return null
+ *  - new_settings contains everything previously set
+ *
+ * */
+function ap_options_validate( $new_settings ) {
+
+    $options = get_option('ap_options');
+
+    if($options = handle_configuration_management_options($new_settings)) return $options;
+    
     // if options have never been set before create some default options
     if( $options == null) $options = get_ap_options_defaults(); 
 
