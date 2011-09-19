@@ -129,8 +129,10 @@ function theme_options_add_page() {
  * Seems to work pretty well though!
  * */
 function get_settings_fields($option_group) {
-    $o =  "<input type='hidden' name='option_page' value='" . esc_attr($option_group) . "' />";
-    $o .= '<input type="hidden" name="action" value="update" />';
+    //$o =  "<input type='hidden' name='option_page' value='" . esc_attr($option_group) . "' />";
+    $o = input('hidden', attr_name('option_page') . attr_value(esc_attr($option_group)));
+    //$o .= '<input type="hidden" name="action" value="update" />';
+    $o = input('hidden', attr_name('action') . attr_value('update'));
 	$o .= wp_nonce_field("$option_group-options", "_wpnonce", true, false);
 	return $o;
 }
