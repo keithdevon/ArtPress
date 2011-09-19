@@ -103,8 +103,8 @@ class Current_Save_ID extends Setting {
     }
     function validate($value) {
         $options = get_option('ap_options');
-        $saves = array_keys($options['saves']);
-        return in_array($value, $saves);
+        $configurations = array_keys($options['configurations']);
+        return in_array($value, $configurations);
     }
 }
 abstract class Toggle extends Setting {

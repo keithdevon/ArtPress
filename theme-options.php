@@ -112,9 +112,9 @@ function ap_settings_page() {
     $configuration = new Configuration('main tab group');
     $options = get_option('ap_options');
     if ($options != null) {
-        if (isset($options['saves'][$options['current-save-id']])) {
+        if (isset($options['configurations'][$options['current-save-id']])) {
             $configuration->inject_values(array_merge(array('current-save-id'=>$options['current-save-id']),
-                                                     $options['saves'][$options['current-save-id']]));
+                                                     $options['configurations'][$options['current-save-id']]));
             }
     }
     echo $configuration->get_html();
@@ -124,14 +124,14 @@ function create_config_form($options, $flag, $setting_name, $setting_label, $sub
     $o = '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
     $o .= input('hidden', attr_name("ap_options[{$flag}]") . attr_value('true') );
-    if( $options && isset($options['saves'])) {
+    if( $options && isset($options['configurations'])) {
         $opts = '';
         foreach (array_keys($options['defaults']) as $default_name) {
             $opts .= option($default_name, $default_name);
         }
         $optgroups = optgroup('default configurations', $opts);
         $opts = '';
-        foreach (array_keys($options['saves']) as $save_name) {
+        foreach (array_keys($options['configurations']) as $save_name) {
             if($save_name != $options[$setting_name])
                 $opts .= option($save_name, $save_name);
         }
@@ -166,9 +166,9 @@ function ap_configs_page() {
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
     $o .= input('hidden', attr_name('ap_options[delete_configuration]') . attr_value('true') );
-    if( $options && isset($options['saves'])) {
+    if( $options && isset($options['configurations'])) {
        $opts = '';
-       foreach (array_keys($options['saves']) as $save_name) {
+       foreach (array_keys($options['configurations']) as $save_name) {
                $opts .= option($save_name, $save_name);
        }
        $o .=  tr(td('delete configuration')
@@ -208,10 +208,10 @@ function get_ap_options_defaults() {
     
     $options = array( 'cs'=>array() );
 
-    $options['saves'] = array();
+    $options['configurations'] = array();
     $options['current-save-id'] = 'default';
     $options['live-id'] = 'default';
-    $options['saves'][$options['current-save-id']] = $options['cs'];
+    $options['configurations'][$options['current-save-id']] = $options['cs'];
 
     $options['defaults'] = $ap_configuration_defaults;
 
@@ -269,14 +269,14 @@ function handle_configuration_management_options($new_settings) {
     if( isset($new_settings['create_new_configuration'] ) ) {
         $new_config_name = $new_settings['current-save-id'];
         $options['current-save-id'] = $new_config_name;
-        $options['saves'][$options['current-save-id']] = array();
+        $options['configurations'][$options['current-save-id']] = array();
         return $options;
     }
     if( isset( $new_settings['delete_configuration'] ) ) {
         $dead_save = $new_settings['delete-id'];
-        unset($options['saves'][$dead_save]);
+        unset($options['configurations'][$dead_save]);
         unset($options['css'][$dead_save]);
-        $first_save = key($options['saves']);
+        $first_save = key($options['configurations']);
 
         if($dead_save == $options['current-save-id']) {
             $options['current-save-id'] = $first_save;
@@ -317,7 +317,7 @@ function ap_options_validate( $new_settings ) {
     // if options have never been set before create some default options
     if( $options == null) $options = get_ap_options_defaults(); 
 
-    $previous_save = $options['saves'][$options['current-save-id']];
+    $previous_save = $options['configurations'][$options['current-save-id']];
     if ($new_settings == null ) {
         $new_settings = array('cs'=>array());
     }
@@ -339,7 +339,7 @@ function ap_options_validate( $new_settings ) {
     }
 
     // store save
-    $options['saves'][$options['current-save-id']] = $merged_save;
+    $options['configurations'][$options['current-save-id']] = $merged_save;
 
     // create css
     $css = create_css($merged_save);
