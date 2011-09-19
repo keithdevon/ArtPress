@@ -439,7 +439,7 @@ class Sub_Tab_Group extends Tab_Group {
         parent::__construct('main tab group', $members);
     }
 }
-class Main_Tab_Group extends Tab_Group {
+class Configuration extends Tab_Group {
     function __construct($display_name, $members=array()) {
         if( $members == null ) {
             $members = array(

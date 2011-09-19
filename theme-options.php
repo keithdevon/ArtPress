@@ -109,15 +109,15 @@ function ap_settings_page() {
     //if ( false !== $_REQUEST['updated'] ) echo div( p(_e( 'Options saved' )), attr_class('updated fade') );
 
 
-    $maintabgroup = new Main_Tab_Group('main tab group');
+    $configuration = new Configuration('main tab group');
     $options = get_option('ap_options');
     if ($options != null) {
         if (isset($options['saves'][$options['current-save-id']])) {
-            $maintabgroup->inject_values(array_merge(array('current-save-id'=>$options['current-save-id']),
+            $configuration->inject_values(array_merge(array('current-save-id'=>$options['current-save-id']),
                                                      $options['saves'][$options['current-save-id']]));
             }
     }
-    echo $maintabgroup->get_html();
+    echo $configuration->get_html();
     echo ct('div');
 }
 function create_config_form($options, $flag, $setting_name, $setting_label, $submit_button_text) {
@@ -350,8 +350,8 @@ class CSS_Setting_Visitor implements Visitor {
 function create_css($save) {
     $output = "";
 
-    $maintabgroup = new Main_Tab_Group('main tab group');
-    $maintabgroup->inject_values($save);
+    $configuration = new Configuration('main tab group');
+    $configuration->inject_values($save);
 
     // customized functionality for Global Settings css
     // headers
