@@ -217,15 +217,7 @@ function get_ap_options_defaults() {
 
     return $options;
 }
-/**
- * Creates a valid options array of stub, empty values for ap_images
- */
-function get_ap_image_defaults() {
-    $options = array();
-    $options['images'] = array();
-    $options['logo-image'] = null;
-    return $options;
-}
+
 /**
  * Function to create the options array in the db if not already created.
  */

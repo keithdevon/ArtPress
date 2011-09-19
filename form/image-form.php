@@ -1,4 +1,14 @@
 <?php
+/**
+ * Creates a valid options array of stub, empty values for ap_images
+ */
+function get_ap_image_defaults() {
+    $options = array();
+    $options['images'] = array();
+    $options['logo-image'] = null;
+    return $options;
+}
+
 function ap_image_upload_page() {
     global $post;
     $settings = get_option('ap_images');
