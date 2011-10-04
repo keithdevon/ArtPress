@@ -95,16 +95,18 @@ class Current_Save_ID extends Setting {
         $o = '';
         $name = $this->get_name();
         $o .= label($name, 'Save configuration as');
+        $value = $this->get_value();
         $attrs =    attr_id($name) .
-                    attr_value($this->get_value()) .
+                    attr_value($value[1]) .
                     attr_size(35);
         $o .= input('text',  attr_name("ap_options[{$name}]") . $attrs);
         return $o;
     }
     function validate($value) {
         $options = get_option('ap_options');
-        $configurations = array_keys($options['configurations']);
-        return in_array($value, $configurations);
+        $configurations = array_keys($options['configurations'][$value[0]]);
+        $valid = in_array( $value[1], $configurations );
+        return $valid;
     }
 }
 abstract class Toggle extends Setting {

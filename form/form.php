@@ -463,7 +463,8 @@ class Configuration extends Tab_Group {
 
     function inject_values($values) {
         $settings = Setting::get_registered_settings();
-        foreach( array_keys($settings) as $setting_key ) { // TODO iterate over $values instead? much smaller
+        foreach( array_keys($settings) as $setting_key ) { 
+            // FIXME iterate over $values instead? much smaller
             // Do a check first to see that setting key exists in the existing supplied $values
             // which will be false for new settings in new versions
             $exists = key_exists($setting_key, $values);
@@ -479,8 +480,8 @@ class Configuration extends Tab_Group {
         global $ap_settings_page;
         add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
         $o = get_settings_fields('artpress_options');
-        $csi = $this->get_child(0);
-        $o .= $csi->get_html();
+        $current_save_id = $this->get_child(0);
+        $o .= $current_save_id->get_html();
         $o .= button_submit(__('Save'));
         //$child_html = parent::get_html();
         $child_tabs_html = '';
@@ -595,6 +596,14 @@ class Configuration extends Tab_Group {
                     			});
             	});
         </script><?php
+    }
+    static function get_current_configuration_settings($options=null) {
+        if($options == null) $options = get_option('ap_options');
+        if( $current_save_id = $options['current-save-id'] )  {
+            if( $config = $options['configurations'][$current_save_id[0]][$current_save_id[1]] ) {
+                return $config;              
+            }
+        }
     }
 }
 /**

@@ -146,9 +146,10 @@ function ap_settings_page() {
     $configuration = new Configuration('main tab group');
     $options = get_option('ap_options');
     if ($options != null) {
-        if (isset($options['configurations']['user'][$options['current-save-id']])) {
+        //if (isset($options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]])) {
+        if($current_config = Configuration::get_current_configuration_settings($options)) {
             $configuration->inject_values(array_merge(array('current-save-id'=>$options['current-save-id']),
-                                                     $options['configurations']['user'][$options['current-save-id']]));
+                                                            $current_config));
             }
     }
     echo $configuration->get_html();
@@ -243,11 +244,14 @@ function get_ap_options_defaults() {
     $options = array( 'cs'=>array() );
 
     $options['configurations']['user'] = array();
-    $options['current-save-id'] = 'default';
-    $options['live-id'] = 'default';
-    $options['configurations']['user'][$options['current-save-id']] = $options['cs'];
-
-    $options['defaults'] = $ap_configuration_defaults;
+    $options['configurations']['defaults'] = $ap_configuration_defaults;
+    
+    $options['current-save-id'] = array('defaults', reset(array_keys($ap_configuration_defaults)));
+    $options['live-id'] = $options['current-save-id'];
+      
+    $options['cs'] = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
+    
+    $options['css'] = array('user' => array(), 'defaults' => array());
 
     return $options;
 }
@@ -343,7 +347,7 @@ function ap_options_validate( $new_settings ) {
     // if options have never been set before create some default options
     if( $options == null) $options = get_ap_options_defaults(); 
 
-    $previous_save = $options['configurations']['user'][$options['current-save-id']];
+    $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
     if ($new_settings == null ) {
         $new_settings = array('cs'=>array());
     }
@@ -353,23 +357,25 @@ function ap_options_validate( $new_settings ) {
     $merged_save = array_filter($merged_save);
 
     // validate save TODO
-
     // set the current-save-id
-    // create save name if none supplied
-    if( $new_settings['current-save-id'] == '' || $new_settings['current-save-id'] == 'default' ) {
+    // create a new save name if the current save if a default configuration ...
+    if( $new_settings['current-save-id'][0] == 'defaults') {
+        // ... or if the supplied save name is blank 
+        $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);
+    } elseif ( $new_settings['current-save-id'][1] == '' ) {
         $d = getdate();
         $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-        $options['current-save-id'] = $date;
+        $options['current-save-id'] = array('user', $date); 
     } else {
         $options['current-save-id'] = $new_settings['current-save-id'];
     }
 
     // store save
-    $options['configurations']['user'][$options['current-save-id']] = $merged_save;
+    $options['configurations']['user'][$options['current-save-id'][1]] = $merged_save;
 
     // create css
     $css = create_css($merged_save);
-    $options['css'][$options['current-save-id']] = $css;
+    $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
 
     return $options;
 }

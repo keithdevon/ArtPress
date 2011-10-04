@@ -11,10 +11,11 @@
     		   title="<?php echo $name ?>"
     		   rel="home"><?php
                 $logo = $name;
-                if($options = get_option('ap_options') ) {
-                    if( isset($options['configurations'][$options['current-save-id']]['background-image:url']) ) {
+                $current_config = Configuration::get_current_configuration_settings();
+                if( $current_config ) {
+                    if( isset($current_config['background-image:url'] ) ) {
                         if( $image_options = get_option('ap_images') ) {
-                            if( $logo_image = $options['configurations'][$options['current-save-id']]['background-image:url'] ) {
+                            if( $logo_image = $current_config['background-image:url'] ) {
                                 $logo_val = intval($logo_image);
                                 if(isset($image_options['images'][$logo_val])) {
                                    if($img_url = $image_options['images'][$logo_val]) {
