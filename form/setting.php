@@ -94,11 +94,11 @@ class Current_Save_ID extends Setting {
     function get_html() {
         $o = '';
         $name = $this->get_name();
-        $o .= label($name, 'Save configuration as');
         $value = $this->get_value();
         $attrs =    attr_id($name) .
                     attr_value($value[1]) .
                     attr_size(35);
+        $o .= label($name, "Save {$value[0]} configuration as");
         $o .= input('text',  attr_name("ap_options[{$name}]") . $attrs);
         return $o;
     }

@@ -61,12 +61,13 @@
 
 if($options = get_option('ap_options')) {
     $has_capability = current_user_can('manage_options');
+    
     if ( $has_capability ) {
         $csi = $options['current-save-id'];
-        echo $options['css'][$csi];
+        echo $options['css'][$csi[0]][$csi[1]];
     } else {
-        $li = $options['live-id'];
-        echo $options['css'][$li];
+        $lci = $options['live_config_id'];
+        echo $options['css'][$lci[0]][$lci[1]];
     }
 }
 ?>

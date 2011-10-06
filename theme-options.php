@@ -24,12 +24,12 @@ require_once $dir . 'form/background-image.php';
 require_once $dir . 'form/default-configurations.php';
 require_once $dir . 'form/image-form.php';
 
-add_action( 'admin_init', 'artpress_options_load_scripts' );
-add_action( 'admin_init', 'artpress_theme_init' );
-add_action( 'admin_menu', 'theme_options_add_page' );
+add_action( 'admin_init', 'init_register_scripts' );
+add_action( 'admin_init', 'init_artpress_theme' );
+add_action( 'admin_menu', 'init_add_theme_pages' );
 
 // Load scripts
-function artpress_options_load_scripts() {
+function init_register_scripts() {
 
     $template_dir = get_bloginfo('template_directory');
     $template_url = get_bloginfo('template_url');
@@ -78,26 +78,26 @@ function artpress_options_load_scripts() {
 /**
  * Init plugin options to white list our options
  */
-function artpress_theme_init() {
-    register_setting( 'artpress_options',       'ap_options', 'ap_options_validate' );
+function init_artpress_theme() {
+    register_setting( 'artpress_options',       'ap_options', 'handle_ap_options' );
     register_setting( 'artpress_image_options', 'ap_images',  'ap_image_validate' );
     init_ap_options();
 }
 
-$ap_settings_page = null;
+$page_edit_config = null;
 /**
  * Load up the menu page
  */
-function theme_options_add_page() {
+function init_add_theme_pages() {
 
     // set up main settings page
-    global $ap_settings_page;
-    $ap_settings_page = add_menu_page( 
+    global $page_edit_config;
+    $page_edit_config = add_menu_page( 
         __( 'ArtPress Options' ),    // page title
         __( 'Artpress' ),            // menu title
         'edit_theme_options',        // capability
         'artpress',                  // menu slug                      
-        'ap_settings_page',          // page rendering function
+        'page_edit_config',          // page rendering function
         '',                          // icon URL
         0                            // menu position
         );
@@ -109,7 +109,7 @@ function theme_options_add_page() {
         __('Configurations'),        // menu title
         'edit_theme_options',        // capability
         'manage_configurations',     // menu slug
-        'ap_configs_page'            // page rendering function
+        'page_configs'            // page rendering function
         );
 
     // set up images page
@@ -129,85 +129,116 @@ function theme_options_add_page() {
  * */
 function get_settings_fields($option_group) {
     $o = input('hidden', attr_name('option_page') . attr_value(esc_attr($option_group)));
-    $o = input('hidden', attr_name('action') . attr_value('update'));
+    $o .= input('hidden', attr_name('action') . attr_value('update'));
 	$o .= wp_nonce_field("$option_group-options", "_wpnonce", true, false);
 	return $o;
 }
 
-function ap_settings_page() {
+function page_edit_config() {
     if ( ! isset( $_REQUEST['updated'] ) )
         $_REQUEST['updated'] = false;
+
+    $configuration = new Configuration('main tab group');
+    $options = get_option('ap_options');
 
     // page title stuff
     screen_icon();
     echo ot('div', attr_class('wrap'));
-    echo h2( get_current_theme() . __( ' Options' ) ); // TODO source of why k & j see differenet stuff
+    echo h2( get_current_theme() . __( ' Options' ) ); 
+    // TODO ^ source of why k & j see different stuff
 
-    $configuration = new Configuration('main tab group');
-    $options = get_option('ap_options');
+    // populate configuration with its settings
     if ($options != null) {
-        //if (isset($options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]])) {
-        if($current_config = Configuration::get_current_configuration_settings($options)) {
-            $configuration->inject_values(array_merge(array('current-save-id'=>$options['current-save-id']),
-                                                            $current_config));
-            }
+        
+        $configuration->inject_values(
+            array_merge(array('current-save-id'=>$options['current-save-id']),
+                        Configuration::get_current_configuration_settings($options))
+        );
+    
     }
+    
+    // output the configuration html
     echo $configuration->get_html();
     echo ct('div');
 }
-function create_config_form($options, $flag, $setting_name, $setting_label, $submit_button_text) {
+
+function form_config_action($options, $flag, $setting_name, $setting_label, $submit_button_text) {
     $o = '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name("ap_options[{$flag}]") . attr_value('true') );
-    if( $options && isset($options['configurations']['user'])) {
-        $opts = '';
-        foreach (array_keys($options['defaults']) as $default_name) {
-            $opts .= option($default_name, $default_name);
-        }
-        $optgroups = optgroup('default configurations', $opts);
-        $opts = '';
-        foreach (array_keys($options['configurations']['user']) as $save_name) {
-            if($save_name != $options[$setting_name])
-                $opts .= option($save_name, $save_name);
-        }
-        $optgroups .= optgroup('user configurations', $opts);
-        $o .=  tr(td($setting_label)
-                . td(select("ap_options[{$setting_name}]", $optgroups) )
-                . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( $submit_button_text ) . "' /></span>")
-                );
+    $o .= input('hidden', attr_name("ap_options[action]") . attr_value( $flag ) );
+            
+    $setting_arr = $options[$setting_name];
+    
+    // create default select options
+    $default_opts = '';
+    foreach (array_keys($options['configurations']['default']) as $config_name) {
+        if( $setting_arr[0] == 'user' || $config_name != $setting_arr[1] ) 
+            $default_opts .= option('default__' . $config_name, $config_name);
     }
+    $default_group = optgroup('default configurations', $default_opts);
+            
+    // create user select options
+    $user_opts = '';
+    foreach (array_keys($options['configurations']['user']) as $config_name) {
+        // omit the currently selected configuration from select choice
+        if( $setting_arr[0] == 'default' || $config_name != $setting_arr[1] ) 
+            $user_opts .= option('user__' . $config_name, $config_name);
+    }
+    $user_group = optgroup('user configurations', $user_opts);
+    
+    // create the rest of the form elements
+    $o .=  tr(td($setting_label)
+            . td(select("ap_options[{$setting_name}]", $default_group . $user_group) )
+            . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( $submit_button_text ) . "' /></span>")
+            );
+    
+    
     $o .= ct('form');
     return $o;
 }
 
-function ap_configs_page() {
+function page_configs() {
     $options = get_option('ap_options');
     $o = '';
-    $o .= h2('configurations');
+    $o .= h2('Theme configurations');
     $o .= ot('table');
-    $o .= tr( td(label( 'live-id', __('current live configuration') ) ) .
-              td(input( 'text', attr_readonly() . attr_value( $options['live-id'] ) ) ) );
+    
+    // notify the user which configuration is currently live
+    $live = $options['live_config_id'];
+    $o .= tr( td(label( 'live_config_id', __('The current public facing configuration') ) ) .
+              td(input( 'text', attr_readonly() . attr_value( $live[0] . ' : ' . $live[1] ) ) ) );
+    
+    // notify the user configuration they're currently editing
+    $editing = $options['current-save-id'];          
+    $o .= tr( td(label( 'current-save-id', __('The configuration currently being edited') ) ) .
+              td(input( 'text', attr_readonly() . attr_value( $editing[0] . ' : ' . $editing[1] ) ) ) );
 
-    $o .= tr( td(label( 'current-save-id', __('current editable configuration') ) ) .
-              td(input( 'text', attr_readonly() . attr_value( $options['current-save-id'] ) ) ) );
+    // 'live configuration' selector
+    $o .= form_config_action($options, 'change_live_config', 'live_config_id', 'Select a different public configuration', 'live');
 
-    // create 'live configuration' selector
-    $o .= create_config_form($options, 'change_live-id', 'live-id', 'new live configuration', 'live');
+    // 'configuration to edit' selector
+    $o .= form_config_action($options, 'change_config_to_edit', 'current-save-id', 'Select a different configuration to edit', 'edit');
 
-    // create 'configuration to edit' selector
-    $o .= create_config_form($options, 'change_current-save-id', 'current-save-id', 'configuration to edit', 'edit');
-
-    // delete a configuration
+    // delete a configuration selector
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name('ap_options[delete_configuration]') . attr_value('true') );
+    $o .= input('hidden', attr_name('ap_options[action]') . attr_value('delete_configuration') );
+    // user can only delete user configurations
     if( $options && isset($options['configurations']['user'])) {
        $opts = '';
        foreach (array_keys($options['configurations']['user']) as $save_name) {
+           // don't give option to delete a user config if it's the current live config
+           if($options['live_config_id'][0] == 'default' || $save_name != $options['live_config_id'][1]) {
                $opts .= option($save_name, $save_name);
+           }
        }
-       $o .=  tr(td('delete configuration')
-               . td(select("ap_options[delete-id]", $opts) )
+       if( $opts ) {
+           $delete_input = select("ap_options[delete-id]", $opts);
+       } else {
+           $delete_input = input('text', attr_readonly() . attr_value('no user configurations'));
+       }
+       $o .=  tr(td('Select a user configuration to delete')
+               . td( $delete_input )
                . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'delete' ) . "' /></span>")
                );
     }
@@ -217,11 +248,11 @@ function ap_configs_page() {
     // create new configuration
     $o .= '<form method="post" action="options.php">';
     $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name('ap_options[create_new_configuration]') . attr_value('true') );
+    $o .= input('hidden', attr_name('ap_options[action]') . attr_value('create_new_configuration') );
 
     $o .= ot('tr');
-    $o .= td(label('new_configuration',__('create new configuration')));
-    $o .= td(input('text', attr_name('ap_options[current-save-id]'), attr_id('new_configuration')));
+    $o .= td(label('new_configuration',__('Create new configuration')));
+    $o .= td(input('text', attr_name('ap_options[new_configuration_name]'). attr_id('new_configuration')));
     $create = __( 'create' );
     $o .= td("<span class='submit'><input type='submit' class='button-primary' value='{$create}' /></span>");
     $o .= ct('tr');
@@ -238,20 +269,21 @@ function ap_configs_page() {
 /**
  * Creates a valid options array of stub, empty values for ap_options
  * */
-function get_ap_options_defaults() {
+function get_defaults() {
     global $ap_configuration_defaults;
     
-    $options = array( 'cs'=>array() );
+    $options['action'] = 'create_default_options';
 
     $options['configurations']['user'] = array();
-    $options['configurations']['defaults'] = $ap_configuration_defaults;
+    $options['configurations']['default'] = $ap_configuration_defaults;
     
-    $options['current-save-id'] = array('defaults', reset(array_keys($ap_configuration_defaults)));
-    $options['live-id'] = $options['current-save-id'];
+    $options['current-save-id'] = array('default', reset(array_keys($ap_configuration_defaults)));
+    $options['live_config_id'] = $options['current-save-id'];
       
     $options['cs'] = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
     
-    $options['css'] = array('user' => array(), 'defaults' => array());
+    $options['css'] = array('user' => array(), 'default' => array());// TODO create css here?
+    
 
     return $options;
 }
@@ -263,7 +295,7 @@ function init_ap_options() {
     $opt1 = get_option('ap_options');
 
     if ( $opt1 == null ) {
-        $opt1 = get_ap_options_defaults();
+        $opt1 = get_defaults();
         add_option('ap_options', $opt1);
     }
 
@@ -288,22 +320,42 @@ function handle_configuration_management_options($new_settings) {
     
     $options = get_option('ap_options');
     
-    if( isset($new_settings['change_current-save-id'] ) ) {
-        $options['current-save-id'] = $new_settings['current-save-id'];
+    // change edit config
+    if( $new_settings['action'] == 'change_config_to_edit' ) {
+        $edit_arr = explode('__', $new_settings['current-save-id'], 2);
+        $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] );
         return $options;
     }
-    if( isset($new_settings['change_live-id'] ) ) {
-        $options['live-id'] = $new_settings['live-id'];
+    
+    // change live/public config
+    if( $new_settings['action'] == 'change_live_config' ) {
+        $live_arr = explode('__', $new_settings['live_config_id'], 2);
+        $options['live_config_id'] = array($live_arr[0], $live_arr[1]);
         return $options;
     }
-    if( isset($new_settings['create_new_configuration'] ) ) {
-        $new_config_name = $new_settings['current-save-id'];
-        $options['current-save-id'] = $new_config_name;
-        $options['configurations']['user'][$options['current-save-id']] = array();
-        return $options;
+    
+    // create new config
+    if( $new_settings['action'] == 'create_new_configuration' ) {
+        $new_config_name = $new_settings['new_configuration_name'];
+        
+        // handle case where name already exists
+        if( isset( $options['configurations']['user'][$new_config_name] ) ) {
+            return $options;
+        } else {
+            $options['current-save-id'] = array('user', $new_config_name);
+            $options['configurations']['user'][$new_config_name] = array();
+            return $options;
+        }
+        // TODO must create css at some point - or abstract out common css
     }
-    if( isset( $new_settings['delete_configuration'] ) ) {
+    
+    // delete config
+    if( $new_settings['action'] == 'delete_configuration' ) {
         $dead_save = $new_settings['delete-id'];
+        if($dead_save == $options['live_config_id']) {
+            //don't do anything if the first save is being shown to the public
+            return $options;
+        }
         unset($options['configurations']['user'][$dead_save]);
         unset($options['css'][$dead_save]);
         $first_save = key($options['configurations']['user']);
@@ -311,15 +363,16 @@ function handle_configuration_management_options($new_settings) {
         if($dead_save == $options['current-save-id']) {
             $options['current-save-id'] = $first_save;
         }
-        if($dead_save == $options['live-id']) {
-            $options['live-id'] = $first_save;
-        }
 
         return $options;
     }
+    
     return false;
 }
 /**
+ * All user interactions with theme settings are routed through this function.
+ * ie everytime the user saves some settings, this function is invoked.
+ * 
  * @var new_settings will either be what is passed to update_option
  * or what is returned from the options form
  *
@@ -327,6 +380,7 @@ function handle_configuration_management_options($new_settings) {
  * if we were to populate our new form using only the new settings
  * provided by the client's browser, then checkboxes would disappear
  * as no record of unticked checkboxes are returned to the server
+ * from the web browser.
  *
  * Call scenarios:
  * 1st time (return from form):
@@ -338,46 +392,62 @@ function handle_configuration_management_options($new_settings) {
  *  - new_settings contains everything previously set
  *
  * */
-function ap_options_validate( $new_settings ) {
+function handle_ap_options( $new_settings ) {
 
-    $options = get_option('ap_options');
+    if($options = handle_configuration_management_options($new_settings)) {
 
-    if($options = handle_configuration_management_options($new_settings)) return $options;
-    
-    // if options have never been set before create some default options
-    if( $options == null) $options = get_ap_options_defaults(); 
-
-    $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
-    if ($new_settings == null ) {
-        $new_settings = array('cs'=>array());
-    }
-    $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
-
-    // filter out default values
-    $merged_save = array_filter($merged_save);
-
-    // validate save TODO
-    // set the current-save-id
-    // create a new save name if the current save if a default configuration ...
-    if( $new_settings['current-save-id'][0] == 'defaults') {
-        // ... or if the supplied save name is blank 
-        $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);
-    } elseif ( $new_settings['current-save-id'][1] == '' ) {
-        $d = getdate();
-        $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-        $options['current-save-id'] = array('user', $date); 
+        return $options;
+        
     } else {
-        $options['current-save-id'] = $new_settings['current-save-id'];
+        
+        if ( $new_settings['action'] == 'create_default_options') {
+            $current_save_id = $new_settings['current-save-id'];
+            // create css
+            $css = get_css($new_settings['configurations'][$current_save_id[0]][$current_save_id[1]]);
+            $new_settings['css'][$current_save_id[0]][$current_save_id[1]] = $css;
+            return $new_settings; 
+            
+        } else if ( $new_settings['action'] == 'save_configuration' ) {
+            $options = get_option('ap_options');
+        
+            // if options have never been set before create some default options
+            if( $options == null) $options = get_defaults(); 
+        
+            $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
+            if ($new_settings == null ) {
+                $new_settings = array('cs'=>array());
+            }
+            $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
+        
+            // filter out default values
+            $merged_save = array_filter($merged_save);
+        
+            // set the current-save-id
+            // TODO check if the name already exists
+            // create a new save name if the current save if a default configuration ...
+            if( $options['current-save-id'][0] == 'default') {
+                $d = getdate();
+                $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
+                $options['current-save-id'] = array('user', $new_settings['current-save-id'] . " (${date})");
+            // ... or if the supplied save name is blank 
+            } elseif ( $new_settings['current-save-id'][1] == '' ) {
+                $d = getdate();
+                $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
+                $options['current-save-id'] = array('user', $date); 
+            } else {
+                $options['current-save-id'] = array('user', $new_settings['current-save-id']);
+            }
+        
+            // store as user configuration
+            $options['configurations']['user'][$options['current-save-id'][1]] = $merged_save;
+        
+            // create css
+            $css = get_css($merged_save);
+            $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
+        
+        }
+        return $options;
     }
-
-    // store save
-    $options['configurations']['user'][$options['current-save-id'][1]] = $merged_save;
-
-    // create css
-    $css = create_css($merged_save);
-    $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
-
-    return $options;
 }
 class CSS_Setting_Visitor implements Visitor {
     function recurse($hierarchy) {
@@ -396,7 +466,7 @@ class CSS_Setting_Visitor implements Visitor {
         }
     }
 }
-function create_css($save) {
+function get_css($save) {
     $output = "";
 
     $configuration = new Configuration('main tab group');

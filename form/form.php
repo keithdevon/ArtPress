@@ -328,10 +328,10 @@ abstract class Sub_Tab extends Group implements Tab {
         }
 
         if ($children[0] instanceof Setting) {
-            $children_html = table( $children_html, attr_class('form-table') );
+            $children_html = table( $children_html, attr_class('form-table') ); 
         }
         $id = $this->get_html_id();
-        $o = div( $children_html, attr_id( $id ) . attr_class('sub-tab') 
+        $o = div( $children_html, attr_id( $id ) . attr_class('sub-tab') // TODO =, not .= ??
         );
         return $o;
     }
@@ -464,7 +464,7 @@ class Configuration extends Tab_Group {
     function inject_values($values) {
         $settings = Setting::get_registered_settings();
         foreach( array_keys($settings) as $setting_key ) { 
-            // FIXME iterate over $values instead? much smaller
+            // FIXME ^ iterate over $values instead? much smaller
             // Do a check first to see that setting key exists in the existing supplied $values
             // which will be false for new settings in new versions
             $exists = key_exists($setting_key, $values);
@@ -504,10 +504,12 @@ class Configuration extends Tab_Group {
             }
         }
 
-        $ul = ul($links);
+        $ul = ul( $links );//. "<span style='float: right;'>hello</span>" );
         $script = "\n<script type='text/javascript'> jQuery( function() { jQuery( '#{$id}-tabs' ).tabs(); } ); </script>";
 
         $o .= $script;
+        // include save configuration flag
+        $o .= input( 'hidden', attr_name('ap_options[action]') . attr_value('save_configuration') );
         $o .= div($ul .
                     $tabs,
                     attr_id("{$id}-tabs")
@@ -600,9 +602,10 @@ class Configuration extends Tab_Group {
     static function get_current_configuration_settings($options=null) {
         if($options == null) $options = get_option('ap_options');
         if( $current_save_id = $options['current-save-id'] )  {
-            if( $config = $options['configurations'][$current_save_id[0]][$current_save_id[1]] ) {
-                return $config;              
-            }
+            //if( $config = $options['configurations'][$current_save_id[0]][$current_save_id[1]] ) {
+            //    return $config;              
+            //}
+            return $options['configurations'][$current_save_id[0]][$current_save_id[1]];
         }
     }
 }
