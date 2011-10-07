@@ -16,8 +16,8 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
         $this->dependents[] = $section_color;
     }
     function get_html() {
-        global $ap_settings_page;
-        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+        global $page_edit_config;
+        add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
         $children_html = ""; get_html_dependents($this);
         $children = $this->get_children();
         $first = true;
@@ -126,8 +126,8 @@ class Global_Font_Group extends Option_Group {
         return $options;
     }
     function get_html() {
-        global $ap_settings_page;
-        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+        global $page_edit_config;
+        add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
 
         $children_html = ""; get_html_dependents($this);
         $children = $this->get_children();
@@ -205,8 +205,8 @@ class Global_Font_Size_Group extends Option_Group {
     function get_dependents()                     { return $this->dependents; }
     function add_dependent($section_font_size)    { $this->dependents[] = $section_font_size; }
     function get_html() {
-        global $ap_settings_page;
-        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+        global $page_edit_config;
+        add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
         $children_html = "";get_html_dependents($this);
         $children = $this->get_children();
         if ( null != $children) {
@@ -309,8 +309,8 @@ class Global_Settings extends Main_Tab  {
         parent::__construct('global settings', 'artpress_options', $members);
     }
     function get_html($pre=null, $post=null) {
-        global $ap_settings_page;
-        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+        global $page_edit_config;
+        add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
         return parent::get_html();
     }
     static function script() {

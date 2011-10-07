@@ -314,8 +314,8 @@ abstract class Sub_Tab extends Group implements Tab {
         parent::__construct($display_name, $members);
     }
     function get_html() {
-        //global $ap_settings_page;
-        //add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+        //global $page_edit_config;
+        //add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
         $o = '';
         $children_html = '';
         $children = $this->get_children();
@@ -390,8 +390,8 @@ abstract class Tab_Group extends Group {
     //}
 
     function get_html() {
-        //global $ap_settings_page;
-        //add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+        //global $page_edit_config;
+        //add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
 
         $child_tabs_html = '';
         $links = '';
@@ -477,8 +477,8 @@ class Configuration extends Tab_Group {
     }
 
     function get_html() {
-        global $ap_settings_page;
-        add_action('admin_footer-' . $ap_settings_page, __CLASS__ . "::script");
+        global $page_edit_config;
+        add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
         $o = get_settings_fields('artpress_options');
         $current_save_id = $this->get_child(0);
         $o .= $current_save_id->get_html();
