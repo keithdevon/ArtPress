@@ -1,5 +1,19 @@
 @CHARSET "UTF-8";
-
-#current-save-id {
+#save-button {
+    height: 40px;
+    clear: both;
+    text-aligh: right;
+    padding-right: 0;
+}
+#save-button input {
     font-size: 24px;
+	float: right;
+    padding: 4px;
+}
+#current-save-id {
+    text-align: right;
+}
+#save-button input[type="submit"] {
+	/* color: white;
+    background: steelblue; */
 }
