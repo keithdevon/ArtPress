@@ -147,7 +147,7 @@ function page_edit_config() {
     $options = get_option('ap_options');
 
     // page title stuff
-    screen_icon();
+    //screen_icon();
     echo ot('div', attr_class('wrap'));
     echo h2( get_current_theme() . __( ' Options' ) ); 
     // TODO ^ source of why k & j see different stuff
