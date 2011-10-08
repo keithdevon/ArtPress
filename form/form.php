@@ -500,9 +500,9 @@ class Configuration extends Tab_Group {
         
         // create form
         $current_save_id = $this->get_child(0);
-        $save_part = div( //  
-            input('submit', button_submit(__('Save')) )//attr_value('save')) 
-            . $current_save_id->get_html(), attr_id('save-button') );
+        $save_part = div(  button_submit( __('Save') ) //attr_value('save')) 
+                            . $current_save_id->get_html()
+                        , attr_id('save-div') );
 
         $form_tabs = ul( $tab_links );
         $form_tab_bodies = div($form_tabs . $form_tabs_content, attr_id("{$id}-tabs") );

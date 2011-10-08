@@ -27,7 +27,7 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
                 $child_html = $child->get_html();
                 $row = ot('tr');
                 $row .= td($child_name, " style='width:200px;'");
-                $row .= td($child_html);
+                $row .= td($child_html, " style='width:200px;'");
 
                 if($first) {
                     $row .= td(div('',

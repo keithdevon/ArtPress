@@ -1,11 +1,11 @@
 @CHARSET "UTF-8";
-#save-button {
+#save-div {
     height: 40px;
     clear: both;
     text-aligh: right;
     padding-right: 0;
 }
-#save-button input {
+#save-div input {
     font-size: 24px;
 	float: right;
     padding: 4px;
@@ -13,7 +13,7 @@
 #current-save-id {
     text-align: right;
 }
-#save-button input[type="submit"] {
+#save-input[type="submit"] {
 	/* color: white;
     background: steelblue; */
 }
