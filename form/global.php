@@ -18,7 +18,9 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
     function get_html() {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
-        $children_html = ""; get_html_dependents($this);
+
+        $children_html = colgroup(3);        
+        get_html_dependents($this);
         $children = $this->get_children();
         $first = true;
         if ( null != $children) {
@@ -26,8 +28,8 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
                 $child_name = $child->get_display_name();
                 $child_html = $child->get_html();
                 $row = ot('tr');
-                $row .= td($child_name, " style='width:200px;'");
-                $row .= td($child_html, " style='width:200px;'");
+                $row .= td($child_name);
+                $row .= td($child_html);
 
                 if($first) {
                     $row .= td(div('',
@@ -39,6 +41,7 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
                 $children_html .= $row;
             }
         }
+        
         return table($children_html, attr_class('form-table'));
     }
     static function script() { ?><script type='text/javascript'>
@@ -129,7 +132,8 @@ class Global_Font_Group extends Option_Group {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
 
-        $children_html = ""; get_html_dependents($this);
+        $children_html = colgroup(2); 
+        get_html_dependents($this);
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {
@@ -207,7 +211,8 @@ class Global_Font_Size_Group extends Option_Group {
     function get_html() {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
-        $children_html = "";get_html_dependents($this);
+        $children_html = colgroup(2);
+        get_html_dependents($this);
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {

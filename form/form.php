@@ -267,7 +267,7 @@ class Option_Group extends Group {
         return $options;
     }
     function get_html() {
-        $children_html = '';
+        $children_html = colgroup(2);
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {
@@ -328,7 +328,7 @@ abstract class Sub_Tab extends Group implements Tab {
         }
 
         if ($children[0] instanceof Setting) {
-            $children_html = table( $children_html, attr_class('form-table') ); 
+            $children_html = table( colgroup(2) . $children_html, attr_class('form-table') ); 
         }
         $id = $this->get_html_id();
         $o = div( $children_html, attr_id( $id ) . attr_class('sub-tab') // TODO =, not .= ??
@@ -799,7 +799,7 @@ function get_setting_row( $setting ) {
 }
 function get_row( $label, $content ) {
     $row = ot('tr');
-    $row .= td($label, attr_style("width:200px;") );
+    $row .= td($label );
     $row .= td($content);
     $row .= ct('tr');
     return $row;

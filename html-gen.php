@@ -84,4 +84,15 @@ function td($content, $attributes ="")          { return ot('td', $attributes)  
 function th($content, $attributes ="")          { return ot('th', $attributes)     . $content . ct('th'); }
 function tr($content, $attributes ="")          { return ot('tr', $attributes)     . $content . ct('tr'); }
 function ul($content, $attributes='')           { return ot('ul', $attributes)     . $content . ct('ul'); }
+
+function col($attributes='') {
+    return bt('col', $attributes);
+}
+function colgroup($number_of_cols) {
+    $cols = '';
+    for( $i=0; $i<$number_of_cols; $i++ ) {
+        $cols .= col();
+    }
+    return ot('colgroup') . $cols . ct('colgroup');
+}
 ?>

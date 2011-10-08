@@ -17,3 +17,12 @@
 	/* color: white;
     background: steelblue; */
 }
+
+table.form-table {
+    table-layout: auto;
+    width: 1000px;
+}
+
+colgroup col:FIRST-CHILD{
+    width: 200px;
+}
