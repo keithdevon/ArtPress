@@ -76,12 +76,13 @@ function row($content) {
     $o .= ct('tr');
     return $o;
 }
-function button_submit($button_text) {
+function button_submit( $button_text, $attributes='' ) {
     return input('submit',
         attr_name('Submit') .
         attr_class('button-primary') .
         attr_type('submit') .
-        attr_value(esc_attr($button_text)));
+        attr_value(esc_attr($button_text)) .
+        $attributes );
 }
 
 ?>

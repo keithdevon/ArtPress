@@ -48,9 +48,13 @@ function init_register_scripts() {
         true);                                                           // in footer?
 
     // register styles
-    wp_register_style(                                                               // handle
-    	'ArtPressOptionsStylesheet',                                                 // src   
-        $template_url . '/scripts/farbtastic/farbtastic.css');
+    wp_register_style(                                                               
+    	'ArtPressOptionsStylesheet',                                                 // handle
+        $template_url . '/form/form.css');                                           // src   
+        
+    wp_register_style(                                                               
+    	'farbtasticStylesheet',                                                      // handle
+        $template_url . '/scripts/farbtastic/farbtastic.css');                       // src   
         
     wp_register_style(
     	'jqueryui1814css',                                                           // handle
@@ -69,9 +73,10 @@ function init_register_scripts() {
     wp_enqueue_script('jQuery.form');
 
     // enqueue styles
-    wp_enqueue_style( 'jqueryui1814css' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
-	wp_enqueue_style('image_form');
+    wp_enqueue_style( 'jqueryui1814css' );
+    wp_enqueue_style( 'farbtasticStylesheet' );
+	wp_enqueue_style( 'image_form' );
 
     add_action('init', 'ht_init_method');
 }

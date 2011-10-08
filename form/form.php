@@ -479,16 +479,11 @@ class Configuration extends Tab_Group {
     function get_html() {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
-        $o = get_settings_fields('artpress_options');
-        $current_save_id = $this->get_child(0);
-        $o .= $current_save_id->get_html();
-        $o .= button_submit(__('Save'));
-        //$child_html = parent::get_html();
-        $child_tabs_html = '';
-        $links = '';
-        $tabs = '';
 
-        $id = $this->get_parentage_string();
+        // create tabs
+        $tab_links = '';
+        $form_tabs_content = '';
+        $id = $this->get_parentage_string(); //TODO remove $id
         $children = $this->get_children();
 
         $count = 1;
@@ -497,27 +492,30 @@ class Configuration extends Tab_Group {
                 if($child instanceof Tab) {
                     $n = $count++;
                     $child->set_html_id("{$id}-tabs-" . $n);
-                    //$link_attrs = ToolTips::get($child) . attr_class(get_class($this)) /*. attr_on_mouse_down("jQuery(this).mousedown(function() { alert('tab'); } );")*/;
-                    $links .= $child->get_link_html();//li( alink('#' . $child->get_html_id(), $child->get_display_name() ) , $link_attrs );
-                    $tabs  .= $child->get_html();
+                    $tab_links .= $child->get_link_html();
+                    $form_tabs_content  .= $child->get_html();
                 }
             }
         }
+        
+        // create form
+        $current_save_id = $this->get_child(0);
+        $save_part = $current_save_id->get_html();
+        $save_part .= button_submit(__('Save'));
 
-        $ul = ul( $links );//. "<span style='float: right;'>hello</span>" );
-        $script = "\n<script type='text/javascript'> jQuery( function() { jQuery( '#{$id}-tabs' ).tabs(); } ); </script>";
+        $form_tabs = ul( $tab_links );
+        $form_tab_bodies = div($form_tabs . $form_tabs_content, attr_id("{$id}-tabs") );
 
-        $o .= $script;
-        // include save configuration flag
-        $o .= input( 'hidden', attr_name('ap_options[action]') . attr_value('save_configuration') );
-        $o .= div($ul .
-                    $tabs,
-                    attr_id("{$id}-tabs")
-                   );
-
-        $form = form('post', 'options.php', $o, null, attr_id('ap_options_form'));
-        return $form;
+        $setting_fields = get_settings_fields('artpress_options');
+        $save_flag = input( 'hidden', attr_name('ap_options[action]') . attr_value('save_configuration') );
+        $script = "\n<script type='text/javascript'> jQuery( function() { jQuery( '#{$id}-tabs' ).tabs(); } ); </script>"; 
+        return form('post'
+                        , 'options.php'
+                        , $script . $setting_fields . $save_part. $save_flag . $form_tab_bodies
+                        , null
+                        , attr_id('ap_options_form'));
     }
+    
     static function script() {?><script type='text/javascript'>
         	changedEls = [];
         	successColor = '#AFA';
