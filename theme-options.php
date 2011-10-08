@@ -161,12 +161,7 @@ function page_edit_config() {
     echo $configuration->get_html();
     echo ct('div');
 }
-
-function form_config_action($options, $flag, $setting_name, $setting_label, $submit_button_text) {
-    $o = '<form method="post" action="options.php">';
-    $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name("ap_options[action]") . attr_value( $flag ) );
-            
+function get_config_select($options, $setting_name) {
     $setting_arr = $options[$setting_name];
     
     // create default select options
@@ -185,13 +180,21 @@ function form_config_action($options, $flag, $setting_name, $setting_label, $sub
             $user_opts .= option('user__' . $config_name, $config_name);
     }
     $user_group = optgroup('user configurations', $user_opts);
+    return select("ap_options[{$setting_name}]", $default_group . $user_group);
+}
+
+function form_config_action($options, $flag, $setting_name, $setting_label, $submit_button_text) {
+    $o = '<form method="post" action="options.php">';
+    $o .= get_settings_fields('artpress_options');
+    $o .= input('hidden', attr_name("ap_options[action]") . attr_value( $flag ) );
+            
+    $select = get_config_select($options, $setting_name);
     
     // create the rest of the form elements
     $o .=  tr(td($setting_label)
-            . td(select("ap_options[{$setting_name}]", $default_group . $user_group) )
+            . td($select)
             . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( $submit_button_text ) . "' /></span>")
             );
-    
     
     $o .= ct('form');
     return $o;
@@ -307,6 +310,7 @@ function init_ap_options() {
     }
 
 }
+
 /** 
  * This function handles macro changes to the configurations ie
  * - creating a new configuration
