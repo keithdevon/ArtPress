@@ -333,6 +333,7 @@ function handle_configuration_management_options($new_settings) {
     if( $new_settings['action'] == 'change_config_to_edit' ) {
         $edit_arr = explode('__', $new_settings['current-save-id'], 2);
         $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] );
+        $options['message'] = "Now editing {$edit_arr[0]} configuration \"{$edit_arr[1]}.";
         return $options;
     }
     
@@ -340,6 +341,7 @@ function handle_configuration_management_options($new_settings) {
     if( $new_settings['action'] == 'change_live_config' ) {
         $live_arr = explode('__', $new_settings['live_config_id'], 2);
         $options['live_config_id'] = array($live_arr[0], $live_arr[1]);
+        $options['message'] = "The {$live_arr[0]} configuration, {$live_arr[1]}, is now live.";
         return $options;
     }
     
@@ -349,10 +351,12 @@ function handle_configuration_management_options($new_settings) {
         
         // handle case where name already exists
         if( isset( $options['configurations']['user'][$new_config_name] ) ) {
+            $options['message'] = "A configuration called {$new_config_name} already exists";
             return $options;
         } else {
             $options['current-save-id'] = array('user', $new_config_name);
             $options['configurations']['user'][$new_config_name] = array();
+            $options['message'] = "Successfully created new user configuration";
             return $options;
         }
         // TODO must create css at some point - or abstract out common css
@@ -363,6 +367,7 @@ function handle_configuration_management_options($new_settings) {
         $dead_save = $new_settings['delete-id'];
         if($dead_save == $options['live_config_id']) {
             //don't do anything if the first save is being shown to the public
+            $options['message'] = "Cannot delete this configuration as it is currently live.";
             return $options;
         }
         unset($options['configurations']['user'][$dead_save]);
@@ -373,6 +378,7 @@ function handle_configuration_management_options($new_settings) {
             $options['current-save-id'] = $first_save;
         }
 
+        $options['message'] = "Deleted configuration {$dead_save}.";
         return $options;
     }
     
@@ -414,6 +420,7 @@ function handle_ap_options( $new_settings ) {
             // create css
             $css = get_css($new_settings['configurations'][$current_save_id[0]][$current_save_id[1]]);
             $new_settings['css'][$current_save_id[0]][$current_save_id[1]] = $css;
+            $new_settings['message'] = 'created default options';
             return $new_settings; 
             
         } else if ( $new_settings['action'] == 'save_configuration' ) {
@@ -438,13 +445,16 @@ function handle_ap_options( $new_settings ) {
                 $d = getdate();
                 $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
                 $options['current-save-id'] = array('user', $new_settings['current-save-id'] . " (${date})");
+                $options['message'] = "Saved default configuration as \"{$options['current-save-id'][1]}\"";
             // ... or if the supplied save name is blank 
             } elseif ( $new_settings['current-save-id'][1] == '' ) {
                 $d = getdate();
                 $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-                $options['current-save-id'] = array('user', $date); 
+                $options['current-save-id'] = array('user', $date);
+                $options['message'] = "Saved user configuration as \"{$date}\"";
             } else {
                 $options['current-save-id'] = array('user', $new_settings['current-save-id']);
+                $options['message'] = "Saved user configuration \"{$options['current-save-id']}\"";
             }
         
             // store as user configuration
