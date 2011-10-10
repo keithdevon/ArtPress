@@ -4,20 +4,25 @@
     clear: both;
     text-aligh: right;
     padding-right: 0;
+    margin-top: 12px;
+    margin-bottom: 14px;
 }
 #save-div input {
     font-size: 24px;
 	float: right;
     padding: 4px;
+    
 }
 #current-save-id {
     text-align: right;
 }
-#save-input[type="submit"] {
-	/* color: white;
-    background: steelblue; */
+#save-div [type="button"] {
+	margin-left: 12px;
 }
-
+#save-div [type="text"] {
+    font-style: italic;
+    color: #464646;
+}
 table.form-table {
     table-layout: auto;
     width: 1000px;

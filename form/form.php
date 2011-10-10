@@ -518,31 +518,83 @@ class Configuration extends Tab_Group {
     }
     
     static function script() {?><script type='text/javascript'>
-        	changedEls = [];
+        	changedEls = {};
         	successColor = '#AFA';
         	waitingColor = '#FF9';
         	failColor    = '#FAA';
+
+        	function inputHasChanged(obj) {
+            	//alert('input has changed');
+            	changedEls[obj.name] = obj.value;
+        	}
+        	function inputHasFocus(obj) {
+            	//var val = jQuery(this).value;
+				//changedEls.push(val);
+				alert(obj.name + " has focus");
+				obj.focus = null;
+        	}
+			function getModifiedFormInputs() {
+				// indlude all the global settings
+				var globalSettings = jQuery('.globalSetting');
+				for(index in globalSettings ) {
+					inputHasChanged( globalSettings[index] );
+				}
+				return changedEls;
+			}
+        	function updateFormInputs( valuesMap ) {
+    			alert('Got this from the server: ' + valuesMap);
+				for(var k in valuesMap) {
+					//alert(k + ' : ' + valuesMap[k]);
+				}
+            }
             // wait for the DOM to be loaded
             jQuery(document).ready(function() {
-                // bind 'myForm' and provide a simple callback function
-                jQuery('#current-save-id').next().click(function(){ 
-                    jQuery(this).prev().css('background-color', waitingColor); 
-                    });
+                var sd = jQuery('#save-div');
+            	var sb = jQuery(sd).find(':submit');
+            	// create a new button element to replace the submit button
+            	// ( can't add button click event handlers to a submit button 
+            	// without it trying to submit causing a refresh every time it is clicked )
+            	var newsb = jQuery('<input/>', {
+            	    type: 'button',
+            	    value: 'Save',
+                	name: 'Submit'
+                	    
+            	}).addClass('button-primary').prependTo(sd);
+            	
+            	jQuery(sb).remove();
+                jQuery(newsb).click(
+                        function(){ 
+                            //alert('clicking');
+                    		jQuery(this).prev().css('background-color', waitingColor); 
+                    		var formInputs = getModifiedFormInputs();
+                            var data = {
+                            		action: 'save_form',
+                            		inputs: formInputs
+                            	};
+                        	// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+                        	jQuery.post(ajaxurl, data, function(response) {
+								updateFormInputs( response );                        		
+                        	});
+                    	});
+    
 
-                jQuery('#ap_options_form').ajaxForm(function() {
-                    for (i = 0; i < changedEls.length; i++) {
-                    	el = changedEls[i];
-                    	jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
-                   	}
-                   	// make save name flash green
-                    jQuery('#current-save-id').css('background-color', successColor).animate({'background-color': '#FFF'}, 'slow');
-                });
+                //jQuery('#ap_options_form').ajaxForm(function() {
+                //    for (i = 0; i < changedEls.length; i++) {
+                //    	el = changedEls[i];
+                //    	jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
+                //   	}
+                //   	// make save name flash green
+                //    jQuery('#current-save-id').css('background-color', successColor).animate({'background-color': '#FFF'}, 'slow');
+                //
+                
             });
             function trimWhiteSpace(str) {
     			return str.replace(/^\s+|\s+$/g, '') ;
     		}
             function isValidSize(val) {
-            	if(parseInt(val)) {
+                if( val == '' ) {
+					return true;
+                } else if(parseInt(val)) {
     				return val.match('px$|em$|%$');
     			} else {
     				if (parseFloat(val)) {
@@ -553,14 +605,13 @@ class Configuration extends Tab_Group {
     			}
     		}
             function checkValidSize(sizeInputEl) {
-            	changedEls.push(sizeInputEl);
-    			var val = trimWhiteSpace(sizeInputEl.value);
+            	var val = trimWhiteSpace(sizeInputEl.value);
     			if(isValidSize(val)) {
     				//this.css('background', 'green');
+    				inputHasChanged(sizeInputEl);
     				sizeInputEl.style.background = successColor;
     			} else {
-    				//this.css('background', 'red');
-    				sizeInputEl.style.background = failColor;
+    				jQuery(sizeInputEl).css('background-color', failColor).animate({'background-color': '#FFF'}, 'slow');
     				sizeInputEl.value = '';
     			}
     		}
@@ -569,7 +620,7 @@ class Configuration extends Tab_Group {
                 openAccordions[tabName] = accordionLink;
         	}
             function getOpenAccordion(tabName) {
-                var oa = openAccordions[tabName]  
+                var oa = openAccordions[tabName];  
             	return oa;
         	}
     		function mainTabClick(tab) {

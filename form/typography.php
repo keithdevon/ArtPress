@@ -40,7 +40,7 @@ class Global_Font_Size extends Setting_Number {
         return $size;
     }
     function get_html() {
-        return parent::get_html(attr_class('globalFontSize') . ToolTips::get($this) //. attr_on_change("updateDependentsOf_Global_Font_Size_Group()")
+        return parent::get_html(attr_class('globalFontSize globalSetting') . ToolTips::get($this) //. attr_on_change("updateDependentsOf_Global_Font_Size_Group()")
         );
     }
     static function get_global_font_size_instance() {
@@ -90,7 +90,7 @@ class Global_Font_Size_Ratio extends Setting_Dropdown {
         return $scale[$n];
     }
     function get_html() {
-        return parent::get_html(attr_class('globalFontSizeRatio') //. attr_on_change("updateDependentsOf_Global_Font_Size_Group()")
+        return parent::get_html(attr_class('globalFontSizeRatio globalSetting') //. attr_on_change("updateDependentsOf_Global_Font_Size_Group()")
         );
     }
 }
@@ -181,7 +181,7 @@ class Global_Font_Family extends Setting_Dropdown {
         return $list;
     }
     function get_html() {
-        return parent::get_html(attr_class('globalFont') //. attr_on_change("updateDependentsOf_Global_Font_Group()")
+        return parent::get_html(attr_class('globalFont globalSetting') //. attr_on_change("updateDependentsOf_Global_Font_Group()")
         );
     }
 }

@@ -151,7 +151,7 @@ function page_edit_config() {
     echo ot('div', attr_class('wrap'));
     echo h2( get_current_theme() . __( ' Options' ) ); 
     // TODO ^ source of why k & j see different stuff
-
+    echo $options['message'];
     // populate configuration with its settings
     if ($options != null) {
         
@@ -333,7 +333,7 @@ function handle_configuration_management_options($new_settings) {
     if( $new_settings['action'] == 'change_config_to_edit' ) {
         $edit_arr = explode('__', $new_settings['current-save-id'], 2);
         $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] );
-        $options['message'] = "Now editing {$edit_arr[0]} configuration \"{$edit_arr[1]}.";
+        $options['message'] = "Now editing {$edit_arr[0]} configuration \"{$edit_arr[1]}\".";
         return $options;
     }
     
@@ -384,6 +384,20 @@ function handle_configuration_management_options($new_settings) {
     
     return false;
 }
+add_action('wp_ajax_save_form', 'ajax_handle_save_form');
+function ajax_handle_save_form() {
+    $inputs = $_POST['inputs'];
+    $options = get_option('ap_options');
+    $new_settings = array( 
+    	'action' => 'save_configuration',
+    	'cs'     => reset($inputs),
+        'current-save-id' => $options['current-save-id'][1]
+    ); 
+    update_option('ap_options', $new_settings);
+    // send results back to the client in the correct format
+    $modified = array_intersect($options['cs'], $new_settings['cs']);
+    echo json_encode( $modified );
+}
 /**
  * All user interactions with theme settings are routed through this function.
  * ie everytime the user saves some settings, this function is invoked.
@@ -431,7 +445,7 @@ function handle_ap_options( $new_settings ) {
         
             $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
             if ($new_settings == null ) {
-                $new_settings = array('cs'=>array());
+                $new_settings = array('cs'=>array()); // TODO don't think I need this anymore
             }
             $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
         
@@ -443,22 +457,26 @@ function handle_ap_options( $new_settings ) {
             // create a new save name if the current save if a default configuration ...
             if( $options['current-save-id'][0] == 'default') {
                 $d = getdate();
-                $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-                $options['current-save-id'] = array('user', $new_settings['current-save-id'] . " (${date})");
+                $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
+                $options['current-save-id'] = array('user', $new_settings['current-save-id'] . " [${date}]");
                 $options['message'] = "Saved default configuration as \"{$options['current-save-id'][1]}\"";
-            // ... or if the supplied save name is blank 
+            
+                // ... or if the supplied save name is blank 
             } elseif ( $new_settings['current-save-id'][1] == '' ) {
                 $d = getdate();
-                $date= "{$d['year']} {$d['month']} {$d['mday']} {$d['weekday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
+                $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
                 $options['current-save-id'] = array('user', $date);
                 $options['message'] = "Saved user configuration as \"{$date}\"";
+            
             } else {
                 $options['current-save-id'] = array('user', $new_settings['current-save-id']);
-                $options['message'] = "Saved user configuration \"{$options['current-save-id']}\"";
+                $options['message'] = "Saved user configuration \"{$options['current-save-id'][1]}\"";
             }
         
             // store as user configuration
-            $options['configurations']['user'][$options['current-save-id'][1]] = $merged_save;
+            $current_config_name = $options['current-save-id'][1];
+            $options['configurations']['user'][$current_config_name] = array(); 
+            $options['configurations']['user'][$current_config_name] = $merged_save;
         
             // create css
             $css = get_css($merged_save);

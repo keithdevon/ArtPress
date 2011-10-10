@@ -26,7 +26,7 @@ class Global_Color extends Setting_Text {
         return $options;
     }
     function get_html() {
-        return parent::get_html( attr_class('colorwell globalColor') );
+        return parent::get_html( attr_class('colorwell globalColor globalSetting') );
     }
 }
 

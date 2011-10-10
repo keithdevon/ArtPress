@@ -388,7 +388,7 @@ function dropdown_get_options_html($dropdown) {
     return $html_options;
 }
 function get_select_html($dropdown, $attributes='') {
-    $select = ot('select', $dropdown->get_html_name() . ToolTips::get($dropdown) . $attributes);
+    $select = ot('select', $dropdown->get_html_name() . ToolTips::get($dropdown) . attr_on_change('inputHasChanged(this)') . $attributes);
     $select .= dropdown_get_options_html($dropdown);
     $select .= ct('select');
     return $select;
