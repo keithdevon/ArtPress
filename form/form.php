@@ -534,7 +534,11 @@ class Configuration extends Tab_Group {
 				obj.focus = null;
         	}
 			function getModifiedFormInputs() {
-				// indlude all the global settings
+				// get current-save-id
+				var configName = jQuery('#current-save-id');
+				inputHasChanged( configName );
+				
+				// add global settings to the list of changed elements regardless
 				var globalSettings = jQuery('.globalSetting');
 				for(index in globalSettings ) {
 					inputHasChanged( globalSettings[index] );
@@ -543,8 +547,12 @@ class Configuration extends Tab_Group {
 			}
         	function updateFormInputs( valuesMap ) {
     			alert('Got this from the server: ' + valuesMap);
-				for(var k in valuesMap) {
+    			var vmap = jQuery.parseJSON( valuesMap );
+    			jQuery('#current-save-id').attr('value', vmap['configName']);
+    			jQuery('#themeNotifications').attr('value', vmap['message']);
+				for(var k in vmap) {
 					//alert(k + ' : ' + valuesMap[k]);
+					
 				}
             }
             // wait for the DOM to be loaded
@@ -573,7 +581,8 @@ class Configuration extends Tab_Group {
                             	};
                         	// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
                         	jQuery.post(ajaxurl, data, function(response) {
-								updateFormInputs( response );                        		
+                            	
+								updateFormInputs( response.slice(0, -1) );                        		
                         	});
                     	});
     

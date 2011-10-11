@@ -31,3 +31,6 @@ table.form-table {
 colgroup col:FIRST-CHILD{
     width: 200px;
 }
+#themeNotifications {
+    float: right;
+}

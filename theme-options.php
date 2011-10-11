@@ -151,7 +151,7 @@ function page_edit_config() {
     echo ot('div', attr_class('wrap'));
     echo h2( get_current_theme() . __( ' Options' ) ); 
     // TODO ^ source of why k & j see different stuff
-    echo $options['message'];
+    echo input('text', attr_id('themeNotifications') . attr_value($options['message']) . attr_size(50) . attr_readonly());
     // populate configuration with its settings
     if ($options != null) {
         
@@ -222,10 +222,10 @@ function page_configs() {
               td(input( 'text', attr_readonly() . attr_value( $editing[0] . ' : ' . $editing[1] ) ) ) );
 
     // 'live configuration' selector
-    $o .= form_config_action($options, 'change_live_config', 'live_config_id', 'Select a different public configuration', 'live');
+    $o .= form_config_action($options, 'change_live_config', 'change_live_config_id', 'Select a different public configuration', 'live');
 
     // 'configuration to edit' selector
-    $o .= form_config_action($options, 'change_config_to_edit', 'current-save-id', 'Select a different configuration to edit', 'edit');
+    $o .= form_config_action($options, 'change_config_to_edit', 'change_current-save-id', 'Select a different configuration to edit', 'edit');
 
     // delete a configuration selector
     $o .= '<form method="post" action="options.php">';
@@ -331,15 +331,15 @@ function handle_configuration_management_options($new_settings) {
     
     // change edit config
     if( $new_settings['action'] == 'change_config_to_edit' ) {
-        $edit_arr = explode('__', $new_settings['current-save-id'], 2);
+        $edit_arr = explode('__', $new_settings['change_current-save-id'], 2);
         $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] );
-        $options['message'] = "Now editing {$edit_arr[0]} configuration \"{$edit_arr[1]}\".";
+        $options['message'] = "Now editing {$edit_arr[0]} configuration &#8220;{$edit_arr[1]}&#8221;.";
         return $options;
     }
     
     // change live/public config
     if( $new_settings['action'] == 'change_live_config' ) {
-        $live_arr = explode('__', $new_settings['live_config_id'], 2);
+        $live_arr = explode('__', $new_settings['change_live_config_id'], 2);
         $options['live_config_id'] = array($live_arr[0], $live_arr[1]);
         $options['message'] = "The {$live_arr[0]} configuration, {$live_arr[1]}, is now live.";
         return $options;
@@ -356,10 +356,10 @@ function handle_configuration_management_options($new_settings) {
         } else {
             $options['current-save-id'] = array('user', $new_config_name);
             $options['configurations']['user'][$new_config_name] = array();
+            // TODO must create css at some point - or abstract out common css
             $options['message'] = "Successfully created new user configuration";
             return $options;
         }
-        // TODO must create css at some point - or abstract out common css
     }
     
     // delete config
@@ -389,14 +389,22 @@ function ajax_handle_save_form() {
     $inputs = $_POST['inputs'];
     $options = get_option('ap_options');
     $new_settings = array( 
-    	'action' => 'save_configuration',
-    	'cs'     => reset($inputs),
+    	'action'  => 'save_configuration',
+        'message' => 'saving configuration',   
+    	'cs'      => reset($inputs),
         'current-save-id' => $options['current-save-id'][1]
     ); 
     update_option('ap_options', $new_settings);
+    
     // send results back to the client in the correct format
-    $modified = array_intersect($options['cs'], $new_settings['cs']);
-    echo json_encode( $modified );
+    $config_type = $options['current-save-id'][0];
+    $config_name = $options['current-save-id'][1];
+    $updated_options = get_option('ap_options');
+    $modified = array_intersect($updated_options['configurations'][$config_type][$config_name], $new_settings['cs']);
+    $modified['configName'] = $config_name;
+    $modified['message'] = $updated_options['message'];
+    $json = json_encode( $modified ); 
+    echo $json;
 }
 /**
  * All user interactions with theme settings are routed through this function.
