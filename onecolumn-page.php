@@ -19,9 +19,6 @@ get_header(); ?>
                 <div class="twelvecol last" role="main">
                     <?php get_template_part( 'ht-crumbs' );
 
-
-			 kd_type_gen();
-
 			 ?>
 
 			<?php
