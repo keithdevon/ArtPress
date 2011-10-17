@@ -33,12 +33,6 @@ get_header(); ?>
                 <div class="clear"></div>
             </div><!-- row -->
 
-		<div class="row">
-		  <div class="sixcol"><?php get_sidebar();?></div>
-		  <div class="sixcol last"><?php get_template_part( 'second-sidebar' );?></div>
-		  <div class="clear"></div>
-		</div>
-
 
 		</div>
 
