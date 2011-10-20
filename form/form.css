@@ -1,17 +1,21 @@
 @CHARSET "UTF-8";
 #save-div {
     height: 40px;
-    clear: both;
-    text-aligh: right;
+    clear: none;
+    display: inline;
+    text-align: right;
     padding-right: 0;
     margin-top: 12px;
     margin-bottom: 14px;
+        
 }
-#save-div input {
+#save-div input, select#change_edit_config  {
     font-size: 24px;
 	float: right;
     padding: 4px;
-    
+}
+#save-div input[type="text"], select#change_edit_config {
+    color: #464646;
 }
 #current-save-id {
     text-align: right;
@@ -21,7 +25,7 @@
 }
 #save-div [type="text"] {
     font-style: italic;
-    color: #464646;
+
 }
 table.form-table {
     table-layout: auto;
@@ -32,5 +36,7 @@ colgroup col:FIRST-CHILD{
     width: 200px;
 }
 #themeNotifications {
-    float: right;
+}
+#config-controls {
+    overflow: auto;
 }

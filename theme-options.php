@@ -21,6 +21,7 @@ require_once $dir . 'form/typography.php';
 require_once $dir . 'form/layout.php';
 require_once $dir . 'form/effect.php';
 require_once $dir . 'form/background-image.php';
+require_once $dir . 'form/configuration.php';
 require_once $dir . 'form/default-configurations.php';
 require_once $dir . 'form/image-form.php';
 
@@ -45,6 +46,13 @@ function init_register_scripts() {
         $template_dir . '/js/jquery.form.js',                            // src   
         null,                                                            // deps  
         '2.83',                                                          // version
+        true);                                                           // in footer?
+        
+    wp_register_script(
+    	'form',                                                          // handle
+        $template_dir . '/form/form.js',                                 // src   
+        null,                                                            // deps  
+        '1.0',                                                           // version
         true);                                                           // in footer?
 
     // register styles
@@ -71,6 +79,7 @@ function init_register_scripts() {
         $template_dir . '/scripts/farbtastic/farbtastic.js', 
         array('jquery'));
     wp_enqueue_script('jQuery.form');
+    wp_enqueue_script('form');
 
     // enqueue styles
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
@@ -107,16 +116,6 @@ function init_add_theme_pages() {
         0                            // menu position
         );
 
-    // set up configurations page
-    add_submenu_page(
-    	'artpress',                  // parent slug
-        __('Configurations'),        // page title  
-        __('Configurations'),        // menu title
-        'edit_theme_options',        // capability
-        'manage_configurations',     // menu slug
-        'page_configs'            // page rendering function
-        );
-
     // set up images page
     add_submenu_page(
     	'artpress',                  // parent slug            
@@ -139,141 +138,100 @@ function get_settings_fields($option_group) {
 	return $o;
 }
 
+function get_config_form($values) {
+    $configuration = new Configuration('main tab group');
+    $configuration->inject_values( $values );
+    $config_html = $configuration->get_html();
+    $setting_fields = get_settings_fields('artpress_options');
+    return form('post', 'options.php', $setting_fields . $config_html, null, attr_id('ap_options_form'));
+}
+
 function page_edit_config() {
     if ( ! isset( $_REQUEST['updated'] ) )
         $_REQUEST['updated'] = false;
-
-    $configuration = new Configuration('main tab group');
+    
+    //add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
+    
     $options = get_option('ap_options');
 
     // page title stuff
     //screen_icon();
     echo ot('div', attr_class('wrap'));
     echo h2( get_current_theme() . __( ' Options' ) ); 
-    // TODO ^ source of why k & j see different stuff
-    echo input('text', attr_id('themeNotifications') . attr_value($options['message']) . attr_size(50) . attr_readonly());
-    // populate configuration with its settings
-    if ($options != null) {
+    $notifications = input('text', attr_id('themeNotifications') . attr_value($options['message']) . attr_size(50) . attr_readonly());
+    
+    // delete button
+    $delete = input('button', attr_value('delete') . attr_on_click('delete_config()') . attr_class('button-secondary'));
+    
+    // live select
+    $live = get_live_button($options);
+    
+    // new
+    $new = input('button', attr_value('new') . attr_on_click('new_config()') . attr_class('button-secondary') );
+    
+    // save
+    $current_save_id = new Current_Save_ID( get_current_config($options) );
+    $save_part = div(  
+          input('hidden', attr_name('current_config_type') . attr_value(get_current_config_type($options)) )
+        . input('hidden', attr_name('current_config_name') . attr_value(get_current_config_name($options)) )
+        , attr_id('save-div') );
         
-        $configuration->inject_values(
-            array_merge(array('current-save-id'=>$options['current-save-id']),
-                        Configuration::get_current_configuration_settings($options))
-        );
     
-    }
+    $save_button = input('button', attr_class('button-primary') . attr_value(esc_attr('save')) . attr_on_click('save_config()') );
     
-    // output the configuration html
-    echo $configuration->get_html();
+    $save_as_button = input('button', attr_value('save as') . attr_on_click('save_as_config()') . attr_class('button-secondary') );
+
+    // select config to edit
+    $config_select = select("", get_config_select_contents($options), attr_id('change_edit_config') . attr_on_change('change_edit_config(this)') );
+    
+    echo div( $notifications . $delete . $live . $new . $save_button . $save_as_button . $save_part . $config_select, attr_id('config-controls') );
+    $values = Configuration::get_current_configuration_settings($options);
+    echo div(get_config_form($values));
     echo ct('div');
 }
-function get_config_select($options, $setting_name) {
-    $setting_arr = $options[$setting_name];
-    
-    // create default select options
+/** 
+ * If the candidate config type and name match the current live config id,
+ * then this function will return a string symbolising that this candidate config
+ * is the live config
+ * */
+function add_live_tag( $options, $candidate_config_type, $candidate_config_name ) {
+    if(is_live_config($options, $candidate_config_type, $candidate_config_name)) return " ( LIVE )";
+    else return '';
+}
+function add_selected_attr( $options, $candidate_config_type, $candidate_config_name ) {
+    if(is_current_config($options, $candidate_config_type, $candidate_config_name)) return attr_selected(true);
+    else return '';
+}
+function get_config_select_contents($options) {
     $default_opts = '';
-    foreach (array_keys($options['configurations']['default']) as $config_name) {
-        if( $setting_arr[0] == 'user' || $config_name != $setting_arr[1] ) 
-            $default_opts .= option('default__' . $config_name, $config_name);
+    $user_opts = '';
+
+    // create default select options
+    foreach ( get_default_configuration_names($options) as $config_name) {
+        $default_opts .= option('default__' . $config_name, 
+                                    $config_name 
+                                        . add_live_tag($options, 'default', $config_name)
+                                    , add_selected_attr($options, 'default', $config_name));
     }
     $default_group = optgroup('default configurations', $default_opts);
             
     // create user select options
-    $user_opts = '';
-    foreach (array_keys($options['configurations']['user']) as $config_name) {
-        // omit the currently selected configuration from select choice
-        if( $setting_arr[0] == 'default' || $config_name != $setting_arr[1] ) 
-            $user_opts .= option('user__' . $config_name, $config_name);
+    foreach ( get_user_configuration_names($options) as $config_name) {
+        $user_opts .= option('user__' . $config_name, 
+                                $config_name 
+                                    . add_live_tag($options, 'user', $config_name)
+                                , add_selected_attr($options, 'user', $config_name));
     }
     $user_group = optgroup('user configurations', $user_opts);
-    return select("ap_options[{$setting_name}]", $default_group . $user_group);
+    
+    return $default_group . $user_group;
 }
 
-function form_config_action($options, $flag, $setting_name, $setting_label, $submit_button_text) {
-    $o = '<form method="post" action="options.php">';
-    $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name("ap_options[action]") . attr_value( $flag ) );
-            
-    $select = get_config_select($options, $setting_name);
-    
-    // create the rest of the form elements
-    $o .=  tr(td($setting_label)
-            . td($select)
-            . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( $submit_button_text ) . "' /></span>")
-            );
-    
-    $o .= ct('form');
-    return $o;
+function get_live_button($options) {
+    $is_live = is_current_config_live($options);
+    return input('button', attr_id('live_switch') .attr_value('live') . attr_disabled($is_live) . attr_class('button-secondary') . attr_on_click('set_live_config()'));
 }
 
-function page_configs() {
-    $options = get_option('ap_options');
-    $o = '';
-    $o .= h2('Theme configurations');
-    $o .= ot('table');
-    
-    // notify the user which configuration is currently live
-    $live = $options['live_config_id'];
-    $o .= tr( td(label( 'live_config_id', __('The current public facing configuration') ) ) .
-              td(input( 'text', attr_readonly() . attr_value( $live[0] . ' : ' . $live[1] ) ) ) );
-    
-    // notify the user configuration they're currently editing
-    $editing = $options['current-save-id'];          
-    $o .= tr( td(label( 'current-save-id', __('The configuration currently being edited') ) ) .
-              td(input( 'text', attr_readonly() . attr_value( $editing[0] . ' : ' . $editing[1] ) ) ) );
-
-    // 'live configuration' selector
-    $o .= form_config_action($options, 'change_live_config', 'change_live_config_id', 'Select a different public configuration', 'live');
-
-    // 'configuration to edit' selector
-    $o .= form_config_action($options, 'change_config_to_edit', 'change_current-save-id', 'Select a different configuration to edit', 'edit');
-
-    // delete a configuration selector
-    $o .= '<form method="post" action="options.php">';
-    $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name('ap_options[action]') . attr_value('delete_configuration') );
-    // user can only delete user configurations
-    if( $options && isset($options['configurations']['user'])) {
-       $opts = '';
-       foreach (array_keys($options['configurations']['user']) as $save_name) {
-           // don't give option to delete a user config if it's the current live config
-           if($options['live_config_id'][0] == 'default' || $save_name != $options['live_config_id'][1]) {
-               $opts .= option($save_name, $save_name);
-           }
-       }
-       if( $opts ) {
-           $delete_input = select("ap_options[delete-id]", $opts);
-       } else {
-           $delete_input = input('text', attr_readonly() . attr_value('no user configurations'));
-       }
-       $o .=  tr(td('Select a user configuration to delete')
-               . td( $delete_input )
-               . td("<span class='submit'><input type='submit' class='button-primary' value='" . __( 'delete' ) . "' /></span>")
-               );
-    }
-    $o .= ct('form');
-
-
-    // create new configuration
-    $o .= '<form method="post" action="options.php">';
-    $o .= get_settings_fields('artpress_options');
-    $o .= input('hidden', attr_name('ap_options[action]') . attr_value('create_new_configuration') );
-
-    $o .= ot('tr');
-    $o .= td(label('new_configuration',__('Create new configuration')));
-    $o .= td(input('text', attr_name('ap_options[new_configuration_name]'). attr_id('new_configuration')));
-    $create = __( 'create' );
-    $o .= td("<span class='submit'><input type='submit' class='button-primary' value='{$create}' /></span>");
-    $o .= ct('tr');
-    $o .= ct('form');
-
-    $o .= ct('table');
-    $div = div($o, attr_class('wrap'));
-
-    // select default configurations
-
-    // upload/download configuration?
-    echo $div;
-}
 /**
  * Creates a valid options array of stub, empty values for ap_options
  * */
@@ -285,15 +243,19 @@ function get_defaults() {
     $options['configurations']['user'] = array();
     $options['configurations']['default'] = $ap_configuration_defaults;
     
-    $options['current-save-id'] = array('default', reset(array_keys($ap_configuration_defaults)));
-    $options['live_config_id'] = $options['current-save-id'];
+    set_current_config($options, 'default', reset(array_keys($ap_configuration_defaults)));
+    set_live_config($options, get_current_config_type($options), get_current_config_type($options));
       
-    $options['cs'] = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
+    $options['cs'] = get_current_config_values($options);
     
     $options['css'] = array('user' => array(), 'default' => array());// TODO create css here?
     
 
     return $options;
+}
+
+function set_action(&$options, $action) {
+   $options['action'] = $action;
 }
 
 /**
@@ -304,7 +266,7 @@ function init_ap_options() {
 
     if ( $opt1 == null ) {
         $opt1 = get_defaults();
-        add_option('ap_options', $opt1);
+        $success = add_option('ap_options', $opt1);
     }
 
     $opt2 = get_option('ap_images');
@@ -332,16 +294,15 @@ function handle_configuration_management_options($new_settings) {
     // change edit config
     if( $new_settings['action'] == 'change_config_to_edit' ) {
         $edit_arr = explode('__', $new_settings['change_current-save-id'], 2);
-        $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] );
-        $options['message'] = "Now editing {$edit_arr[0]} configuration &#8220;{$edit_arr[1]}&#8221;.";
+        $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] ); // TODO use helper functions
+        $options['message'] = "Now editing {$edit_arr[0]} configuration '{$edit_arr[1]}'.";
         return $options;
     }
     
     // change live/public config
     if( $new_settings['action'] == 'change_live_config' ) {
-        $live_arr = explode('__', $new_settings['change_live_config_id'], 2);
-        $options['live_config_id'] = array($live_arr[0], $live_arr[1]);
-        $options['message'] = "The {$live_arr[0]} configuration, {$live_arr[1]}, is now live.";
+        $options['live_config_id'] = array($new_settings['change_live_config_id'][0], $new_settings['change_live_config_id'][1]);
+        $options['message'] = "The {$options['live_config_id'][0]} configuration '{$options['live_config_id'][1]}' is now live.";
         return $options;
     }
     
@@ -365,34 +326,45 @@ function handle_configuration_management_options($new_settings) {
     // delete config
     if( $new_settings['action'] == 'delete_configuration' ) {
         $dead_save = $new_settings['delete-id'];
+        if($dead_save[0] == 'default') {
+            $options['message'] = "Cannot delete default configurations";
+            return $options;
+        }
         if($dead_save == $options['live_config_id']) {
             //don't do anything if the first save is being shown to the public
             $options['message'] = "Cannot delete this configuration as it is currently live.";
             return $options;
         }
-        unset($options['configurations']['user'][$dead_save]);
-        unset($options['css'][$dead_save]);
-        $first_save = key($options['configurations']['user']);
+        unset($options['configurations']['user'][$dead_save[1]]);
+        unset($options['css']['user'][$dead_save[1]]);
+        $first_save_name = key($options['configurations']['default']);
 
         if($dead_save == $options['current-save-id']) {
-            $options['current-save-id'] = $first_save;
+            $options['current-save-id'] = array('default', $first_save_name );
         }
 
-        $options['message'] = "Deleted configuration {$dead_save}.";
+        $options['message'] = "Deleted user configuration '{$dead_save[1]}'";
         return $options;
     }
     
     return false;
 }
-add_action('wp_ajax_save_form', 'ajax_handle_save_form');
-function ajax_handle_save_form() {
+add_action('wp_ajax_save_config', 'ajax_handle_save_config');
+function ajax_handle_save_config() {
     $inputs = $_POST['inputs'];
     $options = get_option('ap_options');
+    $no_slash = str_replace("\\" , "", $inputs['cs']);
+    $cs = json_decode($no_slash, true);
+    $values = array();
+    foreach ( array_keys($cs) as $key ) {
+        $new_key = str_replace(']', '', str_replace('ap_options[cs][', '', $key));
+        $values[$new_key] = $cs[$key];
+    }
     $new_settings = array( 
-    	'action'  => 'save_configuration',
-        'message' => 'saving configuration',   
-    	'cs'      => reset($inputs),
-        'current-save-id' => $options['current-save-id'][1]
+    	'action'          => 'save_configuration',
+        'message'         => 'saving configuration',   
+    	'cs'              => $values,
+        'current-save-id' => array( $inputs['configType'], $inputs['configName'] )
     ); 
     update_option('ap_options', $new_settings);
     
@@ -400,11 +372,123 @@ function ajax_handle_save_form() {
     $config_type = $options['current-save-id'][0];
     $config_name = $options['current-save-id'][1];
     $updated_options = get_option('ap_options');
-    $modified = array_intersect($updated_options['configurations'][$config_type][$config_name], $new_settings['cs']);
-    $modified['configName'] = $config_name;
-    $modified['message'] = $updated_options['message'];
-    $json = json_encode( $modified ); 
+    $response = array(
+    	  'configID'         => get_current_config($updated_options)
+    	, 'message'          => $updated_options['message'] 
+    	, 'configSelectHTML' => get_config_select_contents($updated_options)
+    	);
+    $json = json_encode( $response ); 
     echo $json;
+}
+add_action('wp_ajax_get_config', 'ajax_handle_get_config');
+function ajax_handle_get_config() {
+    if($inputs = $_POST['inputs'] ) {
+
+        $new_settings = array( 
+        	'change_current-save-id' => $inputs['config'],
+        	'action'  => 'change_config_to_edit',
+            'message' => 'changing current configuration',   
+            'current-save-id' => $options['current-save-id'][1]
+        ); 
+        
+        update_option('ap_options', $new_settings);
+        $updated_options = get_option('ap_options');
+        $config_values = get_current_config_values($updated_options);
+        
+        // send results back to the client in the correct format
+        $response = array(
+        	'formHTML'     => get_config_form( $config_values )
+            , 'configID'   => get_current_config($updated_options)
+            , 'message'    => $updated_options['message']
+            , 'isLive'	   => is_current_config_live($updated_options)
+            );
+        $json = json_encode( $response ); ;
+        echo $json;
+    }
+}
+
+add_action('wp_ajax_delete_config', 'ajax_handle_delete_config');
+function ajax_handle_delete_config() {
+    if($inputs = $_POST['inputs'] ) {
+
+        $new_settings = 
+            array( 
+            	'delete-id'       => array( $inputs['configType'], $inputs['configName'] ),
+            	'action'          => 'delete_configuration',
+                'message'         => 'deleting current configuration',   
+            ); 
+        
+        update_option('ap_options', $new_settings);
+        $updated_options = get_option('ap_options');
+        $config_values = get_current_config_values($updated_options);
+        
+        // send results back to the client in the correct format
+        $response = 
+            array(
+                'formHTML'           => get_config_form( $config_values )
+                , 'configID'         => get_current_config($updated_options)
+                , 'message'          => $updated_options['message']
+                , 'configSelectHTML' => get_config_select_contents($updated_options)
+                , 'isLive'	         => is_current_config_live($updated_options)
+                );
+        $json = json_encode( $response ); ;
+        echo $json;
+    }
+}
+
+add_action('wp_ajax_set_live_config', 'ajax_handle_set_live_config');
+function ajax_handle_set_live_config() {
+    if($inputs = $_POST['inputs'] ) {
+        $new_settings = 
+            array( 
+            	'change_live_config_id'       => array( $inputs['configType'], $inputs['configName'] ),
+            	'action'          => 'change_live_config',
+                'message'         => 'changing live configuration',   
+            ); 
+        
+        update_option('ap_options', $new_settings);
+        $updated_options = get_option('ap_options');
+        $config_values = get_current_config_values($updated_options);
+        
+        // send results back to the client in the correct format
+        $response = 
+            array(
+                 'message'           => $updated_options['message']
+                , 'configID'         => get_current_config($updated_options)
+                , 'configSelectHTML' => get_config_select_contents($updated_options)
+                , 'isLive'	         => is_current_config_live($updated_options)
+                );
+        $json = json_encode( $response ); ;
+        echo $json;
+    }
+}
+
+add_action('wp_ajax_new_config', 'ajax_handle_new_config');
+function ajax_handle_new_config() {
+
+    if($inputs = $_POST['inputs'] ) {
+
+        $new_settings = array( 
+        	'new_configuration_name' => $inputs['config'],
+        	'action'  => 'create_new_configuration',
+            'message' => 'changing current configuration',   
+        ); 
+        
+        update_option('ap_options', $new_settings);
+        $updated_options = get_option('ap_options');
+        $config_values = get_current_config_values($updated_options);
+        
+        // send results back to the client in the correct format
+        $response = array(
+        	'formHTML'     => get_config_form( $config_values )
+            , 'configID'   => get_current_config($updated_options)
+            , 'configSelectHTML' => get_config_select_contents($updated_options)
+            , 'message'    => 'Now editing ' . $config_name[1]
+            , 'isLive'	   => is_current_config_live($updated_options)
+            );
+        $json = json_encode( $response ); ;
+        echo $json;
+    }
 }
 /**
  * All user interactions with theme settings are routed through this function.
@@ -463,7 +547,7 @@ function handle_ap_options( $new_settings ) {
             // set the current-save-id
             // TODO check if the name already exists
             // create a new save name if the current save if a default configuration ...
-            if( $options['current-save-id'][0] == 'default') {
+            if( $new_settings['current-save-id'][0] == 'default') {
                 $d = getdate();
                 $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
                 $options['current-save-id'] = array('user', $new_settings['current-save-id'] . " [${date}]");
@@ -477,7 +561,7 @@ function handle_ap_options( $new_settings ) {
                 $options['message'] = "Saved user configuration as \"{$date}\"";
             
             } else {
-                $options['current-save-id'] = array('user', $new_settings['current-save-id']);
+                $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);
                 $options['message'] = "Saved user configuration \"{$options['current-save-id'][1]}\"";
             }
         

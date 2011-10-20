@@ -42,6 +42,13 @@ function attr_checked ($value)    {
         return '';
     }
 }
+function attr_disabled      ($value) { 
+    if( $value == true ){
+        return attribute('disabled',    'disabled'); 
+    } else {
+        return '';
+    }
+}
 function attr_selected ($value)    {
     if( $value == true ){
         return attribute('selected', 'selected');

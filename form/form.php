@@ -443,7 +443,6 @@ class Configuration extends Tab_Group {
     function __construct($display_name, $members=array()) {
         if( $members == null ) {
             $members = array(
-            new Current_Save_ID(),
             new Global_Settings(),
             new Header_Tab(),
             new Menu_Tab(),
@@ -462,23 +461,25 @@ class Configuration extends Tab_Group {
     }
 
     function inject_values($values) {
-        $settings = Setting::get_registered_settings();
-        foreach( array_keys($settings) as $setting_key ) { 
-            // FIXME ^ iterate over $values instead? much smaller
-            // Do a check first to see that setting key exists in the existing supplied $values
-            // which will be false for new settings in new versions
-            $exists = key_exists($setting_key, $values);
-            if( $exists ) {
-                $setting = $settings[$setting_key];
-                $value = $values[$setting_key];
-                $setting->set_value($value);
+        if($values) {
+            $settings = Setting::get_registered_settings();
+            foreach( array_keys($settings) as $setting_key ) { 
+                // FIXME ^ iterate over $values instead? much smaller
+                // Do a check first to see that setting key exists in the existing supplied $values
+                // which will be false for new settings in new versions
+                $exists = key_exists($setting_key, $values);
+                if( $exists ) {
+                    $setting = $settings[$setting_key];
+                    $value = $values[$setting_key];
+                    $setting->set_value($value);
+                }
             }
         }
     }
 
     function get_html() {
         global $page_edit_config;
-        add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
+        //add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
 
         // create tabs
         $tab_links = '';
@@ -499,163 +500,15 @@ class Configuration extends Tab_Group {
         }
         
         // create form
-        $current_save_id = $this->get_child(0);
-        $save_part = div(  button_submit( __('Save') ) //attr_value('save')) 
-                            . $current_save_id->get_html()
-                        , attr_id('save-div') );
-
+        
         $form_tabs = ul( $tab_links );
         $form_tab_bodies = div($form_tabs . $form_tabs_content, attr_id("{$id}-tabs") );
-
-        $setting_fields = get_settings_fields('artpress_options');
-        $save_flag = input( 'hidden', attr_name('ap_options[action]') . attr_value('save_configuration') );
         $script = "\n<script type='text/javascript'> jQuery( function() { jQuery( '#{$id}-tabs' ).tabs(); } ); </script>"; 
-        return form('post'
-                        , 'options.php'
-                        , $script . $setting_fields . $save_part. $save_flag . $form_tab_bodies
-                        , null
-                        , attr_id('ap_options_form'));
+        return $script . $form_tab_bodies;
     }
     
     static function script() {?><script type='text/javascript'>
-        	changedEls = {};
-        	successColor = '#AFA';
-        	waitingColor = '#FF9';
-        	failColor    = '#FAA';
-
-        	function inputHasChanged(obj) {
-            	//alert('input has changed');
-            	changedEls[obj.name] = obj.value;
-        	}
-        	function inputHasFocus(obj) {
-            	//var val = jQuery(this).value;
-				//changedEls.push(val);
-				alert(obj.name + " has focus");
-				obj.focus = null;
-        	}
-			function getModifiedFormInputs() {
-				// get current-save-id
-				var configName = jQuery('#current-save-id');
-				inputHasChanged( configName );
-				
-				// add global settings to the list of changed elements regardless
-				var globalSettings = jQuery('.globalSetting');
-				for(index in globalSettings ) {
-					inputHasChanged( globalSettings[index] );
-				}
-				return changedEls;
-			}
-        	function updateFormInputs( valuesMap ) {
-    			alert('Got this from the server: ' + valuesMap);
-    			var vmap = jQuery.parseJSON( valuesMap );
-    			jQuery('#current-save-id').attr('value', vmap['configName']);
-    			jQuery('#themeNotifications').attr('value', vmap['message']);
-				for(var k in vmap) {
-					//alert(k + ' : ' + valuesMap[k]);
-					
-				}
-            }
-            // wait for the DOM to be loaded
-            jQuery(document).ready(function() {
-                var sd = jQuery('#save-div');
-            	var sb = jQuery(sd).find(':submit');
-            	// create a new button element to replace the submit button
-            	// ( can't add button click event handlers to a submit button 
-            	// without it trying to submit causing a refresh every time it is clicked )
-            	var newsb = jQuery('<input/>', {
-            	    type: 'button',
-            	    value: 'Save',
-                	name: 'Submit'
-                	    
-            	}).addClass('button-primary').prependTo(sd);
-            	
-            	jQuery(sb).remove();
-                jQuery(newsb).click(
-                        function(){ 
-                            //alert('clicking');
-                    		jQuery(this).prev().css('background-color', waitingColor); 
-                    		var formInputs = getModifiedFormInputs();
-                            var data = {
-                            		action: 'save_form',
-                            		inputs: formInputs
-                            	};
-                        	// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
-                        	jQuery.post(ajaxurl, data, function(response) {
-                            	
-								updateFormInputs( response.slice(0, -1) );                        		
-                        	});
-                    	});
-    
-
-                //jQuery('#ap_options_form').ajaxForm(function() {
-                //    for (i = 0; i < changedEls.length; i++) {
-                //    	el = changedEls[i];
-                //    	jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
-                //   	}
-                //   	// make save name flash green
-                //    jQuery('#current-save-id').css('background-color', successColor).animate({'background-color': '#FFF'}, 'slow');
-                //
-                
-            });
-            function trimWhiteSpace(str) {
-    			return str.replace(/^\s+|\s+$/g, '') ;
-    		}
-            function isValidSize(val) {
-                if( val == '' ) {
-					return true;
-                } else if(parseInt(val)) {
-    				return val.match('px$|em$|%$');
-    			} else {
-    				if (parseFloat(val)) {
-						return val.match('em$|%$');
-    				} else {
-    					return false;
-    				}
-    			}
-    		}
-            function checkValidSize(sizeInputEl) {
-            	var val = trimWhiteSpace(sizeInputEl.value);
-    			if(isValidSize(val)) {
-    				//this.css('background', 'green');
-    				inputHasChanged(sizeInputEl);
-    				sizeInputEl.style.background = successColor;
-    			} else {
-    				jQuery(sizeInputEl).css('background-color', failColor).animate({'background-color': '#FFF'}, 'slow');
-    				sizeInputEl.value = '';
-    			}
-    		}
-    		openAccordions = [];
-            function setOpenAccordion(tabName, accordionLink) { 
-                openAccordions[tabName] = accordionLink;
-        	}
-            function getOpenAccordion(tabName) {
-                var oa = openAccordions[tabName];  
-            	return oa;
-        	}
-    		function mainTabClick(tab) {
-    			var oa = getOpenAccordion();
-    			if (oa) {
-        			updateDependents();
-    			}
-    		}
-    		function accordionClick(accordionLink) {
-        		var tabName = jQuery('.ui-tabs-selected').first().children().html();
-        		setOpenAccordion(tabName, accordionLink);
-        		updateDependents(accordionLink);
-    		}
-    		jQuery(document).ready(
-            	function() {
-                	jQuery('div[id="-tabs"]').bind(  'tabsshow', 
-                        	function(event, ui) { 
-                    			// get the open accordion for this tab
-                    			var tabName = ui.tab.innerHTML;
-                    			var oa = getOpenAccordion(tabName);
-								// call updateDependents on the accordion
-								if (oa) {
-									updateDependents(oa);
-									}
-                    			});
-            	});
+ 
         </script><?php
     }
     static function get_current_configuration_settings($options=null) {

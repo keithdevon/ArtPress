@@ -77,8 +77,9 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
            }
       }
 
-       // farbtastic
-        jQuery(document).ready(function() {
+		// farbtastic
+        jQuery(document).ready(initColorPicker);
+        function initColorPicker() {
             var f = jQuery.farbtastic('#picker');
             var p = jQuery('#picker').css('opacity', 0.25);
             var selected;
@@ -95,12 +96,12 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
                                 jQuery(selected = this).css('opacity', 1).addClass('colorwell-selected');
               });
               <?php /* the user will not have selected the last global color text input field
-                   yet it remains linked to the color picker
-                   therefore unlink the last color text box by supplying an empty function*/ ?>
-          f.linkTo(function(){});
-            <?php // add a callback to the color picker to update the dependent section color dropdowns ?>
-            //p.bind('mouseleave', updateDependentsOf_<?php echo __CLASS__ ?>);
-          });</script><?php
+               yet it remains linked to the color picker
+               therefore unlink the last color text box by supplying an empty function*/ ?>
+        f.linkTo(function(){});
+        <?php // add a callback to the color picker to update the dependent section color dropdowns ?>
+        //p.bind('mouseleave', updateDependentsOf_<?php echo __CLASS__ ?>);
+        }</script><?php
     }
 }
 class Global_Font_Group extends Option_Group {
