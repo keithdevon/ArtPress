@@ -397,13 +397,14 @@ function ajax_handle_save_config() {
 }
 add_action('wp_ajax_get_config', 'ajax_handle_get_config');
 function ajax_handle_get_config() {
+    //$options = get_option('ap_options');
     if($inputs = $_POST['inputs'] ) {
 
         $new_settings = array( 
         	'change_current-save-id' => $inputs['config'],
         	'action'  => 'change_config_to_edit',
             'message' => 'changing current configuration',   
-            'current-save-id' => $options['current-save-id'][1]
+            //'current-save-id' => $options['current-save-id'][1]
         ); 
         
         update_option('ap_options', $new_settings);

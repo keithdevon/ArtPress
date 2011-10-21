@@ -7,7 +7,6 @@ waitingColor = '#FF9';
 failColor    = '#FAA';
 
 function inputHasChanged(obj) {
-	//alert('input has changed');
 	changedEls[obj.name] = obj.value;
 }
 function inputHasFocus(obj) {
@@ -29,10 +28,10 @@ function getModifiedFormInputs() {
 	return changedEls;
 }
 function updateFormInputs( valuesMap ) {
-	//alert('Got this from the server: ' + valuesMap);
+	// update current config information
 	jQuery("[name='current_config_type']").attr('value', valuesMap['configID'][0] );
 	jQuery("[name='current_config_name']").attr('value', valuesMap['configID'][1] );
-	jQuery('#current-save-id').attr('value', valuesMap['configID'][1]);
+
 	jQuery('#themeNotifications').attr('value', valuesMap['message']);
 	var liveSwitch = jQuery('#live_switch');
 	if (valuesMap['isLive']) {
@@ -157,6 +156,25 @@ jQuery(document).ready(
 					}
     			});
 	});
+function handleResponse(response) {
+	// remove trailing 0
+	var sliced = response.slice(0, -1);
+	// convert string to js object
+	var parsed = jQuery.parseJSON(sliced);
+	
+	// handle new form
+	
+	// handle new config select
+    var form = jQuery('#ap_options_form');
+    form.hide();
+    form.html(parsed['formHTML']); 
+    updateFormInputs(parsed);
+    update_config_select(parsed['configSelectHTML']);
+    
+    // restore form
+    initColorPicker();                     
+    form.fadeIn('fast');
+}
 
 function delete_config() {
 	// TODO check for outstanding changes	
@@ -282,19 +300,6 @@ function save_config() {
 	var currentConfigType = jQuery("input[name=current_config_type]").val();
 	var currentConfigName = jQuery("input[name=current_config_name]").val();
 
-    //var data = {
-    //    action: 'save_config',
-    //    inputs: {
-	//		'configType' : currentConfigType,
-	//		'configName' : currentConfigName
-	//	}
-    //};
-    //jQuery.post(ajaxurl, data, function(response) {
-	//	response = jQuery.parseJSON(response.slice(0, -1));
-    //    updateFormInputs(response);
-    //    update_config_select(response['configSelectHTML']);
-    //
-    //});
 	save(currentConfigType, currentConfigName);
 }
 
