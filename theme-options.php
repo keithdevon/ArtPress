@@ -585,7 +585,7 @@ class CSS_Setting_Visitor implements Visitor {
     function valid_child($hierarchy) {
         if ( $hierarchy instanceof CSS_Setting ) {
             $parent = $hierarchy->get_parent();
-            if ( $parent instanceof Toggle_Group ) {
+            if ( $parent instanceof IToggle_Group ) {
                 return $parent->is_on();
             } else {
                 return true;

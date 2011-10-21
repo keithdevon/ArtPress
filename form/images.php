@@ -86,9 +86,27 @@ abstract class CSS_Image_Dropdown extends CSS_Dropdown_Input {
         }
     }
 }
-class Background_Image_Dropdown extends CSS_Image_Dropdown {
-    function __construct($value=0) {
+class Background_Image_Dropdown extends CSS_Image_Dropdown implements IToggle_Group {
+    function __construct($children, $value=null) {
         parent::__construct('background-image:url', 'image select', $value);
+        foreach ($children as $child) {
+            $this->add_child($child);
+        }
+    }
+    function get_html() {
+        $parent_html = parent::get_html();
+        $html = '';
+        $children = parent::get_children();
+        if ( null != $children ) {
+            foreach($children as $child) {
+                $html .= get_setting_row( $child );
+            }
+        }
+        return $parent_html . $html;
+    }
+    function is_on() {
+        if ($this->get_value()) return true;
+        else return false;
     }
 }
 class Logo_Image_Dropdown extends CSS_Image_Dropdown {

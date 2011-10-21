@@ -35,6 +35,7 @@ interface IValid_Input              { function is_valid(); }
 interface IValidate                 { function validate($value); }
 interface Tab                       { function get_link_html($attributes=null); }
 interface IComposite                {}
+interface IToggle_Group             { function is_on(); }
 interface Visitor {
     function recurse($hierarchy);
     function valid_child($hierarchy);

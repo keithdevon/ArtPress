@@ -128,57 +128,6 @@ abstract class Toggle extends Setting {
     }
 }
 
-/**
- * This setting contains a bunch of different sub settings.
- * If this setting is on, the sub settings will be used,
- * otherwise the sub setting's values will be ignored,
- * eg the won't be use to generate CSS
- * */
-abstract class Toggle_Group extends Setting implements IComposite {
-    static $toggles;
-
-    static function get_toggles() {
-        return self::$toggles;
-    }
-
-    function __construct($name, $display_name, $on, $members=array()) {
-        foreach ($members as $child) {
-            $this->add_child($child);
-        }
-        parent::__construct($name, $display_name, $on);
-        $toggles[$this->get_name()] = $this;
-    }
-    function get_html() {
-        $html_name = $this->get_html_name();
-        $value = $this->get_value();
-        $html = '';
-        $html =
-        input('hidden', $html_name . attr_value('0')) .
-        input('checkbox', $html_name . attr_value($value) . attr_checked($value));
-        $children = parent::get_children();
-        if ( null != $children ) {
-            foreach($children as $child) {
-                $html .= get_setting_row( $child );
-            }
-        }
-        return $html;
-    }
-    function set_value($value) {
-        parent::set_value($value);
-    }
-    function validate($value) {
-        // TODO
-        return true;
-    }
-    function is_on() {
-        if( $this->get_value() ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-}
 function create_css_declaration($css_setting) {
     $value = $css_setting->get_css_value();
     if ($value) {

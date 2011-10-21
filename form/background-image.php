@@ -46,17 +46,6 @@ class Background_Vertical_Position extends Setting_Size_Text_Input {
         return parent::get_name();
     }
 }
-class Background_Image_Toggle extends Toggle_Group {
-    function __construct($on, $members=array()) {
-    	parent::__construct('background-image-toggle', 'use background image', $on, $members);
-    }
-
-
-
-
-
-
-}
 class Background_Position extends CSS_Composite {
     function __construct() {
         parent::__construct('background position', 'background-position',
@@ -74,13 +63,15 @@ class Background_Image_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
         if ( null == $members ) {
             $members = array(
-            new Section_Background_Color(),
-            new Background_Image_Toggle(0, array(
-                new Background_Image_Dropdown(),
-                new Background_Repeat(),
-                new Background_Attachment(),
-                new Background_Position()
-                 ) ) );
+                new Section_Background_Color(),
+                new Background_Image_Dropdown( 
+                    array(
+                        new Background_Repeat(),
+                        new Background_Attachment(),
+                        new Background_Position()
+                        ) 
+                 ) 
+             );
         }
         parent::__construct($display_name, $members);
     }
