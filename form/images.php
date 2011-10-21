@@ -114,6 +114,6 @@ class Logo_Image_Dropdown extends CSS_Image_Dropdown {
         parent::__construct('background-image:url', 'Logo image select', $value);
     }
     function get_html(){
-        parent::get_html(attr_class('globalSetting'));
+        return parent::get_html(attr_class('globalSetting'));
     }
 }
