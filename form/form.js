@@ -248,12 +248,13 @@ function change_edit_config(selectObj) {
     };
         
     jQuery.post(ajaxurl, data, function(response) {
-		response = jQuery.parseJSON(response.slice(0, -1));
+    	var sliced = response.slice(0, -1);
+		var parsed = jQuery.parseJSON(sliced);
         var form = jQuery('#ap_options_form');
         form.hide();
-        form.html(response['formHTML']); 
-        updateFormInputs(response);
-        update_config_select(response['configSelectHTML']);
+        form.html(parsed['formHTML']); 
+        updateFormInputs(parsed);
+        update_config_select(parsed['configSelectHTML']);
         initColorPicker();                     
         form.fadeIn('fast');
     });

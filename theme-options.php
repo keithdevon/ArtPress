@@ -145,6 +145,27 @@ function get_config_form($values) {
     $setting_fields = get_settings_fields('artpress_options');
     return form('post', 'options.php', $setting_fields . $config_html, null, attr_id('ap_options_form'));
 }
+abstract class Config_Button {
+    private $value, $on_click, $class, $attributes;
+    function __construct($value, $on_click, $class, $attributes='') {
+        $this->value = $value;
+        $this->on_click = $on_click; 
+        $this->class = $class;
+        $this->attributes = $attributes;
+    }
+    function get_html() { return input( 'button', attr_value($this->value) . attr_on_click($this->on_click) . attr_class($this->class) . ToolTips::get($this) . $this->attributes );}
+}
+class Save_Button    extends Config_Button { function __construct() { parent::__construct('save',    'save_config()',     'button-primary');   } }
+class Save_As_Button extends Config_Button { function __construct() { parent::__construct('save as', 'save_as_config()',  'button-secondary'); } }
+class Delete_Button  extends Config_Button { function __construct() { parent::__construct('delete',  'delete_config()',   'button-secondary'); } }
+class New_Button     extends Config_Button { function __construct() { parent::__construct('new',     'new_config()',      'button-secondary'); } }
+class Live_Button    extends Config_Button { 
+    function __construct($options) { 
+        $is_live = is_current_config_live($options);
+        $attributes = attr_id('live_switch') . attr_disabled($is_live);
+        parent::__construct('live',    'set_live_config()', 'button-secondary', $attributes );
+    } 
+}
 
 function page_edit_config() {
     if ( ! isset( $_REQUEST['updated'] ) )
@@ -160,31 +181,30 @@ function page_edit_config() {
     echo h2( get_current_theme() . __( ' Options' ) ); 
     $notifications = input('text', attr_id('themeNotifications') . attr_value($options['message']) . attr_size(50) . attr_readonly());
     
-    // delete button
-    $delete = input('button', attr_value('delete') . attr_on_click('delete_config()') . attr_class('button-secondary'));
-    
-    // live select
-    $live = get_live_button($options);
-    
-    // new
-    $new = input('button', attr_value('new') . attr_on_click('new_config()') . attr_class('button-secondary') );
+    // create buttons
+    $delete = new Delete_Button(); 
+    $live = new Live_Button($options);
+    $new = new New_Button();
+    $save = new Save_Button();
+    $save_as = new Save_As_Button();
     
     // save
-    $current_save_id = new Current_Save_ID( get_current_config($options) );
     $save_part = div(  
           input('hidden', attr_name('current_config_type') . attr_value(get_current_config_type($options)) )
         . input('hidden', attr_name('current_config_name') . attr_value(get_current_config_name($options)) )
         , attr_id('save-div') );
-        
-    
-    $save_button = input('button', attr_class('button-primary') . attr_value(esc_attr('save')) . attr_on_click('save_config()') );
-    
-    $save_as_button = input('button', attr_value('save as') . attr_on_click('save_as_config()') . attr_class('button-secondary') );
 
     // select config to edit
     $config_select = select("", get_config_select_contents($options), attr_id('change_edit_config') . attr_on_change('change_edit_config(this)') );
     
-    echo div( $notifications . $delete . $live . $new . $save_button . $save_as_button . $save_part . $config_select, attr_id('config-controls') );
+    echo div( $notifications 
+            . $delete->get_html() 
+            . $live->get_html() 
+            . $new->get_html() 
+            . $save->get_html() 
+            . $save_as->get_html() 
+            . $save_part 
+            . $config_select, attr_id('config-controls') );
     $values = Configuration::get_current_configuration_settings($options);
     echo div(get_config_form($values));
     echo ct('div');
@@ -225,11 +245,6 @@ function get_config_select_contents($options) {
     $user_group = optgroup('user configurations', $user_opts);
     
     return $default_group . $user_group;
-}
-
-function get_live_button($options) {
-    $is_live = is_current_config_live($options);
-    return input('button', attr_id('live_switch') .attr_value('live') . attr_disabled($is_live) . attr_class('button-secondary') . attr_on_click('set_live_config()'));
 }
 
 /**
@@ -483,7 +498,7 @@ function ajax_handle_new_config() {
         	'formHTML'     => get_config_form( $config_values )
             , 'configID'   => get_current_config($updated_options)
             , 'configSelectHTML' => get_config_select_contents($updated_options)
-            , 'message'    => 'Now editing ' . $config_name[1]
+            , 'message'          => $updated_options['message']
             , 'isLive'	   => is_current_config_live($updated_options)
             );
         $json = json_encode( $response ); ;

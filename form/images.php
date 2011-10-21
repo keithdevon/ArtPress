@@ -79,8 +79,7 @@ abstract class CSS_Image_Dropdown extends CSS_Dropdown_Input {
     function get_css_declaration() {
         $options = self::$options;
         $value = $this->get_value();
-        $file = $options[$value];
-        if($file) {
+        if(isset($options[$value]) && $file = $options[$value]) {
             $dec = "\nbackground-image:url('{$file}');";
             return $dec;
         }

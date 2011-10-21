@@ -1,6 +1,13 @@
 <?php
 class ToolTips {
      private static $tooltips = array(
+         ////Config controls
+        "Save_Button"    => "Save this configuration",
+        "Save_As_Button" => "Save this configuration and give it a new name",
+        "Delete_Button"  => "Completely remove this configuration",
+        "New_Button"     => "Create a new blank configuration",
+        "Live_Button"    => "Make this configuration visible to the public",
+     
         ////Top Level
         "Global_Settings" => "Set the global colours, fonts and logo." 				  ,
         "Header_Tab"      => "Edit the header area, site title and site description." ,
