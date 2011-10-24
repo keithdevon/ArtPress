@@ -292,6 +292,10 @@ function save(configType, configName) {
 		response = jQuery.parseJSON(response.slice(0, -1));
         updateFormInputs(response);
         update_config_select(response['configSelectHTML']);
+        for (var name in changedEls ) {
+			var el = jQuery('[name="' + name + '"]');
+			jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
+        }
     });		
 }
 function save_config() {
