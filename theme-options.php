@@ -259,7 +259,7 @@ function get_defaults() {
     $options['configurations']['default'] = $ap_configuration_defaults;
     
     set_current_config($options, 'default', reset(array_keys($ap_configuration_defaults)));
-    set_live_config($options, get_current_config_type($options), get_current_config_type($options));
+    set_live_config($options, get_current_config_type($options), get_current_config_name($options));
       
     $options['cs'] = get_current_config_values($options);
     
