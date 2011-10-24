@@ -56,7 +56,7 @@ class Background_Position extends CSS_Composite {
         );
     }
     function validate($value) {
-        // TODO
+        return is_valid_size_string($value);
     }
 }
 class Background_Image_Tab extends Sub_Tab {
