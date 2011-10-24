@@ -10,23 +10,10 @@ function inputHasChanged(obj) {
 	changedEls[obj.name] = obj.value;
 }
 function inputHasFocus(obj) {
-	//var val = jQuery(this).value;
-	//changedEls.push(val);
 	alert(obj.name + " has focus");
 	obj.focus = null;
 }
-function getModifiedFormInputs() {
-	// get current-save-id
-	//var configID = jQuery('#current-save-id');
-	//inputHasChanged( configID );
-	
-	// add global settings to the list of changed elements regardless
-	var globalSettings = jQuery('.globalSetting');
-	for(index = 0; index < globalSettings.length; index++ ) {
-		inputHasChanged( globalSettings[index] );
-	}
-	return changedEls;
-}
+
 function updateFormInputs( valuesMap ) {
 	// update current config information
 	jQuery("[name='current_config_type']").attr('value', valuesMap['configID'][0] );
@@ -89,14 +76,6 @@ function submitForm() {
 	form.ajaxSubmit();
 }
 
-    //jQuery('#ap_options_form').ajaxForm(function() {
-    //    for (i = 0; i < changedEls.length; i++) {
-    //    	el = changedEls[i];
-    //    	jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
-    //   	}
-    //   	// make save name flash green
-    //    jQuery('#current-save-id').css('background-color', successColor).animate({'background-color': '#FFF'}, 'slow');
-    //
 function trimWhiteSpace(str) {
 	return str.replace(/^\s+|\s+$/g, '') ;
 }
@@ -116,7 +95,6 @@ function isValidSize(val) {
 function checkValidSize(sizeInputEl) {
 	var val = trimWhiteSpace(sizeInputEl.value);
 	if(isValidSize(val)) {
-		//this.css('background', 'green');
 		inputHasChanged(sizeInputEl);
 		sizeInputEl.style.background = successColor;
 	} else {
@@ -278,7 +256,16 @@ function change_edit_config(selectObj) {
     });
 }
 function save(configType, configName) {
-	var modifiedInputs = getModifiedFormInputs();	
+	// make a deep copy of all changed input elements
+	var modifiedInputs = jQuery.extend(true, {}, changedEls);
+	
+	// add all global elements
+	var globalSettings = jQuery('.globalSetting');
+	for(index = 0; index < globalSettings.length; index++ ) {
+		var gs = globalSettings[index];
+		modifiedInputs[gs.name] = gs.value;
+	}
+	
 	var inputString = JSON.stringify(modifiedInputs);
     var data = {
         action: 'save_config',
@@ -289,6 +276,8 @@ function save(configType, configName) {
 		}
     };
     jQuery.post(ajaxurl, data, function(response) {
+    	// reset changedEls
+    	changedEls = {};
 		response = jQuery.parseJSON(response.slice(0, -1));
         updateFormInputs(response);
         update_config_select(response['configSelectHTML']);
@@ -308,7 +297,7 @@ function save_config() {
 }
 
 function save_as_config() {
-	var candidate_config_name = prompt('enter a name', '');
+	var candidate_config_name = jQuery.trim(prompt('enter a name', ''));
 	
 	if(candidate_config_name) {
 		// TODO check for outstanding changes	
