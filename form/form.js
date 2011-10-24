@@ -31,54 +31,7 @@ function updateFormInputs( valuesMap ) {
 		
 	}
 }
-// wait for the DOM to be loaded
-//jQuery(document).ready(function() {
-//    var sd = jQuery('#save-div');
-//	var sb = jQuery(sd).find(':submit');
-//	// create a new button element to replace the submit button
-//	// ( can't add button click event handlers to a submit button 
-//	// without it trying to submit causing a refresh every time it is clicked )
-//	var newSB = jQuery('<input/>', {
-//	    type: 'button',
-//	    value: 'Save',
-//    	name: 'Submit'
-//    	    
-//	}).addClass('button-primary').prependTo(sd);
-//	
-//	jQuery(sb).remove();
-//    jQuery(newSB).click(
-//            function(){ 
-//                //alert('clicking');
-//        		jQuery(this).prev().css('background-color', waitingColor); 
-//        		var formInputs = getModifiedFormInputs();
-//                var data = {
-//                		action: 'save_form',
-//                		inputs: formInputs
-//                	};
-//            	// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
-//            	jQuery.post(ajaxurl, data, function(response) {
-//        			var vmap = jQuery.parseJSON( response.slice(0, -1) );
-//					updateFormInputs( vmap );                        		
-//            	});
-//        	});
-//    
-//});
-//$(document).ready(function() {
-//	$('#ap_options_form').bind('submit', 'submitForm'
-//			
-//	);
-//});
-function submitForm() {
-	//e.preventDefault(); // <-- important
 
-	var form = jQuery('#ap_options_form');
-	form.preventDefault();
-	form.ajaxSubmit();
-}
-
-function trimWhiteSpace(str) {
-	return str.replace(/^\s+|\s+$/g, '') ;
-}
 function isValidSize(val) {
     if( val == '' ) {
 		return true;
@@ -93,7 +46,8 @@ function isValidSize(val) {
 	}
 }
 function checkValidSize(sizeInputEl) {
-	var val = trimWhiteSpace(sizeInputEl.value);
+	var val = jQuery.trim(sizeInputEl.value);
+	sizeInputEl.value = val;
 	if(isValidSize(val)) {
 		inputHasChanged(sizeInputEl);
 		sizeInputEl.style.background = successColor;
@@ -276,8 +230,6 @@ function save(configType, configName) {
 		}
     };
     jQuery.post(ajaxurl, data, function(response) {
-    	// reset changedEls
-    	changedEls = {};
 		response = jQuery.parseJSON(response.slice(0, -1));
         updateFormInputs(response);
         update_config_select(response['configSelectHTML']);
@@ -285,6 +237,8 @@ function save(configType, configName) {
 			var el = jQuery('[name="' + name + '"]');
 			jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
         }
+        // reset changedEls
+        changedEls = {};
     });		
 }
 function save_config() {
