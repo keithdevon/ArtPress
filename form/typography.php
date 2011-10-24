@@ -28,10 +28,15 @@ class Letter_Spacing extends CSS_Size_Text_Input {
         parent::__construct('letter-spacing', 'letter spacing', $value);
     }
 }
-class Global_Font_Size extends Setting_Number {
+$font_size_options = array();
+for($i = 20; $i > 5; $i--) {
+    $font_size_options[$i] = $i . 'px';
+}
+class Global_Font_Size extends Setting_Dropdown {
     static $global_font_size_instance;
     function __construct($value) {
-        parent::__construct('base-font-size', 'Base font size', $value);
+        global $font_size_options;
+        parent::__construct('base-font-size', 'Base font size', $font_size_options, $value);
         self::$global_font_size_instance = $this;
     }
     static function get_global_font_size() {
@@ -40,11 +45,24 @@ class Global_Font_Size extends Setting_Number {
         return $size;
     }
     function get_html() {
-        return parent::get_html(attr_class('globalFontSize globalSetting') . ToolTips::get($this) //. attr_on_change("updateDependentsOf_Global_Font_Size_Group()")
-        );
+        return parent::get_html(
+            attr_class('globalFontSize globalSetting') 
+            . ToolTips::get($this));
     }
     static function get_global_font_size_instance() {
         return self::$global_font_size_instance;
+    }
+    function validate($value) {
+        if(is_numeric($value) ) { // ensures the string represents a valid number
+            $value += 0; // this will convert it to a number type
+            if(is_int($value)) {
+                global $font_size_options;
+                $ak = array_keys($font_size_options);
+                $intval = intval($value);
+                $in = in_array($intval, $ak, true);
+                return $in;
+            } return false;
+        } return false;
     }
 }
 $font_size_ratio_options = array(array('golden', 1.618), array('musical fifths', 1.5), array('musical forths', 1.4));
