@@ -171,15 +171,13 @@ function page_edit_config() {
     if ( ! isset( $_REQUEST['updated'] ) )
         $_REQUEST['updated'] = false;
     
-    //add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
-    
     $options = get_option('ap_options');
 
     // page title stuff
     //screen_icon();
     echo ot('div', attr_class('wrap'));
     echo h2( get_current_theme() . __( ' Options' ) ); 
-    $notifications = input('text', attr_id('themeNotifications') . attr_value($options['message']) . attr_size(50) . attr_readonly());
+    $notifications = span($options['message'], attr_id('themeNotifications'));
     
     // create buttons
     $delete = new Delete_Button(); 
@@ -187,24 +185,24 @@ function page_edit_config() {
     $new = new New_Button();
     $save = new Save_Button();
     $save_as = new Save_As_Button();
-    
-    // save
-    $save_part = div(  
-          input('hidden', attr_name('current_config_type') . attr_value(get_current_config_type($options)) )
-        . input('hidden', attr_name('current_config_name') . attr_value(get_current_config_name($options)) )
-        , attr_id('save-div') );
 
     // select config to edit
     $config_select = select("", get_config_select_contents($options), attr_id('change_edit_config') . attr_on_change('change_edit_config(this)') );
     
-    echo div( $notifications 
-            . $delete->get_html() 
-            . $live->get_html() 
-            . $new->get_html() 
-            . $save->get_html() 
-            . $save_as->get_html() 
-            . $save_part 
-            . $config_select, attr_id('config-controls') );
+    $controls = span( $delete->get_html() 
+                . $live->get_html() 
+                . $new->get_html() 
+                . $save_as->get_html() 
+                . $save->get_html() 
+                . $config_select
+            , attr_id('config-controls') );
+            
+    echo div( $notifications . $controls, attr_id('form-header') );
+    // config type & name
+    echo input('hidden', attr_name('current_config_type') . attr_value(get_current_config_type($options)) )
+        . input('hidden', attr_name('current_config_name') . attr_value(get_current_config_name($options)) );
+    
+    // form content
     $values = Configuration::get_current_configuration_settings($options);
     echo div(get_config_form($values));
     echo ct('div');

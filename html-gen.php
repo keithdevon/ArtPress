@@ -86,7 +86,7 @@ function optgroup($label, $options)             { return ot('optgroup', attr_lab
 function option($value, $content, $attributes=""){ return ot('option', attr_value($value) . $attributes) . $content . ct('option'); }
 function p($content, $attributes ="")           { return ot('p', $attributes)      . $content . ct('p'); }
 function select($name, $content, $attributes=""){ return ot('select', attr_name($name) . $attributes ) . $content . ct('select'); }
-function span($content, $attributes ="")         { return ot('spa n', $attributes)   . $content . ct('span'); }
+function span($content, $attributes ="")         { return ot('span', $attributes)   . $content . ct('span'); }
 function table($content, $attributes ="")       { return ot('table', $attributes)  . $content . ct('table'); }
 function td($content, $attributes ="")          { return ot('td', $attributes)     . $content . ct('td'); }
 function th($content, $attributes ="")          { return ot('th', $attributes)     . $content . ct('th'); }

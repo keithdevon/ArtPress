@@ -18,8 +18,12 @@ function updateFormInputs( valuesMap ) {
 	// update current config information
 	jQuery("[name='current_config_type']").attr('value', valuesMap['configID'][0] );
 	jQuery("[name='current_config_name']").attr('value', valuesMap['configID'][1] );
-
-	jQuery('#themeNotifications').attr('value', valuesMap['message']);
+	
+	var notes = jQuery('#themeNotifications')
+	notes.html( valuesMap['message'] );
+	notes.show();
+	notes.delay(3000).fadeOut(1500);
+	
 	var liveSwitch = jQuery('#live_switch');
 	if (valuesMap['isLive']) {
 		liveSwitch.attr('disabled', 'disabled');
