@@ -37,7 +37,7 @@ class Text_Shadow extends CSS_Composite {
         );
     }
     function validate($value) {
-
+        // TODO validate this
     }
     function get_css() {
         return parent::get_css();

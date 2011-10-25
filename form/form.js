@@ -113,29 +113,30 @@ function handleResponse(response) {
 
 function delete_config() {
 	// TODO check for outstanding changes	
-		
 	var currentConfigType = jQuery("input[name=current_config_type]").val();
 	var currentConfigName = jQuery("input[name=current_config_name]").val();
+	var proceed = confirm('Delete user configuration: "' + currentConfigName + '"?');
 
-	jQuery('#-tabs').fadeOut('fast');
-        var data = {
-            action: 'delete_config',
-            inputs: {
-				'configType' : currentConfigType,
-				'configName' : currentConfigName
-			}
-        };
-        jQuery.post(ajaxurl, data, function(response) {
-			response = jQuery.parseJSON(response.slice(0, -1));
-            var form = jQuery('#ap_options_form');
-            form.hide();
-            form.html(response['formHTML']); 
-            updateFormInputs(response);
-	        update_config_select(response['configSelectHTML']);
-            initColorPicker();                     
-            form.fadeIn('fast');
-        });
-	
+	if(proceed) {
+		jQuery('#-tabs').fadeOut('fast');
+	        var data = {
+	            action: 'delete_config',
+	            inputs: {
+					'configType' : currentConfigType,
+					'configName' : currentConfigName
+				}
+	        };
+	        jQuery.post(ajaxurl, data, function(response) {
+				response = jQuery.parseJSON(response.slice(0, -1));
+	            var form = jQuery('#ap_options_form');
+	            form.hide();
+	            form.html(response['formHTML']); 
+	            updateFormInputs(response);
+		        update_config_select(response['configSelectHTML']);
+	            initColorPicker();                     
+	            form.fadeIn('fast');
+	        });
+	}
 }
 
 function new_config() {
