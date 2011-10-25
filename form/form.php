@@ -718,3 +718,4 @@ function get_row( $label, $content ) {
     $row .= ct('tr');
     return $row;
 }
+

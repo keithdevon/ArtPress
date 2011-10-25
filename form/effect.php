@@ -6,6 +6,9 @@ class Text_Shadow_Horizontal extends Setting_Size_Text_Input {
     function __construct($value='') {
         parent::__construct('horizontal', 'horizontal text shadow', $value);
     }
+    function get_css() {
+        return parent::get_css();
+    }
 }
 class Text_Shadow_Vertical extends Setting_Size_Text_Input {
     function __construct($value='') {
@@ -35,6 +38,9 @@ class Text_Shadow extends CSS_Composite {
     }
     function validate($value) {
 
+    }
+    function get_css() {
+        return parent::get_css();
     }
 }
 class Box_Shadow_Horizontal extends Setting_Size_Text_Input {
@@ -75,6 +81,9 @@ class Box_Shadow extends CSS_Composite {
 class Border_Radius extends CSS_Size_Text_Input {
     function __construct($value='') {
         parent::__construct('border-radius', 'border radius', $value);
+    }
+    function get_css_declaration() {
+        return parent::get_css_declaration();
     }
 }
 

@@ -28,10 +28,6 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
         }
     }
 
-    function get_differentiator () {
-        return get_class($this);
-    }
-
     function get_full_name() {
         $local_name = $this->get_name();
         $full_name = '[' . $local_name . ']';
@@ -165,9 +161,6 @@ abstract class CSS_Setting extends Setting implements CSS {
     }
     function get_css_value() {
         return $this->get_value();
-    }
-    function get_differentiator() {
-        return $this->get_css_property();
     }
     function get_css_property() {
         return $this->name;

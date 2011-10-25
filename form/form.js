@@ -19,7 +19,7 @@ function updateFormInputs( valuesMap ) {
 	jQuery("[name='current_config_type']").attr('value', valuesMap['configID'][0] );
 	jQuery("[name='current_config_name']").attr('value', valuesMap['configID'][1] );
 	
-	var notes = jQuery('#themeNotifications')
+	var notes = jQuery('#themeNotifications');
 	notes.html( valuesMap['message'] );
 	notes.show();
 	notes.delay(3000).fadeOut(1500);
@@ -32,7 +32,6 @@ function updateFormInputs( valuesMap ) {
 	}
 	for(var k in valuesMap) {
 		//alert(k + ' : ' + valuesMap[k]);
-		
 	}
 }
 
