@@ -1,5 +1,6 @@
 syntax: glob
 ignoreme
+.dropbox
 .task
 glob:.task/completed.data
 glob:.task/pending.data
