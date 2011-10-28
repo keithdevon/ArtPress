@@ -14,7 +14,7 @@ class Gallery_Title extends CSS_Selector {
 
 class Galleries_Entry_Meta extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('.grid-single .entry-meta', 'entry meta', $children=null);
+        parent::__construct('.grid-single .entry-meta, .grid-single .entry-meta a:link', 'entry meta', $children=null);
     }
 }
 

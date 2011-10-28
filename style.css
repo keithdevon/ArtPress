@@ -180,51 +180,13 @@ hr {
 /* Text elements */
     
 #site-title, h1, h2, h3, h4 {
-	text-rendering: optimizeLegibility; 
-	font-size:1em;
+	text-rendering: optimizeLegibility;
 	}
-
-/* { 
-    font-size:4.5em; 
-    line-height: 1em;
-    margin:1.07em 0 .94em;
+	
+#site-title {
+    margin:0em;
+    font-size:2em;
     }
- { 
-    font-size:3.75em; 
-    line-height: 1.2em;
-    margin:.97em 0 1.04em;
-    }
- { 
-    font-size:3em; 
-    line-height: 1em;
-    margin:1em 0 1em;
-    }
-#site-title, h1 { 
-    font-size:2.25em;
-    line-height: 1.334em;
-    margin:1.5em 0 1.17em;
-    }
-
-h2 { 
-    font-size:1.5em;
-    line-height: 1em;
-    margin:1.88em 0 1.15em;
-    }
-h3 { 
-    font-size:1.313em;
-    line-height: 1.143em;
-    margin:2.2em 0 1.27em; 
-    }
-h4 { 
-    font-size:1.125em;
-    line-height: 1.3328em;
-    margin:2.65em 0 1.42em;
-    }
-h5 { 
-    font-size:1em;
-    line-height: 1.5em;
-    margin:0;
-    }*/
 
 ul {
 	list-style: square;
@@ -256,7 +218,7 @@ dt {
 	font-weight: bold;
 }
 dd {
-	margin-bottom: 18px;
+	margin-bottom: 1.5em;
 }
 strong {
 	font-weight: bold;
@@ -267,7 +229,7 @@ i {
 	font-style: italic;
 }
 big {
-	font-size: 131.25%;
+	font-size: 150%;
 }
 ins {
 	background: #ffc;
@@ -285,8 +247,7 @@ blockquote i {
 pre {
 	background: #f7f7f7;
 	color: #222;
-	line-height: 18px;
-	margin-bottom: 18px;
+	margin-bottom: 1.5em;
 	padding: 1.5em;
 }
 abbr,
@@ -705,7 +666,7 @@ body.category-galleries div.format-gallery .entry-content p, body.category-galle
     }
         
 body.category-galleries div.format-gallery {
-    margin-bottom: 2em;
+    margin-bottom: 4em;
     border: none;
     padding: 0px;
     }
@@ -1465,9 +1426,6 @@ background-image:-moz-linear-gradient(top,bottom,from(rgba(0,92,17,0.75)), to(rg
 -moz-box-shadow:rgba(0,92,17,0.75) 0px 8px 24px;
  
 box-shadow:rgba(0,92,17,0.75) 0px 8px 24px; 
-
- 
-/*margin: 0 5px 0 5px;*/
  
 }
 

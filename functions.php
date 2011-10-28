@@ -1,49 +1,5 @@
 <?php
-/**
- * TwentyTen functions and definitions
- *
- * Sets up the theme and provides some helper functions. Some helper functions
- * are used in the theme as custom template tags. Others are attached to action and
- * filter hooks in WordPress to change core functionality.
- *
- * The first function, twentyten_setup(), sets up the theme by registering support
- * for various features in WordPress, such as post thumbnails, navigation menus, and the like.
- *
- * When using a child theme (see http://codex.wordpress.org/Theme_Development and
- * http://codex.wordpress.org/Child_Themes), you can override certain functions
- * (those wrapped in a function_exists() call) by defining them first in your child theme's
- * functions.php file. The child theme's functions.php file is included before the parent
- * theme's file, so the child theme functions would be used.
- *
- * Functions that are not pluggable (not wrapped in function_exists()) are instead attached
- * to a filter or action hook. The hook can be removed by using remove_action() or
- * remove_filter() and you can attach your own function to the hook.
- *
- * We can remove the parent theme's hook only after it is attached, which means we need to
- * wait until setting up the child theme:
- *
- * <code>
- * add_action( 'after_setup_theme', 'my_child_theme_setup' );
- * function my_child_theme_setup() {
- *     // We are providing our own filter for excerpt_length (or using the unfiltered value)
- *     remove_filter( 'excerpt_length', 'twentyten_excerpt_length' );
- *     ...
- * }
- * </code>
- *
- * For more information on hooks, actions, and filters, see http://codex.wordpress.org/Plugin_API.
- *
- * @package WordPress
- * @subpackage Twenty_Ten
- * @since Twenty Ten 1.0
- */
 
-/**
- * Set the content width based on the theme's design and stylesheet.
- *
- * Used to set the width of images and content. Should be equal to the width the theme
- * is designed for, generally via the style.css stylesheet.
- */
 if ( ! isset( $content_width ) )
 	$content_width = 1140;
 
@@ -683,43 +639,49 @@ function attachment_toolbox($size = thumbnail) {
 
 //------Columns
 
-add_shortcode( '1of3', 'ht_col1of3_shortcode' );//add 3 column shortcode (for columns 1 and 2)
+add_shortcode( '3col_first', 'ht_col1of3_shortcode' );//add 3 column shortcode (for columns 1 and 2)
 
 function ht_col1of3_shortcode( $atts, $content = null ) {
    return '<div style="width:100%; clear:both;"></div><div class="fourcol internal-col">' . $content . '</div>';
 }
 
-add_shortcode( '2of3', 'ht_col2of3_shortcode' );//add 3 column shortcode (for column 2)
+add_shortcode( '3col', 'ht_col2of3_shortcode' );//add 3 column shortcode (for column 2)
 
 function ht_col2of3_shortcode( $atts, $content = null ) {
    return '<div class="fourcol internal-col" >' . $content . '</div>';
 }
 
-add_shortcode( '3of3', 'ht_col3of3_shortcode' );//add 3rd of 3 columns
+add_shortcode( '3col_last', 'ht_col3of3_shortcode' );//add 3rd of 3 columns
 
 function ht_col3of3_shortcode( $atts, $content = null ) {
    return '<div class="fourcol internal-col last">' . $content . '</div><div style="clear:both;"></div>';
 }
 
-add_shortcode( '1of2', 'ht_col1of2_shortcode' );// add 2 column shotcode
+add_shortcode( '2col_first', 'ht_col1of2_shortcode' );// add 2 column shotcode
 
 function ht_col1of2_shortcode( $atts, $content = null ) {
-   return '<div class="sixcol internal-col">' . $content . '</div>';
+   return '<div style="width:100%; clear:both;"></div><div class="sixcol internal-col">' . $content . '</div>';
 }
 
-add_shortcode( '2of2', 'ht_col2of2_shortcode' );// 2nd of 2 columns
+add_shortcode( '2col_last', 'ht_col2of2_shortcode' );// 2nd of 2 columns
 
 function ht_col2of2_shortcode( $atts, $content = null ) {
    return '<div class="sixcol internal-col last" >' . $content . '</div><div style="clear:both;"></div>';
 }
 
-add_shortcode( '1of4', 'ht_col1of4_shortcode' );// add 4 column shotcode
+add_shortcode( '4col_first', 'ht_col1of4_shortcode' );// add 4 column shotcode
 
 function ht_col1of4_shortcode( $atts, $content = null ) {
+   return '<div style="width:100%; clear:both;"></div><div class="threecol internal-col">' . $content . '</div>';
+}
+
+add_shortcode( '4col', 'ht_colof4_shortcode' );// add 4 column shotcode
+
+function ht_colof4_shortcode( $atts, $content = null ) {
    return '<div class="threecol internal-col">' . $content . '</div>';
 }
 
-add_shortcode( '4of4', 'ht_col4of4_shortcode' );// 4th of 4 columns
+add_shortcode( '4col_last', 'ht_col4of4_shortcode' );// 4th of 4 columns
 
 function ht_col4of4_shortcode( $atts, $content = null ) {
    return '<div class="threecol internal-col last" >' . $content . '</div><div style="clear:both;"></div>';
@@ -735,7 +697,7 @@ $options = get_option('artpress_theme_options');//extract this from the function
     extract( shortcode_atts( array(
       'float' => 'boxout',
       ), $atts ) );
-      $ht_opening = '<div class="box-out" style="width:30%; background-color: #eee; margin-bottom:1.5em; padding:1.5em; font-size:1.2em; line-height:1.5em; font-style:italic;';
+      $ht_opening = '<div class="box-out" style="width:30%; margin-bottom:1.5em; padding:1.5em; font-size:1.2em; line-height:1.5em; font-style:italic;';
       if(esc_attr($float) == 'right') $ht_middle = 'margin-left:1em;  float:' . esc_attr($float) . ';">';
         else $ht_middle = 'margin-right:1.5em; float:left;">';
         $ht_end =  $content . '</div>';
@@ -800,12 +762,6 @@ add_shortcode('gallery', 'ht_gallery_shortcode');
 /**
  * The Gallery shortcode.
  *
- * This overwrites the core WP gallery shortcode and spits out all the images in rows and columns. Yum!
- *
- * @since 2.5.0
- *
- * @param array $attr Attributes attributed to the shortcode.
- * @return string HTML content to display gallery.
  */
 function ht_gallery_shortcode($attr) {
 	global $post, $wp_locale;
@@ -1196,3 +1152,16 @@ function kd_type_gen() {
     //print_r($ht_font_sizes);
 
 }
+
+// Set sub-menu offset to height of menu items
+
+function detect_menu_height() {
+    echo '<script>
+        jQuery(document).ready(function () {
+            var kdev = jQuery("#menu-main-menu li").height();
+            jQuery("#menu-main-menu li .sub-menu").css("top", kdev);
+        });
+        </script>';
+}
+
+add_action( 'wp_footer', 'detect_menu_height' );
