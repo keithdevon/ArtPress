@@ -6,7 +6,7 @@
 <div id="branding" role="banner">
     <?php $heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div'; ?>
     <<?php echo $heading_tag; ?> id="site-title">
-    	<span>
+    	
     		<a href="<?php echo home_url( '/' ); ?>"
     		   title="<?php echo $name ?>"
     		   rel="home"><?php
@@ -30,7 +30,7 @@
     		       ?>
 
     		</a>
-    	</span>
+    	
     </<?php echo $heading_tag; ?>>
 
     <div id="site-description"><?php bloginfo( 'description' ); ?></div>
