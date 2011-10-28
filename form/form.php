@@ -30,11 +30,13 @@ require_once $dir . 'heart-theme-utils.php';
 
 interface Render_As_HTML            { function get_html(); }
 interface CSS                       { function get_css(); }
+interface IHas_CSS_Value            { function get_css_value(); }
 interface ICSS_Selector extends CSS { function get_css_selector(); }
 interface IValid_Input              { function is_valid(); }
 interface IValidate                 { function validate($value); }
 interface Tab                       { function get_link_html($attributes=null); }
 interface IComposite                {}
+interface IComposite_Part           {}
 interface IToggle_Group             { function is_on(); }
 interface Visitor {
     function recurse($hierarchy);
@@ -272,6 +274,7 @@ class Option_Group extends Group {
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {
+                // don't create a complete form row if this is child is one setting of many
                 if( $child instanceof Setting && !($child instanceof IComposite ) ) {
                     $child_html = get_setting_row( $child );
                 } else {
@@ -529,13 +532,14 @@ function get_setting_instances($hierarchy_obj, $unpack_composites, $settings_arr
     if( !is_array($settings_array) ) {
         return get_setting_instances($hierarchy_obj, $unpack_composites, array());
     }
-    // the following test must come before the Setting test because,
-    // CSS_Composite is a 'Setting' object but has children
+    // the following test must come before the Setting test because
+    // Settings are normally leaf nodes in this tree however
+    // CSS_Composite is a 'Setting' object and has children
     // therefore if we do this test first, we descend into its children
     // and get all their names
     // instead of just returning the name of the CSS_Composite object
     else if( ( $hierarchy_obj instanceof Setting ) &&
-    !($hierarchy_obj instanceof IComposite) ) {
+             !($hierarchy_obj instanceof IComposite) ) {
         $name = $hierarchy_obj->get_name();
         $settings_array[$name] = $hierarchy_obj;
         return $settings_array;

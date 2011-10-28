@@ -147,7 +147,7 @@ function get_css_parents($hierarchy_object) {
  * @author jsd
  *
  */
-abstract class CSS_Setting extends Setting implements CSS {
+abstract class CSS_Setting extends Setting implements CSS, IHas_CSS_Value {
 
     function __construct($css_property, $display_name, $value) {
         $this->css_property = $css_property; // FIXME does this do anything
@@ -204,7 +204,7 @@ abstract class CSS_Composite extends CSS_Setting implements IComposite {
 
         $values = '';
         foreach( $this->get_children() as $child ){
-            $css_value = $child->get_value();
+            $css_value = $child->get_css_value();
             if($css_value) {
                 $values .= ' ' . $css_value;
             }
@@ -262,32 +262,32 @@ abstract class CSS_Size_Text_Input extends CSS_Text_Input {
         return get_size_text_input_html($this, $attributes='');
     }
 }
-abstract class CSS_Horizontal_Position_Text_Input extends CSS_Size_Text_Input {
-    function __construct($css_property, $display_name, $value='') {
-        parent::__construct($css_property, $display_name, $value);
-    }
-
-    function validate($value) {
-        if(parent::validate($value) || in_array($value, array('left', 'center', 'right'))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
-abstract class CSS_Vertical_Position_Text_Input extends CSS_Size_Text_Input {
-    function __construct($css_property, $display_name, $value='') {
-        parent::__construct($css_property, $display_name, $value);
-    }
-
-    function validate($value) {
-        if(parent::validate($value) || in_array($value, array('top', 'center', 'bottom'))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
+//abstract class CSS_Horizontal_Position_Text_Input extends CSS_Size_Text_Input {
+//    function __construct($css_property, $display_name, $value='') {
+//        parent::__construct($css_property, $display_name, $value);
+//    }
+//
+//    function validate($value) {
+//        if(parent::validate($value) || in_array($value, array('left', 'center', 'right'))) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+//}
+//abstract class CSS_Vertical_Position_Text_Input extends CSS_Size_Text_Input {
+//    function __construct($css_property, $display_name, $value='') {
+//        parent::__construct($css_property, $display_name, $value);
+//    }
+//
+//    function validate($value) {
+//        if(parent::validate($value) || in_array($value, array('top', 'center', 'bottom'))) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+//}
 function dropdown_get_options_html($dropdown) {
     $html_options = '';
     $is_optgroup = false;
