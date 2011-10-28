@@ -34,7 +34,21 @@ function updateFormInputs( valuesMap ) {
 		//alert(k + ' : ' + valuesMap[k]);
 	}
 }
-
+function isOutstandingChanges() {
+	var changed = false;
+	for(var x in changedEls) {
+		changed = true;
+		break;
+	}
+	if(changed) return true;
+	else return false;
+}
+function promptOutstandingChanges() {
+	if( isOutstandingChanges() ) {
+		if(confirm('Discard unsaved changes to this configuration?') ) return true;
+		else return false;
+	} else return true;
+}
 function isValidSize(val) {
     if( val == '' ) {
 		return true;
@@ -141,27 +155,31 @@ function delete_config() {
 
 function new_config() {
 	// TODO check for outstanding changes
-	var name_candidate = prompt("name the new configuration", "");
-	if (name_candidate) {
-		jQuery('#-tabs').fadeOut('fast');
-	    var data = {
-	        action: 'new_config',
-	        inputs: {
-				'config' : name_candidate
-			}
-	    };
-	        
-	    jQuery.post(ajaxurl, data, function(response) {
-			response = jQuery.parseJSON(response.slice(0, -1));
-	        var form = jQuery('#ap_options_form');
-	        form.hide();
-	        form.html(response['formHTML']); 
-	        updateFormInputs(response);
-	        update_config_select(response['configSelectHTML']);
-	        initColorPicker();                     
-	        form.fadeIn('fast');
-	    });
+	if(promptOutstandingChanges()) {
+		
+		var name_candidate = prompt("name the new configuration", "");
+		if (name_candidate) {
+			jQuery('#-tabs').fadeOut('fast');
+		    var data = {
+		        action: 'new_config',
+		        inputs: {
+					'config' : name_candidate
+				}
+		    };
+		        
+		    jQuery.post(ajaxurl, data, function(response) {
+				response = jQuery.parseJSON(response.slice(0, -1));
+		        var form = jQuery('#ap_options_form');
+		        form.hide();
+		        form.html(response['formHTML']); 
+		        updateFormInputs(response);
+		        update_config_select(response['configSelectHTML']);
+		        initColorPicker();                     
+		        form.fadeIn('fast');
+		    });
+		}
 	}
+
 }
 
 function set_live_config() {
