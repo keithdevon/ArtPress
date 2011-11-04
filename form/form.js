@@ -94,17 +94,32 @@ function accordionClick(accordionLink) {
 }
 jQuery(document).ready(
 	function() {
-    	jQuery('div[id="-tabs"]').bind(  'tabsshow', 
-        	function(event, ui) { 
-    			// get the open accordion for this tab
-    			var tabName = ui.tab.innerHTML;
-    			var oa = getOpenAccordion(tabName);
-				// call updateDependents on the accordion
-				if (oa) {
-					updateDependents(oa);
-					}
-    			});
-	});
+    	jQuery('div[id="-tabs"]').bind(  
+    			'tabsshow', 
+	        	function(event, ui) { 
+	    			// get the open accordion for this tab
+	    			var tabName = ui.tab.innerHTML;
+	    			var oa = getOpenAccordion(tabName);
+					// call updateDependents on the accordion
+					if (oa) {
+						updateDependents(oa);
+						}
+	    			}
+		);
+    	jQuery.each(
+    			jQuery('a[href^="#-tabs-"'), 
+    			function(tabLink) {
+    				tabLink.bind('click', 
+					function(tabLink) {
+    					// get the open accordion for this tab
+    					var name = tabLink.html;
+    					updateDependents(name);    				
+    				});
+    			}
+		);
+	}
+);
+
 function handleResponse(response) {
 	// remove trailing 0
 	var sliced = response.slice(0, -1);

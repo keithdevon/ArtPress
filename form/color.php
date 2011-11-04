@@ -32,8 +32,9 @@ class Global_Color extends Setting_Text {
 
 function get_css_dropdown_value($obj) {
     $options = $obj->get_opts();
-    $value = $options[$obj->get_value()];
-    return $value;
+    $value = $obj->get_value();
+    $css_value = $options[$value];
+    return $css_value;
 }
 abstract class Section_Color extends CSS_Dropdown_Input implements ISetting_Depends_On_Global_Setting {
     function __construct($css_property, $display_name, $value=0) {

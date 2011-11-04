@@ -2,25 +2,22 @@
 require_once 'form.php';
 require_once 'color.php';
 
-class Text_Shadow_Horizontal extends Setting_Size_Text_Input {
+class Text_Shadow_Horizontal extends CSS_Size_Text_Input implements IComposite_Part {
     function __construct($value='') {
         parent::__construct('horizontal', 'horizontal text shadow', $value);
     }
-    function get_css() {
-        return parent::get_css();
-    }
 }
-class Text_Shadow_Vertical extends Setting_Size_Text_Input {
+class Text_Shadow_Vertical extends CSS_Size_Text_Input implements IComposite_Part {
     function __construct($value='') {
         parent::__construct('vertical', 'vertical text shadow', $value);
     }
 }
-class Text_Shadow_Blur_Radius extends Setting_Size_Text_Input {
+class Text_Shadow_Blur_Radius extends CSS_Size_Text_Input implements IComposite_Part {
     function __construct($value='') {
         parent::__construct('blur_radius', 'text shadow blur radius', $value);
     }
 }
-class Text_Shadow_Color extends Setting_Color {
+class Text_Shadow_Color extends Section_Foreground_Color implements IComposite_Part {
     function __construct($value=0) {
         parent::__construct($value);
     }
@@ -38,27 +35,24 @@ class Text_Shadow extends CSS_Composite {
     }
     function validate($value) {
         // TODO validate this
-    }
-    function get_css() {
-        return parent::get_css();
-    }
+    }   
 }
-class Box_Shadow_Horizontal extends Setting_Size_Text_Input {
+class Box_Shadow_Horizontal extends CSS_Size_Text_Input implements IComposite_Part {
     function __construct($value='') {
         parent::__construct('horizontal', 'horizontal box shadow', $value);
     }
 }
-class Box_Shadow_Vertical extends Setting_Size_Text_Input {
+class Box_Shadow_Vertical extends CSS_Size_Text_Input implements IComposite_Part {
     function __construct($value='') {
         parent::__construct('vertical', 'vertical box shadow', $value);
     }
 }
-class Box_Shadow_Blur_Radius extends Setting_Size_Text_Input {
+class Box_Shadow_Blur_Radius extends CSS_Size_Text_Input implements IComposite_Part {
     function __construct($value='') {
         parent::__construct('blur-radius', 'box shadow blur radius', $value);
     }
 }
-class Box_Shadow_Color extends Setting_Color {
+class Box_Shadow_Color extends Section_Foreground_Color implements IComposite_Part {
     function __construct($value=0) {
         parent::__construct($value);
     }
@@ -75,7 +69,7 @@ class Box_Shadow extends CSS_Composite {
         );
     }
     function validate($value) {
-
+        // TODO fix!
     }
 }
 class Border_Radius extends CSS_Size_Text_Input {
