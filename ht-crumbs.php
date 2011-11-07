@@ -11,7 +11,7 @@ if ((is_page() && !is_front_page()) || is_category() || is_single()) {
 
    if (is_category() || is_single() && !is_attachment()) {
         $category = get_the_category();
-      echo '<li><span class=crumb-divider>&nbsp;/ </span><a href="'.get_category_link($category[0]->cat_ID).'"  title="'.$category[0]->cat_name.'">'.$category[0]->cat_name.'</a></li>';
+        if($category) echo '<li><span class=crumb-divider>&nbsp;/ </span><a href="'.get_category_link($category[0]->cat_ID).'"  title="'.$category[0]->cat_name.'">'.$category[0]->cat_name.'</a></li>';
       }
 
    if (!is_category())
