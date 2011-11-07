@@ -311,6 +311,8 @@ h1#site-title, #site-title {
 
 #site-title a {
 	text-decoration: none;
+	display:block;
+	width:100%;
 }
 #site-description {
 	float:left;
