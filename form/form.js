@@ -52,12 +52,11 @@ function promptOutstandingChanges() {
 function isValidSize(val) {
     if( val == '' ) {
 		return true;
-    } else if(parseInt(val)) {
-		return val.match('px$|em$|%$');
-	} else {
-		if (parseFloat(val)) {
-			return val.match('em$|%$');
-		} else {
+    } else {
+    	var num = parseFloat(val);
+    	if( num || num == 0) {
+    		return val.match('px$|em$|%$');
+	}  else {
 			return false;
 		}
 	}
