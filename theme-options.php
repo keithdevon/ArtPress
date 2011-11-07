@@ -24,6 +24,7 @@ require_once $dir . 'form/background-image.php';
 require_once $dir . 'form/configuration.php';
 require_once $dir . 'form/default-configurations.php';
 require_once $dir . 'form/image-form.php';
+//    require_once $dir . 'form/download-config.php';
 
 add_action( 'admin_init', 'init_register_scripts' );
 add_action( 'admin_init', 'init_artpress_theme' );
@@ -206,6 +207,11 @@ function page_edit_config() {
     $values = Configuration::get_current_configuration_settings($options);
     echo div(get_config_form($values));
     echo ct('div');
+    
+    // download / upload configs
+    $template_url = get_bloginfo('template_url');
+    echo alink($template_url . '/form/download-config.php?foo=bar', 'download config', attr_type('text/plain'));
+    //echo alink('dathello there', 'hello');
 }
 /** 
  * If the candidate config type and name match the current live config id,
