@@ -270,7 +270,7 @@ class Option_Group extends Group {
         return $options;
     }
     function get_html() {
-        $children_html = colgroup(2);
+        $children_html = colgroup(5);
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {
@@ -283,7 +283,9 @@ class Option_Group extends Group {
                 $children_html .= $child_html;
             }
         }
-        return table($children_html, attr_class('form-table'));
+        //return table($children_html, attr_class('form-table'));
+        return $children_html;
+        
     }
 }
 /**
@@ -302,10 +304,10 @@ class Option_Row_Group extends Group {
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {
-                $children_html .= $child->get_html();
+                $children_html .= td($child->get_html());
             }
         }
-        return get_row($this->get_display_name(), $children_html);
+        return tr( td($this->get_display_name()) . $children_html );
     }
 }
 function get_link_html($tab, $attributes=null) {
@@ -327,15 +329,15 @@ abstract class Sub_Tab extends Group implements Tab {
             foreach($children as $child) {
                 $child_name = $child->get_display_name();
                 $child_html = $child->get_html();
-                $children_html .= get_row($child_name, $child_html);
+                $children_html .= row( td($child_name) . $child_html);
             }
         }
 
         if ($children[0] instanceof Setting) {
-            $children_html = table( colgroup(2) . $children_html, attr_class('form-table') ); 
+            $children_html = table( colgroup(5) . $children_html, attr_class('form-table') ); 
         }
         $id = $this->get_html_id();
-        $o = div( $children_html, attr_id( $id ) . attr_class('sub-tab') // TODO =, not .= ??
+        $o = div( table($children_html, attr_class('form-table')), attr_id( $id ) . attr_class('sub-tab') // TODO =, not .= ??
         );
         return $o;
     }
@@ -713,7 +715,8 @@ class CSS_Selector_Group extends Group implements ICSS_Selector {
 function get_setting_row( $setting ) {
     $child_name = $setting->get_display_name();
     $child_html = $setting->get_html();
-    return get_row($child_name, $child_html);
+    //return get_row($child_name, $child_html);
+    return row( td($child_name) . td($child_html) );
 }
 function get_row( $label, $content ) {
     $row = ot('tr');
@@ -721,5 +724,18 @@ function get_row( $label, $content ) {
     $row .= td($content);
     $row .= ct('tr');
     return $row;
+}
+
+/** 
+ * Hacky function to include column headers for settings that are displayed in a tabular form.
+ * */
+class Column_Header extends Hierarchy {
+    private $column_header;
+    function __construct($column_header) {
+        $this->column_header = $column_header;
+    }
+    function get_html() {
+        return $this->column_header;
+    }
 }
 

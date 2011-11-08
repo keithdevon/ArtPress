@@ -194,7 +194,7 @@ abstract class CSS_Composite extends CSS_Setting implements IComposite {
         $children = $this->get_children();
         if ( null != $children) {
             foreach($children as $child) {
-                $children_html .= $child->get_html();
+                $children_html .= td($child->get_html());
             }
         }
         return $children_html;

@@ -10,8 +10,12 @@ select#change_edit_config {
 table.form-table {
     table-layout: auto;
     width: 1000px;
+    border-collapse:collapse;
 }
 
+colgroup col {
+    /*width: 80px;*/
+}
 colgroup col:FIRST-CHILD{
     width: 200px;
 }
