@@ -448,9 +448,9 @@ class Configuration extends Tab_Group {
         if( $members == null ) {
             $members = array(
             new Global_Settings(),
+            new Body_Tab(),
             new Header_Tab(),
             new Menu_Tab(),
-            new Body_Tab(),
             new Sidebar_Tab(),
             new Footer_Tab(),
             new Gallery_Tab()
