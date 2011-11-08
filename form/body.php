@@ -2,7 +2,7 @@
 
 class Body_Base extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('', 'body settings', $children=null);
+        parent::__construct('', 'general body settings', $children=null);
     }
 }
 

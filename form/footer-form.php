@@ -2,7 +2,7 @@
 
 class Footer_Base extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('', 'Footer Base', $children=null);
+        parent::__construct('', 'general footer settings', $children=null);
     }
 }
 

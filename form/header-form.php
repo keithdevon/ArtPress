@@ -2,7 +2,7 @@
 
 class Header_Base extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('', 'header base', $children=null);
+        parent::__construct('', 'general header settings', $children=null);
     }
 }
 class Site_Title extends CSS_Selector {

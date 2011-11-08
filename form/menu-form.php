@@ -2,7 +2,7 @@
 
 class Menu_Base extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('#access', 'Menu Styling', $children=null);
+        parent::__construct('#access', 'general menu settings', $children=null);
     }
 }
 

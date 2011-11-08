@@ -47,13 +47,13 @@ class ToolTips {
         "Letter_Spacing"           => "Add or remove horizontal space from between the letters.",
 
         ////Header
-        "Header_Base"      => "The default settings for the header area.",
+        "Header_Base"      => "Common settings for the whole header area. These can be overwritten by the following sections.",
         "Site_Title"       => "If you are not using a logo image, you can style the site title here.",
         "Site_Title_Hover" => "The mouse hover state of the 'Site Title'",
         "Site_Description" =>"The site description, or tagline, can be styled here. To change the text go to Settings in the left-hand admin menu.",
 
         ////Menu
-        "Menu_Base"         => "The default style settings of the main navigation bar.",
+        "Menu_Base"         => "Common settings for the whole menu areas. These can be overwritten by the following sections.",
         "Link"              => "Style the menu links here.",
         "Link_Hover"        => "Style the mouse hover state of the menu links here.",
         "Sub_Menu"          => "If you are using sub-menus, you can style the drop-down list here.",
@@ -61,7 +61,7 @@ class ToolTips {
         "Current_Menu_Item" => "Style the menu link of the currently selected page. This is great for providing feedback on where the user is within the site.",
 
         ////Body
-        "Body_Base"        => "The body is the page as a whole. You can apply styles to it here. They will be inherited by most other elements unless they are over-written.",
+        "Body_Base"        => "Common settings for the whole body area. These can be overwritten by the following sections.",
         "Page_Title"       => "The title of the current page can be styled here.",
         "Entry_Title"      => "The titles of blog posts, when listed, can be styled here.",
         "Widget_Title"     => "Titles of widgets within the body area can be styled here.",
@@ -78,19 +78,19 @@ class ToolTips {
         "Entry_Meta"       => "Entry meta shows information about a post or gallery. Eg, date, author, etc.",
         //
         //Sidebar
-        "Sidebar_Base" => "The default style settings of the sidebars.",
+        "Sidebar_Base" => "Common settings for the whole sidebar areas. These can be overwritten by the following sections.",
         "Widget_Title" => "Style the sidebar widget titles here.",
         //"Link" "Style the sidebar links here."
         //"Link hover" "Style the sidebar link mouse hover state here."
 
         //Footer
-        "Footer_Base" => "The default style settings of the footer area.",
+        "Footer_Base" => "Common settings for the whole footer area. These can be overwritten by the following sections.",
         "Widget_Title" => "Style the footer widget titles here.",
         //"Link" "Style the footer links here."
         //"Link hover" "Style the footer link mouse hover state here."
 
         //Galleries
-        "Gallery_Base" => "The default style settings of the gallery pages.",
+        "Gallery_Base" => "Common settings for the whole gallery areas. These can be overwritten by the following sections.",
         "Gallery_Title" => "Style the galleries page titles here.",
         "Galleries_Entry_Meta" => "Style the galleries page gallery meta information here.",
         "Gallery_Image_Links" => "Style the gallery images here.",
