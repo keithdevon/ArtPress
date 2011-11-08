@@ -281,3 +281,9 @@ td#fancy_title_right {
 	width: 15px;
 	background: transparent url('fancy_title_right.png') repeat-x;
 }
+#fancy_inner a#fancy_left:link, #fancy_inner a#fancy_left:visited,
+#fancy_inner a#fancy_left:hover, #fancy_inner a#fancy_left:active,
+#fancy_inner a#fancy_right:link, #fancy_inner a#fancy_right:visited,
+#fancy_inner a#fancy_right:hover, #fancy_inner a#fancy_right:active {
+background-color:transparent;
+}

@@ -4,7 +4,7 @@ Theme URI: http://keithdevon.com
 Description: ArtPress has been built specifically for artists. It is based on TwentyTen and the 1140px grid framework from cssgrid.net.
 Tags: Art, 1140px grid
 Author: Heart Themes
-Version: 0.1.4
+Version: 0.2.0
 License: GNU General Public License
 License URI: license.txt
 */
@@ -311,6 +311,8 @@ h1#site-title, #site-title {
 
 #site-title a {
 	text-decoration: none;
+	display:block;
+	width:100%;
 }
 #site-description {
 	float:left;

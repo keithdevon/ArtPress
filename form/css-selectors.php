@@ -2,7 +2,7 @@
 
 class Page_Title extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('.page-title, h1', 'page title', $children=null);
+        parent::__construct('.page-title, h1', 'page/post title', $children=null);
     }
 }
 class Entry_Title extends CSS_Selector {

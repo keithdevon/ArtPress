@@ -2,7 +2,7 @@
 
 class Body_Base extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('', 'general body settings', $children=null);
+        parent::__construct('', 'general page/post settings', $children=null);
     }
 }
 
@@ -26,7 +26,7 @@ class Body_Group extends CSS_Selector_Group {
             $children[] = new Crumb_Hover();
             $children[] = new Entry_Meta();
         }
-        parent::__construct('body', 'body', $children);
+        parent::__construct('body', 'general', $children);
     }
 }
 
@@ -35,6 +35,6 @@ class Body_Tab extends Main_Tab {
         if( null == $children ) {
              $children[] = new Body_Group();
         }
-        parent::__construct('body', 'artpress_options', $children);
+        parent::__construct('general', 'artpress_options', $children);
     }
 }
