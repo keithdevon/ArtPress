@@ -2,8 +2,8 @@
 wd="export";   #working directory
 td="artpress"; #top level zip directory
 dt=`date "+%Y%m%d%H%M%S"`; # date / time
-
-apdir=$wd/$td\_$dt;
+zd=$td\_$dt;
+apdir=$wd/$zd;
 
 function copyfolder {
     echo "! copying $1/";
@@ -48,7 +48,7 @@ echo "finished copying files"
 echo "! zipping up folder ..."
 cd $wd
 
-zip -r $td.zip $td\_$dt
+zip -r $td.zip $zd
 
 cd ..
 

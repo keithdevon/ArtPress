@@ -176,7 +176,7 @@ function page_edit_config() {
     // page title stuff
     //screen_icon();
     echo ot('div', attr_class('wrap'));
-    echo h2( get_current_theme() . __( ' Options' ) ); 
+    echo h2( __( 'Artpress Options' ) ); 
     $notifications = span($options['message'], attr_id('themeNotifications'));
     
     // create buttons
