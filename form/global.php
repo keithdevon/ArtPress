@@ -310,7 +310,7 @@ class Global_Settings extends Main_Tab  {
             $gf3 = new Global_Font_Family('Font family 3', 0);
             $members[] = new Global_Font_Group('Global Fonts', array($gf1, $gf2, $gf3));
 
-            $members[] = new Option_Group('Logo settings', new Logo_Image_Dropdown());
+            $members[] = new Logo_Image_Dropdown();
         }
         parent::__construct('global settings', 'artpress_options', $members);
     }

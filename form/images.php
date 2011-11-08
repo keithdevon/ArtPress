@@ -93,12 +93,13 @@ class Background_Image_Dropdown extends CSS_Image_Dropdown implements IToggle_Gr
         }
     }
     function get_html() {
-        $parent_html = parent::get_html();
+        $parent_html = row( td( $this->get_display_name() ) . td( parent::get_html() ) );
         $html = '';
         $children = parent::get_children();
         if ( null != $children ) {
             foreach($children as $child) {
-                $html .= get_setting_row( $child );
+                //$html .= get_setting_row( $child );
+                $html .= $child->get_html();
             }
         }
         return $parent_html . $html;
@@ -113,6 +114,13 @@ class Logo_Image_Dropdown extends CSS_Image_Dropdown {
         parent::__construct('background-image:url', 'Logo image select', $value);
     }
     function get_html(){
-        return parent::get_html(attr_class('globalSetting'));
+        return 
+            table(
+                row( 
+                    td($this->get_display_name() ) 
+                    . td( parent::get_html( attr_class('globalSetting') ) )
+                ),
+                attr_class('form-table')  
+            );
     }
 }
