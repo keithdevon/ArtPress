@@ -79,16 +79,28 @@ class Border_Radius extends CSS_Size_Text_Input {
     function get_css_declaration() {
         return parent::get_css_declaration();
     }
+    function get_html() {
+        return td( parent::get_html() );
+    }
 }
 
 
 class Effect_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
         if ( null == $members ) {
+            $members[] = new Option_Row_Group('',
+                    array(
+                        new Column_Header('horizontal'),
+                        new Column_Header('vertical'),
+                        new Column_Header('blur radius'),
+                        new Column_Header('color')
+                    )
+                );
+            $members[]  = new Text_Shadow();
+            $members[]  = new Box_Shadow();
             $members[]  = new Border_Radius();
-            $members[] = new Text_Shadow();
-            $members[] = new Box_Shadow();
         }
         parent::__construct($display_name, $members);
     }
+    function get_html() { return parent::get_html(); }
 }

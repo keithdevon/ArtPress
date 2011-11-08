@@ -99,6 +99,13 @@ class Border_Tab extends Sub_Tab {
             $members = array(
                 new Option_Group('',
                     array(
+                        new Option_Row_Group('',
+                            array(
+                                new Column_Header('color'),
+                                new Column_Header('style'),
+                                new Column_Header('width')
+                            )
+                        ),
                         new Option_Row_Group('all borders',
                             array(
                                 new Border_Color(),

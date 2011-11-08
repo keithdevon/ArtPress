@@ -7,3 +7,4 @@ glob:.task/pending.data
 glob:.task/undo.data
 
 meta
+export
