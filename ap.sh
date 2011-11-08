@@ -1,6 +1,9 @@
 #!/bin/bash
+wd="export";   #working directory
+td="artpress"; #top level zip directory
+dt=`date "+%Y%m%d%H%M%S"`; # date / time
 
-apdir="export/artpress";
+apdir=$wd/$td\_$dt;
 
 function copyfolder {
     echo "! copying $1/";
@@ -43,7 +46,9 @@ copyfolder 'images';
 echo "finished copying files"
 
 echo "! zipping up folder ..."
-cd export
-zip -r artpress.zip artpress
+cd $wd
+
+zip -r $td.zip $td\_$dt
+
 cd ..
 
