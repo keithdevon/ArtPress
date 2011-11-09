@@ -697,7 +697,7 @@ $options = get_option('artpress_theme_options');//extract this from the function
     extract( shortcode_atts( array(
       'float' => 'boxout',
       ), $atts ) );
-      $ht_opening = '<div class="box-out" style="width:30%; margin-bottom:1.5em; padding:1.5em; font-size:1.2em; line-height:1.5em; font-style:italic;';
+      $ht_opening = '<div class="box-out" style="width:30%; margin-bottom:1.5em; padding:1.5em; padding-top:0px; font-size:1em; line-height:1.5em; font-style:italic;';
       if(esc_attr($float) == 'right') $ht_middle = 'margin-left:1em;  float:' . esc_attr($float) . ';">';
         else $ht_middle = 'margin-right:1.5em; float:left;">';
         $ht_end =  $content . '</div>';
