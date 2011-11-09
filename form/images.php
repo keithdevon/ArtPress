@@ -93,16 +93,31 @@ class Background_Image_Dropdown extends CSS_Image_Dropdown implements IToggle_Gr
         }
     }
     function get_html() {
-        $parent_html = row( td( $this->get_display_name() ) . td( parent::get_html() ) );
-        $html = '';
+        /* The following slightly odd behaviour is necessary for now.
+         * Because this is a composite setting, it needs to generate
+         * its own tabular html code. However the containing object's html method
+         * isn't expecting this. 
+         * Therefore we first need to close the currently open cell and row, 
+         * create our own rows and cells and then make sure
+         * we don't close the last cell and row and the containing object will
+         * do that for us. */
+        $parent_html = parent::get_html() . ct('td') .  ct('tr')  ;
+        $children_html = '';
         $children = parent::get_children();
         if ( null != $children ) {
-            foreach($children as $child) {
-                //$html .= get_setting_row( $child );
-                $html .= $child->get_html();
+            $size = sizeof( $children );
+            for( $i = 0; $i < $size; $i++ ) {
+                $children_html .= ot('tr');
+                $children_html .= td( $children[$i]->get_display_name());
+                $children_html .= ot('td');
+                $children_html .= $children[$i]->get_html();
+                if($i != ($size - 1) ) {
+                    $children_html .= ct('td') . ct('tr');
+                }
             }
+            
         }
-        return $parent_html . $html;
+        return $parent_html . $children_html;
     }
     function is_on() {
         if ($this->get_value()) return true;

@@ -58,7 +58,6 @@ class Background_Position extends CSS_Composite {
     function validate($value) {
         return is_valid_size_string($value);
     }
-    function get_html() { return parent::get_html(); }
 }
 class Background_Image_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
@@ -75,5 +74,8 @@ class Background_Image_Tab extends Sub_Tab {
              );
         }
         parent::__construct($display_name, $members);
+    }
+    function get_html() {
+        return parent::get_html();
     }
 }

@@ -329,7 +329,7 @@ abstract class Sub_Tab extends Group implements Tab {
             foreach($children as $child) {
                 $child_name = $child->get_display_name();
                 $child_html = $child->get_html();
-                $children_html .= row( td($child_name) . $child_html);
+                $children_html .= row( td($child_name) . td($child_html));
             }
         }
 
@@ -343,9 +343,10 @@ abstract class Sub_Tab extends Group implements Tab {
     }
     function get_html_id()       { return $this->html_id;   }
     function set_html_id($value) { $this->html_id = $value; }
-    function get_link_html($attributes=null) { return get_link_html($this, $attributes //. attr_class("sub-tab") 
-    ); }
-    //function script() {}
+    function get_link_html($attributes=null) { 
+        return get_link_html($this, $attributes //. attr_class("sub-tab") 
+        ); 
+    }
 }
 abstract class Main_Tab extends Hierarchy implements Tab, Render_As_HTML {
     private $html_id;

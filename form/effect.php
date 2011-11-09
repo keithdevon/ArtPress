@@ -79,9 +79,6 @@ class Border_Radius extends CSS_Size_Text_Input {
     function get_css_declaration() {
         return parent::get_css_declaration();
     }
-    function get_html() {
-        return td( parent::get_html() );
-    }
 }
 
 
