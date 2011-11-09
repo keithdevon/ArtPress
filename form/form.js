@@ -2,9 +2,18 @@
  * 
  */
 changedEls = {};
+
 successColor = '#AFA';
+successColorDark = '#8D8';
+
 waitingColor = '#FF9';
+waitingColorDark = '#DD7';
+
+warningColor = waitingColor;
+warningColorDark = waitingColorDark;
+
 failColor    = '#FAA';
+failColorDark = '#D88';
 
 function inputHasChanged(obj) {
 	changedEls[obj.name] = obj.value;
@@ -13,7 +22,29 @@ function inputHasFocus(obj) {
 	alert(obj.name + " has focus");
 	obj.focus = null;
 }
-
+function getMessageColor( valuesMap ) {
+	if (valuesMap['message_type'] == 'success') {
+		return successColor;
+	} else if (valuesMap['message_type'] == 'warning') {
+		return warningColor;
+	} else if (valuesMap['message_type'] == 'fail') {
+		return failColor;
+	}
+}
+function getMessageDarkerColor( valuesMap ) {
+	if (valuesMap['message_type'] == 'success') {
+		return successColorDark;
+	} else if (valuesMap['message_type'] == 'warning') {
+		return warningColorDark;
+	} else if (valuesMap['message_type'] == 'fail') {
+		return failColorDark;
+	}
+}
+function setMessageColor(obj, valuesMap) {
+	// set the background color
+	obj.css('background-color', getMessageColor(valuesMap) );
+	obj.css('border-color', getMessageDarkerColor(valuesMap) );
+}
 function updateFormInputs( valuesMap ) {
 	// update current config information
 	jQuery("[name='current_config_type']").attr('value', valuesMap['configID'][0] );
@@ -21,6 +52,8 @@ function updateFormInputs( valuesMap ) {
 	
 	var notes = jQuery('#themeNotifications');
 	notes.html( valuesMap['message'] );
+
+	setMessageColor(notes, valuesMap);
 	notes.show();
 	notes.delay(3000).fadeOut(1500);
 	
