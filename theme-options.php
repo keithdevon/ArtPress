@@ -257,7 +257,7 @@ function get_config_select_contents($options) {
 function get_defaults() {
     global $ap_configuration_defaults;
     
-    $options['action'] = 'create_default_options';
+    $options['command'] = 'create_default_options';
 
     $options['configurations']['user'] = array();
     $options['configurations']['default'] = $ap_configuration_defaults;
@@ -274,7 +274,7 @@ function get_defaults() {
 }
 
 function set_action(&$options, $action) {
-   $options['action'] = $action;
+   $options['command'] = $action;
 }
 
 /**
@@ -311,7 +311,7 @@ function handle_configuration_management_options($new_settings) {
     $options = get_option('ap_options');
     
     // change edit config
-    if( $new_settings['action'] == 'change_config_to_edit' ) {
+    if( $new_settings['command'] == 'change_config_to_edit' ) {
         $edit_arr = explode('__', $new_settings['change_current-save-id'], 2);
         $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] ); // TODO use helper functions
         $options['message'] = "Now editing {$edit_arr[0]} configuration '{$edit_arr[1]}'.";
@@ -319,14 +319,14 @@ function handle_configuration_management_options($new_settings) {
     }
     
     // change live/public config
-    if( $new_settings['action'] == 'change_live_config' ) {
+    if( $new_settings['command'] == 'change_live_config' ) {
         $options['live_config_id'] = array($new_settings['change_live_config_id'][0], $new_settings['change_live_config_id'][1]);
         $options['message'] = "The {$options['live_config_id'][0]} configuration '{$options['live_config_id'][1]}' is now live.";
         return $options;
     }
     
     // create new config
-    if( $new_settings['action'] == 'create_new_configuration' ) {
+    if( $new_settings['command'] == 'create_new_configuration' ) {
         $new_config_name = $new_settings['new_configuration_name'];
         
         // handle case where name already exists
@@ -343,7 +343,7 @@ function handle_configuration_management_options($new_settings) {
     }
     
     // delete config
-    if( $new_settings['action'] == 'delete_configuration' ) {
+    if( $new_settings['command'] == 'delete_configuration' ) {
         $dead_save = $new_settings['delete-id'];
         if($dead_save[0] == 'default') {
             $options['message'] = "Cannot delete default configurations";
@@ -380,7 +380,7 @@ function ajax_handle_save_config() {
         $values[$new_key] = $cs[$key];
     }
     $new_settings = array( 
-    	'action'          => 'save_configuration',
+    	'command'          => 'save_configuration',
         'message'         => 'saving configuration',   
     	'cs'              => $values,
         'current-save-id' => array( $inputs['configType'], $inputs['configName'] )
@@ -406,7 +406,7 @@ function ajax_handle_get_config() {
 
         $new_settings = array( 
         	'change_current-save-id' => $inputs['config'],
-        	'action'  => 'change_config_to_edit',
+        	'command'  => 'change_config_to_edit',
             'message' => 'changing current configuration',   
             //'current-save-id' => $options['current-save-id'][1]
         ); 
@@ -434,7 +434,7 @@ function ajax_handle_delete_config() {
         $new_settings = 
             array( 
             	'delete-id'       => array( $inputs['configType'], $inputs['configName'] ),
-            	'action'          => 'delete_configuration',
+            	'command'          => 'delete_configuration',
                 'message'         => 'deleting current configuration',   
             ); 
         
@@ -462,7 +462,7 @@ function ajax_handle_set_live_config() {
         $new_settings = 
             array( 
             	'change_live_config_id'       => array( $inputs['configType'], $inputs['configName'] ),
-            	'action'          => 'change_live_config',
+            	'command'          => 'change_live_config',
                 'message'         => 'changing live configuration',   
             ); 
         
@@ -490,7 +490,7 @@ function ajax_handle_new_config() {
 
         $new_settings = array( 
         	'new_configuration_name' => $inputs['config'],
-        	'action'  => 'create_new_configuration',
+        	'command'  => 'create_new_configuration',
             'message' => 'changing current configuration',   
         ); 
         
@@ -541,7 +541,7 @@ function handle_ap_options( $new_settings ) {
         
     } else {
         
-        if ( $new_settings['action'] == 'create_default_options') {
+        if ( $new_settings['command'] == 'create_default_options') {
             $current_save_id = $new_settings['current-save-id'];
             // create css
             $css = get_css($new_settings['configurations'][$current_save_id[0]][$current_save_id[1]]);
@@ -549,7 +549,7 @@ function handle_ap_options( $new_settings ) {
             $new_settings['message'] = 'created default options';
             return $new_settings; 
             
-        } else if ( $new_settings['action'] == 'save_configuration' ) {
+        } else if ( $new_settings['command'] == 'save_configuration' ) {
             $options = get_option('ap_options');
         
             // if options have never been set before create some default options
