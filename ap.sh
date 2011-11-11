@@ -50,5 +50,6 @@ cd $wd
 
 zip -r $td.zip $zd
 
+rm -r $zd
 cd ..
 
