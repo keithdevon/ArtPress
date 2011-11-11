@@ -28,10 +28,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	padding: 0;
 	vertical-align: baseline;
 }
-body {
-    /*background: url(images/grid.png);*/
-	
-}
+
 h1, h2 {
 	clear: both;
 	font-weight: normal;
@@ -602,9 +599,7 @@ body.page .edit-link {
 }
 .entry-utility {
 	clear: both;
-	color: #888;
-	font-size: 12px;
-	line-height: 2em;
+	line-height: 1.5em;
 }
 
 #content .video-player {
@@ -770,15 +765,7 @@ img.aligncenter {
 	text-align: center;
 	/*width: 33%; removed to allow col classes to take over layout*/
 }
-/*
-These are now being handled by our column divs - kdev
 
-.gallery-columns-2 .gallery-item {
-	width: 50%;
-}
-.gallery-columns-4 .gallery-item {
-	width: 25%;
-}*/
 .gallery img {
 }
 .gallery-columns-2 .attachment-medium {
@@ -1302,134 +1289,6 @@ label.horiz {
 #access form.searchform {
     float:right;
     }
-
-    
-/* REMOVE EVERYTHING BELOW THIS LINE FOR RELEASE VERSIONS !!!! ______________________________________________*/
-    
-    
-/* GLOSSY BUTTONS ------------*/
-
-.css3-button {
- 
-position:relative;
- 
-display:inline-block;
- 
-width:8em;
- 
-padding:0.25em 0.5em 0.3em 0.5em;
- 
-text-align:center;
- 
-cursor:pointer;
- 
-border:2px solid #999;
- 
-background-color:#666;
- 
-background-color:rgba(128,128,128,0.75);
- 
--moz-border-radius:16px;
- 
--webkit-border-radius:16px;
- 
--opera-border-radius:16px;
- 
--khtml-border-radius:16px;
- 
-border-radius:16px;
- 
-font-size:1em;
- 
-color:#fff;
- 
-font-weight:bold;
- 
-text-shadow:1px 1px 3px rgba(0,0,0,0.5);
- 
-background-image:-webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(64,64,64,0.75)), to(rgba(192,192,192,0.9)));
- 
-background-image:-moz-linear-gradient(top,bottom,from(rgba(64,64,64,0.75)), to(rgba(192,192,192,0.9)));
- 
--khtml-box-shadow:rgba(192,192,192,0.75) 0px 8px 24px;
- 
--moz-box-shadow:rgba(192,192,192,0.75) 0px 8px 24px;
- 
-box-shadow:rgba(192,192,192,0.75) 0px 8px 24px;
- 
-}
- 
-.css3-button span {
- 
-position:absolute;
- 
-display:block;
- 
-width:94%;
- 
-left:3.5%;
- 
-top:0px;
- 
-height:50%;
- 
--webkit-border-radius:8px;
- 
--moz-border-radius:8px;
- 
-background-color:rgba(255,255,255,0.25);
- 
-background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0.5)), to(rgba(255,255,255,0)));
- 
-background-image:-moz-linear-gradient(top,bottom,from(rgba(255,255,255,0.75)), to(rgba(255,255,255,0)));
- 
-}
- 
-#shiny-green {
-
-font-family: helvetica, "Helvetica Neue", Arial, sans-serif;
-
-text-shadow:-1px 0px 0px rgba(0,0,0,.5);
-
-color:white;
-
-border-color:#00420C;
- 
-background-color:rgba(0,105,19,0.75);
- 
-background-image:-webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(0,105,19,0.75)), to(rgba(0,66,12,0.9)));
- 
-background-image:-moz-linear-gradient(top,bottom,from(rgba(0,105,19,0.75)), to(rgba(0,66,12,0.9)));
- 
--khtml-box-shadow:rgba(0,66,12,0.75) 0px 8px 24px;
- 
--moz-box-shadow:rgba(0,66,12,0.75) 0px 8px 24px;
- 
-box-shadow:rgba(0,66,12,0.75) 0px 8px 24px;
- 
-}
- 
-#shiny-green:hover {
-
-color:white;
-
-text-decoration:none;
-
-border-color:#006913;
- 
-background-color:rgba(0,92,17,0.75);
- 
-background-image:-webkit-gradient(linear, 0% 0%, 0% 90%, from(rgba(0,92,17,0.75)), to(rgba(2,169,33,0.9)));
- 
-background-image:-moz-linear-gradient(top,bottom,from(rgba(0,92,17,0.75)), to(rgba(2,169,33,0.9)));
- 
--khtml-box-shadow:rgba(0,92,17,0.75) 0px 8px 24px;
- 
--moz-box-shadow:rgba(0,92,17,0.75) 0px 8px 24px;
- 
-box-shadow:rgba(0,92,17,0.75) 0px 8px 24px; 
- 
-}
 
 
 /* Gallery padding */
