@@ -212,7 +212,7 @@ class Global_Font_Size_Group extends Option_Group {
     function get_html() {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
-        $children_html = colgroup(2);
+        $children_html = colgroup(5);
         get_html_dependents($this);
         $children = $this->get_children();
         if ( null != $children) {
@@ -331,7 +331,7 @@ class Global_Settings extends Main_Tab  {
            // create the new options
            var spaces = "\u00A0\u00A0\u00A0";
            var options = [outerHTML(new Option('', 0))];
-           for ( i = 1; i < globalOptions.size(); i++ ) {
+           for ( var i = 1; i < globalOptions.size(); i++ ) {
               var val = globalOptions[i].value;
               var opt = new Option(i + spaces + val, i);
               options.push(outerHTML(opt));
