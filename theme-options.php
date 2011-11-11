@@ -209,8 +209,12 @@ function page_edit_config() {
     echo ct('div');
     
     // download / upload configs
-    $template_url = get_bloginfo('template_url');
-    echo alink($template_url . '/form/download-config.php?foo=bar', 'download config', attr_type('text/plain'));
+    //$template_url = get_bloginfo('template_url');
+    //echo alink($template_url . '/form/download-config.php?foo=bar', 'download config', attr_type('text/plain'));
+    $setting_fields = get_settings_fields('artpress_options');
+    $hidden = input('hidden', attr_name('command') . attr_value('download_configs'));
+    $submit = input('submit', attr_value('download configs'));
+    echo form('post', 'options.php', $setting_fields . $hidden . $submit, null);
     //echo alink('dathello there', 'hello');
 }
 /** 
