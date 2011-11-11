@@ -517,11 +517,13 @@ class Configuration extends Tab_Group {
     }
     static function get_current_configuration_settings($options=null) {
         if($options == null) $options = get_option('ap_options');
-        if( $current_save_id = $options['current-save-id'] )  {
+        if( isset($options['current-save-id']) && $current_save_id = $options['current-save-id'] )  {
             //if( $config = $options['configurations'][$current_save_id[0]][$current_save_id[1]] ) {
             //    return $config;              
             //}
             return $options['configurations'][$current_save_id[0]][$current_save_id[1]];
+        } else {
+            return null;
         }
     }
 }
