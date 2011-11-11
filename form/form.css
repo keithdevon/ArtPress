@@ -22,13 +22,18 @@ colgroup col:FIRST-CHILD{
 }
 #themeNotifications {
     color: #555;
+    padding: 6px 6px 6px 6px;
+    border: solid 1px white;
+    float: left;
 }
 #config-controls {
     float: right;
+    text-align: right;
+    width: 500px;
 }
 #form-header {
 	/* position: relative;*/
     margin-top: 12px;
     margin-bottom: 12px; 
-    overflow: auto;
+    height: 30px;
 }
