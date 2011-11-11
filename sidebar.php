@@ -8,9 +8,9 @@
  */
 ?>
 
-		<div id="sidebar-A" class="sidebar widget-area" role="complementary">
+<div id="sidebar-A" class="sidebar widget-area" role="complementary">
 
-			<ul class="xoxo">
+    <ul class="xoxo">
 
 <?php
 	/* When we call the dynamic_sidebar() function, it'll spit out
@@ -22,7 +22,7 @@
 
 
 
-		<?php endif; // end primary widget area ?>
+<?php endif; // end primary widget area ?>
 
-			</ul>
-		</div><!-- #primary .widget-area -->
+    </ul>
+</div><!-- #primary .widget-area -->
