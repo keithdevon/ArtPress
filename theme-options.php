@@ -276,6 +276,46 @@ function get_defaults() {
 
     return $options;
 }
+/**
+ * Fills the options array with default or stub values.
+ * */
+function pad_options($options) {
+    global $ap_configuration_defaults;
+    
+    if(!is_array($options)) {
+        $options = array();
+    }
+    if( !isset($options['command']) ) {
+        $options['command'] = 'padding_options';
+    }
+    if( !isset($options['configurations']) ) {
+        $options['configurations'] = array();    
+    }
+    if( !isset($options['configurations']['user']) ) {
+        $options['configurations']['user'] = array();
+    }
+    if( !isset($options['configurations']['default']) ) {
+        $options['configurations']['default'] = $ap_configuration_defaults;
+    } 
+    if( !isset($options['current-save-id']) ) {
+        set_current_config($options, 'default', reset(array_keys($ap_configuration_defaults)));
+    }
+    if( !isset($options['live_config_id']) ) {
+        set_live_config($options, get_current_config_type($options), get_current_config_name($options));
+    }
+    if( !isset($options['cs'])) { 
+        $options['cs'] = get_current_config_values($options); // TODO could be set to null, is this ok?
+    }
+    if( !isset($options['css']) ) {
+        $options['css'] = array('user' => array(), 'default' => array());
+		// TODO create css here?
+    }
+    if( !isset($options['message']) ) {
+        $options['message'] = 'Installed Wordpress';
+    }
+    return $options;
+}
+
 
 function set_action(&$options, $action) {
    $options['command'] = $action;
@@ -285,12 +325,13 @@ function set_action(&$options, $action) {
  * Function to create the options array in the db if not already created.
  */
 function init_ap_options() {
-    $opt1 = get_option('ap_options');
-
-    if ( $opt1 == null ) {
-        $opt1 = get_defaults();
-        $success = add_option('ap_options', $opt1);
-    }
+    //$previous_options = get_option('ap_options');
+    //$opt1 = pad_options( $previous_options );
+    //if($opt1['command'] == 'padding_options') {
+    //    $opt1['command'] = 'save_configuration';
+    //}
+    //$success = update_option('ap_options', $opt1);
+    update_option('ap_options', null);
 
     $opt2 = get_option('ap_images');
 
@@ -539,7 +580,7 @@ function ajax_handle_new_config() {
  * */
 function handle_ap_options( $new_settings ) {
 
-    $options =  get_option('ap_options');
+    $options =  pad_options( get_option('ap_options') );
     $options = handle_configuration_management_options($options, $new_settings);
         
         
@@ -554,9 +595,9 @@ function handle_ap_options( $new_settings ) {
     } else if ( $new_settings['command'] == 'save_configuration' ) {
     
         $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
-        if ($new_settings == null ) {
-            $new_settings = array('cs'=>array()); // TODO don't think I need this anymore
-        }
+        //if ($new_settings == null ) {
+        //    $new_settings = array('cs'=>array()); // TODO don't think I need this anymore
+        //}
         $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
     
         // filter out default values
