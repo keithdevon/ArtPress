@@ -314,6 +314,19 @@ function pad_options($options) {
         $options['css'] = array('user' => array(), 'default' => array());
 		// TODO create css here?
     }
+    // create missing default config css
+    foreach( get_default_configuration_names( $options ) as $name ) {
+        if( !isset($options['css']['default'][$name])) {
+            $options['css']['default'][$name] = get_css($options['configurations']['default'][$name]);
+        }
+    }
+    // create missing user config css
+    foreach( get_user_configuration_names( $options ) as $name ) {
+        if( !isset($options['css']['default'][$name])) {
+            $options['css']['user'][$name] = get_css($options['configurations']['user'][$name]);
+        }
+    }
+    
     if( !isset($options['message']) ) {
         $options['message'] = 'Installed Wordpress';
     }
