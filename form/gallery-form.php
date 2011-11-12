@@ -2,7 +2,7 @@
 
 class Gallery_Base extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('', 'gallery base', $children=null);
+        parent::__construct('', 'general gallery settings', $children=null);
     }
 }
 

@@ -294,8 +294,6 @@ class Global_Font_Size_Group extends Option_Group {
 class Global_Settings extends Main_Tab  {
     function __construct($members=null) {
         if ( null == $members ) {
-            $members[] = new Option_Group('Logo settings', new Logo_Image_Dropdown());
-
             $gc1 = new Global_Color('Color 1', '#000000');
             $gc2 = new Global_Color('Color 2', '#444444');
             $gc3 = new Global_Color('Color 3', '#888888');
@@ -312,6 +310,7 @@ class Global_Settings extends Main_Tab  {
             $gf3 = new Global_Font_Family('Font family 3', 0);
             $members[] = new Global_Font_Group('Global Fonts', array($gf1, $gf2, $gf3));
 
+            $members[] = new Option_Group('Logo settings', new Logo_Image_Dropdown());
         }
         parent::__construct('global settings', 'artpress_options', $members);
     }

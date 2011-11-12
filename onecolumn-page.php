@@ -17,9 +17,7 @@ get_header(); ?>
 		<div id="content" class="one-column container">
             <div class="row">
                 <div class="twelvecol last" role="main">
-                    <?php get_template_part( 'ht-crumbs' );
-
-			 ?>
+                    <?php get_template_part( 'ht-crumbs' ); ?>
 
 			<?php
 			/* Run the loop to output the page.

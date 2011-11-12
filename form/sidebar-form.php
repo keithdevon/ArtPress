@@ -2,7 +2,7 @@
 
 class Sidebar_Base extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('', 'sidebar base', $children=null);
+        parent::__construct('', 'general sidebar settings', $children=null);
     }
 }
 

@@ -190,11 +190,18 @@ abstract class CSS_Composite extends CSS_Setting implements IComposite {
         return $value;
     }
     function get_html() {
-        $children_html = '';
+        $children_html = '';//ct('td') .  ct('tr');
         $children = $this->get_children();
         if ( null != $children) {
-            foreach($children as $child) {
-                $children_html .= $child->get_html();
+            $size = sizeof( $children );
+            for( $i = 0; $i < $size; $i++ ) {
+                if($i != 0 ) {
+                    $children_html .= ot('td');
+                }
+                $children_html .= $children[$i]->get_html();
+                if($i != ($size - 1) ) {
+                    $children_html .= ct('td');
+                }
             }
         }
         return $children_html;

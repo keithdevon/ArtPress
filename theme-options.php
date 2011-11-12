@@ -177,8 +177,8 @@ function page_edit_config() {
     // page title stuff
     //screen_icon();
     echo ot('div', attr_class('wrap'));
-    echo h2( get_current_theme() . __( ' Options' ) ); 
-    $notifications = span($options['message'], attr_id('themeNotifications'));
+    echo h2( __( 'Artpress Options' ) ); 
+    $notifications = div('', attr_id('themeNotifications'));
     
     // create buttons
     $delete = new Delete_Button(); 
@@ -190,7 +190,7 @@ function page_edit_config() {
     // select config to edit
     $config_select = select("", get_config_select_contents($options), attr_id('change_edit_config') . attr_on_change('change_edit_config(this)') );
     
-    $controls = span( $delete->get_html() 
+    $controls = div( $delete->get_html() 
                 . $live->get_html() 
                 . $new->get_html() 
                 . $save_as->get_html() 
@@ -198,7 +198,7 @@ function page_edit_config() {
                 . $config_select
             , attr_id('config-controls') );
             
-    echo div( $notifications . $controls, attr_id('form-header') );
+    echo div( $controls . $notifications, attr_id('form-header') );
     // config type & name
     echo input('hidden', attr_name('current_config_type') . attr_value(get_current_config_type($options)) )
         . input('hidden', attr_name('current_config_name') . attr_value(get_current_config_name($options)) );
@@ -360,6 +360,7 @@ function handle_configuration_management_options($options, $new_settings) {
         $edit_arr = explode('__', $new_settings['change_current-save-id'], 2);
         $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] ); // TODO use helper functions
         $options['message'] = "Now editing {$edit_arr[0]} configuration '{$edit_arr[1]}'.";
+        $options['message_type'] = 'success';
         return $options;
     }
     
@@ -367,6 +368,7 @@ function handle_configuration_management_options($options, $new_settings) {
     if( $new_settings['command'] == 'change_live_config' ) {
         $options['live_config_id'] = array($new_settings['change_live_config_id'][0], $new_settings['change_live_config_id'][1]);
         $options['message'] = "The {$options['live_config_id'][0]} configuration '{$options['live_config_id'][1]}' is now live.";
+        $options['message_type'] = 'success';
         return $options;
     }
     
@@ -377,12 +379,14 @@ function handle_configuration_management_options($options, $new_settings) {
         // handle case where name already exists
         if( isset( $options['configurations']['user'][$new_config_name] ) ) {
             $options['message'] = "A configuration called {$new_config_name} already exists";
+            $options['message_type'] = 'fail';
             return $options;
         } else {
             $options['current-save-id'] = array('user', $new_config_name);
             $options['configurations']['user'][$new_config_name] = array();
             // TODO must create css at some point - or abstract out common css
             $options['message'] = "Successfully created new user configuration";
+            $options['message_type'] = 'success';            
             return $options;
         }
     }
@@ -392,11 +396,13 @@ function handle_configuration_management_options($options, $new_settings) {
         $dead_save = $new_settings['delete-id'];
         if($dead_save[0] == 'default') {
             $options['message'] = "Cannot delete default configurations";
+            $options['message_type'] = 'fail';
             return $options;
         }
         if($dead_save == $options['live_config_id']) {
             //don't do anything if the first save is being shown to the public
             $options['message'] = "Cannot delete this configuration as it is currently live.";
+            $options['message_type'] = 'fail';
             return $options;
         }
         unset($options['configurations']['user'][$dead_save[1]]);
@@ -408,6 +414,7 @@ function handle_configuration_management_options($options, $new_settings) {
         }
 
         $options['message'] = "Deleted user configuration '{$dead_save[1]}'";
+        $options['message_type'] = 'success';
         return $options;
     }
     
@@ -439,6 +446,7 @@ function ajax_handle_save_config() {
     $response = array(
     	  'configID'         => get_current_config($updated_options)
     	, 'message'          => $updated_options['message'] 
+    	, 'message_type'     => $updated_options['message_type'] 
     	, 'configSelectHTML' => get_config_select_contents($updated_options)
     	);
     $json = json_encode( $response ); 
@@ -465,6 +473,7 @@ function ajax_handle_get_config() {
         	'formHTML'     => get_config_form( $config_values )
             , 'configID'   => get_current_config($updated_options)
             , 'message'    => $updated_options['message']
+            , 'message_type'     => $updated_options['message_type'] 
             , 'isLive'	   => is_current_config_live($updated_options)
             );
         $json = json_encode( $response ); ;
@@ -493,6 +502,7 @@ function ajax_handle_delete_config() {
                 'formHTML'           => get_config_form( $config_values )
                 , 'configID'         => get_current_config($updated_options)
                 , 'message'          => $updated_options['message']
+                , 'message_type'     => $updated_options['message_type'] 
                 , 'configSelectHTML' => get_config_select_contents($updated_options)
                 , 'isLive'	         => is_current_config_live($updated_options)
                 );
@@ -519,6 +529,7 @@ function ajax_handle_set_live_config() {
         $response = 
             array(
                  'message'           => $updated_options['message']
+                , 'message_type'     => $updated_options['message_type'] 
                 , 'configID'         => get_current_config($updated_options)
                 , 'configSelectHTML' => get_config_select_contents($updated_options)
                 , 'isLive'	         => is_current_config_live($updated_options)
@@ -549,6 +560,7 @@ function ajax_handle_new_config() {
             , 'configID'   => get_current_config($updated_options)
             , 'configSelectHTML' => get_config_select_contents($updated_options)
             , 'message'          => $updated_options['message']
+            , 'message_type'     => $updated_options['message_type'] 
             , 'isLive'	   => is_current_config_live($updated_options)
             );
         $json = json_encode( $response ); ;
@@ -590,6 +602,7 @@ function handle_ap_options( $new_settings ) {
         $css = get_css($new_settings['configurations'][$current_save_id[0]][$current_save_id[1]]);
         $new_settings['css'][$current_save_id[0]][$current_save_id[1]] = $css;
         $new_settings['message'] = 'created default options';
+            $new_settings['message_type'] = 'success';
         return $new_settings; 
         
     } else if ( $new_settings['command'] == 'save_configuration' ) {
@@ -611,6 +624,7 @@ function handle_ap_options( $new_settings ) {
             //$date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
             $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);// . " [${date}]");
             $options['message'] = "Saved default configuration as \"{$options['current-save-id'][1]}\"";
+                $options['message_type'] = 'success';
         
             // ... or if the supplied save name is blank 
         } elseif ( $new_settings['current-save-id'][1] == '' ) {
@@ -618,6 +632,7 @@ function handle_ap_options( $new_settings ) {
             $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
             $options['current-save-id'] = array('user', $date);
             $options['message'] = "Saved user configuration as \"{$date}\"";
+                $options['message_type'] = 'success';
         
         } else {
             $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);

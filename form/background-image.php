@@ -75,4 +75,7 @@ class Background_Image_Tab extends Sub_Tab {
         }
         parent::__construct($display_name, $members);
     }
+    function get_html() {
+        return parent::get_html();
+    }
 }

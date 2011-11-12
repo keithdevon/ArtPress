@@ -63,6 +63,14 @@ class Layout_Tab extends Sub_Tab {
     function __construct($display_name, $members=null) {
         if ( null == $members ) {
             $og = new Option_Group('', array(
+                new Option_Row_Group('',
+                    array(
+                        new Column_Header('top'),
+                        new Column_Header('right'),
+                        new Column_Header('bottom'),
+                        new Column_Header('left')
+                    )
+                ),
                 new Option_Row_Group('margin',
                     array(
                         new Margin_Top(),
