@@ -192,6 +192,7 @@ abstract class Hierarchy {
     }
     // SETTERS
     function add_child($child)   {
+        $children = $this->children; // TODO debug only, delete
         $child->set_parent($this);
         $this->children[]   = $child;
     }
