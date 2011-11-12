@@ -310,9 +310,9 @@ function init_ap_options() {
  * 
  * If none of these operations have been requested, the function returns false.
  * */
-function handle_configuration_management_options($new_settings) {
+function handle_configuration_management_options($options, $new_settings) {
     
-    $options = get_option('ap_options');
+    //$options = get_option('ap_options');
     
     // change edit config
     if( $new_settings['command'] == 'change_config_to_edit' ) {
@@ -370,7 +370,7 @@ function handle_configuration_management_options($new_settings) {
         return $options;
     }
     
-    return false;
+    return $options;
 }
 add_action('wp_ajax_save_config', 'ajax_handle_save_config');
 function ajax_handle_save_config() {
@@ -539,68 +539,62 @@ function ajax_handle_new_config() {
  * */
 function handle_ap_options( $new_settings ) {
 
-    if($options = handle_configuration_management_options($new_settings)) {
-
-        return $options;
+    $options =  get_option('ap_options');
+    $options = handle_configuration_management_options($options, $new_settings);
         
-    } else {
         
-        if ( $new_settings['command'] == 'create_default_options') {
-            $current_save_id = $new_settings['current-save-id'];
-            // create css
-            $css = get_css($new_settings['configurations'][$current_save_id[0]][$current_save_id[1]]);
-            $new_settings['css'][$current_save_id[0]][$current_save_id[1]] = $css;
-            $new_settings['message'] = 'created default options';
-            return $new_settings; 
-            
-        } else if ( $new_settings['command'] == 'save_configuration' ) {
-            $options = get_option('ap_options');
+    if ( $new_settings['command'] == 'create_default_options') {
+        $current_save_id = $new_settings['current-save-id'];
+        // create css
+        $css = get_css($new_settings['configurations'][$current_save_id[0]][$current_save_id[1]]);
+        $new_settings['css'][$current_save_id[0]][$current_save_id[1]] = $css;
+        $new_settings['message'] = 'created default options';
+        return $new_settings; 
         
-            // if options have never been set before create some default options
-            if( $options == null) $options = get_defaults(); 
-        
-            $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
-            if ($new_settings == null ) {
-                $new_settings = array('cs'=>array()); // TODO don't think I need this anymore
-            }
-            $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
-        
-            // filter out default values
-            $merged_save = array_filter($merged_save);
-        
-            // set the current-save-id
-            // TODO check if the name already exists
-            // create a new save name if the current save if a default configuration ...
-            if( $new_settings['current-save-id'][0] == 'default') {
-                $d = getdate();
-                $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-                $options['current-save-id'] = array('user', $new_settings['current-save-id'] . " [${date}]");
-                $options['message'] = "Saved default configuration as \"{$options['current-save-id'][1]}\"";
-            
-                // ... or if the supplied save name is blank 
-            } elseif ( $new_settings['current-save-id'][1] == '' ) {
-                $d = getdate();
-                $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-                $options['current-save-id'] = array('user', $date);
-                $options['message'] = "Saved user configuration as \"{$date}\"";
-            
-            } else {
-                $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);
-                $options['message'] = "Saved user configuration \"{$options['current-save-id'][1]}\"";
-            }
-        
-            // store as user configuration
-            $current_config_name = $options['current-save-id'][1];
-            $options['configurations']['user'][$current_config_name] = array(); 
-            $options['configurations']['user'][$current_config_name] = $merged_save;
-        
-            // create css
-            $css = get_css($merged_save);
-            $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
-        
+    } else if ( $new_settings['command'] == 'save_configuration' ) {
+    
+        $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
+        if ($new_settings == null ) {
+            $new_settings = array('cs'=>array()); // TODO don't think I need this anymore
         }
-        return $options;
+        $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
+    
+        // filter out default values
+        $merged_save = array_filter($merged_save);
+    
+        // set the current-save-id
+        // TODO check if the name already exists
+        // create a new save name if the current save if a default configuration ...
+        if( $new_settings['current-save-id'][0] == 'default') {
+            $d = getdate();
+            //$date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
+            $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);// . " [${date}]");
+            $options['message'] = "Saved default configuration as \"{$options['current-save-id'][1]}\"";
+        
+            // ... or if the supplied save name is blank 
+        } elseif ( $new_settings['current-save-id'][1] == '' ) {
+            $d = getdate();
+            $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
+            $options['current-save-id'] = array('user', $date);
+            $options['message'] = "Saved user configuration as \"{$date}\"";
+        
+        } else {
+            $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);
+            $options['message'] = "Saved user configuration \"{$options['current-save-id'][1]}\"";
+        }
+    
+        // store as user configuration
+        $current_config_name = $options['current-save-id'][1];
+        $options['configurations']['user'][$current_config_name] = array(); 
+        $options['configurations']['user'][$current_config_name] = $merged_save;
+    
+        // create css
+        $css = get_css($merged_save);
+        $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
+    
     }
+    return $options;
+
 }
 class CSS_Setting_Visitor implements Visitor {
     function recurse($hierarchy) {
