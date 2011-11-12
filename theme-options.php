@@ -212,7 +212,7 @@ function page_edit_config() {
     //$template_url = get_bloginfo('template_url');
     //echo alink($template_url . '/form/download-config.php?foo=bar', 'download config', attr_type('text/plain'));
     $setting_fields = get_settings_fields('artpress_options');
-    $hidden = input('hidden', attr_name('command') . attr_value('download_configs'));
+    $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_configs'));
     $submit = input('submit', attr_value('download configs'));
     echo form('post', 'options.php', $setting_fields . $hidden . $submit, null);
     //echo alink('dathello there', 'hello');
@@ -352,8 +352,6 @@ function init_ap_options() {
  * If none of these operations have been requested, the function returns false.
  * */
 function handle_configuration_management_options($options, $new_settings) {
-    
-    //$options = get_option('ap_options');
     
     // change edit config
     if( $new_settings['command'] == 'change_config_to_edit' ) {
@@ -648,6 +646,22 @@ function handle_ap_options( $new_settings ) {
         $css = get_css($merged_save);
         $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
     
+    } else if($new_settings['command'] == 'download_configs') {
+        // get the configs
+        $user_configs = get_user_configurations($options);
+
+        // get rid of any existing stuff in the buffer, and create new header
+        ob_clean();
+        header( "Content-type: text/plain" );
+        header('Content-Disposition: attachment; filename="configs.txt"');
+        
+        // format the output
+        $new_lines_for_commas = str_replace(',',",\n",json_encode($user_configs));
+        $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
+        $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
+        
+        echo $new_lines_for_close_brackets;
+        exit;
     }
     return $options;
 

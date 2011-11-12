@@ -84,5 +84,10 @@ function button_submit( $button_text, $attributes='' ) {
         attr_value(esc_attr($button_text)) .
         $attributes );
 }
+function array_equals($array, $key, $value) {
+    if(isset($array[$key])) {
+        return ($array[$key] == $value);
+    } else return false;
+}
 
 ?>
