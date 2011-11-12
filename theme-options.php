@@ -610,9 +610,6 @@ function handle_ap_options( $new_settings ) {
     } else if ( $new_settings['command'] == 'save_configuration' ) {
     
         $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
-        //if ($new_settings == null ) {
-        //    $new_settings = array('cs'=>array()); // TODO don't think I need this anymore
-        //}
         $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
     
         // filter out default values
