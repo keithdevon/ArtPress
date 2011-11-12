@@ -208,14 +208,18 @@ function page_edit_config() {
     echo div(get_config_form($values));
     echo ct('div');
     
-    // download / upload configs
-    //$template_url = get_bloginfo('template_url');
-    //echo alink($template_url . '/form/download-config.php?foo=bar', 'download config', attr_type('text/plain'));
+    // download all configs form
     $setting_fields = get_settings_fields('artpress_options');
-    $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_configs'));
-    $submit = input('submit', attr_value('download configs'));
+    $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_user_configs'));
+    $submit = input('submit', attr_value('download all user configs'));
     echo form('post', 'options.php', $setting_fields . $hidden . $submit, null);
-    //echo alink('dathello there', 'hello');
+    
+    // download current config form
+    $setting_fields = get_settings_fields('artpress_options');
+    $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_current_config'));
+    $submit = input('submit', attr_value('download current config'));
+    echo form('post', 'options.php', $setting_fields . $hidden . $submit, null);
+
 }
 /** 
  * If the candidate config type and name match the current live config id,
@@ -646,14 +650,31 @@ function handle_ap_options( $new_settings ) {
         $css = get_css($merged_save);
         $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
     
-    } else if($new_settings['command'] == 'download_configs') {
+    } else if($new_settings['command'] == 'download_current_config') {
+        // get the configs
+        $config_name = get_current_config_name($options);
+        $config = get_current_config_values($options);
+
+        // get rid of any existing stuff in the buffer, and create new header
+        ob_clean();
+        header( "Content-type: text/plain" );
+        header('Content-Disposition: attachment; filename="current-config.txt"');
+        
+        // format the output
+        $new_lines_for_commas = str_replace(',',",\n",json_encode(array($config_name => $config)));
+        $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
+        $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
+        
+        echo $new_lines_for_close_brackets;
+        exit;
+    } else if($new_settings['command'] == 'download_user_configs') {
         // get the configs
         $user_configs = get_user_configurations($options);
 
         // get rid of any existing stuff in the buffer, and create new header
         ob_clean();
         header( "Content-type: text/plain" );
-        header('Content-Disposition: attachment; filename="configs.txt"');
+        header('Content-Disposition: attachment; filename="user-configs.txt"');
         
         // format the output
         $new_lines_for_commas = str_replace(',',",\n",json_encode($user_configs));
