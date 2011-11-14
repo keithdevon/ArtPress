@@ -27,7 +27,7 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
 
-        $children_html = '';//colgroup(3);        
+        $children_html = colgroup(3);        
         get_html_dependents($this);
         //$children = $this->get_children();
         $children = self::$singleton->get_children();
@@ -142,7 +142,7 @@ class Global_Font_Group extends Option_Group {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
 
-        $children_html = '';//colgroup(3); 
+        $children_html = colgroup(3); 
         get_html_dependents($this);
         $children = self::$singleton->get_children();
         if ( null != $children) {
@@ -221,7 +221,7 @@ class Global_Font_Size_Group extends Option_Group {
     function get_html() {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
-        $children_html = '';//colgroup(3);
+        $children_html = colgroup(3);
         get_html_dependents($this);
         $children = self::$singleton->get_children();
         if ( null != $children) {
