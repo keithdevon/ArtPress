@@ -7,11 +7,11 @@ require_once 'form.php';
  * @author jsd
  *
  */
-class Global_Color extends Setting_Text {
+abstract class Global_Color extends Setting_Text {
     private static $global_color_instances = array();
 
-    function __construct($display_name, $value='') {
-        parent::__construct('color', $display_name, $value);
+    function __construct($name, $display_name, $value='') {
+        parent::__construct($name, $display_name, $value);
         self::$global_color_instances[] = $this;
     }
     function validate($value) {
@@ -29,6 +29,37 @@ class Global_Color extends Setting_Text {
         return parent::get_html( attr_class('colorwell globalColor globalSetting') );
     }
 }
+
+class Global_Color_1 extends Global_Color { 
+    function __construct( $value='#000000' ) { 
+        parent::__construct('color', 'color 1', $value); 
+    } 
+}
+
+class Global_Color_2 extends Global_Color { 
+    function __construct( $value='#444444' ) {
+        parent::__construct('color__2', 'color 2', $value);
+    }
+}
+
+class Global_Color_3 extends Global_Color { 
+    function __construct( $value='#888888' ) {
+        parent::__construct('color__3', 'color 3', $value);
+    }
+}
+
+class Global_Color_4 extends Global_Color { 
+    function __construct( $value='#bbbbbb' ) {
+        parent::__construct('color__4', 'color 4', $value);
+    }
+}
+
+class Global_Color_5 extends Global_Color { 
+    function __construct( $value='#ffffff' ) {
+        parent::__construct('color__5', 'color 5', $value);
+    }
+}
+
 
 function get_css_dropdown_value($obj) {
     $options = $obj->get_opts();

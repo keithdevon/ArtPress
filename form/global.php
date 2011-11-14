@@ -5,6 +5,14 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
 
     function __construct($display_name, $members=null) {
         if(!self::$singleton) {
+            if($members == null) {
+                $members = array(
+                    new Global_Color_1(),
+                    new Global_Color_2(),
+                    new Global_Color_3(),
+                    new Global_Color_4(),
+                    new Global_Color_5());
+            }
             parent::__construct($display_name, $members);
             self::$singleton = $this;
         }
@@ -19,9 +27,10 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
 
-        $children_html = colgroup(3);        
+        $children_html = '';//colgroup(3);        
         get_html_dependents($this);
-        $children = $this->get_children();
+        //$children = $this->get_children();
+        $children = self::$singleton->get_children();
         $first = true;
         if ( null != $children) {
             foreach($children as $child) {
@@ -133,9 +142,9 @@ class Global_Font_Group extends Option_Group {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
 
-        $children_html = colgroup(2); 
+        $children_html = '';//colgroup(3); 
         get_html_dependents($this);
-        $children = $this->get_children();
+        $children = self::$singleton->get_children();
         if ( null != $children) {
             foreach($children as $child) {
                 if( $child instanceof Setting && !($child instanceof IComposite ) ) {
@@ -212,9 +221,9 @@ class Global_Font_Size_Group extends Option_Group {
     function get_html() {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
-        $children_html = colgroup(5);
+        $children_html = '';//colgroup(3);
         get_html_dependents($this);
-        $children = $this->get_children();
+        $children = self::$singleton->get_children();
         if ( null != $children) {
             foreach($children as $child) {
                 if( $child instanceof Setting && !($child instanceof IComposite ) ) {
@@ -294,12 +303,12 @@ class Global_Font_Size_Group extends Option_Group {
 class Global_Settings extends Main_Tab  {
     function __construct($members=null) {
         if ( null == $members ) {
-            $gc1 = new Global_Color('Color 1', '#000000');
-            $gc2 = new Global_Color('Color 2', '#444444');
-            $gc3 = new Global_Color('Color 3', '#888888');
-            $gc4 = new Global_Color('Color 4', '#bbbbbb');
-            $gc5 = new Global_Color('Color 5', '#ffffff');
-            $members[] = new Global_Color_Group('Global Colors', array($gc1, $gc2, $gc3, $gc4, $gc5));
+            //$gc1 = new Global_Color('Color 1', '#000000');
+            //$gc2 = new Global_Color('Color 2', '#444444');
+            //$gc3 = new Global_Color('Color 3', '#888888');
+            //$gc4 = new Global_Color('Color 4', '#bbbbbb');
+            //$gc5 = new Global_Color('Color 5', '#ffffff');
+            $members[] = new Global_Color_Group('Global Colors');
 
             $gfs = new Global_Font_Size(10);
             $gfss = new Global_Font_Size_Ratio();

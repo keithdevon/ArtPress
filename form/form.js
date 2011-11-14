@@ -63,6 +63,9 @@ function updateFormInputs( valuesMap ) {
 	} else {
 		liveSwitch.removeAttr('disabled');
 	}
+	if (valuesMap['configSelectHTML']) {
+		updateConfigSelect(valuesMap['configSelectHTML']);
+	}
 	for(var k in valuesMap) {
 		//alert(k + ' : ' + valuesMap[k]);
 	}
@@ -153,23 +156,41 @@ jQuery(document).ready(
 );
 
 function handleResponse(response) {
-	// remove trailing 0
-	var sliced = response.slice(0, -1);
-	// convert string to js object
-	var parsed = jQuery.parseJSON(sliced);
-	
-	// handle new form
-	
-	// handle new config select
-    var form = jQuery('#ap_options_form');
-    form.hide();
-    form.html(parsed['formHTML']); 
-    updateFormInputs(parsed);
-    update_config_select(parsed['configSelectHTML']);
+	//// remove trailing 0
+	//var sliced = response.slice(0, -1);
+	//// convert string to js object
+	//var parsed = jQuery.parseJSON(sliced);
+	//
+	//// handle new form
+	//
+	//// handle new config select
+    //var form = jQuery('#ap_options_form');
+    //form.hide();
+    //form.html(parsed['formHTML']); 
+    //updateFormInputs(parsed);
+    //updateConfigSelect(parsed['configSelectHTML']);
+    //
+    //// restore form
+    //initColorPicker();                     
+    //form.fadeIn('fast');
+	changedEls = null;
     
-    // restore form
-    initColorPicker();                     
+	response = jQuery.parseJSON(response.slice(0, -1));
+    var form = jQuery('#ap_options_form');
+    //form.hide();
+    var formHTML = response['formHTML'];
+    form.html(formHTML); 
+    updateFormInputs(response);
     form.fadeIn('fast');
+    initColorPicker();                     
+}
+
+function changeConfig(data) {
+	//jQuery('#-tabs').fadeOut('fast');
+	jQuery('#ap_options_form').fadeOut('fast');
+    jQuery.post(ajaxurl, data, function(response) {
+    	handleResponse(response);
+    });
 }
 
 function delete_config() {
@@ -179,24 +200,14 @@ function delete_config() {
 	var proceed = confirm('Delete user configuration: "' + currentConfigName + '"?');
 
 	if(proceed) {
-		jQuery('#-tabs').fadeOut('fast');
-	        var data = {
-	            action: 'delete_config',
-	            inputs: {
-					'configType' : currentConfigType,
-					'configName' : currentConfigName
-				}
-	        };
-	        jQuery.post(ajaxurl, data, function(response) {
-				response = jQuery.parseJSON(response.slice(0, -1));
-	            var form = jQuery('#ap_options_form');
-	            form.hide();
-	            form.html(response['formHTML']); 
-	            updateFormInputs(response);
-		        update_config_select(response['configSelectHTML']);
-	            initColorPicker();                     
-	            form.fadeIn('fast');
-	        });
+        var data = {
+            action: 'delete_config',
+            inputs: {
+				'configType' : currentConfigType,
+				'configName' : currentConfigName
+			}
+        };
+		changeConfig(data);
 	}
 }
 
@@ -206,7 +217,6 @@ function new_config() {
 		
 		var name_candidate = prompt("name the new configuration", "");
 		if (name_candidate) {
-			jQuery('#-tabs').fadeOut('fast');
 		    var data = {
 		        action: 'new_config',
 		        inputs: {
@@ -214,16 +224,7 @@ function new_config() {
 				}
 		    };
 		        
-		    jQuery.post(ajaxurl, data, function(response) {
-				response = jQuery.parseJSON(response.slice(0, -1));
-		        var form = jQuery('#ap_options_form');
-		        form.hide();
-		        form.html(response['formHTML']); 
-		        updateFormInputs(response);
-		        update_config_select(response['configSelectHTML']);
-		        initColorPicker();                     
-		        form.fadeIn('fast');
-		    });
+			changeConfig(data);
 		}
 	}
 
@@ -242,41 +243,27 @@ function set_live_config() {
 			'configName' : currentConfigName
 		}
     };
-    jQuery.post(ajaxurl, data, function(response) {
-		response = jQuery.parseJSON(response.slice(0, -1));
-        var form = jQuery('#ap_options_form');
-        updateFormInputs(response);
-        update_config_select(response['configSelectHTML']);
-    });
+	changeConfig(data);
 }
 
-function update_config_select(html) {
+function updateConfigSelect(html) {
 	var select = jQuery('#change_edit_config');
 	select.html(html);
 }
 
 function change_edit_config(selectObj) {
 	// TODO check for outstanding changes	
-	
-	jQuery('#-tabs').fadeOut('fast');
-    var data = {
-        action: 'get_config',
-        inputs: {
-			'config' : selectObj.value
-		}
-    };
-        
-    jQuery.post(ajaxurl, data, function(response) {
-    	var sliced = response.slice(0, -1);
-		var parsed = jQuery.parseJSON(sliced);
-        var form = jQuery('#ap_options_form');
-        form.hide();
-        form.html(parsed['formHTML']); 
-        updateFormInputs(parsed);
-        update_config_select(parsed['configSelectHTML']);
-        initColorPicker();                     
-        form.fadeIn('fast');
-    });
+	if(promptOutstandingChanges()) {
+
+	    var data = {
+	        action: 'get_config',
+	        inputs: {
+				'config' : selectObj.value
+			}
+	    };
+	        
+		changeConfig(data);
+	}
 }
 function save(configType, configName) {
 	// make a deep copy of all changed input elements
@@ -284,7 +271,7 @@ function save(configType, configName) {
 	
 	// add all global elements
 	var globalSettings = jQuery('.globalSetting');
-	for(index = 0; index < globalSettings.length; index++ ) {
+	for(var index = 0; index < globalSettings.length; index++ ) {
 		var gs = globalSettings[index];
 		modifiedInputs[gs.name] = gs.value;
 	}
@@ -293,7 +280,7 @@ function save(configType, configName) {
     var data = {
         action: 'save_config',
         inputs: {
-			'configType' : 'user',
+			'configType' : configType,
 			'configName' : configName,
 			'cs'         : inputString
 		}
@@ -301,7 +288,7 @@ function save(configType, configName) {
     jQuery.post(ajaxurl, data, function(response) {
 		response = jQuery.parseJSON(response.slice(0, -1));
         updateFormInputs(response);
-        update_config_select(response['configSelectHTML']);
+        updateConfigSelect(response['configSelectHTML']);
         for (var name in changedEls ) {
 			var el = jQuery('[name="' + name + '"]');
 			jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');

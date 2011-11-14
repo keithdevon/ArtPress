@@ -144,7 +144,7 @@ function get_config_form($values) {
     $configuration->inject_values( $values );
     $config_html = $configuration->get_html();
     $setting_fields = get_settings_fields('artpress_options');
-    return form('post', 'options.php', $setting_fields . $config_html, null, attr_id('ap_options_form'));
+    return form('post', 'options.php', $setting_fields . $config_html, null);
 }
 abstract class Config_Button {
     private $value, $on_click, $class, $attributes;
@@ -205,7 +205,7 @@ function page_edit_config() {
     
     // form content
     $values = Configuration::get_current_configuration_settings($options);
-    echo div(get_config_form($values));
+    echo div(get_config_form($values), attr_id('ap_options_form'));
     echo ct('div');
     
     // download all configs form
@@ -342,13 +342,11 @@ function set_action(&$options, $action) {
  * Function to create the options array in the db if not already created.
  */
 function init_ap_options() {
-    //$previous_options = get_option('ap_options');
-    //$opt1 = pad_options( $previous_options );
-    //if($opt1['command'] == 'padding_options') {
-    //    $opt1['command'] = 'save_configuration';
-    //}
-    //$success = update_option('ap_options', $opt1);
-    update_option('ap_options', null);
+    $previous_options = get_option('ap_options');
+
+    if(!$previous_options) {
+        $success = add_option('ap_options', null);
+    }
 
     $opt2 = get_option('ap_images');
 
@@ -398,7 +396,12 @@ function handle_configuration_management_options($options, $new_settings) {
             return $options;
         } else {
             $options['current-save-id'] = array('user', $new_config_name);
-            $options['configurations']['user'][$new_config_name] = array();
+            
+            // fire up the global settings ...
+            //$global_settings = new Global_Settings();
+            //$settings = Setting::get_registered_settings();
+            // ... and store these as the defaults for the new config
+            $options['configurations']['user'][$new_config_name] = array(); //$settings;
             // TODO must create css at some point - or abstract out common css
             $options['message'] = "Successfully created new user configuration";
             $options['message_type'] = 'success';            
@@ -435,6 +438,35 @@ function handle_configuration_management_options($options, $new_settings) {
     
     return $options;
 }
+/** 
+ * Simple method to encode the ajax response in a JSON format.
+ * The result is then echoed. */
+function send_ajax_response($response){
+    $json = json_encode( $response );
+    echo $json;
+}
+/**
+ * 
+ * This method reduces the boilerplate that is required to
+ * create a response that switches the current config being edited.
+ * This happens on a change, delete or new command.
+ */
+function create_change_config_response() {
+    $updated_options = get_option('ap_options');
+    $config_values = get_current_config_values($updated_options);
+    
+    // send results back to the client in the correct format
+    $response = array(
+            'formHTML'     => get_config_form( $config_values )
+            , 'configID'         => get_current_config($updated_options)
+            , 'message'          => $updated_options['message']
+            , 'message_type'     => $updated_options['message_type']
+            , 'isLive'	         => is_current_config_live($updated_options)
+            , 'configSelectHTML' => get_config_select_contents($updated_options)
+    );
+    return $response;    
+}
+
 add_action('wp_ajax_save_config', 'ajax_handle_save_config');
 function ajax_handle_save_config() {
     $inputs = $_POST['inputs'];
@@ -455,8 +487,8 @@ function ajax_handle_save_config() {
     update_option('ap_options', $new_settings);
     
     // send results back to the client in the correct format
-    $config_type = $options['current-save-id'][0];
-    $config_name = $options['current-save-id'][1];
+    //$config_type = $options['current-save-id'][0];
+    //$config_name = $options['current-save-id'][1];
     $updated_options = get_option('ap_options');
     $response = array(
     	  'configID'         => get_current_config($updated_options)
@@ -464,8 +496,7 @@ function ajax_handle_save_config() {
     	, 'message_type'     => $updated_options['message_type'] 
     	, 'configSelectHTML' => get_config_select_contents($updated_options)
     	);
-    $json = json_encode( $response ); 
-    echo $json;
+    send_ajax_response($response);
 }
 add_action('wp_ajax_get_config', 'ajax_handle_get_config');
 function ajax_handle_get_config() {
@@ -480,19 +511,8 @@ function ajax_handle_get_config() {
         ); 
         
         update_option('ap_options', $new_settings);
-        $updated_options = get_option('ap_options');
-        $config_values = get_current_config_values($updated_options);
-        
-        // send results back to the client in the correct format
-        $response = array(
-        	'formHTML'     => get_config_form( $config_values )
-            , 'configID'   => get_current_config($updated_options)
-            , 'message'    => $updated_options['message']
-            , 'message_type'     => $updated_options['message_type'] 
-            , 'isLive'	   => is_current_config_live($updated_options)
-            );
-        $json = json_encode( $response ); ;
-        echo $json;
+        $response = create_change_config_response();
+        send_ajax_response($response);
     }
 }
 
@@ -508,21 +528,8 @@ function ajax_handle_delete_config() {
             ); 
         
         update_option('ap_options', $new_settings);
-        $updated_options = get_option('ap_options');
-        $config_values = get_current_config_values($updated_options);
-        
-        // send results back to the client in the correct format
-        $response = 
-            array(
-                'formHTML'           => get_config_form( $config_values )
-                , 'configID'         => get_current_config($updated_options)
-                , 'message'          => $updated_options['message']
-                , 'message_type'     => $updated_options['message_type'] 
-                , 'configSelectHTML' => get_config_select_contents($updated_options)
-                , 'isLive'	         => is_current_config_live($updated_options)
-                );
-        $json = json_encode( $response ); ;
-        echo $json;
+        $response = create_change_config_response();
+        send_ajax_response($response);
     }
 }
 
@@ -549,8 +556,7 @@ function ajax_handle_set_live_config() {
                 , 'configSelectHTML' => get_config_select_contents($updated_options)
                 , 'isLive'	         => is_current_config_live($updated_options)
                 );
-        $json = json_encode( $response ); ;
-        echo $json;
+        send_ajax_response($response);
     }
 }
 
@@ -566,20 +572,8 @@ function ajax_handle_new_config() {
         ); 
         
         update_option('ap_options', $new_settings);
-        $updated_options = get_option('ap_options');
-        $config_values = get_current_config_values($updated_options);
-        
-        // send results back to the client in the correct format
-        $response = array(
-        	'formHTML'     => get_config_form( $config_values )
-            , 'configID'   => get_current_config($updated_options)
-            , 'configSelectHTML' => get_config_select_contents($updated_options)
-            , 'message'          => $updated_options['message']
-            , 'message_type'     => $updated_options['message_type'] 
-            , 'isLive'	   => is_current_config_live($updated_options)
-            );
-        $json = json_encode( $response ); ;
-        echo $json;
+        $response = create_change_config_response();
+        send_ajax_response($response);
     }
 }
 /**
@@ -608,94 +602,94 @@ function ajax_handle_new_config() {
 function handle_ap_options( $new_settings ) {
 
     $options =  pad_options( get_option('ap_options') );
-    $options = handle_configuration_management_options($options, $new_settings);
-        
-        
-    if ( $new_settings['command'] == 'create_default_options') {
-        $current_save_id = $new_settings['current-save-id'];
-        // create css
-        $css = get_css($new_settings['configurations'][$current_save_id[0]][$current_save_id[1]]);
-        $new_settings['css'][$current_save_id[0]][$current_save_id[1]] = $css;
-        $new_settings['message'] = 'created default options';
-            $new_settings['message_type'] = 'success';
-        return $new_settings; 
-        
-    } else if ( $new_settings['command'] == 'save_configuration' ) {
     
-        $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]];
-        $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
-    
-        // filter out default values
-        $merged_save = array_filter($merged_save);
-    
-        // set the current-save-id
-        // TODO check if the name already exists
-        // create a new save name if the current save if a default configuration ...
-        if( $new_settings['current-save-id'][0] == 'default') {
-            $d = getdate();
-            //$date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-            $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);// . " [${date}]");
-            $options['message'] = "Saved default configuration as \"{$options['current-save-id'][1]}\"";
+    if( $new_settings ) {
+            
+        $options = handle_configuration_management_options($options, $new_settings);
+                  
+        if ( $new_settings['command'] == 'create_default_options') {
+            $current_save_id = $new_settings['current-save-id'];
+            // create css
+            $css = get_css($new_settings['configurations'][$current_save_id[0]][$current_save_id[1]]);
+            $new_settings['css'][$current_save_id[0]][$current_save_id[1]] = $css;
+            $new_settings['message'] = 'created default options';
+                $new_settings['message_type'] = 'success';
+            return $new_settings; 
+            
+        } else if ( $new_settings['command'] == 'save_configuration' ) {
+        
+            $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]]; //TODO use helper function
+            $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
+        
+            // filter out default values
+            $merged_save = array_filter($merged_save);
+        
+            // set the current-save-id
+            // TODO check if the name already exists
+            // create a new save name if the current save if a default configuration ...
+            if( $new_settings['current-save-id'][0] == 'default') {
+                $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);// . " [${date}]");
+                $options['message'] = "Saved default configuration as \"{$options['current-save-id'][1]}\"";
                 $options['message_type'] = 'success';
+            
+                // ... or if the supplied save name is blank 
+            } elseif ( $new_settings['current-save-id'][1] == '' ) {
+                $d = getdate();
+                $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
+                $options['current-save-id'] = array('user', $date);
+                $options['message'] = "Saved user configuration as \"{$date}\"";
+                    $options['message_type'] = 'success';
+            
+            } else {
+                $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);
+                $options['message'] = "Saved user configuration \"{$options['current-save-id'][1]}\"";
+            }
         
-            // ... or if the supplied save name is blank 
-        } elseif ( $new_settings['current-save-id'][1] == '' ) {
-            $d = getdate();
-            $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-            $options['current-save-id'] = array('user', $date);
-            $options['message'] = "Saved user configuration as \"{$date}\"";
-                $options['message_type'] = 'success';
+            // store as user configuration
+            $current_config_name = $options['current-save-id'][1];
+            $options['configurations']['user'][$current_config_name] = array(); 
+            $options['configurations']['user'][$current_config_name] = $merged_save;
         
-        } else {
-            $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);
-            $options['message'] = "Saved user configuration \"{$options['current-save-id'][1]}\"";
+            // create css
+            $css = get_css($merged_save);
+            $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
+        
+        } else if($new_settings['command'] == 'download_current_config') {
+            // get the configs
+            $config_name = get_current_config_name($options);
+            $config = get_current_config_values($options);
+    
+            // get rid of any existing stuff in the buffer, and create new header
+            ob_clean();
+            header( "Content-type: text/plain" );
+            header('Content-Disposition: attachment; filename="current-config.txt"');
+            
+            // format the output
+            $new_lines_for_commas = str_replace(',',",\n",json_encode(array($config_name => $config)));
+            $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
+            $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
+            
+            echo $new_lines_for_close_brackets;
+            exit;
+        } else if($new_settings['command'] == 'download_user_configs') {
+            // get the configs
+            $user_configs = get_user_configurations($options);
+    
+            // get rid of any existing stuff in the buffer, and create new header
+            ob_clean();
+            header( "Content-type: text/plain" );
+            header('Content-Disposition: attachment; filename="user-configs.txt"');
+            
+            // format the output
+            $new_lines_for_commas = str_replace(',',",\n",json_encode($user_configs));
+            $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
+            $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
+            
+            echo $new_lines_for_close_brackets;
+            exit;
         }
-    
-        // store as user configuration
-        $current_config_name = $options['current-save-id'][1];
-        $options['configurations']['user'][$current_config_name] = array(); 
-        $options['configurations']['user'][$current_config_name] = $merged_save;
-    
-        // create css
-        $css = get_css($merged_save);
-        $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
-    
-    } else if($new_settings['command'] == 'download_current_config') {
-        // get the configs
-        $config_name = get_current_config_name($options);
-        $config = get_current_config_values($options);
-
-        // get rid of any existing stuff in the buffer, and create new header
-        ob_clean();
-        header( "Content-type: text/plain" );
-        header('Content-Disposition: attachment; filename="current-config.txt"');
-        
-        // format the output
-        $new_lines_for_commas = str_replace(',',",\n",json_encode(array($config_name => $config)));
-        $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
-        $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
-        
-        echo $new_lines_for_close_brackets;
-        exit;
-    } else if($new_settings['command'] == 'download_user_configs') {
-        // get the configs
-        $user_configs = get_user_configurations($options);
-
-        // get rid of any existing stuff in the buffer, and create new header
-        ob_clean();
-        header( "Content-type: text/plain" );
-        header('Content-Disposition: attachment; filename="user-configs.txt"');
-        
-        // format the output
-        $new_lines_for_commas = str_replace(',',",\n",json_encode($user_configs));
-        $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
-        $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
-        
-        echo $new_lines_for_close_brackets;
-        exit;
     }
     return $options;
-
 }
 class CSS_Setting_Visitor implements Visitor {
     function recurse($hierarchy) {
