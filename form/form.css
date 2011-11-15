@@ -37,3 +37,16 @@ colgroup col:FIRST-CHILD{
     margin-bottom: 12px; 
     height: 30px;
 }
+#config_up_download {
+	float: right;
+}
+#config_up_download form {
+	display:inline;
+}
+#config_up_download form input[type=submit] {
+	border: none;
+	color: #21759B;
+}
+#config_up_download form input:hover {
+	color: #D54E21;
+}
