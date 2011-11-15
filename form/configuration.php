@@ -3,6 +3,10 @@
 function get_configuration_values( $options, $config_type, $config_name ) {
     return $options['configurations'][$config_type][$config_name];
 }
+function set_configuration_values( $options, $config_type, $config_name, $config_values ) {
+    $options['configurations'][$config_type][$config_name] = $config_values;
+    return $options;
+}
 
 // current configuration functions
 
@@ -30,6 +34,9 @@ function is_current_config_default_type($options) {
 function is_current_config($options, $candidate_type, $candidate_name) {
     return ( ( $candidate_type == get_current_config_type($options) ) 
           && ( $candidate_name == get_current_config_name($options) ) );
+}
+function set_current_config_values($options, $config_values) {
+    return set_configuration_values($options, get_current_config_type($options), get_current_config_name($options), $config_values);
 }
 
 // live configuration functions
@@ -85,4 +92,16 @@ function get_user_configurations($options) {
 function get_user_configuration_names($options) {
     return array_keys(get_user_configurations($options));
 }
+function user_configuration_name_exists($options, $user_config_name_candidate) {
+    if($names = get_user_configuration_names($options) ) {
+        return isset($names[$user_config_name_candidate]);
+    }
+}
 
+// message
+
+function set_message($options, $type, $message) {
+    $options['message'] = $message;
+    $options['message_type'] = $type;
+    return $options;
+}

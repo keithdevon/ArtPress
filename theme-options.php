@@ -24,6 +24,8 @@ require_once $dir . 'form/background-image.php';
 require_once $dir . 'form/configuration.php';
 require_once $dir . 'form/default-configurations.php';
 require_once $dir . 'form/image-form.php';
+require_once $dir . 'form/ajax-handlers.php';
+
 //    require_once $dir . 'form/download-config.php';
 
 add_action( 'admin_init', 'init_register_scripts' );
@@ -219,6 +221,13 @@ function page_edit_config() {
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_current_config'));
     $submit = input('submit', attr_value('download current config'));
     echo form('post', 'options.php', $setting_fields . $hidden . $submit, null);
+    
+    // upload configs
+    $setting_fields = get_settings_fields('artpress_options');
+    $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('upload_configs'));
+    $file   = input('file', attr_name('config_file'));
+    $submit = input('submit', attr_value('upload configs'));
+    echo form('post', 'options.php', $setting_fields . $hidden . $file . $submit, "multipart/form-data");
 
 }
 /** 
@@ -357,224 +366,62 @@ function init_ap_options() {
 
 }
 
-/** 
- * This function handles macro changes to the configurations ie
- * - creating a new configuration
- * - choosing a new live configuration
- * - choosing which configuration to edit
- * - deleting a configuration
- * 
- * If none of these operations have been requested, the function returns false.
- * */
-function handle_configuration_management_options($options, $new_settings) {
-    
-    // change edit config
-    if( $new_settings['command'] == 'change_config_to_edit' ) {
-        $edit_arr = explode('__', $new_settings['change_current-save-id'], 2);
-        $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] ); // TODO use helper functions
-        $options['message'] = "Now editing {$edit_arr[0]} configuration '{$edit_arr[1]}'.";
-        $options['message_type'] = 'success';
-        return $options;
-    }
-    
-    // change live/public config
-    if( $new_settings['command'] == 'change_live_config' ) {
-        $options['live_config_id'] = array($new_settings['change_live_config_id'][0], $new_settings['change_live_config_id'][1]);
-        $options['message'] = "The {$options['live_config_id'][0]} configuration '{$options['live_config_id'][1]}' is now live.";
-        $options['message_type'] = 'success';
-        return $options;
-    }
-    
-    // create new config
-    if( $new_settings['command'] == 'create_new_configuration' ) {
-        $new_config_name = $new_settings['new_configuration_name'];
-        
-        // handle case where name already exists
-        if( isset( $options['configurations']['user'][$new_config_name] ) ) {
-            $options['message'] = "A configuration called {$new_config_name} already exists";
-            $options['message_type'] = 'fail';
-            return $options;
-        } else {
-            $options['current-save-id'] = array('user', $new_config_name);
-            
-            // fire up the global settings ...
-            //$global_settings = new Global_Settings();
-            //$settings = Setting::get_registered_settings();
-            // ... and store these as the defaults for the new config
-            $options['configurations']['user'][$new_config_name] = array(); //$settings;
-            // TODO must create css at some point - or abstract out common css
-            $options['message'] = "Successfully created new user configuration";
-            $options['message_type'] = 'success';            
-            return $options;
-        }
-    }
-    
-    // delete config
-    if( $new_settings['command'] == 'delete_configuration' ) {
-        $dead_save = $new_settings['delete-id'];
-        if($dead_save[0] == 'default') {
-            $options['message'] = "Cannot delete default configurations";
-            $options['message_type'] = 'fail';
-            return $options;
-        }
-        if($dead_save == $options['live_config_id']) {
-            //don't do anything if the first save is being shown to the public
-            $options['message'] = "Cannot delete this configuration as it is currently live.";
-            $options['message_type'] = 'fail';
-            return $options;
-        }
-        unset($options['configurations']['user'][$dead_save[1]]);
-        unset($options['css']['user'][$dead_save[1]]);
-        $first_save_name = key($options['configurations']['default']);
+function create_date_string() {
+    $d = getdate();
+    $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
+    return $date;    
+}
 
-        if($dead_save == $options['current-save-id']) {
-            $options['current-save-id'] = array('default', $first_save_name );
-        }
-
-        $options['message'] = "Deleted user configuration '{$dead_save[1]}'";
-        $options['message_type'] = 'success';
-        return $options;
-    }
+function update_config($options, $new_settings) {
+    //$previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]]; //TODO use helper function
+    $previous_save = get_current_config_values($options);
+    $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
     
+    // filter out default values
+    $merged_save = array_filter($merged_save);
+    $options = save_config($options, $new_settings);
     return $options;
 }
 /** 
- * Simple method to encode the ajax response in a JSON format.
- * The result is then echoed. */
-function send_ajax_response($response){
-    $json = json_encode( $response );
-    echo $json;
-}
-/**
  * 
- * This method reduces the boilerplate that is required to
- * create a response that switches the current config being edited.
- * This happens on a change, delete or new command.
- */
-function create_change_config_response() {
-    $updated_options = get_option('ap_options');
-    $config_values = get_current_config_values($updated_options);
+ * */
+function save_config( $options, $config_type, $config_name, $config_values) {
+  
+    // check if the name already exists
+    if( user_configuration_name_exists($options, $config_name) ) {
+        return handle_user_config_name_exists($options, $config_name);
+    }
     
-    // send results back to the client in the correct format
-    $response = array(
-            'formHTML'     => get_config_form( $config_values )
-            , 'configID'         => get_current_config($updated_options)
-            , 'message'          => $updated_options['message']
-            , 'message_type'     => $updated_options['message_type']
-            , 'isLive'	         => is_current_config_live($updated_options)
-            , 'configSelectHTML' => get_config_select_contents($updated_options)
-    );
-    return $response;    
-}
-
-add_action('wp_ajax_save_config', 'ajax_handle_save_config');
-function ajax_handle_save_config() {
-    $inputs = $_POST['inputs'];
-    $options = get_option('ap_options');
-    $no_slash = str_replace("\\" , "", $inputs['cs']);
-    $cs = json_decode($no_slash, true);
-    $values = array();
-    foreach ( array_keys($cs) as $key ) {
-        $new_key = str_replace(']', '', str_replace('ap_options[cs][', '', $key));
-        $values[$new_key] = $cs[$key];
-    }
-    $new_settings = array( 
-    	'command'          => 'save_configuration',
-        'message'         => 'saving configuration',   
-    	'cs'              => $values,
-        'current-save-id' => array( $inputs['configType'], $inputs['configName'] )
-    ); 
-    update_option('ap_options', $new_settings);
+    // create a new save name if the current save if a default configuration ...
+    if( $config_type == 'default') {
+        $options['current-save-id'] = array('user', $config_name . ' ' . create_date_string() );
+        $options = set_message('success', "Saved default configuration as \"{$options['current-save-id'][1]}\"");
     
-    // send results back to the client in the correct format
-    //$config_type = $options['current-save-id'][0];
-    //$config_name = $options['current-save-id'][1];
-    $updated_options = get_option('ap_options');
-    $response = array(
-    	  'configID'         => get_current_config($updated_options)
-    	, 'message'          => $updated_options['message'] 
-    	, 'message_type'     => $updated_options['message_type'] 
-    	, 'configSelectHTML' => get_config_select_contents($updated_options)
-    	);
-    send_ajax_response($response);
-}
-add_action('wp_ajax_get_config', 'ajax_handle_get_config');
-function ajax_handle_get_config() {
-    //$options = get_option('ap_options');
-    if($inputs = $_POST['inputs'] ) {
-
-        $new_settings = array( 
-        	'change_current-save-id' => $inputs['config'],
-        	'command'  => 'change_config_to_edit',
-            'message' => 'changing current configuration',   
-            //'current-save-id' => $options['current-save-id'][1]
-        ); 
-        
-        update_option('ap_options', $new_settings);
-        $response = create_change_config_response();
-        send_ajax_response($response);
+    // ... or if the supplied save name is blank
+    } elseif ( $config_name == '' ) {
+        $date = create_date_string();
+        $options['current-save-id'] = array('user', $date);
+        $options = set_message($options, 'success', "Saved user configuration as \"{$date}\"" );
+    
+    } else {
+        $options['current-save-id'] = array('user', $config_name);
+        $options = set_message($options, 'success', "Saved user configuration \"{$options['current-save-id'][1]}\"");
     }
+
+    
+    // store as user configuration
+    $options = set_current_config_values($options, $config_values);
+    
+    // create css
+    $css = get_css($config_values);
+    $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
+    
+    return $options;
 }
-
-add_action('wp_ajax_delete_config', 'ajax_handle_delete_config');
-function ajax_handle_delete_config() {
-    if($inputs = $_POST['inputs'] ) {
-
-        $new_settings = 
-            array( 
-            	'delete-id'       => array( $inputs['configType'], $inputs['configName'] ),
-            	'command'          => 'delete_configuration',
-                'message'         => 'deleting current configuration',   
-            ); 
-        
-        update_option('ap_options', $new_settings);
-        $response = create_change_config_response();
-        send_ajax_response($response);
-    }
-}
-
-add_action('wp_ajax_set_live_config', 'ajax_handle_set_live_config');
-function ajax_handle_set_live_config() {
-    if($inputs = $_POST['inputs'] ) {
-        $new_settings = 
-            array( 
-            	'change_live_config_id'       => array( $inputs['configType'], $inputs['configName'] ),
-            	'command'          => 'change_live_config',
-                'message'         => 'changing live configuration',   
-            ); 
-        
-        update_option('ap_options', $new_settings);
-        $updated_options = get_option('ap_options');
-        $config_values = get_current_config_values($updated_options);
-        
-        // send results back to the client in the correct format
-        $response = 
-            array(
-                 'message'           => $updated_options['message']
-                , 'message_type'     => $updated_options['message_type'] 
-                , 'configID'         => get_current_config($updated_options)
-                , 'configSelectHTML' => get_config_select_contents($updated_options)
-                , 'isLive'	         => is_current_config_live($updated_options)
-                );
-        send_ajax_response($response);
-    }
-}
-
-add_action('wp_ajax_new_config', 'ajax_handle_new_config');
-function ajax_handle_new_config() {
-
-    if($inputs = $_POST['inputs'] ) {
-
-        $new_settings = array( 
-        	'new_configuration_name' => $inputs['config'],
-        	'command'  => 'create_new_configuration',
-            'message' => 'changing current configuration',   
-        ); 
-        
-        update_option('ap_options', $new_settings);
-        $response = create_change_config_response();
-        send_ajax_response($response);
-    }
+function handle_user_config_name_exists($options, $new_config_name) {
+    $options['message'] = "A configuration called {$new_config_name} already exists";
+    $options['message_type'] = 'fail';
+    return $options;    
 }
 /**
  * All user interactions with theme settings are routed through this function.
@@ -604,10 +451,69 @@ function handle_ap_options( $new_settings ) {
     $options =  pad_options( get_option('ap_options') );
     
     if( $new_settings ) {
-            
-        $options = handle_configuration_management_options($options, $new_settings);
+        
+        // change edit config
+        if( $new_settings['command'] == 'change_config_to_edit' ) {
+            $edit_arr = explode('__', $new_settings['change_current-save-id'], 2);
+            $options['current-save-id'] = array( $edit_arr[0], $edit_arr[1] ); // TODO use helper functions
+            $options['message'] = "Now editing {$edit_arr[0]} configuration '{$edit_arr[1]}'.";
+            $options['message_type'] = 'success';
+            return $options;
+        }
+        
+        // change live/public config
+        elseif( $new_settings['command'] == 'change_live_config' ) {
+            $options['live_config_id'] = array($new_settings['change_live_config_id'][0], $new_settings['change_live_config_id'][1]);
+            $options['message'] = "The {$options['live_config_id'][0]} configuration '{$options['live_config_id'][1]}' is now live.";
+            $options['message_type'] = 'success';
+            return $options;
+        }
+        
+        // create new config
+        elseif( $new_settings['command'] == 'create_new_configuration' ) {
+            $new_config_name = $new_settings['new_configuration_name'];
+        
+            // handle case where user config name already in use
+            if( user_configuration_name_exists($options, $new_config_name ) ) {
+                return handle_user_config_name_exists($options, $new_config_name);
+            } else {
+                $options['current-save-id'] = array('user', $new_config_name);
+                $options['configurations']['user'][$new_config_name] = array(); //$settings;
+                $options['message'] = "Successfully created new user configuration";
+                $options['message_type'] = 'success';
+                return $options;
+            }
+        }
+        
+        // delete config
+        elseif( $new_settings['command'] == 'delete_configuration' ) {
+            $dead_save = $new_settings['delete-id'];
+            if($dead_save[0] == 'default') {
+                $options['message'] = "Cannot delete default configurations";
+                $options['message_type'] = 'fail';
+                return $options;
+            }
+            if($dead_save == $options['live_config_id']) {
+                //don't do anything if the first save is being shown to the public
+                $options['message'] = "Cannot delete this configuration as it is currently live.";
+                $options['message_type'] = 'fail';
+                return $options;
+            }
+            unset($options['configurations']['user'][$dead_save[1]]);
+            unset($options['css']['user'][$dead_save[1]]);
+            $first_save_name = key($options['configurations']['default']);
+        
+            if($dead_save == $options['current-save-id']) {
+                $options['current-save-id'] = array('default', $first_save_name );
+            }
+        
+            $options['message'] = "Deleted user configuration '{$dead_save[1]}'";
+            $options['message_type'] = 'success';
+            return $options;
+        }
                   
-        if ( $new_settings['command'] == 'create_default_options') {
+        elseif ( $new_settings['command'] == 'create_default_options') {
+            
             $current_save_id = $new_settings['current-save-id'];
             // create css
             $css = get_css($new_settings['configurations'][$current_save_id[0]][$current_save_id[1]]);
@@ -616,45 +522,12 @@ function handle_ap_options( $new_settings ) {
                 $new_settings['message_type'] = 'success';
             return $new_settings; 
             
-        } else if ( $new_settings['command'] == 'save_configuration' ) {
-        
-            $previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]]; //TODO use helper function
-            $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
-        
-            // filter out default values
-            $merged_save = array_filter($merged_save);
-        
-            // set the current-save-id
-            // TODO check if the name already exists
-            // create a new save name if the current save if a default configuration ...
-            if( $new_settings['current-save-id'][0] == 'default') {
-                $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);// . " [${date}]");
-                $options['message'] = "Saved default configuration as \"{$options['current-save-id'][1]}\"";
-                $options['message_type'] = 'success';
+        } elseif ( $new_settings['command'] == 'save_configuration' ) {
             
-                // ... or if the supplied save name is blank 
-            } elseif ( $new_settings['current-save-id'][1] == '' ) {
-                $d = getdate();
-                $date= "{$d['year']}/{$d['mon']}/{$d['mday']} {$d['hours']}:{$d['minutes']}:{$d['seconds']}";
-                $options['current-save-id'] = array('user', $date);
-                $options['message'] = "Saved user configuration as \"{$date}\"";
-                    $options['message_type'] = 'success';
+            $options = save_config($options, get_current_config_type($new_settings), get_current_config_name($new_settings), $new_settings['cs']);
+               
+        } elseif($new_settings['command'] == 'download_current_config') {
             
-            } else {
-                $options['current-save-id'] = array('user', $new_settings['current-save-id'][1]);
-                $options['message'] = "Saved user configuration \"{$options['current-save-id'][1]}\"";
-            }
-        
-            // store as user configuration
-            $current_config_name = $options['current-save-id'][1];
-            $options['configurations']['user'][$current_config_name] = array(); 
-            $options['configurations']['user'][$current_config_name] = $merged_save;
-        
-            // create css
-            $css = get_css($merged_save);
-            $options['css'][$options['current-save-id'][0]][$options['current-save-id'][1]] = $css;
-        
-        } else if($new_settings['command'] == 'download_current_config') {
             // get the configs
             $config_name = get_current_config_name($options);
             $config = get_current_config_values($options);
@@ -671,7 +544,9 @@ function handle_ap_options( $new_settings ) {
             
             echo $new_lines_for_close_brackets;
             exit;
-        } else if($new_settings['command'] == 'download_user_configs') {
+            
+        } elseif($new_settings['command'] == 'download_user_configs') {
+            
             // get the configs
             $user_configs = get_user_configurations($options);
     
@@ -687,6 +562,32 @@ function handle_ap_options( $new_settings ) {
             
             echo $new_lines_for_close_brackets;
             exit;
+            
+        } elseif($new_settings['command'] == 'upload_configs') {
+            
+            // report file upload failure
+            if ($_FILES["config_file"]["error"] > 0) {
+                
+                $options['message'] = "Error: " . $_FILES["file"]["error"];
+                $options['message_type'] = "fail";
+            
+            // 
+            } else {
+                
+                $file_name = $_FILES["config_file"]["tmp_name"];
+                $file_contents = file_get_contents($file_name);
+                if($configs_array = json_decode($file_contents, true) ) {
+                    foreach(array_keys($configs_array) as $config_name) {
+                        $options = save_config($options, 'user', $config_name, $configs_array[$config_name]);
+                        if($options['message_type'] == 'fail') return $options;
+                    }
+                    $options = set_message($options, 'success', 'Successfully uploaded config file');
+                } else {
+                    $options['message'] = 'Cannot upload, config file is not well formed JSON';
+                    $options['message_type'] = 'fail';
+                }
+                
+            }
         }
     }
     return $options;
