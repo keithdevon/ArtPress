@@ -15,6 +15,21 @@ warningColorDark = waitingColorDark;
 failColor    = '#FAA';
 failColorDark = '#D88';
 
+spinOpts = {
+		  lines: 12, // The number of lines to draw
+		  length: 7, // The length of each line
+		  width: 4, // The line thickness
+		  radius: 10, // The radius of the inner circle
+		  color: '#000', // #rgb or #rrggbb
+		  speed: 1, // Rounds per second
+		  trail: 60, // Afterglow percentage
+		  shadow: false // Whether to render a shadow
+		};
+
+target = document.getElementById('style-manager');
+spinner = new Spinner(spinOpts).spin(target);
+spinner.spin(target);
+
 function inputHasChanged(obj) {
 	changedEls[obj.name] = obj.value;
 }
@@ -129,6 +144,8 @@ function accordionClick(accordionLink) {
 }
 jQuery(document).ready(
 	function() {
+		spinner.stop();
+		jQuery('#ap_options_form').css('visibility', 'visible');
     	jQuery('div[id="-tabs"]').bind(  
     			'tabsshow', 
 	        	function(event, ui) { 
@@ -171,11 +188,13 @@ function handleResponse(response) {
     // bring back to life
     form.fadeIn('fast');
 	jQuery('#config_up_download').fadeIn('fast');
+	spinner.stop();
     initColorPicker();                     
 }
 
 function changeConfig(data) {
 	//jQuery('#-tabs').fadeOut('fast');
+	spinner.spin(target);
 	jQuery('#ap_options_form').fadeOut('fast');
 	jQuery('#config_up_download').fadeOut('fast');
     jQuery.post(ajaxurl, data, function(response) {

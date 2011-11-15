@@ -50,3 +50,7 @@ colgroup col:FIRST-CHILD{
 #config_up_download form input:hover {
 	color: #D54E21;
 }
+
+#ap_options_form {
+	visibility: hidden;
+}

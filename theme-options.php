@@ -57,6 +57,13 @@ function init_register_scripts() {
         null,                                                            // deps  
         '1.0',                                                           // version
         true);                                                           // in footer?
+    
+    wp_register_script(
+		'spin',                                                          // handle
+        $template_dir . '/js/spin.min.js',                                   // src
+        null,                                                            // deps
+		'1.0',                                                           // version
+        false);                                                          // in footer?
 
     // register styles
     wp_register_style(                                                               
@@ -83,6 +90,7 @@ function init_register_scripts() {
         array('jquery'));
     wp_enqueue_script('jQuery.form');
     wp_enqueue_script('form');
+    wp_enqueue_script('spin');
 
     // enqueue styles
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
@@ -178,7 +186,7 @@ function page_edit_config() {
 
     // page title stuff
     //screen_icon();
-    echo ot('div', attr_class('wrap'));
+    echo ot('div', attr_class('wrap') . attr_id('style-manager'));
     echo h2( __( 'Artpress Options' ) ); 
     $notifications = div('', attr_id('themeNotifications'));
     
@@ -230,8 +238,8 @@ function page_edit_config() {
     echo div( get_config_form($values), attr_id('ap_options_form') );
     
     echo div(          
-        $download_all_controls
-        . $download_current_controls
+        $download_all_controls . " | "
+        . $download_current_controls . " | "
         . $upload_controls
         , 
         attr_id('config_up_download')
