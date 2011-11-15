@@ -205,30 +205,39 @@ function page_edit_config() {
     echo input('hidden', attr_name('current_config_type') . attr_value(get_current_config_type($options)) )
         . input('hidden', attr_name('current_config_name') . attr_value(get_current_config_name($options)) );
     
-    // form content
-    $values = Configuration::get_current_configuration_settings($options);
-    echo div(get_config_form($values), attr_id('ap_options_form'));
-    echo ct('div');
     
     // download all configs form
     $setting_fields = get_settings_fields('artpress_options');
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_user_configs'));
     $submit = input('submit', attr_value('download all user configs'));
-    echo form('post', 'options.php', $setting_fields . $hidden . $submit, null);
+    $download_all_controls = form('post', 'options.php', $setting_fields . $hidden . $submit, null);
     
     // download current config form
     $setting_fields = get_settings_fields('artpress_options');
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_current_config'));
     $submit = input('submit', attr_value('download current config'));
-    echo form('post', 'options.php', $setting_fields . $hidden . $submit, null);
+    $download_current_controls = form('post', 'options.php', $setting_fields . $hidden . $submit, null);
     
     // upload configs
     $setting_fields = get_settings_fields('artpress_options');
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('upload_configs'));
     $file   = input('file', attr_name('config_file'));
     $submit = input('submit', attr_value('upload configs'));
-    echo form('post', 'options.php', $setting_fields . $hidden . $file . $submit, "multipart/form-data");
+    $upload_controls = form('post', 'options.php', $setting_fields . $hidden . $file . $submit, "multipart/form-data");
 
+    // form content
+    $values = Configuration::get_current_configuration_settings($options);
+    echo div( get_config_form($values), attr_id('ap_options_form') );
+    
+    echo div(          
+        $download_all_controls
+        . $download_current_controls
+        . $upload_controls
+        , 
+        attr_id('config_up_download')
+     );
+    
+    echo ct('div');
 }
 /** 
  * If the candidate config type and name match the current live config id,

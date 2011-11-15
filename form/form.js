@@ -66,9 +66,9 @@ function updateFormInputs( valuesMap ) {
 	if (valuesMap['configSelectHTML']) {
 		updateConfigSelect(valuesMap['configSelectHTML']);
 	}
-	for(var k in valuesMap) {
-		//alert(k + ' : ' + valuesMap[k]);
-	}
+	//for(var k in valuesMap) {
+	//	//alert(k + ' : ' + valuesMap[k]);
+	//}
 }
 function isOutstandingChanges() {
 	var changed = false;
@@ -156,38 +156,28 @@ jQuery(document).ready(
 );
 
 function handleResponse(response) {
-	//// remove trailing 0
-	//var sliced = response.slice(0, -1);
-	//// convert string to js object
-	//var parsed = jQuery.parseJSON(sliced);
-	//
-	//// handle new form
-	//
-	//// handle new config select
-    //var form = jQuery('#ap_options_form');
-    //form.hide();
-    //form.html(parsed['formHTML']); 
-    //updateFormInputs(parsed);
-    //updateConfigSelect(parsed['configSelectHTML']);
-    //
-    //// restore form
-    //initColorPicker();                     
-    //form.fadeIn('fast');
+	// reset the elements that have been marked as changed
 	changedEls = null;
-    
+	
+	// insert new form
 	response = jQuery.parseJSON(response.slice(0, -1));
     var form = jQuery('#ap_options_form');
-    //form.hide();
     var formHTML = response['formHTML'];
-    form.html(formHTML); 
+    form.html(formHTML);
+    
+    // update controls etc
     updateFormInputs(response);
+    
+    // bring back to life
     form.fadeIn('fast');
+	jQuery('#config_up_download').fadeIn('fast');
     initColorPicker();                     
 }
 
 function changeConfig(data) {
 	//jQuery('#-tabs').fadeOut('fast');
 	jQuery('#ap_options_form').fadeOut('fast');
+	jQuery('#config_up_download').fadeOut('fast');
     jQuery.post(ajaxurl, data, function(response) {
     	handleResponse(response);
     });
