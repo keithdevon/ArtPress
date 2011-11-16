@@ -83,6 +83,12 @@ function get_default_configurations($options) {
 function get_default_configuration_names($options) {
     return array_keys(get_default_configurations($options));
 }
+function set_default_configurations_values($options, $default_configs) {
+    foreach(array_keys($default_configs) as $config_name) {
+        $options = set_configuration_values($options, 'default', $config_name, $default_configs[$config_name]);
+    }
+    return $options;
+}
 
 // user configurations
 

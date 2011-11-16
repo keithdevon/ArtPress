@@ -324,8 +324,9 @@ function pad_options($options) {
     if( !isset($options['configurations']['user']) ) {
         $options['configurations']['user'] = array();
     }
-    if( !isset($options['configurations']['default']) ) {
-        $options['configurations']['default'] = $ap_configuration_defaults;
+    // import the default configs if defaults hasn't been set OR if the defaults are different
+    if( !isset($options['configurations']['default']) || ( get_default_configurations($options) != $ap_configuration_defaults )  ) {
+        $options = set_default_configurations_values($options, $ap_configuration_defaults);
     } 
     if( !isset($options['current-save-id']) ) {
         set_current_config($options, 'default', reset(array_keys($ap_configuration_defaults)));
@@ -412,7 +413,7 @@ function save_config( $options, $config_type, $config_name, $config_values) {
     // create a new save name if the current save if a default configuration ...
     if( $config_type == 'default') {
         $options['current-save-id'] = array('user', $config_name . ' ' . create_date_string() );
-        $options = set_message('success', "Saved default configuration as \"{$options['current-save-id'][1]}\"");
+        $options = set_message($options, 'success', "Saved default configuration as \"{$options['current-save-id'][1]}\"");
     
     // ... or if the supplied save name is blank
     } elseif ( $config_name == '' ) {
@@ -439,6 +440,14 @@ function handle_user_config_name_exists($options, $new_config_name) {
     $options['message'] = "A configuration called {$new_config_name} already exists";
     $options['message_type'] = 'fail';
     return $options;    
+}
+function import_configs($options, $configs_array) {
+    foreach(array_keys($configs_array) as $config_name) {
+        $options = save_config($options, 'user', $config_name, $configs_array[$config_name]);
+        if($options['message_type'] == 'fail') return $options;
+    }
+    $options = set_message($options, 'success', 'Successfully uploaded config file');
+    return $options;
 }
 /**
  * All user interactions with theme settings are routed through this function.
@@ -588,17 +597,13 @@ function handle_ap_options( $new_settings ) {
                 $options['message'] = "Error: " . $_FILES["file"]["error"];
                 $options['message_type'] = "fail";
             
-            // 
             } else {
                 
                 $file_name = $_FILES["config_file"]["tmp_name"];
                 $file_contents = file_get_contents($file_name);
+
                 if($configs_array = json_decode($file_contents, true) ) {
-                    foreach(array_keys($configs_array) as $config_name) {
-                        $options = save_config($options, 'user', $config_name, $configs_array[$config_name]);
-                        if($options['message_type'] == 'fail') return $options;
-                    }
-                    $options = set_message($options, 'success', 'Successfully uploaded config file');
+                    $options = import_configs($options, $configs_array);
                 } else {
                     $options['message'] = 'Cannot upload, config file is not well formed JSON';
                     $options['message_type'] = 'fail';
