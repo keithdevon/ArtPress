@@ -26,9 +26,8 @@ require_once $dir . 'form/default-configurations.php';
 require_once $dir . 'form/image-form.php';
 require_once $dir . 'form/ajax-handlers.php';
 
-//    require_once $dir . 'form/download-config.php';
-
-add_action( 'admin_init', 'init_register_scripts' );
+//add_action( 'admin_init', 'init_register_scripts' );
+add_action( 'admin_enqueue_scripts', 'init_register_scripts' );
 add_action( 'admin_init', 'init_artpress_theme' );
 add_action( 'admin_menu', 'init_add_theme_pages' );
 
@@ -98,7 +97,6 @@ function init_register_scripts() {
     wp_enqueue_style( 'farbtasticStylesheet' );
 	wp_enqueue_style( 'image_form' );
 
-    add_action('init', 'ht_init_method');
 }
 /**
  * Init plugin options to white list our options
