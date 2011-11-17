@@ -39,9 +39,11 @@ function init_register_scripts() {
 
     // register scripts
     wp_register_script(
-    	'jqueryui1814',                                                  // handle
-        $template_dir . '/js/ui1814/js/jquery-ui-1.8.14.custom.min.js',  // src
-        array('jquery'));                                                // deps
+    	'jqueryui-cdn',                                                  
+    	'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js',
+        array('jquery'),
+        '1.8.14.custom.min'
+    );                                                
         
     wp_register_script(
     	'jQuery.form',                                                   // handle
@@ -82,7 +84,7 @@ function init_register_scripts() {
         $template_url . '/form/image-form.css');                                     // src   
 
     // enqueue scripts
-    wp_enqueue_script('jqueryui1814');
+    wp_enqueue_script('jqueryui-cdn');
     wp_enqueue_script(
     	'farbtastic', 
         $template_dir . '/scripts/farbtastic/farbtastic.js', 
