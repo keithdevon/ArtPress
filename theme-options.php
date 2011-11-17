@@ -38,35 +38,24 @@ function init_register_scripts() {
     $template_url = get_bloginfo('template_url');
 
     // register scripts
-    wp_register_script(
-    	'jqueryui-cdn',                                                  
-    	'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js',
-        array('jquery'),
-        '1.8.14.custom.min'
-    );                                                
-        
-    wp_register_script(
-    	'jQuery.form',                                                   // handle
-        $template_dir . '/js/jquery.form.js',                            // src   
-        null,                                                            // deps  
-        '2.83',                                                          // version
-        true);                                                           // in footer?
-        
-    wp_register_script(
-    	'form',                                                          // handle
-        $template_dir . '/form/form.js',                                 // src   
-        null,                                                            // deps  
-        '1.0',                                                           // version
-        true);                                                           // in footer?
     
-    wp_register_script(
-		'spin',                                                          // handle
-        $template_dir . '/js/spin.min.js',                                   // src
-        null,                                                            // deps
-		'1.0',                                                           // version
-        false);                                                          // in footer?
+    // JQuery UI
+    wp_register_script( 'jquery-ui-cdn' , 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
+    
+    // JQuery UI SelectMenu
+    wp_register_script( 'jquery-ui-selectmenu' , $template_dir . '/js/ui.selectmenu.js' , array('jquery', 'jquery-ui-cdn') );
+        
+    // JQuery Form
+    wp_register_script( 'jQuery.form' ,  $template_dir . '/js/jquery.form.js' , null , '2.83' , true );                                                          
+
+    // Artpress Form
+    wp_register_script( 'form' ,  $template_dir . '/form/form.js' , null , '1.0' , true );                                                           
+    
+    // Spin
+    wp_register_script( 'spin' , $template_dir . '/js/spin.min.js' , null , '1.0' , false );                                                         
 
     // register styles
+    
     wp_register_style(                                                               
     	'ArtPressOptionsStylesheet',                                                 // handle
         $template_url . '/form/form.css');                                           // src   
