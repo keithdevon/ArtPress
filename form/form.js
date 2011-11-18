@@ -137,40 +137,24 @@ function mainTabClick(tab) {
 		updateDependents();
 	}
 }
+
+
 function accordionClick(accordionLink) {
+	
+	// dependent dropdowns need to be updated
 	var tabName = jQuery('.ui-tabs-selected').first().children().html();
 	setOpenAccordion(tabName, accordionLink);
 	updateDependents(accordionLink);
-}
-jQuery(document).ready(
-	function() {
-		spinner.stop();
-		jQuery('#ap_options_form').css('visibility', 'visible');
-    	jQuery('div[id="-tabs"]').bind(  
-    			'tabsshow', 
-	        	function(event, ui) { 
-	    			// get the open accordion for this tab
-	    			var tabName = ui.tab.innerHTML;
-	    			var oa = getOpenAccordion(tabName);
-					// call updateDependents on the accordion
-					if (oa) {
-						updateDependents(oa);
-						}
-	    			}
-		);
-    	jQuery.each(
-    			jQuery('a[href^="#-tabs-"'), 
-    			function(tabLink) {
-    				tabLink.bind('click', 
-					function(tabLink) {
-    					// get the open accordion for this tab
-    					var name = tabLink.html;
-    					updateDependents(name);    				
-    				});
-    			}
-		);
+	
+	// convert selects to jquery selectmenus
+	if( haveBeenOpenedAccordions[accordionLink] != true ) {
+	    haveBeenOpenedAccordions[accordionLink] = true;
+		var selects = jQuery(accordionLink).next().find('select');
+		selects.selectmenu({style:'dropdown'});
+		selects.find('select.section_color').attr('color', 'red');
 	}
-);
+}
+
 
 function handleResponse(response) {
 	// reset the elements that have been marked as changed
@@ -323,3 +307,33 @@ function save_as_config() {
 		save('user', candidate_config_name);
 	}
 }
+
+jQuery(document).ready(
+		function() {
+			spinner.stop();
+			jQuery('#ap_options_form').css('visibility', 'visible');
+	    	jQuery('div[id="-tabs"]').bind(  
+	    			'tabsshow', 
+		        	function(event, ui) { 
+		    			// get the open accordion for this tab
+		    			var tabName = ui.tab.innerHTML;
+		    			var oa = getOpenAccordion(tabName);
+						// call updateDependents on the accordion
+						if (oa) {
+							updateDependents(oa);
+							}
+		    			}
+			);
+	    	jQuery.each(
+	    			jQuery('a[href^="#-tabs-"'), 
+	    			function(tabLink) {
+	    				tabLink.bind('click', 
+						function(tabLink) {
+	    					// get the open accordion for this tab
+	    					var name = tabLink.html;
+	    					updateDependents(name);    				
+	    				});
+	    			}
+			);
+		}
+	);
