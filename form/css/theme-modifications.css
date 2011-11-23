@@ -1,0 +1,62 @@
+/*@CHARSET "UTF-8";*/
+
+/* Component containers
+----------------------------------*/
+
+.ui-widget-content { border: 1px solid #dddddd; background: whiteSmoke; color: #333333; }
+
+
+.ui-widget-header { 
+    border-bottom: 1px solid #ddd; 
+    background-color: #F1F1F1;
+    background-image: -ms-linear-gradient(top,#F9F9F9,#ECECEC);
+    background-image: -moz-linear-gradient(top,#F9F9F9,#ECECEC);
+    background-image: -o-linear-gradient(top,#F9F9F9,#ECECEC);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#F9F9F9),to(#ECECEC));
+    background-image: -webkit-linear-gradient(top,#F9F9F9,#ECECEC);
+    background-image: linear-gradient(top,#F9F9F9,#ECECEC);
+    color: #ffffff; 
+    font-weight: bold; }
+    
+.wrap div#-tabs>div>div>div, .wrap div#-tabs>div>div>h4 {
+    border:none;
+    }
+    
+/* Interaction states
+----------------------------------*/    
+    
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {  
+    font-weight: bold; 
+    color: #1c94c4;
+    text-transform: capitalize;
+    }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { 
+    color: #ccc; 
+    text-decoration: none;
+    }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+    font-weight: bold; color: green;}
+.ui-state-hover a, .ui-state-hover a:hover { 
+    color: #de5731; 
+    text-decoration: none; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { 
+    border: 1px solid #ddd;
+    background-color: whiteSmoke;
+    font-weight: bold; 
+    color: #eb8f00;
+    text-transform: capitalize; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, body.wp-admin .ui-state-active a:hover, .ui-state-active a:active { 
+    color: #21759B; text-decoration: none; }
+
+/*
+ * jQuery UI Tabs 1.8.14
+ */
+    
+.ui-tabs { position: relative; padding: 0px; zoom: 1; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+.ui-tabs .ui-tabs-nav { margin: 0; padding: 5px; padding-bottom:0px }
+
+/*
+ * jQuery UI Progressbar 1.8.14
+ */
+
+#-tabs {margin-top:10px;}
