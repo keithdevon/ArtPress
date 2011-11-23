@@ -328,7 +328,7 @@ function dropdown_get_options_html($dropdown) {
         attr_selected( ((string)$opt == $dropdown->get_value()) ? true : false ) .
         attr_value((string)$opt));
         if($content && ($dropdown instanceof ISetting_Depends_On_Global_Setting) ) {
-            $html_options .= $i++ . '&nbsp;&nbsp;&nbsp;';
+            //s$html_options .= $i++ . '&nbsp;&nbsp;&nbsp;';
         }
         $html_options .= $content;
         $html_options .= ct('option') . "\n";

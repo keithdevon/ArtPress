@@ -58,7 +58,7 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
       function updateSectionColors(section) {
             // get global colors
           var colors = getGlobalOptionsHTML(jQuery('.globalColor'));
-          var colorOptions = colors.join();
+          var colorOptions = colors.join(); // TODO possibly supply "\n" as arg
 
          // decide if update needs to happen
             // get ahold of one section color
@@ -67,9 +67,9 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
            var section_colors = jQuery(sectionDiv).find('.section_color');
 
            // compare the global color options with a section color's options
-           // to see if they are consistent
+           // to see if they're inconsistent and therefore need updating
            var first= section_colors[0];
-           if (colorOptions != first.innerHTML) {
+           if (colorOptions != first.innerHTML) { // FIXME currently doesn't give positive result due to whitespace
                for (var i = 0; i < section_colors.length; i++) {
                    var sc = section_colors[i];
                     // store currently selected option
@@ -338,11 +338,12 @@ class Global_Settings extends Main_Tab  {
            globalOptions.splice(0,0,'');
         
            // create the new options
-           var spaces = "\u00A0\u00A0\u00A0";
+           //var spaces = "\u00A0\u00A0\u00A0";
            var options = [outerHTML(new Option('', 0))];
            for ( var i = 1; i < globalOptions.size(); i++ ) {
               var val = globalOptions[i].value;
-              var opt = new Option(i + spaces + val, i);
+              var opt = new Option(//i + spaces + 
+                      val, i);
               options.push(outerHTML(opt));
            }
            return options;
