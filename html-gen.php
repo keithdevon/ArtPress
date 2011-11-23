@@ -21,6 +21,7 @@ function attr_on_click      ($value) { return attribute('onclick',     $value); 
 function attr_on_load       ($value) { return attribute('onload',      $value);     }
 function attr_on_focus      ($value) { return attribute('onfocus',     $value);     }
 function attr_on_mouse_down ($value) { return attribute('onmousedown', $value);     }
+function attr_on_mouse_up   ($value) { return attribute('onmouseup',   $value);     }
 function attr_on_mouse_over ($value) { return attribute('onmouseover', $value);     }
 function attr_readonly      ()       { return attribute('readonly',    'readonly'); }
 function attr_size          ($value) { return attribute('size',        $value);     }
