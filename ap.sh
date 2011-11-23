@@ -11,45 +11,60 @@ function copyfolder {
     cp -R $1 $apdir;
 }
 
-echo "*****************************"
-echo "* creating ArtPress zip ... *"
-echo "*****************************"
+function zip {
+    echo "*****************************"
+    echo "* creating ArtPress zip ... *"
+    echo "*****************************"
+    
+    echo "! making artpress folder"
+    mkdir -pv $apdir;
+    
+    
+    echo "! copying top level .css files"
+    cp -R *.css $apdir;
+    
+    echo "! copying license.txt"
+    cp license.txt $apdir;
+    
+    echo "! copying screenshot.png"
+    cp screenshot.png $apdir;
+    
+    
+    # php files
+    echo "! copying top level .php files"
+    cp -R *.php $apdir;
+    
+    copyfolder 'sidebars';
+    copyfolder 'form';
+    copyfolder 'ht-functions';
+    copyfolder 'ht-widgets';
+    copyfolder 'css';
+    copyfolder 'fancybox';
+    copyfolder 'scripts';
+    copyfolder 'js';
+    copyfolder 'images';
+    
+    echo "finished copying files"
+    
+    echo "! zipping up folder ..."
+    cd $wd
+    
+    zip -r $td.zip $zd
+    
+    rm -r $zd
+    cd ..
+    
+}
 
-echo "! making artpress folder"
-mkdir -pv $apdir;
+function publish {
+    # run tests
 
+    # get current version number
+    # update number
+    # update version number in style.css
 
-echo "! copying top level .css files"
-cp -R *.css $apdir;
+    # create zip - with version number
 
-echo "! copying license.txt"
-cp license.txt $apdir;
+    # upload to wordpress-for-artists.com 
 
-echo "! copying screenshot.png"
-cp screenshot.png $apdir;
-
-
-# php files
-echo "! copying top level .php files"
-cp -R *.php $apdir;
-
-copyfolder 'sidebars';
-copyfolder 'form';
-copyfolder 'ht-functions';
-copyfolder 'ht-widgets';
-copyfolder 'css';
-copyfolder 'fancybox';
-copyfolder 'scripts';
-copyfolder 'js';
-copyfolder 'images';
-
-echo "finished copying files"
-
-echo "! zipping up folder ..."
-cd $wd
-
-zip -r $td.zip $zd
-
-rm -r $zd
-cd ..
-
+}
