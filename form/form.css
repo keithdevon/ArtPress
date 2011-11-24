@@ -13,6 +13,10 @@ table.form-table {
     border-collapse:collapse;
 }
 
+table.form-table textarea {
+	width: 400px;
+}
+
 colgroup {
     /*width: 80px;*/
 

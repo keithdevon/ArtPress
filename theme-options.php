@@ -17,6 +17,7 @@ require_once $dir . 'form/body.php';
 require_once $dir . 'form/sidebar-form.php';
 require_once $dir . 'form/footer-form.php';
 require_once $dir . 'form/gallery-form.php';
+require_once $dir . 'form/advanced-form.php';
 require_once $dir . 'form/typography.php';
 require_once $dir . 'form/layout.php';
 require_once $dir . 'form/effect.php';
@@ -343,7 +344,7 @@ function pad_options($options) {
     }
     // create missing user config css
     foreach( get_user_configuration_names( $options ) as $name ) {
-        if( !isset($options['css']['default'][$name])) {
+        if( !isset($options['css']['user'][$name])) {
             $options['css']['user'][$name] = get_css($options['configurations']['user'][$name]);
         }
     }
@@ -385,22 +386,21 @@ function create_date_string() {
 }
 
 function update_config($options, $new_settings) {
-    //$previous_save = $options['configurations'][$options['current-save-id'][0]][$options['current-save-id'][1]]; //TODO use helper function
     $previous_save = get_current_config_values($options);
     $merged_save = array_merge_recursive_distinct($previous_save, $new_settings['cs']);
     
     // filter out default values
     $merged_save = array_filter($merged_save);
-    $options = save_config($options, $new_settings);
+    $options = save_config(true, $options, get_current_config_type($new_settings), get_current_config_name($new_settings), $merged_save );
     return $options;
 }
 /** 
  * 
  * */
-function save_config( $options, $config_type, $config_name, $config_values) {
+function save_config( $overwrite, $options, $config_type, $config_name, $config_values) {
   
     // check if the name already exists
-    if( user_configuration_name_exists($options, $config_name) ) {
+    if( !$overwrite && user_configuration_name_exists($options, $config_name) ) {
         return handle_user_config_name_exists($options, $config_name);
     }
     
@@ -437,7 +437,7 @@ function handle_user_config_name_exists($options, $new_config_name) {
 }
 function import_configs($options, $configs_array) {
     foreach(array_keys($configs_array) as $config_name) {
-        $options = save_config($options, 'user', $config_name, $configs_array[$config_name]);
+        $options = save_config( true, $options, 'user', $config_name, $configs_array[$config_name] ); // TODO currently overwrites, is this desirable?
         if($options['message_type'] == 'fail') return $options;
     }
     $options = set_message($options, 'success', 'Successfully uploaded config file');
@@ -491,6 +491,9 @@ function handle_ap_options( $new_settings ) {
         
         // create new config
         elseif( $new_settings['command'] == 'create_new_configuration' ) {
+            
+            // TODO should use save configuration function instead of this!!
+            
             $new_config_name = $new_settings['new_configuration_name'];
         
             // handle case where user config name already in use
@@ -544,7 +547,7 @@ function handle_ap_options( $new_settings ) {
             
         } elseif ( $new_settings['command'] == 'save_configuration' ) {
             
-            $options = save_config($options, get_current_config_type($new_settings), get_current_config_name($new_settings), $new_settings['cs']);
+            $options = update_config($options, $new_settings);
                
         } elseif($new_settings['command'] == 'download_current_config') {
             

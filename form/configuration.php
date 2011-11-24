@@ -111,3 +111,26 @@ function set_message($options, $type, $message) {
     $options['message_type'] = $type;
     return $options;
 }
+
+// css
+
+function get_config_css($options, $config_type, $config_name) {
+    return $options['css'][$config_type][$config_name];
+}
+function get_current_config_css($options) {
+    return get_config_css($options, get_current_config_type($options), get_current_config_name($options));
+}
+function get_live_config_css($options) {
+    return get_config_css($options, get_live_config_type($options), get_live_config_name($options));
+}
+
+function get_config_custom_css($config_values) {
+    if(isset($config_values['custom-css'])) return $config_values['custom-css'];
+}
+function get_current_config_custom_css($options) {
+    return get_config_custom_css( get_current_config_values($options) );
+}
+function get_live_config_custom_css($options) {
+    return get_config_custom_css( get_live_config_values($options) );
+}
+

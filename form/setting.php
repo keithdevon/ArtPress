@@ -46,15 +46,21 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
         return array($key=>$value);
     }
     function register_self() {
+        $rs = self::$registered_settings;
         self::$registered_settings[] = $this;
+    }
+    static function clear_registered_settings() {
+        self::$registered_settings = array();
     }
     static function get_registered_settings($visitor=null) {
         $settings = array();
-        $registererd_settings = self::$registered_settings;
-        foreach ( $registererd_settings as $setting ) {
+        $registered_settings = self::$registered_settings;
+        
+        foreach ( $registered_settings as $setting ) {
             if(!$visitor || $visitor->is_valid($setting)) {
                 $name = $setting->get_name();
                 $new_name = $name;
+                
                 $i = 1;
                 if(!$setting instanceof CSS_Setting) {
                     // ensure that the name hasn't been used before
@@ -227,6 +233,12 @@ function get_text_input_html($setting, $attributes='') {
     $i = input('text', ToolTips::get($setting) . $html_name . $value . $attributes);
     return $i;
 }
+function get_textarea_input_html($setting, $attributes='') {
+    $html_name = $setting->get_html_name();
+    $value = $setting->get_value();
+    $i = textarea($value, ToolTips::get($setting) . $html_name  . $attributes);
+    return $i;
+}
 function get_size_text_input_html($setting, $attributes=''){
     return get_text_input_html($setting, $attributes . attr_class('size') .
     attr_on_change('checkValidSize(this);'));
@@ -238,6 +250,14 @@ abstract class Setting_Text extends Setting {
     function get_html($attributes='') {
         return get_text_input_html($this, $attributes);
     }
+}
+abstract class Setting_Textarea extends Setting {
+    function __construct($name, $display_name, $value='') {
+        parent::__construct($name, $display_name, $value);
+    }
+    function get_html($attributes='') {
+        return get_textarea_input_html($this, $attributes);
+    }    
 }
 abstract class CSS_Text_Input extends CSS_Setting {
     function __construct($css_property, $display_name, $value) {

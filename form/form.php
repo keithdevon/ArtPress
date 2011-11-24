@@ -449,6 +449,7 @@ class Sub_Tab_Group extends Tab_Group {
 }
 class Configuration extends Tab_Group {
     function __construct($display_name, $members=array()) {
+        Setting::clear_registered_settings();
         if( $members == null ) {
             $members = array(
             new Global_Settings(),
@@ -457,7 +458,8 @@ class Configuration extends Tab_Group {
             new Menu_Tab(),
             new Sidebar_Tab(),
             new Footer_Tab(),
-            new Gallery_Tab()
+            new Gallery_Tab(),
+            new Advanced_Tab()
             );
         }
         //$this->set_on_mouse_down("mainTabClick(this)");
