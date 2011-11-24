@@ -10,7 +10,9 @@
     		<a href="<?php echo home_url( '/' ); ?>"
     		   title="<?php echo $name ?>"
     		   rel="home"><?php
-                $logo = $name;
+                $logo = $name; 
+                // TODO this currently doesn't take into consideration
+                // whether the live config is being viewed 
                 $current_config = Configuration::get_current_configuration_settings();
                 if( $current_config ) {
                     if( isset($current_config['background-image:url'] ) ) {
