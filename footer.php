@@ -28,7 +28,7 @@
 
 			<div id="site-generator" class="fourcol last">
 				<?php do_action( 'twentyten_credits' ); ?>
-				<a href="<?php echo esc_url( __( 'http://wordpress.org/', 'twentyten' ) ); ?>" title="<?php esc_attr_e( 'Semantic Personal Publishing Platform', 'twentyten' ); ?>" rel="generator"><?php printf( __( 'Proudly powered by %s.', 'twentyten' ), 'WordPress' ); ?></a>
+				Site powered by <a href="http://wordpress.org/" title="Semantic Personal Publishing Platform" rel="generator">WordPress</a> and <a href="http://wordpress-for-artists.com/">ArtPress</a>
 			</div><!-- #site-generator -->
 
 		</div><!-- #colophon -->
