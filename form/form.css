@@ -32,14 +32,23 @@ colgroup col:FIRST-CHILD{
 }
 #config-controls {
     float: right;
-    text-align: right;
-    width: 500px;
+    text-align: left;
+}
+#form-header .postbox h3 {
+font-size: 15px;
+font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+font-weight: normal;
+line-height: 1;
+padding: 7px 10px;
+}
+.postbox .inside {
+margin:10px 0;
 }
 #form-header {
 	/* position: relative;*/
     margin-top: 12px;
     margin-bottom: 12px; 
-    height: 30px;
+    height: 90px;
 }
 #config_up_download {
 	float: right;

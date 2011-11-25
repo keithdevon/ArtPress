@@ -195,13 +195,18 @@ function page_edit_config() {
     // select config to edit
     $config_select = select("", get_config_select_contents($options), attr_id('change_edit_config') . attr_on_change('change_edit_config(this)') );
     
-    $controls = div( $delete->get_html() 
-                . $live->get_html() 
-                . $new->get_html() 
-                . $save_as->get_html() 
-                . $save->get_html() 
-                . $config_select
-            , attr_id('config-controls') );
+    $controls = div( 
+                    h3( 
+                        span('Styles') , attr_class('hndle') )
+                    . div(
+                         $delete->get_html() 
+                        . $live->get_html() 
+                        . $new->get_html() 
+                        . $save_as->get_html() 
+                        . $save->get_html() 
+                        . $config_select
+                        , attr_class('inside') )
+                , attr_id('config-controls') . attr_class('postbox') );
             
     echo div( $controls . $notifications, attr_id('form-header') );
     // config type & name
