@@ -174,8 +174,9 @@ class Live_Button    extends Config_Button {
 }
 
 function page_edit_config() {
-    if ( ! isset( $_REQUEST['updated'] ) )
-        $_REQUEST['updated'] = false;
+    
+    //if ( ! isset( $_REQUEST['updated'] ) )
+    //    $_REQUEST['updated'] = false;
     
     $options = get_option('ap_options');
 
