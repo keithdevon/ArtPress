@@ -543,7 +543,7 @@ require_once ( get_template_directory() . '/theme-options.php' );
 
 
 /* For adding custom field to gallery popup */
-
+/*
 // ----- Height
 function artpress_attachment_height($image_height_form_fields, $post) {
 	// $form_fields is a an array of fields to include in the attachment form
@@ -601,7 +601,7 @@ function artpress_attachment_width_to_save($post, $attachment) {
 }
 // now attach our function to the hook.
 add_filter("attachment_fields_to_save", "artpress_attachment_width_to_save", null , 2);
-
+*/
 
 
 // Image handling
