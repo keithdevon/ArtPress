@@ -642,49 +642,49 @@ function attachment_toolbox($size = thumbnail) {
 add_shortcode( '3col_first', 'ht_col1of3_shortcode' );//add 3 column shortcode (for columns 1 and 2)
 
 function ht_col1of3_shortcode( $atts, $content = null ) {
-   return '<div style="width:100%; clear:both;"></div><div class="fourcol internal-col">' . $content . '</div>';
+   return '<div style="width:100%; clear:both;"></div><div class="fourcol internal-col">' . do_shortcode( $content ) . '</div>';
 }
 
 add_shortcode( '3col', 'ht_col2of3_shortcode' );//add 3 column shortcode (for column 2)
 
 function ht_col2of3_shortcode( $atts, $content = null ) {
-   return '<div class="fourcol internal-col" >' . $content . '</div>';
+   return '<div class="fourcol internal-col" >' . do_shortcode( $content ) . '</div>';
 }
 
 add_shortcode( '3col_last', 'ht_col3of3_shortcode' );//add 3rd of 3 columns
 
 function ht_col3of3_shortcode( $atts, $content = null ) {
-   return '<div class="fourcol internal-col last">' . $content . '</div><div style="clear:both;"></div>';
+   return '<div class="fourcol internal-col last">' . do_shortcode( $content ) . '</div><div style="clear:both;"></div>';
 }
 
 add_shortcode( '2col_first', 'ht_col1of2_shortcode' );// add 2 column shotcode
 
 function ht_col1of2_shortcode( $atts, $content = null ) {
-   return '<div style="width:100%; clear:both;"></div><div class="sixcol internal-col">' . $content . '</div>';
+   return '<div style="width:100%; clear:both;"></div><div class="sixcol internal-col">' . do_shortcode( $content ) . '</div>';
 }
 
 add_shortcode( '2col_last', 'ht_col2of2_shortcode' );// 2nd of 2 columns
 
 function ht_col2of2_shortcode( $atts, $content = null ) {
-   return '<div class="sixcol internal-col last" >' . $content . '</div><div style="clear:both;"></div>';
+   return '<div class="sixcol internal-col last" >' . do_shortcode( $content ) . '</div><div style="clear:both;"></div>';
 }
 
 add_shortcode( '4col_first', 'ht_col1of4_shortcode' );// add 4 column shotcode
 
 function ht_col1of4_shortcode( $atts, $content = null ) {
-   return '<div style="width:100%; clear:both;"></div><div class="threecol internal-col">' . $content . '</div>';
+   return '<div style="width:100%; clear:both;"></div><div class="threecol internal-col">' . do_shortcode( $content ) . '</div>';
 }
 
 add_shortcode( '4col', 'ht_colof4_shortcode' );// add 4 column shotcode
 
 function ht_colof4_shortcode( $atts, $content = null ) {
-   return '<div class="threecol internal-col">' . $content . '</div>';
+   return '<div class="threecol internal-col">' . do_shortcode( $content ) . '</div>';
 }
 
 add_shortcode( '4col_last', 'ht_col4of4_shortcode' );// 4th of 4 columns
 
 function ht_col4of4_shortcode( $atts, $content = null ) {
-   return '<div class="threecol internal-col last" >' . $content . '</div><div style="clear:both;"></div>';
+   return '<div class="threecol internal-col last" >' . do_shortcode( $content ) . '</div><div style="clear:both;"></div>';
 }
 
 //------Box outs
@@ -700,7 +700,7 @@ $options = get_option('artpress_theme_options');//extract this from the function
       $ht_opening = '<div class="box-out" style="width:30%; margin-bottom:1.5em; padding:1.5em; padding-top:0px; font-size:1em; line-height:1.5em; font-style:italic;';
       if(esc_attr($float) == 'right') $ht_middle = 'margin-left:1em;  float:' . esc_attr($float) . ';">';
         else $ht_middle = 'margin-right:1.5em; float:left;">';
-        $ht_end =  $content . '</div>';
+        $ht_end =  do_shortcode( $content ) . '</div>';
         return $ht_opening . $ht_middle . $ht_end;
 }
 
