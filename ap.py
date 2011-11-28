@@ -136,6 +136,23 @@ def publish( level ):
 
     # run publish tests
     ## outstanding changes
+    command = 'git status -s'
+    result = commands.getoutput( command )
+    if( len( result ) > 0 ):
+        print "\nCurrent Git status:"
+        print "--------------------------------------------------------------------------"
+        print result
+        print "--------------------------------------------------------------------------"
+        print "\nThere are uncommitted changes in your directory. Proceed anyway?"
+        invalid_input = True
+        
+        while( invalid_input ):
+            response = raw_input("[type 'yes' or 'no'] ");
+            if( response == 'no'):
+                exit()
+            elif( response == 'yes' ):
+                invalid_input = False
+                
     ## can upload to wpfa
     
     # take screenshot
