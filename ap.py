@@ -29,19 +29,22 @@ def get_version_number_file( ):
     current_version = current_version_string.split( '.' )
     return current_version
 
+def upload_file(file, destination_uri):
+    command = 'curl -u k31thd3v0n:kKeio0n\!kduir -T '
+    command += file
+    command += ' ftp://ftp.' + destination_uri
+    print command
+    return commands.getoutput( command )
+
 def update_version_number_file( new_version ):
     version_file_path = version_file_location + '/' + version_file_name;
+    
     # update local file
     with open( version_file_path, 'w' ) as f:
         f.write( new_version )
     f.closed
     
-    command = 'curl -u k31thd3v0n:kKeio0n\!kduir -T '
-    command += version_file_path
-    command += ' ftp://ftp.' + version_number_file_uri
-    print command
-    print 'updating version number file at ' + version_number_file_uri + ' to ' + new_version
-    print commands.getoutput( command );    
+    return upload_file( version_file_path, version_number_file_uri ) 
 
 def create_new_version_number( level, current_version):
     if( level == 'patch' ):
@@ -121,11 +124,9 @@ def tag_commit( level, new_version_number ):
     print commands.getoutput( command );
 
 def upload_zip( zip_name ):
-    command = 'curl -u k31thd3v0n:kKeio0n\!kduir -T '
-    command += exp_dir + '/' + zip_name
-    command += ' ftp://ftp.' + theme_uri + '/' + upload_directory + '/' + zip_name
     print 'uploading ' + zip_name + ' ...'
-    print commands.getoutput( command );
+    upload_file( exp_dir + '/' + zip_name, upload_directory + '/' + zip_name )
+    commands.getoutput( command );
 
 def publish( level ):
     # get current version number
