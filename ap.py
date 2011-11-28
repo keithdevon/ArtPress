@@ -118,8 +118,7 @@ def get_level_string( level ):
 
 def tag_commit( level, new_version_number ):
     command = 'git tag -a v' + new_version_number
-    command += " -m '" + get_level_string( level ) + " " 
-    command += new_version_number + "'"
+    command += " -m '" + get_level_string( level ) + "'"
     print commands.getoutput( command );
 
 def upload_zip( zip_name ):
