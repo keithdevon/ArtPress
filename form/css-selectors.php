@@ -72,12 +72,12 @@ class Entry_Meta extends CSS_Selector {
 
 class Sub_Menu extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('ul.sub-menu, ul.sub-menu a:link, ul.sub-menu a:visited', 'drop downs', $children=null);
+        parent::__construct('ul.sub-menu, ul.sub-menu a:link, ul.sub-menu a:visited, ul.children, ul.children a:link, ul.children a:visited', 'drop downs', $children=null);
     }
 }
 class Sub_Menu_Hover extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('ul.sub-menu a:hover, ul.sub-menu a:active', 'drop down hover', $children=null);
+        parent::__construct('ul.sub-menu a:hover, ul.sub-menu a:active, ul.children a:hover, ul.children a:active', 'drop down hover', $children=null);
     }
 }
 
