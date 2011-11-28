@@ -26,7 +26,6 @@ version_number_file_uri =  theme_uri + '/'  + version_file_name
 
 def get_version_number_file( ):
     current_version_string = commands.getoutput( 'curl -s ' + version_number_file_uri )
-    #print "(current version:  " + current_version_string + ")"
     current_version = current_version_string.split( '.' )
     return current_version
 
