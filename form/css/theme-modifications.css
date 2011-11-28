@@ -7,6 +7,7 @@
 
 
 .ui-widget-header { 
+    border:none;
     border-bottom: 1px solid #ddd; 
     background-color: #F1F1F1;
     background-image: -ms-linear-gradient(top,#F9F9F9,#ECECEC);
@@ -21,6 +22,8 @@
 .wrap div#-tabs>div>div>div, .wrap div#-tabs>div>div>h4 {
     border:none;
     }
+
+
     
 /* Interaction states
 ----------------------------------*/    
@@ -35,7 +38,8 @@
     text-decoration: none;
     }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
-    font-weight: bold; color: green;}
+    font-weight: bold;
+    background: #fff; }
 .ui-state-hover a, .ui-state-hover a:hover { 
     color: #de5731; 
     text-decoration: none; }
@@ -47,6 +51,10 @@
     text-transform: capitalize; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, body.wp-admin .ui-state-active a:hover, .ui-state-active a:active { 
     color: #21759B; text-decoration: none; }
+.ui-tabs .ui-tabs-nav li {
+    border-color:#ccc;
+    }
+
 
 /*
  * jQuery UI Tabs 1.8.14
