@@ -18,7 +18,8 @@ for line in open('style.css'):
     # get theme uri    
     if "Theme URI:" in line:
         theme_uri = line.split()[-1]
-
+        
+upload_directory = '/wp-content/uploads/downloads/ArtPress'
 version_file_location = 'meta/version-number'
 version_file_name=os.listdir(version_file_location)[0]
 version_number_file_uri =  theme_uri + '/'  + version_file_name
@@ -124,7 +125,7 @@ def tag_commit( level, new_version_number ):
 def upload_zip( zip_name ):
     command = 'curl -u k31thd3v0n:kKeio0n\!kduir -T '
     command += exp_dir + '/' + zip_name
-    command += ' ftp://ftp.' + theme_uri + '/' + zip_name
+    command += ' ftp://ftp.' + theme_uri + '/' + upload_directory + '/' + zip_name
     print 'uploading ' + zip_name + ' ...'
     print commands.getoutput( command );
 
