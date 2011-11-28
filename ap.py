@@ -28,8 +28,6 @@ for line in open('theme-options.php'):
         upload_directory = theme_uri + line.split()[-3][:-2][1:]
         print upload_directory
         
-#upload_directory = '/wp-content/uploads/downloads/ArtPress'
-print upload_directory
 version_file_location = 'meta'
 version_file_name='latest-ArtPress-version-number.txt'
 version_number_file_uri =  theme_uri + '/'  + version_file_name
