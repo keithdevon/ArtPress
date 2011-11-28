@@ -5,6 +5,7 @@ import subprocess
 import os
 import commands
 import shutil
+import re
 
 # CONSTANTS
 
@@ -18,8 +19,17 @@ for line in open('style.css'):
     # get theme uri    
     if "Theme URI:" in line:
         theme_uri = line.split()[-1]
+
+for line in open('theme-options.php'):
+    #print line
+    m = re.search( "\$upload_directory.*CANONICAL", line )
+    if( m ):
+        print 'found it: '
+        upload_directory = theme_uri + line.split()[-3][:-2][1:]
+        print upload_directory
         
-upload_directory = '/wp-content/uploads/downloads/ArtPress'
+#upload_directory = '/wp-content/uploads/downloads/ArtPress'
+print upload_directory
 version_file_location = 'meta'
 version_file_name='latest-ArtPress-version-number.txt'
 version_number_file_uri =  theme_uri + '/'  + version_file_name
@@ -125,8 +135,8 @@ def tag_commit( level, new_version_number ):
 
 def upload_zip( zip_name ):
     print 'uploading ' + zip_name + ' ...'
-    upload_file( exp_dir + '/' + zip_name, upload_directory + '/' + zip_name )
-    commands.getoutput( command );
+    print upload_file( exp_dir + '/' + zip_name, upload_directory + '/' + zip_name )
+    
 
 def publish( level ):
     # get current version number
