@@ -120,7 +120,7 @@ def tag_commit( level, new_version_number ):
     command = 'git tag -a v' + new_version_number
     command += " -m '" + get_level_string( level ) + " " 
     command += new_version_number + "'"
-    print command
+    print commands.getoutput( command );
 
 def upload_zip( zip_name ):
     command = 'curl -u k31thd3v0n:kKeio0n\!kduir -T '
@@ -176,11 +176,11 @@ def publish( level ):
     # create zip with version number
     zip_file = create_zip( theme_name, new_version )
 
-    # upload zip to wfa
-    upload_zip( zip_file )
-    
     # tag commit
     tag_commit( level, new_version )
+
+    # upload zip to wfa
+    upload_zip( zip_file )
 
     # update lavn.txt
     update_version_number_file( new_version )
