@@ -20,13 +20,13 @@ for line in open('style.css'):
         theme_uri = line.split()[-1]
         
 upload_directory = '/wp-content/uploads/downloads/ArtPress'
-version_file_location = 'meta/version-number'
-version_file_name=os.listdir(version_file_location)[0]
+version_file_location = 'meta'
+version_file_name='latest-ArtPress-version-number.txt'
 version_number_file_uri =  theme_uri + '/'  + version_file_name
 
 def get_version_number_file( ):
     current_version_string = commands.getoutput( 'curl -s ' + version_number_file_uri )
-    print "(current version:  " + current_version_string + ")"
+    #print "(current version:  " + current_version_string + ")"
     current_version = current_version_string.split( '.' )
     return current_version
 
@@ -130,7 +130,14 @@ def upload_zip( zip_name ):
     print commands.getoutput( command );
 
 def publish( level ):
-    print "Creating a new " + get_level_string( level ) + " for " + theme_name
+    # get current version number
+    current_version = get_version_number_file()
+    current_version_string = current_version[0] + '.'
+    current_version_string += current_version[1] + '.'
+    current_version_string += current_version[2]
+    
+
+    print "Creating a new " + get_level_string( level ) + " for " + theme_name + " " + str( current_version_string )
 
     # run artpress tests
 
@@ -157,9 +164,6 @@ def publish( level ):
     
     # take screenshot
     
-    # get current version number
-    current_version = get_version_number_file()
-
     # create new number
     new_version = create_new_version_number( level, current_version )
     
