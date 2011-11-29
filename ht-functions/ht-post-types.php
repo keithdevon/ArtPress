@@ -30,6 +30,7 @@ function create_my_post_types() {
             'has_archive' => true,
             'supports' => array('title','editor','thumbnail'),
             'rewrite' => array( 'slug' => 'gallery' ),
+            'taxonomies' => array( 'category' ),
  
         )
     );
