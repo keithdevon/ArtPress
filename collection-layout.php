@@ -60,9 +60,9 @@ if ( have_posts() ) while ( have_posts() ) : the_post();
                                     ); */?>
                                 </div>
                                 -->
+                                
                                 <?php endif; ?>
-                                <?php the_excerpt();?>
-
+                                <?php // TODO make this conditional the_excerpt();?>
                                 <?php endif; ?>
 
                             </div><!-- .entry-content -->
