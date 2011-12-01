@@ -7,9 +7,11 @@ if ( have_posts() ) while ( have_posts() ) : the_post();
                     <?php get_template_part( 'ht-crumbs' );?>
                     <h1 class="page-title"><?php the_title(); ?></h1>
 
+                    <!-- TODO: make this conditional 
                     <div class="entry-meta">
-                       <?php twentyten_posted_on(); ?>
+                       <?php // twentyten_posted_on(); ?>
                     </div><!-- .entry-meta -->
+                
                 </div><!-- twelvecol last -->
                 <div class="clear"></div>
                 <div class="twelvecol">
