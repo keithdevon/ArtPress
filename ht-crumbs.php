@@ -1,4 +1,6 @@
 <?php
+/*
+TODO: make this conditional
 if ((is_page() && !is_front_page()) || is_category() || is_single()) {
    echo '<ul id="breadcrumbs">';
    echo '<li class="front_page"><a href="'.get_bloginfo('url').'" title="'.get_bloginfo('name').'">'.get_bloginfo('title').'</a></li>';
@@ -23,5 +25,5 @@ elseif (is_home()) {
     echo '<li class="front_page"><a href="'.get_bloginfo('url').'" title="'.get_bloginfo('name').'">'.get_bloginfo('title').'</a></li>';
     echo '<li class="current"><span class=crumb-divider>&nbsp;/ </span><a href="#">Blog</a></li>';
     echo '</ul>';
-    }
+    }*/
 ?>

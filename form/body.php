@@ -22,8 +22,8 @@ class Body_Group extends CSS_Selector_Group {
             $children[] = new OL();
             $children[] = new Link();
             $children[] = new Link_Hover();
-            $children[] = new Crumbs();
-            $children[] = new Crumb_Hover();
+            //TODO: Make these conditional $children[] = new Crumbs();
+            //$children[] = new Crumb_Hover();
             $children[] = new Entry_Meta();
         }
         parent::__construct('body', 'general', $children);
