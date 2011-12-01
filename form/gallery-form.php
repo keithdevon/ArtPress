@@ -29,7 +29,7 @@ class Gallery_Group extends CSS_Selector_Group {
         if( null == $children ) {
             $children[] = new Gallery_Base();
             $children[] = new Gallery_Title();
-            $children[] = new Galleries_Entry_Meta();
+            // TODO: Make this conditional $children[] = new Galleries_Entry_Meta();
             $children[] = new Gallery_Image_Links();
         }
         parent::__construct('.category-galleries', 'gallery', $children);
