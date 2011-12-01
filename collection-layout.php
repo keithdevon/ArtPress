@@ -21,7 +21,17 @@ if ( have_posts() ) while ( have_posts() ) : the_post();
 
                 <?php 
                 $ap_cat = get_post_meta(get_the_ID(), '_ap_coll_cat', true); 
-                $ap_query = new WP_Query('post_type=ap_galleries&category_name='.$ap_cat);
+                $args = array(
+                    'post_type' => 'ap_galleries',
+                	'tax_query' => array(
+                		array(
+                			'taxonomy' => 'collections',
+                			'field' => 'slug',
+                			'terms' => $ap_cat
+                		)
+                	)
+                );
+                $ap_query = new WP_Query($args);
                 $post_count = 0;
                 $numItems = ($ap_query->post_count);
                 $postnumber = 0;
