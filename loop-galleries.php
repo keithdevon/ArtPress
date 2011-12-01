@@ -81,15 +81,14 @@ if( $g_cat_layout == 'grid' ) {?>
 							<a class="size-thumbnail" href="<?php the_permalink(); ?>"><?php echo $image_img_tag; ?></a>
 						</div><!-- .gallery-thumb -->
 
-<h2 class="gallery-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
+                        <h2 class="gallery-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 
-<div class="entry-meta">
-    <?php twentyten_posted_on(); ?>
-   <?php printf( _n( '<a %1$s>%2$s photo</a>.', '| <a %1$s>%2$s photos</a>.', $total_images, 'twentyten' ),
-								'href="' . get_permalink() . '" title="' . sprintf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ) . '" rel="bookmark"',
-								number_format_i18n( $total_images )
-							); ?>
-</div>
+                        <!-- TODO: make this conditional
+                        <div class="entry-meta">
+                            <?php // twentyten_posted_on(); ?>
+                            <?php /* printf( _n( '<a %1$s>%2$s photo</a>.', '| <a %1$s>%2$s photos</a>.', $total_images, 'twentyten' ), 'href="' . get_permalink() . '" title="' . sprintf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ) . '" rel="bookmark"', number_format_i18n( $total_images ));*/ ?>
+                        </div>
+                        -->
 				<?php endif; ?>
 						<?php the_excerpt();?>
 
