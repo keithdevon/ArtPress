@@ -24,7 +24,7 @@ function create_my_post_types() {
             ),
             'public' => true,
             'has_archive' => true,
-            'supports' => array('title','editor'),
+            'supports' => array('title','editor', 'thumbnail'),
             'rewrite' => array( 'slug' => 'collections' ),
             'register_meta_box_cb' => 'add_collection_metaboxes',
  
