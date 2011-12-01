@@ -8,13 +8,24 @@ function create_my_post_types() {
     register_post_type( 'ap_collections',
         array(
             'labels' => array(
-                'name' => __( 'Collections' ),
-                'singular_name' => __( 'Collection' )
+                'name' => _x('Collections', 'post type general name'),
+                'singular_name' => _x('Collection', 'post type singular name'),
+                'add_new' => _x('Add New', 'book'),
+                'add_new_item' => __('Add New Collection'),
+                'edit_item' => __('Edit Collection'),
+                'new_item' => __('New Collection'),
+                'all_items' => __('All Collections'),
+                'view_item' => __('View Collection'),
+                'search_items' => __('Search Collections'),
+                'not_found' =>  __('No collections found'),
+                'not_found_in_trash' => __('No collections found in Trash'), 
+                'parent_item_colon' => '',
+                'menu_name' => 'Collections'
             ),
             'public' => true,
             'has_archive' => true,
-            'supports' => array('title','editor','thumbnail'),
-            'rewrite' => array( 'slug' => 'collection' ),
+            'supports' => array('title','editor'),
+            'rewrite' => array( 'slug' => 'collections' ),
             'register_meta_box_cb' => 'add_collection_metaboxes',
  
         )
@@ -23,21 +34,58 @@ function create_my_post_types() {
     register_post_type( 'ap_galleries',
         array(
             'labels' => array(
-                'name' => __( 'Galleries' ),
-                'singular_name' => __( 'Gallery' )
+                'name' => _x('Galleries', 'post type general name'),
+                'singular_name' => _x('Gallery', 'post type singular name'),
+                'add_new' => _x('Add New', 'book'),
+                'add_new_item' => __('Add New Gallery'),
+                'edit_item' => __('Edit Gallery'),
+                'new_item' => __('New Gallery'),
+                'all_items' => __('All Galleries'),
+                'view_item' => __('View Gallery'),
+                'search_items' => __('Search Galleries'),
+                'not_found' =>  __('No galleries found'),
+                'not_found_in_trash' => __('No galleries found in Trash'), 
+                'parent_item_colon' => '',
+                'menu_name' => 'Galleries'
             ),
             'public' => true,
             'has_archive' => true,
-            'supports' => array('title','editor','thumbnail'),
-            'rewrite' => array( 'slug' => 'gallery' ),
-            'taxonomies' => array( 'category' ),
- 
+            'supports' => array('title','editor'),
+            'rewrite' => array( 'slug' => 'galleries' ),
         )
     );
 }
 
 
-//
+// Add collections taxonomy
+
+function ap_register_taxonomies() {
+ 
+    register_taxonomy(
+        'collections',
+        array( 'ap_galleries' ),
+        array(
+            'public' => true,
+            'labels' => array( 
+                'name' => _x( 'Collections', 'taxonomy general name' ),
+                'singular_name' => _x( 'Collection', 'taxonomy singular name' ),
+                'search_items' =>  __( 'Search Collections' ),
+                'all_items' => __( 'All Collections' ),
+                'parent_item' => __( 'Parent Collection' ),
+                'parent_item_colon' => __( 'Parent Collection:' ),
+                'edit_item' => __( 'Edit Collection' ), 
+                'update_item' => __( 'Update Collection' ),
+                'add_new_item' => __( 'Add New Collection' ),
+                'new_item_name' => __( 'New Collection Name' ),
+                'menu_name' => __( 'Collection' ), ),
+            'hierarchical' => true,
+        )
+    );
+}
+ 
+add_action( 'init', 'ap_register_taxonomies' );
+
+
 
 //Add custom meta box
  
@@ -47,17 +95,17 @@ function add_collection_metaboxes() {
     add_meta_box('ap_collections_categories', 'Collection Category', 'ap_collections_categories', 'ap_collections', 'side', 'default');
 }
  
-// Output the Property metaboxes
+// Output the Collections metaboxes
  
 function ap_collections_categories() {
     global $post;
     $collection_category = get_post_meta($post->ID, '_ap_coll_cat', true);
     $values = get_post_custom( $post->ID );
-    $selected = isset( $values['_ap_coll_cat'] ) ? esc_attr( $values['_ap_coll_cat'][0] ) : Ó; ?>
+    $selected = isset( $values['_ap_coll_cat'] ) ? esc_attr( $values['_ap_coll_cat'][0] ) : "" ?>
         <select name="_ap_coll_cat" > 
             <option value=""><?php echo esc_attr(__('Collection Category')); ?></option> 
             <?php 
-                $categories=  get_categories(); 
+                $categories=  get_categories('taxonomy=collections'); 
             
                 foreach ($categories as $category) {
                     $option = '<option value="'.$category->category_nicename.'" '.selected( $selected, $category->category_nicename ).' >';
