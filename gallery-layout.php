@@ -1,7 +1,7 @@
 <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?><div id="post-<?php the_ID(); ?>" <?php post_class('container gallery-layout-php'); ?>>
                         <div class="row">
                             <div class=" twelvecol last">
-                                <?php get_template_part( 'ht-crumbs' );?>
+                                <?php // TODO: make this conditional get_template_part( 'ht-crumbs' );?>
                                 <h1 class="page-title"><?php the_title(); ?></h1>
 
                                 <!-- TODO:make this conditional
