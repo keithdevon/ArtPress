@@ -675,13 +675,19 @@ function kd_type_gen() {
 
 // Set sub-menu offset to height of menu items
 
-function detect_menu_height() {
+function ap_detect_menu_height() {
     echo '<script>
         jQuery(document).ready(function () {
-            var kdev = jQuery("#menu-main-menu li").height();
-            jQuery("#menu-main-menu li .sub-menu").css("top", kdev);
+            if(jQuery(".menu-header ul li")) {
+                var ap_menu_height = jQuery(".menu-header ul li").height();
+                jQuery(".menu-header ul li .sub-menu").css("top", ap_menu_height);
+            }
+            else() {
+                var ap_menu_height = jQuery(".menu ul li").height();
+                jQuery(".menu ul li .children").css("top", ap_menu_height);
+            }
         });
         </script>';
 }
 
-add_action( 'wp_footer', 'detect_menu_height' );
+add_action( 'wp_footer', 'ap_detect_menu_height' );
