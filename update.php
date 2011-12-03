@@ -28,19 +28,24 @@ function greater_version( $array1, $array2 ) {
     else return false;
 }
 
-function get_latest_version_number() {
-    $response = wp_remote_get('http://wordpress-for-artists.com/latest-artpress-version-number.txt');
-    if( is_wp_error( $response ) ) {
-        return -1;
-    } else {
-        $theBody = wp_remote_retrieve_body( $response );
-        return parse_version_number($theBody);
+function get_latest_version_number($bypass_transient_cache=false) {
+    if(!$bypass_transient_cache && $latest_version = get_transient('latest-ArtPress-version-number') ) {
+        return parse_version_number($latest_version);
+    } else {      
+        $response = wp_remote_get('http://wordpress-for-artists.com/latest-ArtPress-version-number.txt');
+        if( is_wp_error( $response ) ) {
+            return -1;
+        } else {
+            $the_body = wp_remote_retrieve_body( $response );
+            set_transient('latest-ArtPress-version-number', $the_body, 60*60*12);
+            return parse_version_number($the_body);
+        }
     }
 }
 
-function newer_version_available() {
-    $latest = get_latest_version_number();
-    $current = get_theme_version_number();
+function newer_version_available( $bypass_transient_cache=false ) {
+    $latest = get_latest_version_number( $bypass_transient_cache );
+    $current = explode('.', get_theme_version_number() );
     return greater_version($latest, $current);
 }
 
@@ -48,14 +53,9 @@ function update_theme() {
     if ( $new_version = newer_version_available() ) {
         $version_string = version_number_array_to_string( $new_version );
         
-        $setting_fields = get_settings_fields('artpress_options');
-        $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('upgrade_theme'));
-        $submit = input('submit', attr_value('upgrade ' . get_theme_name() . ' to version ' . $version_string ));
-        $upgrade_form = form('post', 'options.php', $setting_fields . $hidden . $submit, null);
-        
-        echo div("Version {$version_string} available." . $upgrade_form );
+        echo div("Version {$version_string} available. " . alink("themes.php?page=upgrade_artpress", "Click here to upgrade.") );
     } else {
-        echo "You have the latest version";
+
     }
     
 }
