@@ -89,5 +89,17 @@ function array_equals($array, $key, $value) {
         return ($array[$key] == $value);
     } else return false;
 }
-
+function get_this_theme_data($key) {
+    $theme_data = get_theme_data( $dir = get_template_directory() . '/style.css' );
+    return $theme_data[$key];
+}
+function get_theme_version_number() {
+    return get_this_theme_data('Version');
+}
+function get_theme_name() {
+    return get_this_theme_data('Name');
+}
+function get_theme_uri() {
+    return get_this_theme_data('URI');
+}
 ?>
