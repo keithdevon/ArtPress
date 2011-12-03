@@ -53,7 +53,7 @@ function update_theme() {
     if ( $new_version = newer_version_available() ) {
         $version_string = version_number_array_to_string( $new_version );
         
-        echo div("Version {$version_string} available. " . alink("themes.php?page=upgrade_artpress", "Click here to upgrade.") );
+        echo div("Version {$version_string} available. " . alink("admin.php?page=upgrade_artpress", "Click here to upgrade.") );
     } else {
 
     }
