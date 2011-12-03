@@ -1,7 +1,8 @@
 <?php
 $dir = get_template_directory() . '/';
 
-require_once 'heart-theme-utils.php';
+require_once 'heart-theme-utils.php'; // FIXME
+require_once $dir . 'update.php';
 include_once $dir . 'form/heart-theme-form-functions.php';
 require_once $dir . 'form/tooltips.php';
 require_once $dir . 'form/form.php';
@@ -131,7 +132,168 @@ function init_add_theme_pages() {
         'manage_images',             // menu slug              
         'ap_image_upload_page'       // page rendering function
         );
+
+    add_submenu_page( 'artpress', 'Upgrade ArtPress', 'Upgrade', 'edit_theme_options', 'upgrade_artpress', 'page_upgrade_artpress');
+    
 }
+
+//function page_upgrade_artpress() {
+//    if( is_authenticated() ) {
+//        echo h1('upgrade artpress');
+//        $method='post'; 
+//        $action= ""; // a blank method means the form will submit to this same page
+//        echo form(
+//            $method, 
+//            $action, 
+//            input('submit', attr_name('upgrade') . attr_value('upgrade this theme')) .
+//            wp_nonce_field(null,null,null,false),
+//            null );
+//    } else return;
+//}
+function is_authenticated() {
+    // $_POST will store the command to upgrade
+    // if it's empty then there is nothing to do
+    // so go back and display the form
+    if( empty( $_POST ) ) {
+        return true;
+    }
+    
+    check_admin_referer();
+    
+    $form_fields = array('upgrade');
+    $method = '';
+    $unzip_destination = WP_CONTENT_DIR . '/themes/';
+    
+    if ( isset($_POST['upgrade']) ) {
+        $url = wp_nonce_url('themes.php?page=page_upgrade_artpress');
+        //$url = 'themes.php?page=page_upgrade_artpress';
+                                               //($url, $method, false, false, $form_fields)
+        $creds = request_filesystem_credentials($url, $method, false, $unzip_destination, $form_fields);
+        if (false === $creds )  {
+            return; // stop processing here
+        }
+        
+        if ( ! WP_Filesystem($creds) ) {
+            // our credentials were no good, ask the user for them again
+            request_filesystem_credentials($url, $method, true, $unzip_destination, $form_fields);
+            return false;
+        }
+    }
+    
+    echo "successfully got credentials";
+}
+//add_action('admin_menu', 'otto_admin_add_page');
+//
+//function otto_admin_add_page() {
+//    add_theme_page('Otto Test Page', 'Otto Test Options', 'edit_theme_options', 'otto', 'otto_options_page');
+//}
+function page_upgrade_artpress() {
+    if ( upgrade_artpress() ) return;
+    
+    echo h2('Upgrade ArtPress');
+    
+    if( newer_version_available( true ) ) {
+        $latest_version = version_number_array_to_string( get_latest_version_number(true) );
+        $form_content = wp_nonce_field('upgrade_artpress', 'nf');
+        $form_content .= input('submit', attr_name('upgrade') . attr_value('upgrade to version ' . $latest_version));
+        echo form('post', '', $form_content, null);
+    } else {
+        echo "You have the latest version.";
+    }
+}
+
+function upgrade_artpress() {
+	if (empty($_POST)) return false; 
+	
+	
+	$form_fields = array ('upgrade'); // this is a list of the form field contents I want passed along between page views
+	$method = ''; // Normally you leave this an empty string and it figures it out by itself, but you can override the filesystem method here
+	
+	// check to see if we are trying to upgrade a file
+	if (isset($_POST['upgrade'])) {
+		// okay, let's see about getting credentials
+		$url = wp_nonce_url('admin.php?page=upgrade_artpress', 'upgrade_artpress');
+		if (false === ($creds = request_filesystem_credentials($url, $method, false, false, $form_fields) ) ) {
+        	check_admin_referer('upgrade_artpress', 'nf'); // dies if haven't come from an admin page
+			// if we have to get the credentials from the user, then we'll always get here
+			// if we get here, then we don't have credentials yet,
+			// but have just produced a form for the user to fill in, 
+			// so stop processing for now
+			
+			return true; // stop the normal page form from displaying 
+		}
+			
+		// now we have some credentials, try to get the wp_filesystem running
+		if ( ! WP_Filesystem($creds) ) {
+			// our credentials were no good, ask the user for them again
+			request_filesystem_credentials($url, $method, true, false, $form_fields);
+			return true;
+		}
+
+		// by this point, the $wp_filesystem global should be working, so let's use it to create a file
+		global $wp_filesystem;
+		
+		// create zip name
+		$name = get_theme_name();
+		$latest_version = version_number_array_to_string( get_latest_version_number() );
+		$name_ver = $name . $latest_version;
+		$zip_name = $name_ver . '.zip';
+		
+		// create the download file location
+		$local_upload_dir = wp_upload_dir();
+		$zip_destination = $local_upload_dir['basedir'];
+		$zip_download_path = $zip_destination . '/' . $zip_name;
+		
+		// download the zip
+		$fh = fopen($zip_download_path, 'w');
+		$upload_directory = '/wp-content/uploads/downloads/ArtPress'; // CANONICAL
+		$uri = substr( get_theme_uri(), 7); // trim off http://
+		$full_uri = $uri . $upload_directory . '/' . $zip_name;
+		$ch = curl_init( $full_uri );
+		curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+		curl_setopt( $ch, CURLOPT_FILE, $fh );
+		curl_exec($ch);
+		curl_close($ch);
+		fclose($fh);	
+		
+		$theme_dir = WP_CONTENT_DIR . '/themes/';
+		
+		// move zip from uploads/ to themes/
+		$theme_zip_path = $theme_dir . $zip_name;
+		if ( ! $wp_filesystem->copy( $zip_download_path, $theme_zip_path, true )){
+		    echo h2('error moving zip to theme directory');
+		    return false;
+		}
+		
+		// rename current ArtPress
+		$src = $theme_dir . $name;
+		$current_artpress = $theme_dir . $name . get_theme_version_number();
+		if ( ! $wp_filesystem->move( $src, $current_artpress, true ) ) {
+	    echo "<h2>error copying zip to themes folder</h2>";
+	        return false;
+	    }
+		
+		// unzip theme
+		if ( ! unzip_file( $theme_dir . $zip_name, $theme_dir ) ) {
+		    echo h2('failed to unzip the theme');
+		    return false;
+		}
+		
+		// delete old directory
+		if ( ! $wp_filesystem->delete( $current_artpress, true) ) {
+		    echo "<h2>error copying zip to themes folder</h2>";
+		    return false;
+		}
+		// delete zip
+		if ( ! $wp_filesystem->delete( $theme_zip_path, false) ) {
+		    echo "<h2>error copying zip to themes folder</h2>";
+		    return false;
+		}		
+	}
+	echo $name . " successfully updated to version " . $latest_version;
+	return true;
+}
+
 
 /**
  * HACK ALERT! creating my own 'settings_fields' that doesn't echo but returns its contents.
@@ -175,6 +337,7 @@ class Live_Button    extends Config_Button {
 
 function page_edit_config() {
     
+    update_theme();
     //if ( ! isset( $_REQUEST['updated'] ) )
     //    $_REQUEST['updated'] = false;
     
