@@ -346,7 +346,7 @@ function page_edit_config() {
     // page title stuff
     //screen_icon();
     echo ot('div', attr_class('wrap') . attr_id('style-manager'));
-    echo h2( __( 'Artpress Options' ) ); 
+    echo h2( __( 'Artpress Style Manager' ) ); 
     $notifications = div('', attr_id('themeNotifications'));
     
     // create buttons
