@@ -266,10 +266,10 @@ function upgrade_artpress() {
 		}
 		
 		// rename current ArtPress
-		$src = $theme_dir . $name;
+		$artpress_path = $theme_dir . $name;
 		$current_artpress = $theme_dir . $name . get_theme_version_number();
-		if ( ! $wp_filesystem->move( $src, $current_artpress, true ) ) {
-	    echo "<h2>error copying zip to themes folder</h2>";
+		if ( ! $wp_filesystem->move( $artpress_path, $current_artpress, true ) ) {
+	    echo "<h2>error renaming current theme</h2>";
 	        return false;
 	    }
 		
@@ -278,6 +278,9 @@ function upgrade_artpress() {
 		    echo h2('failed to unzip the theme');
 		    return false;
 		}
+		
+		// register the new theme
+        register_theme_directory( $artpress_path );
 		
 		// delete old directory
 		if ( ! $wp_filesystem->delete( $current_artpress, true) ) {
@@ -289,8 +292,8 @@ function upgrade_artpress() {
 		    echo "<h2>error copying zip to themes folder</h2>";
 		    return false;
 		}		
+    	echo $name . " successfully updated to version " . $latest_version;
 	}
-	echo $name . " successfully updated to version " . $latest_version;
 	return true;
 }
 
