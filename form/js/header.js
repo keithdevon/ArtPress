@@ -25,6 +25,8 @@ spinOpts = {
 		  shadow: false // Whether to render a shadow
 		};
 
+openAccordions = [];
+
 function inputHasChanged(obj) {
 	changedEls[obj.name] = obj.value;
 }
@@ -149,7 +151,7 @@ function checkValidVerticalPosition( posInputEl ) {
 		}
 	);
 }
-openAccordions = [];
+
 function setOpenAccordion(tabName, accordionLink) { 
     openAccordions[tabName] = accordionLink;
 }
@@ -171,14 +173,6 @@ function accordionClick(accordionLink) {
 	var tabName = jQuery('.ui-tabs-selected').first().children().html();
 	setOpenAccordion(tabName, accordionLink);
 	updateDependents(accordionLink);
-	
-	// convert selects to jquery selectmenus
-	if( haveBeenOpenedAccordions[accordionLink] != true ) {
-	    haveBeenOpenedAccordions[accordionLink] = true;
-		var selects = jQuery(accordionLink).next().find('select');
-		selects.selectmenu({style:'dropdown'});
-		selects.find('select.section_color').attr('color', 'red');
-	}
 }
 
 
