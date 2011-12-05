@@ -67,3 +67,10 @@ margin:10px 0;
 #ap_options_form {
 	visibility: hidden;
 }
+
+/* Admin title */
+#style-manager h2 {
+display:block;
+width:300px;
+float:left;
+}
