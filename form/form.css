@@ -29,6 +29,7 @@ colgroup col:FIRST-CHILD{
     padding: 6px 6px 6px 6px;
     border: solid 1px white;
     float: left;
+    border-radius: 3px;
 }
 #config-controls {
     float: right;
