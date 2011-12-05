@@ -2,50 +2,93 @@
 
 //------Columns
 
-add_shortcode( '3col_first', 'ht_col1of3_shortcode' );//add 3 column shortcode (for columns 1 and 2)
+//One third
 
-function ht_col1of3_shortcode( $atts, $content = null ) {
-   return '<div style="width:100%; clear:both;"></div><div class="fourcol internal-col">' . do_shortcode( $content ) . '</div>';
+add_shortcode( '1third', 'ht_1third_shortcode' );//add 2/3rds column
+
+function ht_1third_shortcode( $atts, $content = null ) {
+   extract( shortcode_atts( array(
+      'p' => ''
+      ), $atts ) );
+    if($p == 'first' ) $start = '<div style="width:100%; clear:both;"></div>';
+    else $start = '';
+    if($p == 'last' ) {
+        $end = '<div style="clear:both;"></div>';
+        $class = ' last';
+    }
+    else {
+        $end = '';
+        $class = '';
+    }
+    
+    return $start . '<div class="fourcol internal-col '. $class .'">' . do_shortcode( $content ) . '</div>' . $end;
 }
 
-add_shortcode( '3col', 'ht_col2of3_shortcode' );//add 3 column shortcode (for column 2)
 
-function ht_col2of3_shortcode( $atts, $content = null ) {
-   return '<div class="fourcol internal-col" >' . do_shortcode( $content ) . '</div>';
+//Two thirds
+
+add_shortcode( '2thirds', 'ht_2thirds_shortcode' );//add 2/3rds column
+
+function ht_2thirds_shortcode( $atts, $content = null ) {
+   extract( shortcode_atts( array(
+      'p' => 'first'
+      ), $atts ) );
+    if($p == 'first' ) $start = '<div style="width:100%; clear:both;"></div>';
+    else $start = '';
+    if($p == 'last' ) {
+        $end = '<div style="clear:both;"></div>';
+        $class = ' last';
+    }
+    else {
+        $end = '';
+        $class = '';
+    }
+    
+    return $start . '<div class="eightcol internal-col '. $class .'">' . do_shortcode( $content ) . '</div>' . $end;
 }
 
-add_shortcode( '3col_last', 'ht_col3of3_shortcode' );//add 3rd of 3 columns
 
-function ht_col3of3_shortcode( $atts, $content = null ) {
-   return '<div class="fourcol internal-col last">' . do_shortcode( $content ) . '</div><div style="clear:both;"></div>';
+//one half
+
+add_shortcode( '1half', 'ht_1half_shortcode' );//add 2/3rds column
+
+function ht_1half_shortcode( $atts, $content = null ) {
+   extract( shortcode_atts( array(
+      'p' => 'first'
+      ), $atts ) );
+    if($p == 'first' ) $start = '<div style="width:100%; clear:both;"></div>';
+    else $start = '';
+    if($p == 'last' ) {
+        $end = '<div style="clear:both;"></div>';
+        $class = ' last';
+    }
+    else {
+        $end = '';
+        $class = '';
+    }
+    
+    return $start . '<div class="sixcol internal-col '. $class .'">' . do_shortcode( $content ) . '</div>' . $end;
 }
 
-add_shortcode( '2col_first', 'ht_col1of2_shortcode' );// add 2 column shotcode
 
-function ht_col1of2_shortcode( $atts, $content = null ) {
-   return '<div style="width:100%; clear:both;"></div><div class="sixcol internal-col">' . do_shortcode( $content ) . '</div>';
-}
+//one quarter
 
-add_shortcode( '2col_last', 'ht_col2of2_shortcode' );// 2nd of 2 columns
+add_shortcode( '1quart', 'ht_1quart_shortcode' );//add 2/3rds column
 
-function ht_col2of2_shortcode( $atts, $content = null ) {
-   return '<div class="sixcol internal-col last" >' . do_shortcode( $content ) . '</div><div style="clear:both;"></div>';
-}
-
-add_shortcode( '4col_first', 'ht_col1of4_shortcode' );// add 4 column shotcode
-
-function ht_col1of4_shortcode( $atts, $content = null ) {
-   return '<div style="width:100%; clear:both;"></div><div class="threecol internal-col">' . do_shortcode( $content ) . '</div>';
-}
-
-add_shortcode( '4col', 'ht_colof4_shortcode' );// add 4 column shotcode
-
-function ht_colof4_shortcode( $atts, $content = null ) {
-   return '<div class="threecol internal-col">' . do_shortcode( $content ) . '</div>';
-}
-
-add_shortcode( '4col_last', 'ht_col4of4_shortcode' );// 4th of 4 columns
-
-function ht_col4of4_shortcode( $atts, $content = null ) {
-   return '<div class="threecol internal-col last" >' . do_shortcode( $content ) . '</div><div style="clear:both;"></div>';
+function ht_1quart_shortcode( $atts, $content = null ) {
+   extract( shortcode_atts( array(
+      'p' => ''
+      ), $atts ) );
+    if($p == 'first' ) $start = '<div style="width:100%; clear:both;"></div>';
+    else $start = '';
+    if($p == 'last' ) {
+        $end = '<div style="clear:both;"></div>';
+        $class = ' last';
+    }
+    else {
+        $end = '';
+        $class = '';
+    }
+    
+    return $start . '<div class="threecol internal-col '. $class .'">' . do_shortcode( $content ) . '</div>' . $end;
 }
