@@ -682,7 +682,7 @@ function ap_detect_menu_height() {
                 var ap_menu_height = jQuery(".menu-header ul li").height();
                 jQuery(".menu-header ul li .sub-menu").css("top", ap_menu_height);
             }
-            else() {
+            else {
                 var ap_menu_height = jQuery(".menu ul li").height();
                 jQuery(".menu ul li .children").css("top", ap_menu_height);
             }
