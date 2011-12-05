@@ -137,19 +137,6 @@ function init_add_theme_pages() {
     
 }
 
-//function page_upgrade_artpress() {
-//    if( is_authenticated() ) {
-//        echo h1('upgrade artpress');
-//        $method='post'; 
-//        $action= ""; // a blank method means the form will submit to this same page
-//        echo form(
-//            $method, 
-//            $action, 
-//            input('submit', attr_name('upgrade') . attr_value('upgrade this theme')) .
-//            wp_nonce_field(null,null,null,false),
-//            null );
-//    } else return;
-//}
 function is_authenticated() {
     // $_POST will store the command to upgrade
     // if it's empty then there is nothing to do
@@ -182,11 +169,7 @@ function is_authenticated() {
     
     echo "successfully got credentials";
 }
-//add_action('admin_menu', 'otto_admin_add_page');
-//
-//function otto_admin_add_page() {
-//    add_theme_page('Otto Test Page', 'Otto Test Options', 'edit_theme_options', 'otto', 'otto_options_page');
-//}
+
 function page_upgrade_artpress() {
     if ( upgrade_artpress() ) return;
     
