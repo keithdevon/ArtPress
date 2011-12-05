@@ -69,13 +69,8 @@ function init_register_scripts() {
     
 
         
-    wp_register_style(
-    	'image_form',                                                                // handle
-        $template_url . '/form/image-form.css');                                     // src   
-    
-    wp_register_style(
-        	'ArtPressOptionsStylesheet',                                                 // handle
-            $template_url . '/form/form.css');                                           // src
+    wp_register_style( 'image_form',                $template_url . '/form/css/image-form.css');
+    wp_register_style( 'ArtPressOptionsStylesheet', $template_url . '/form/css/form.css');
 
     // enqueue styles
     wp_enqueue_style( 'jquery-ui-theme-ui-lightness' );
