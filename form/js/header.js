@@ -1,6 +1,4 @@
-/**
- * 
- */
+/** Contants ----------------------------------------------------------------*/
 changedEls = {};
 
 successColor = '#AFA';
@@ -15,6 +13,7 @@ warningColorDark = waitingColorDark;
 failColor    = '#FAA';
 failColorDark = '#D88';
 
+/** Spinner -----------------------------------------------------------------*/
 spinOpts = {
 		  lines: 12, // The number of lines to draw
 		  length: 7, // The length of each line
@@ -25,10 +24,6 @@ spinOpts = {
 		  trail: 60, // Afterglow percentage
 		  shadow: false // Whether to render a shadow
 		};
-
-target = document.getElementById('style-manager');
-spinner = new Spinner(spinOpts).spin(target);
-spinner.spin(target);
 
 function inputHasChanged(obj) {
 	changedEls[obj.name] = obj.value;
@@ -353,7 +348,6 @@ function save_as_config() {
 
 jQuery(document).ready(
 		function() {
-			spinner.stop();
 			jQuery('#ap_options_form').css('visibility', 'visible');
 	    	jQuery('div[id="-tabs"]').bind(  
 	    			'tabsshow', 
@@ -378,5 +372,7 @@ jQuery(document).ready(
 	    				});
 	    			}
 			);
+	    	spinner.stop();
+	    	jQuery('#initial_load_spinner').remove();
 		}
 	);

@@ -68,3 +68,8 @@ margin:10px 0;
 #ap_options_form {
 	visibility: hidden;
 }
+#initial_load_spinner {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+}

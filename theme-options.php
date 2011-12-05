@@ -46,12 +46,13 @@ function init_register_scripts() {
     
     // JQuery Form
     wp_register_script( 'jQuery.form' ,  $template_dir . '/js/jquery.form.js' , null , '2.83' , true );                                                          
-
-    // Artpress Form
-    wp_register_script( 'form' ,  $template_dir . '/form/form.js' , null , '1.0' , true );                                                           
     
-    // Spin
+    // Spinner
     wp_register_script( 'spin' , $template_dir . '/js/spin.min.js' , null , '1.0' , false );                                                         
+
+    // Artpress Form scripts
+    wp_register_script( 'header' ,  $template_dir . '/form/js/header.js' , null , '1.0' , false );
+    wp_register_script( 'footer' ,  $template_dir . '/form/js/footer.js' , null , '1.0' , true );                                                           
 
     // register styles
         
@@ -76,24 +77,24 @@ function init_register_scripts() {
         	'ArtPressOptionsStylesheet',                                                 // handle
             $template_url . '/form/form.css');                                           // src
 
-    // enqueue scripts
-    wp_enqueue_script('jquery-ui-cdn');
+    // enqueue styles
+    wp_enqueue_style( 'jquery-ui-theme-ui-lightness' );
+    wp_enqueue_style( 'theme_modifications' );
+    wp_enqueue_style( 'farbtasticStylesheet' );
+	wp_enqueue_style( 'image_form' );
+    wp_enqueue_style( 'ArtPressOptionsStylesheet' );
 
+    // enqueue scripts
+    wp_enqueue_script( 'jquery-ui-cdn' );
     wp_enqueue_script(
     	'farbtastic', 
         $template_dir . '/scripts/farbtastic/farbtastic.js', 
         array('jquery'));
-    wp_enqueue_script('jQuery.form');
-    wp_enqueue_script('form');
-    wp_enqueue_script('spin');
+    wp_enqueue_script( 'jQuery.form' );
+    wp_enqueue_script( 'spin' );
+    wp_enqueue_script( 'header' );
+    wp_enqueue_script( 'footer' );
 
-    // enqueue styles
-    wp_enqueue_style( 'jquery-ui-theme-ui-lightness' );
-    wp_enqueue_style('theme_modifications');
-    wp_enqueue_style( 'farbtasticStylesheet' );
-	wp_enqueue_style( 'image_form' );
-
-    wp_enqueue_style( 'ArtPressOptionsStylesheet' );
 
 }
 /**
@@ -333,6 +334,16 @@ function page_edit_config() {
     //screen_icon();
     echo ot('div', attr_class('wrap') . attr_id('style-manager'));
     echo h2( __( 'ArtPress Style Manager' ) );
+    
+    $init_load_script = script(
+        "
+        initSpinner = document.getElementById('initial_load_spinner');
+        spinner = new Spinner(spinOpts).spin(initSpinner);
+        spinner.spin(initSpinner);
+    ");
+    echo div( '', attr_id('initial_load_spinner'));
+    echo $init_load_script;
+    
     $notifications = div('', attr_id('themeNotifications'));
     
     // create buttons

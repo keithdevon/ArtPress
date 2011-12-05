@@ -86,6 +86,7 @@ function li($content, $attributes ="")          { return ot('li', $attributes)  
 function optgroup($label, $options)             { return ot('optgroup', attr_label($label)) . $options . ct('optgroup'); }
 function option($value, $content, $attributes=""){ return ot('option', attr_value($value) . $attributes) . $content . ct('option'); }
 function p($content, $attributes ="")           { return ot('p', $attributes)      . $content . ct('p'); }
+function script($content, $type="text/javascript") { return ot('script', attr_type($type)) . $content . ct('script'); }
 function select($name, $content, $attributes=""){ return ot('select', attr_name($name) . $attributes ) . $content . ct('select'); }
 function span($content, $attributes ="")         { return ot('span', $attributes)   . $content . ct('span'); }
 function textarea($content, $attributes ="")    { return ot('textarea', $attributes)  . $content . ct('textarea');}
@@ -105,4 +106,4 @@ function colgroup($number_of_cols) {
     }
     return ot('colgroup') . $cols . ct('colgroup');
 }
-?>
+
