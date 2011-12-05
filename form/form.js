@@ -158,7 +158,7 @@ function accordionClick(accordionLink) {
 
 function handleResponse(response) {
 	// reset the elements that have been marked as changed
-	changedEls = null;
+	changedEls = {};
 	
 	// insert new form
 	response = jQuery.parseJSON(response.slice(0, -1));
