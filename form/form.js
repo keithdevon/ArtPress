@@ -55,22 +55,28 @@ function getMessageDarkerColor( valuesMap ) {
 		return failColorDark;
 	}
 }
+function setMessage( obj, valuesMap, delayTime, fadeOutTime ) {
+	obj.hide();
+	obj.html( valuesMap['message'] );
+	setMessageColor( obj, valuesMap );
+	obj.show();
+	obj.delay( delayTime );
+	if (fadeOutTime > 0 ) obj.fadeOut( fadeOutTime );
+}
 function setMessageColor(obj, valuesMap) {
 	// set the background color
 	obj.css('background-color', getMessageColor(valuesMap) );
 	obj.css('border-color', getMessageDarkerColor(valuesMap) );
+}
+function getThemeNotifications() {
+	return jQuery('#themeNotifications');	
 }
 function updateFormInputs( valuesMap ) {
 	// update current config information
 	jQuery("[name='current_config_type']").attr('value', valuesMap['configID'][0] );
 	jQuery("[name='current_config_name']").attr('value', valuesMap['configID'][1] );
 	
-	var notes = jQuery('#themeNotifications');
-	notes.html( valuesMap['message'] );
-
-	setMessageColor(notes, valuesMap);
-	notes.show();
-	notes.delay(3000).fadeOut(1500);
+	setMessage( jQuery('#themeNotifications'), valuesMap, 3000, 1500 );
 	
 	var liveSwitch = jQuery('#live_switch');
 	if (valuesMap['isLive']) {
@@ -259,6 +265,9 @@ function change_edit_config(selectObj) {
 	}
 }
 function save(configType, configName) {
+	// set save message
+	setMessage(getThemeNotifications(), {'message' : 'saving ...', 'message_type' : 'warning'}, 0, 0);	
+	
 	// make a deep copy of all changed input elements
 	var modifiedInputs = jQuery.extend(true, {}, changedEls);
 	
