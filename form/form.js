@@ -168,28 +168,37 @@ function handleResponse(response) {
 	
 	// insert new form
 	response = jQuery.parseJSON(response.slice(0, -1));
-    var form = jQuery('#ap_options_form');
-    var formHTML = response['formHTML'];
-    form.html(formHTML);
-    
-    // update controls etc
-    updateFormInputs(response);
-    
-    // bring back to life
-    form.fadeIn('fast');
+	var form = jQuery('#ap_options_form');
+	var formHTML = response['formHTML'];
+	form.html(formHTML);
+	
+	// update controls etc
+	updateFormInputs(response);
+	
+	// bring back to life
+	form.fadeIn('fast');
 	jQuery('#config_up_download').fadeIn('fast');
 	spinner.stop();
-    initColorPicker();                     
+	initColorPicker();                     
+	
+	// re-enable controls
+	jQuery('#config-controls input').removeAttr('disabled');
 }
 
 function changeConfig(data) {
-	//jQuery('#-tabs').fadeOut('fast');
+	// disable controls
+	jQuery('#config-controls input').attr('disabled', '');
+	
+	// hide things that are going to chang
 	spinner.spin(target);
 	jQuery('#ap_options_form').fadeOut('fast');
 	jQuery('#config_up_download').fadeOut('fast');
-    jQuery.post(ajaxurl, data, function(response) {
+    
+	// handle response from server
+	jQuery.post(ajaxurl, data, function(response) {
     	handleResponse(response);
     });
+    
 }
 
 function delete_config() {
