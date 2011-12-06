@@ -8,7 +8,7 @@ class Gallery_Base extends CSS_Selector {
 
 class Gallery_Title extends CSS_Selector {
     function __construct($children=null) {
-        parent::__construct('.grid-single h2.gallery-title a', 'gallery titles', $children=null);
+        parent::__construct('h2.gallery-title a', 'gallery titles', $children=null);
     }
 }
 
@@ -32,7 +32,7 @@ class Gallery_Group extends CSS_Selector_Group {
             // TODO: Make this conditional $children[] = new Galleries_Entry_Meta();
             $children[] = new Gallery_Image_Links();
         }
-        parent::__construct('.category-galleries', 'gallery', $children);
+        parent::__construct('', 'gallery', $children);
     }
 }
 
