@@ -73,3 +73,10 @@ margin:10px 0;
 	top: 50%;
 	left: 50%;
 }
+
+/* Admin title */
+#style-manager h2 {
+display:block;
+width:300px;
+float:left;
+}
