@@ -69,6 +69,7 @@ margin:10px 0;
 	visibility: hidden;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 /* Admin title */
 #style-manager h2 {
@@ -76,9 +77,14 @@ display:block;
 width:300px;
 float:left;
 =======
+=======
+>>>>>>> c2bbb03bc42f15715c9ebb84ec1d92b4c973c608
 #initial_load_spinner {
 	position: fixed;
 	top: 50%;
 	left: 50%;
+<<<<<<< HEAD
+>>>>>>> c2bbb03bc42f15715c9ebb84ec1d92b4c973c608
+=======
 >>>>>>> c2bbb03bc42f15715c9ebb84ec1d92b4c973c608
 }
