@@ -37,9 +37,9 @@ class ToolTips {
 
         /* Typography */
         "Typography_Tab"		   => "Font and text settings",
-        "Section_Foreground_Color" => "Select the text color of the element. Colors can be set in Global Settings",
-        "Section_Font"             => "Select the font family of the element. Font families can be set in Global Settings.",
-        "Section_Font_Size"        => "Select the font size here. Font sizes are based on the base font size and the font size ratio. You can edit these in Global Settings.",
+        "Section_Foreground_Color" => "Select the text color of the element. These colors can be changed in the Palette tab.",
+        "Section_Font"             => "Select the font family of the element. These font families can be changed in the Palette tab.",
+        "Section_Font_Size"        => "Select the font size here. Font sizes are based on the base font size and the font size ratio. You can edit these in the Palette tab.",
         "Font_Style"               => "Select from Normal, Italic or Oblique.",
         "Font_Weight"              => "Sets the boldness of a font.",
         "Text_Align"               => "Align the text to the left, right, center or fully justified.",
