@@ -47,8 +47,8 @@ function init_register_scripts() {
 
     // register scripts
     wp_register_script( 'jquery-ui-cdn' , 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
-    wp_register_script( 'jQuery.form' ,   $template_dir . '/js/jquery.form.js' , null , '2.83' , true  );                                                          
-    wp_register_script( 'spin' ,          $template_dir . '/js/spin.min.js'    , null , '1.0'  , false );                                                         
+    wp_register_script( 'jQuery.form' ,   $template_dir . '/form/js/jquery.form.js' , null , '2.83' , true  );                                                          
+    wp_register_script( 'spin' ,          $template_dir . '/form/js/spin.min.js'    , null , '1.0'  , false );                                                         
     wp_register_script( 'header' ,        $template_dir . '/form/js/header.js' , null , '1.0'  , false );
     wp_register_script( 'footer' ,        $template_dir . '/form/js/footer.js' , null , '1.0'  , true  );                                                           
 
