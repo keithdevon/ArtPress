@@ -517,20 +517,21 @@ class Configuration extends Tab_Group {
         return $script . $form_tab_bodies;
     }
     
+ 	// TODO delete?
     static function script() {?><script type='text/javascript'>
- 
         </script><?php
     }
     static function get_current_configuration_settings($options=null) {
         if($options == null) $options = get_option('ap_options');
         if( isset($options['current-save-id']) && $current_save_id = $options['current-save-id'] )  {
-            //if( $config = $options['configurations'][$current_save_id[0]][$current_save_id[1]] ) {
-            //    return $config;              
-            //}
             return $options['configurations'][$current_save_id[0]][$current_save_id[1]];
         } else {
             return null;
         }
+    }
+    static function get_live_configuration_settings($options=null) {
+        if($options == null) $options = get_option('ap_options');
+        return get_live_config_values($options);
     }
 }
 /**

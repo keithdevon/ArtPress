@@ -28,7 +28,6 @@ require_once $dir . 'form/default-configurations.php';
 require_once $dir . 'form/image-form.php';
 require_once $dir . 'form/ajax-handlers.php';
 
-//add_action( 'admin_init', 'init_register_scripts' );
 add_action( 'admin_enqueue_scripts', 'init_register_scripts' );
 add_action( 'admin_init', 'init_artpress_theme' );
 add_action( 'admin_menu', 'init_add_theme_pages' );
@@ -39,61 +38,36 @@ function init_register_scripts() {
     $template_dir = get_bloginfo('template_directory');
     $template_url = get_bloginfo('template_url');
 
-    // register scripts
-    
-    // JQuery UI
-    wp_register_script( 'jquery-ui-cdn' , 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
-    
-    // JQuery Form
-    wp_register_script( 'jQuery.form' ,  $template_dir . '/js/jquery.form.js' , null , '2.83' , true );                                                          
-
-    // Artpress Form
-    wp_register_script( 'form' ,  $template_dir . '/form/form.js' , null , '1.0' , true );                                                           
-    
-    // Spin
-    wp_register_script( 'spin' , $template_dir . '/js/spin.min.js' , null , '1.0' , false );                                                         
-
     // register styles
-        
-    wp_register_style(                                                               
-    	'farbtasticStylesheet',                                                      // handle
-        $template_url . '/scripts/farbtastic/farbtastic.css');                       // src   
-        
-    //wp_register_style(
-    //	'jqueryui1814css',                                                           // handle
-    //    $template_dir . '/js/ui1814/css/ui-lightness/jquery-ui-1.8.14.custom.css');  // src   
     wp_register_style( 'jquery-ui-theme-ui-lightness' , 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css' );
-    
-    wp_register_style( 'theme_modifications', $template_dir . '/form/css/theme-modifications.css');
-    
+    wp_register_style( 'farbtasticStylesheet',          $template_url . '/scripts/farbtastic/farbtastic.css');
+    wp_register_style( 'theme_modifications',           $template_dir . '/form/css/theme-modifications.css');
+    wp_register_style( 'image_form',                    $template_url . '/form/css/image-form.css');
+    wp_register_style( 'ArtPressOptionsStylesheet',     $template_url . '/form/css/form.css');
 
-        
-    wp_register_style(
-    	'image_form',                                                                // handle
-        $template_url . '/form/image-form.css');                                     // src   
-    
-    wp_register_style(
-        	'ArtPressOptionsStylesheet',                                                 // handle
-            $template_url . '/form/form.css');                                           // src
+    // register scripts
+    wp_register_script( 'jquery-ui-cdn' , 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
+    wp_register_script( 'jQuery.form' ,   $template_dir . '/js/jquery.form.js' , null , '2.83' , true  );                                                          
+    wp_register_script( 'spin' ,          $template_dir . '/js/spin.min.js'    , null , '1.0'  , false );                                                         
+    wp_register_script( 'header' ,        $template_dir . '/form/js/header.js' , null , '1.0'  , false );
+    wp_register_script( 'footer' ,        $template_dir . '/form/js/footer.js' , null , '1.0'  , true  );                                                           
 
-    // enqueue scripts
-    wp_enqueue_script('jquery-ui-cdn');
-
-    wp_enqueue_script(
-    	'farbtastic', 
-        $template_dir . '/scripts/farbtastic/farbtastic.js', 
-        array('jquery'));
-    wp_enqueue_script('jQuery.form');
-    wp_enqueue_script('form');
-    wp_enqueue_script('spin');
 
     // enqueue styles
     wp_enqueue_style( 'jquery-ui-theme-ui-lightness' );
-    wp_enqueue_style('theme_modifications');
+    wp_enqueue_style( 'theme_modifications' );
     wp_enqueue_style( 'farbtasticStylesheet' );
 	wp_enqueue_style( 'image_form' );
-
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
+
+    // enqueue scripts
+    wp_enqueue_script( 'farbtastic', $template_dir . '/scripts/farbtastic/farbtastic.js', array('jquery'));
+    wp_enqueue_script( 'jquery-ui-cdn' );
+    wp_enqueue_script( 'jQuery.form' );
+    wp_enqueue_script( 'spin' );
+    wp_enqueue_script( 'header' );
+    wp_enqueue_script( 'footer' );
+
 
 }
 /**
@@ -137,19 +111,6 @@ function init_add_theme_pages() {
     
 }
 
-//function page_upgrade_artpress() {
-//    if( is_authenticated() ) {
-//        echo h1('upgrade artpress');
-//        $method='post'; 
-//        $action= ""; // a blank method means the form will submit to this same page
-//        echo form(
-//            $method, 
-//            $action, 
-//            input('submit', attr_name('upgrade') . attr_value('upgrade this theme')) .
-//            wp_nonce_field(null,null,null,false),
-//            null );
-//    } else return;
-//}
 function is_authenticated() {
     // $_POST will store the command to upgrade
     // if it's empty then there is nothing to do
@@ -182,11 +143,7 @@ function is_authenticated() {
     
     echo "successfully got credentials";
 }
-//add_action('admin_menu', 'otto_admin_add_page');
-//
-//function otto_admin_add_page() {
-//    add_theme_page('Otto Test Page', 'Otto Test Options', 'edit_theme_options', 'otto', 'otto_options_page');
-//}
+
 function page_upgrade_artpress() {
     if ( upgrade_artpress() ) return;
     
@@ -350,6 +307,16 @@ function page_edit_config() {
     //screen_icon();
     echo ot('div', attr_class('wrap') . attr_id('style-manager'));
     echo h2( __( 'ArtPress Style Manager' ) );
+    
+    $init_load_script = script(
+        "
+        initSpinner = document.getElementById('initial_load_spinner');
+        spinner = new Spinner(spinOpts).spin(initSpinner);
+        spinner.spin(initSpinner);
+    ");
+    echo div( '', attr_id('initial_load_spinner'));
+    echo $init_load_script;
+    
     $notifications = div('', attr_id('themeNotifications'));
     
     // create buttons

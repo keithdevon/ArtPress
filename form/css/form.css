@@ -29,6 +29,7 @@ colgroup col:FIRST-CHILD{
     padding: 6px 6px 6px 6px;
     border: solid 1px white;
     float: left;
+    border-radius: 3px;
 }
 #config-controls {
     float: right;
@@ -67,10 +68,17 @@ margin:10px 0;
 #ap_options_form {
 	visibility: hidden;
 }
+<<<<<<< HEAD
 
 /* Admin title */
 #style-manager h2 {
 display:block;
 width:300px;
 float:left;
+=======
+#initial_load_spinner {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+>>>>>>> c2bbb03bc42f15715c9ebb84ec1d92b4c973c608
 }

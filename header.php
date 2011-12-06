@@ -60,7 +60,7 @@
 // http://core.trac.wordpress.org/ticket/14365
 
 if($options = get_option('ap_options')) {
-    $has_capability = current_user_can('manage_options'); // TODO is this the correct access right?
+    $has_capability = current_user_can('edit_theme_options'); // TODO is this the correct access right?
     
     if ( $has_capability ) {
 

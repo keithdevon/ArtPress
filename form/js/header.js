@@ -1,6 +1,4 @@
-/**
- * 
- */
+/** Contants ----------------------------------------------------------------*/
 changedEls = {};
 
 successColor = '#AFA';
@@ -15,6 +13,7 @@ warningColorDark = waitingColorDark;
 failColor    = '#FAA';
 failColorDark = '#D88';
 
+/** Spinner -----------------------------------------------------------------*/
 spinOpts = {
 		  lines: 12, // The number of lines to draw
 		  length: 7, // The length of each line
@@ -26,9 +25,7 @@ spinOpts = {
 		  shadow: false // Whether to render a shadow
 		};
 
-target = document.getElementById('style-manager');
-spinner = new Spinner(spinOpts).spin(target);
-spinner.spin(target);
+openAccordions = [];
 
 function inputHasChanged(obj) {
 	changedEls[obj.name] = obj.value;
@@ -55,22 +52,28 @@ function getMessageDarkerColor( valuesMap ) {
 		return failColorDark;
 	}
 }
+function setMessage( obj, valuesMap, delayTime, fadeOutTime ) {
+	obj.hide();
+	obj.html( valuesMap['message'] );
+	setMessageColor( obj, valuesMap );
+	obj.show();
+	obj.delay( delayTime );
+	if (fadeOutTime > 0 ) obj.fadeOut( fadeOutTime );
+}
 function setMessageColor(obj, valuesMap) {
 	// set the background color
 	obj.css('background-color', getMessageColor(valuesMap) );
 	obj.css('border-color', getMessageDarkerColor(valuesMap) );
+}
+function getThemeNotifications() {
+	return jQuery('#themeNotifications');	
 }
 function updateFormInputs( valuesMap ) {
 	// update current config information
 	jQuery("[name='current_config_type']").attr('value', valuesMap['configID'][0] );
 	jQuery("[name='current_config_name']").attr('value', valuesMap['configID'][1] );
 	
-	var notes = jQuery('#themeNotifications');
-	notes.html( valuesMap['message'] );
-
-	setMessageColor(notes, valuesMap);
-	notes.show();
-	notes.delay(3000).fadeOut(1500);
+	setMessage( jQuery('#themeNotifications'), valuesMap, 3000, 1500 );
 	
 	var liveSwitch = jQuery('#live_switch');
 	if (valuesMap['isLive']) {
@@ -112,18 +115,43 @@ function isValidSize(val) {
 		}
 	}
 }
-function checkValidSize(sizeInputEl) {
-	var val = jQuery.trim(sizeInputEl.value);
-	sizeInputEl.value = val;
-	if(isValidSize(val)) {
-		inputHasChanged(sizeInputEl);
-		sizeInputEl.style.background = successColor;
+function isValidHorizontalPosition(val) {
+	if ( val == 'left' || val == 'center' || val == 'right') {
+		return true;
+	} else return false;
+}
+function isValidVerticalPosition(val) {
+	if ( val == 'top' || val == 'center' || val == 'bottom') {
+		return true;
+	} else return false;
+}
+function checkValid( element, checkFunction ) {
+	var val = jQuery.trim(element.value);
+	element.value = val;
+	if(checkFunction(val)) {
+		inputHasChanged(element);
+		element.style.background = successColor;
 	} else {
-		jQuery(sizeInputEl).css('background-color', failColor).animate({'background-color': '#FFF'}, 'slow');
-		sizeInputEl.value = '';
+		jQuery(element).css('background-color', failColor).animate({'background-color': '#FFF'}, 'slow');
+		element.value = '';
 	}
 }
-openAccordions = [];
+function checkValidSize(sizeInputEl) {
+	checkValid( sizeInputEl, isValidSize );
+}
+function checkValidHorizontalPosition( posInputEl ) {
+	checkValid( posInputEl, function(val) {
+			return ( isValidSize(val) || isValidHorizontalPosition(val) );
+		}
+	);
+}
+function checkValidVerticalPosition( posInputEl ) {
+	checkValid( posInputEl, function(val) {
+			return ( isValidSize(val) || isValidVerticalPosition(val) );
+		}
+	);
+}
+
 function setOpenAccordion(tabName, accordionLink) { 
     openAccordions[tabName] = accordionLink;
 }
@@ -145,45 +173,46 @@ function accordionClick(accordionLink) {
 	var tabName = jQuery('.ui-tabs-selected').first().children().html();
 	setOpenAccordion(tabName, accordionLink);
 	updateDependents(accordionLink);
-	
-	// convert selects to jquery selectmenus
-	if( haveBeenOpenedAccordions[accordionLink] != true ) {
-	    haveBeenOpenedAccordions[accordionLink] = true;
-		var selects = jQuery(accordionLink).next().find('select');
-		selects.selectmenu({style:'dropdown'});
-		selects.find('select.section_color').attr('color', 'red');
-	}
 }
 
 
 function handleResponse(response) {
 	// reset the elements that have been marked as changed
-	changedEls = null;
+	changedEls = {};
 	
 	// insert new form
 	response = jQuery.parseJSON(response.slice(0, -1));
-    var form = jQuery('#ap_options_form');
-    var formHTML = response['formHTML'];
-    form.html(formHTML);
-    
-    // update controls etc
-    updateFormInputs(response);
-    
-    // bring back to life
-    form.fadeIn('fast');
+	var form = jQuery('#ap_options_form');
+	var formHTML = response['formHTML'];
+	form.html(formHTML);
+	
+	// update controls etc
+	updateFormInputs(response);
+	
+	// bring back to life
+	form.fadeIn('fast');
 	jQuery('#config_up_download').fadeIn('fast');
 	spinner.stop();
-    initColorPicker();                     
+	initColorPicker();                     
+	
+	// re-enable controls
+	jQuery('#config-controls input').removeAttr('disabled');
 }
 
 function changeConfig(data) {
-	//jQuery('#-tabs').fadeOut('fast');
+	// disable controls
+	jQuery('#config-controls input').attr('disabled', '');
+	
+	// hide things that are going to chang
 	spinner.spin(target);
 	jQuery('#ap_options_form').fadeOut('fast');
 	jQuery('#config_up_download').fadeOut('fast');
-    jQuery.post(ajaxurl, data, function(response) {
+    
+	// handle response from server
+	jQuery.post(ajaxurl, data, function(response) {
     	handleResponse(response);
     });
+    
 }
 
 function delete_config() {
@@ -259,6 +288,9 @@ function change_edit_config(selectObj) {
 	}
 }
 function save(configType, configName) {
+	// set save message
+	setMessage(getThemeNotifications(), {'message' : 'saving ...', 'message_type' : 'warning'}, 0, 0);	
+	
 	// make a deep copy of all changed input elements
 	var modifiedInputs = jQuery.extend(true, {}, changedEls);
 	
@@ -310,7 +342,6 @@ function save_as_config() {
 
 jQuery(document).ready(
 		function() {
-			spinner.stop();
 			jQuery('#ap_options_form').css('visibility', 'visible');
 	    	jQuery('div[id="-tabs"]').bind(  
 	    			'tabsshow', 
@@ -335,5 +366,7 @@ jQuery(document).ready(
 	    				});
 	    			}
 			);
+	    	spinner.stop();
+	    	jQuery('#initial_load_spinner').remove();
 		}
 	);
