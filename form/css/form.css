@@ -1,0 +1,75 @@
+@CHARSET "UTF-8";
+
+select#change_edit_config  {
+    padding: 4px;
+}
+select#change_edit_config {
+    color: #464646;
+}
+
+table.form-table {
+    table-layout: auto;
+    width: 1000px;
+    border-collapse:collapse;
+}
+
+table.form-table textarea {
+	width: 400px;
+}
+
+colgroup {
+    /*width: 80px;*/
+
+}
+colgroup col:FIRST-CHILD{
+    width: 200px;
+}
+#themeNotifications {
+    color: #555;
+    padding: 6px 6px 6px 6px;
+    border: solid 1px white;
+    float: left;
+    border-radius: 3px;
+}
+#config-controls {
+    float: right;
+    text-align: left;
+}
+#form-header .postbox h3 {
+font-size: 15px;
+font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+font-weight: normal;
+line-height: 1;
+padding: 7px 10px;
+}
+.postbox .inside {
+margin:10px 0;
+}
+#form-header {
+	/* position: relative;*/
+    margin-top: 12px;
+    margin-bottom: 12px; 
+    height: 90px;
+}
+#config_up_download {
+	float: right;
+}
+#config_up_download form {
+	display:inline;
+}
+#config_up_download form input[type=submit] {
+	border: none;
+	color: #21759B;
+}
+#config_up_download form input:hover {
+	color: #D54E21;
+}
+
+#ap_options_form {
+	visibility: hidden;
+}
+#initial_load_spinner {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+}
