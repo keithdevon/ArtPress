@@ -30,6 +30,8 @@ colgroup col:FIRST-CHILD{
     border: solid 1px white;
     float: left;
     border-radius: 3px;
+    margin-top:10px;
+    clear:left;
 }
 #config-controls {
     float: right;
