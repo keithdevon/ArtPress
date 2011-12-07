@@ -95,11 +95,22 @@ function updateDependents(section) {
 }
 
 //-----------------------------------------------------------------------------
+jQuery(document).ready(convertGlobalFontsToSelectmenus);
+styleFontDropdown = function (text) {
+	var newText = "<span style='font-family:" + text +";'>" + text + "</span>";
+	return newText;
+};
+function convertGlobalFontsToSelectmenus() {
+    // get the global fonts
+    var fonts = jQuery('select.globalFont');
+    
+    fonts.selectmenu({format : styleFontDropdown});
+}
 
 function updateSectionFontFamilies(section) {
 
     // get the global fonts
-    var fonts = jQuery('.globalFont');
+    var fonts = jQuery('select.globalFont');
 
     // create the new options
         var spaces = "\u00A0\u00A0\u00A0";
