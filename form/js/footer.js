@@ -113,13 +113,14 @@ function updateSectionFontFamilies(section) {
     var fonts = jQuery('select.globalFont');
 
     // create the new options
-        var spaces = "\u00A0\u00A0\u00A0";
+        //var spaces = "\u00A0\u00A0\u00A0";
         // add the null option to the array
         var options = outerHTML(new Option('', 0));
         for ( var i = 0; i < fonts.size(); i++ ) {
            var num = fonts[i].value;
            var selectString = "option[value='" + num + "']";
-           var optHTMLVal = i + spaces + jQuery(fonts[i]).find(selectString).html();
+           var optHTMLVal = //i + spaces + 
+           jQuery(fonts[i]).find(selectString).html();
            var opt = new Option(optHTMLVal, i+1);
            options += outerHTML(opt);
         }
