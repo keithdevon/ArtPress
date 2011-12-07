@@ -176,17 +176,18 @@ $font_family_options = array('',
                     	);
 // FONT
 class Global_Font_Family extends Setting_Dropdown {
-    private static $global_font_family_instances = array();
+    private static $global_font_family_chosen_instances = array();
 
     function __construct($display_name, $value=0) {
         global $font_family_options;
         parent::__construct('font-family', $display_name, $font_family_options, $value);
-        self::$global_font_family_instances[] = $this;
+        self::$global_font_family_chosen_instances[] = $this;
     }
 
     static function get_global_font_family_options() {
         $list = array('');
-        foreach (self::$global_font_family_instances as $global_font) {
+        $gffci = self::$global_font_family_chosen_instances;
+        foreach ( $gffci as $global_font) {
            $v = $global_font->get_value();
            $global_options = $global_font->get_opts();
            $font = $global_options[$v];
