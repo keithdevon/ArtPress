@@ -106,7 +106,16 @@ function convertGlobalFontsToSelectmenus() {
     
     fonts.selectmenu({format : styleFontDropdown});
 }
-
+function convertSectionFontsToSelectmenus(accordionSection) {
+	var sectionFonts = jQuery(accordionSection).find('select.section_font');
+	sectionFonts.selectmenu({format : styleFontDropdown});
+}
+jQuery(document).ready(function() {
+	jQuery('.ui-accordion').bind('accordionchange', function(event, ui){ 
+		convertSectionFontsToSelectmenus(ui.newContent);
+	});
+	
+});
 function updateSectionFontFamilies(section) {
 
     // get the global fonts
