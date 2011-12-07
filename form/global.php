@@ -321,7 +321,7 @@ class Global_Settings extends Main_Tab  {
 
             $members[] = new Logo_Image_Dropdown();
         }
-        parent::__construct('global settings', 'artpress_options', $members);
+        parent::__construct('palette', 'artpress_options', $members);
     }
     function get_html($pre=null, $post=null) {
         global $page_edit_config;
