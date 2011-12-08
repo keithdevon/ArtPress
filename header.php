@@ -87,7 +87,8 @@ if($options = get_option('ap_options')) {
 	    $current_name = get_current_config_name($options);
 	    if( $has_capability && ( $live_type != $current_type || $live_name != $current_name ) ) {
     	    $theme_name = get_theme_name();
-    	    $link = alink("wp-admin/admin.php?page=artpress", "settings");
+    	    $url = get_bloginfo('url') . "/wp-admin/admin.php?page=artpress";
+    	    $link = alink( $url, "settings");
     	    $content = "This style (<em>{$current_name}</em>) is not live. The live style can be changed in {$theme_name} {$link}";
     	    echo div($content, attr_class('non-live-config-banner')); 
 	    }
