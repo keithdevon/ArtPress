@@ -287,7 +287,7 @@ function change_edit_config(selectObj) {
 		changeConfig(data);
 	}
 }
-function save(configType, configName) {
+function save(configType, configName, actionString) {
 	// set save message
 	setMessage(getThemeNotifications(), {'message' : 'saving ...', 'message_type' : 'warning'}, 0, 0);	
 	
@@ -302,8 +302,9 @@ function save(configType, configName) {
 	}
 	
 	var inputString = JSON.stringify(modifiedInputs);
+
     var data = {
-        action: 'save_config',
+        action: actionString,
         inputs: {
 			'configType' : configType,
 			'configName' : configName,
@@ -328,7 +329,7 @@ function save_config() {
 	var currentConfigType = jQuery("input[name=current_config_type]").val();
 	var currentConfigName = jQuery("input[name=current_config_name]").val();
 
-	save(currentConfigType, currentConfigName);
+	save(currentConfigType, currentConfigName, 'save_config');
 }
 
 function save_as_config() {
@@ -336,7 +337,7 @@ function save_as_config() {
 	
 	if(candidate_config_name) {
 		// TODO check for outstanding changes	
-		save('user', candidate_config_name);
+		save('user', candidate_config_name, 'save_as_config');
 	}
 }
 

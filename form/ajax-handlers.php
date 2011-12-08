@@ -27,22 +27,20 @@ function create_change_config_response() {
     );
     return $response;
 }
-
-add_action('wp_ajax_save_config', 'ajax_handle_save_config');
-function ajax_handle_save_config() {  
-    /* 
-     * Format the new settings and update options
-     * */
+function common_save_function( $command, $message ) {
+    /*
+    * Format the new settings and update options
+    * */
     
     $options = get_option('ap_options');
     $inputs = $_POST['inputs'];
-    $current_settings = $inputs['cs'];    
+    $current_settings = $inputs['cs'];
     
     // replace \" with "
-    $no_backslash_quote = str_replace("\\\"" , "\"", $current_settings); 
+    $no_backslash_quote = str_replace("\\\"" , "\"", $current_settings);
     
     // replace \\ with \
-    $no_double_backslash = str_replace("\\\\", "\\", $no_backslash_quote); 
+    $no_double_backslash = str_replace("\\\\", "\\", $no_backslash_quote);
     
     // decode the json format
     $cs = json_decode($no_double_backslash, true);
@@ -53,24 +51,35 @@ function ajax_handle_save_config() {
         $new_key = str_replace(']', '', str_replace('ap_options[cs][', '', $key));
         $values[$new_key] = $cs[$key];
     }
-    $new_settings = array(
-        'command'          => 'save_configuration',
-        'message'         => 'saving configuration',
-    	'cs'              => $values,
-        'current-save-id' => array( $inputs['configType'], $inputs['configName'] )
-    );
+    
+    $new_settings['command'] = $command;
+    $new_settings['message'] = $message;
+    $new_settings['cs'] = $values;
+    $new_settings['current-save-id'] = array( $inputs['configType'], $inputs['configName'] );
+    
     update_option('ap_options', $new_settings);
-
+    
     // send results back to the client in the correct format
     $updated_options = get_option('ap_options');
     $response = array(
-        'configID'         => get_current_config($updated_options)
+            'configID'         => get_current_config($updated_options)
     , 'message'          => $updated_options['message']
     , 'message_type'     => $updated_options['message_type']
     , 'configSelectHTML' => get_config_select_contents($updated_options)
     );
     send_ajax_response($response);
 }
+
+add_action('wp_ajax_save_as_config', 'ajax_handle_save_as_config');
+function ajax_handle_save_as_config() {
+    common_save_function('save_as_configuration', 'saving as configuration');
+}
+
+add_action('wp_ajax_save_config', 'ajax_handle_save_config');
+function ajax_handle_save_config() {  
+    common_save_function('save_configuration', 'saving configuration');
+}
+
 add_action('wp_ajax_get_config', 'ajax_handle_get_config');
 function ajax_handle_get_config() {
     //$options = get_option('ap_options');

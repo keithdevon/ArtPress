@@ -680,7 +680,8 @@ function handle_ap_options( $new_settings ) {
             $options['message_type'] = 'success';
             return $options;
         }
-                  
+
+        // create default options
         elseif ( $new_settings['command'] == 'create_default_options') {
             
             $current_save_id = $new_settings['current-save-id'];
@@ -691,11 +692,29 @@ function handle_ap_options( $new_settings ) {
                 $new_settings['message_type'] = 'success';
             return $new_settings; 
             
-        } elseif ( $new_settings['command'] == 'save_configuration' ) {
+        } 
+        
+        // save as 
+        elseif ( $new_settings['command'] == 'save_as_configuration' ) {
+            $new_config_name = $new_settings['current-save-id'][1];
+            // handle case where user config name already in use
+            if( user_configuration_name_exists($options, $new_config_name ) ) {
+                return handle_user_config_name_exists($options, $new_config_name);
+            } else {
+                $options = save_config(false, $options, 'user', $new_config_name, $new_settings['cs']);
+                return $options;
+            }            
+        } 
+        
+        // save
+        elseif ( $new_settings['command'] == 'save_configuration' ) {
             
             $options = update_config($options, $new_settings);
                
-        } elseif($new_settings['command'] == 'download_current_config') {
+        } 
+        
+        // download current config
+        elseif($new_settings['command'] == 'download_current_config') {
             
             // get the configs
             $config_name = get_current_config_name($options);
@@ -714,7 +733,10 @@ function handle_ap_options( $new_settings ) {
             echo $new_lines_for_close_brackets;
             exit;
             
-        } elseif($new_settings['command'] == 'download_user_configs') {
+        } 
+        
+        // download all user configs
+        elseif($new_settings['command'] == 'download_user_configs') {
             
             // get the configs
             $user_configs = get_user_configurations($options);
@@ -732,7 +754,10 @@ function handle_ap_options( $new_settings ) {
             echo $new_lines_for_close_brackets;
             exit;
             
-        } elseif($new_settings['command'] == 'upload_configs') {
+        } 
+        
+        // upload configs
+        elseif($new_settings['command'] == 'upload_configs') {
             
             // report file upload failure
             if ($_FILES["config_file"]["error"] > 0) {
