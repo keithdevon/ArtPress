@@ -27,7 +27,7 @@ function updateSectionColors(section) {
 			var select_value = sc.value;
 
 			// replace options
-			sc.innerHTML = colorsOptions;
+			sc.innerHTML = colorOptions;
 			if (jQuery(sc).hasClass('section_background_color')) {
 				sc.innerHTML += outerHTML(new Option('transparent', colors.length));
 			}
