@@ -35,38 +35,45 @@ add_action( 'admin_menu', 'init_add_theme_pages' );
 // Load scripts
 function init_register_scripts() {
 
-    $template_dir = get_bloginfo('template_directory');
-    $template_url = get_bloginfo('template_url');
+    $td = get_bloginfo('template_directory');
+    $ghjq = 'http://ajax.googleapis.com/ajax/libs/jqueryui/'; // Google hosted jQuery
 
     // register styles
-    wp_register_style( 'jquery-ui-theme-ui-lightness' , 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css' );
-    wp_register_style( 'farbtasticStylesheet',          $template_url . '/scripts/farbtastic/farbtastic.css');
-    wp_register_style( 'theme_modifications',           $template_dir . '/form/css/theme-modifications.css');
-    wp_register_style( 'image_form',                    $template_url . '/form/css/image-form.css');
-    wp_register_style( 'ArtPressOptionsStylesheet',     $template_url . '/form/css/form.css');
+    wp_register_style( 'jquery-ui-theme-ui-lightness' , $ghjq . '1.8.16/themes/ui-lightness/jquery-ui.css' );
+    wp_register_style( 'farbtasticStylesheet',          $td . '/scripts/farbtastic/farbtastic.css');
+    wp_register_style( 'theme-modifications',           $td . '/form/css/theme-modifications.css');
+    wp_register_style( 'image-form',                    $td . '/form/css/image-form.css');
+    wp_register_style( 'ArtPressOptionsStylesheet',     $td . '/form/css/form.css');
+    wp_register_style( 'selectmenu',                    $td . '/form/css/jquery.ui.selectmenu.css');
+    wp_register_style( 'selectmenu-modifications',       $td . '/form/css/selectmenu-modifications.css');
 
     // register scripts
-    wp_register_script( 'jquery-ui-cdn' , 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
-    wp_register_script( 'jQuery.form' ,   $template_dir . '/js/jquery.form.js' , null , '2.83' , true  );                                                          
-    wp_register_script( 'spin' ,          $template_dir . '/js/spin.min.js'    , null , '1.0'  , false );                                                         
-    wp_register_script( 'header' ,        $template_dir . '/form/js/header.js' , null , '1.0'  , false );
-    wp_register_script( 'footer' ,        $template_dir . '/form/js/footer.js' , null , '1.0'  , true  );                                                           
+    wp_register_script( 'jquery-ui-cdn' , $ghjq .'1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
+    wp_register_script( 'jQuery.form' ,   $td . '/form/js/jquery.form.js'          , null , '2.83' , true  );                                                          
+    wp_register_script( 'farbtastic',     $td . '/scripts/farbtastic/farbtastic.js', array('jquery'));
+    wp_register_script( 'spin' ,          $td . '/form/js/spin.min.js'             , null , '1.0'  , false );                                                         
+    wp_register_script( 'header' ,        $td . '/form/js/header.js'               , null , '1.0'  , false );
+    wp_register_script( 'footer' ,        $td . '/form/js/footer.js'               , null , '1.0'  , true  );
+    wp_register_script( 'selectmenu' ,    $td . '/form/js/jquery.ui.selectmenu.js' , null , '1.0'  , false );
 
 
     // enqueue styles
     wp_enqueue_style( 'jquery-ui-theme-ui-lightness' );
-    wp_enqueue_style( 'theme_modifications' );
+    wp_enqueue_style( 'theme-modifications' );
     wp_enqueue_style( 'farbtasticStylesheet' );
-	wp_enqueue_style( 'image_form' );
+	wp_enqueue_style( 'image-form' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
-
+    wp_enqueue_style( 'selectmenu' );
+    wp_enqueue_style( 'selectmenu-modifications' );
+    
     // enqueue scripts
-    wp_enqueue_script( 'farbtastic', $template_dir . '/scripts/farbtastic/farbtastic.js', array('jquery'));
     wp_enqueue_script( 'jquery-ui-cdn' );
     wp_enqueue_script( 'jQuery.form' );
+    wp_enqueue_script( 'farbtastic');
     wp_enqueue_script( 'spin' );
     wp_enqueue_script( 'header' );
     wp_enqueue_script( 'footer' );
+    wp_enqueue_script( 'selectmenu' );
 
 
 }

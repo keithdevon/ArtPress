@@ -291,9 +291,22 @@ a:hover {
 	left: -9000px;
 }
 
-
 /* =Header
 -------------------------------------------------------------- */
+
+.non-live-config-banner {
+    text-align: center;
+    font-size: 14px;
+    font-family: sans-serif;
+    width: 100%;
+    color: #eee;
+    background: grey;
+    /*border: solid 1px grey;*/
+}
+
+.non-live-config-banner a:link, .non-live-config-banner a:VISITED {
+	color: #eee;
+}
 
 #header {
     padding-bottom:18px;

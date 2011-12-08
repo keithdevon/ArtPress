@@ -355,6 +355,20 @@ jQuery(document).ready(
 							}
 		    			}
 			);
+	    	jQuery('div[id="-tabs"]').bind(  
+	    			'tabsshow', 
+		        	function(event, ui) { 
+		    			// get the open accordion for this tab
+		    			var tabName = ui.tab.innerHTML;
+		    			var oa = getOpenAccordion(tabName);
+						// call updateDependents on the accordion
+						if (oa) {
+							
+							convertSectionFontsToSelectmenus(jQuery(oa).next());
+							convertSectionColorsToSelectmenus(jQuery(oa).next());
+							}
+		    			}
+			);
 	    	jQuery.each(
 	    			jQuery('a[href^="#-tabs-"'), 
 	    			function(tabLink) {
