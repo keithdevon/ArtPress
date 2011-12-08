@@ -41,10 +41,11 @@ function init_register_scripts() {
     // register styles
     wp_register_style( 'jquery-ui-theme-ui-lightness' , $ghjq . '1.8.16/themes/ui-lightness/jquery-ui.css' );
     wp_register_style( 'farbtasticStylesheet',          $td . '/scripts/farbtastic/farbtastic.css');
-    wp_register_style( 'theme_modifications',           $td . '/form/css/theme-modifications.css');
-    wp_register_style( 'image_form',                    $td . '/form/css/image-form.css');
+    wp_register_style( 'theme-modifications',           $td . '/form/css/theme-modifications.css');
+    wp_register_style( 'image-form',                    $td . '/form/css/image-form.css');
     wp_register_style( 'ArtPressOptionsStylesheet',     $td . '/form/css/form.css');
     wp_register_style( 'selectmenu',                    $td . '/form/css/jquery.ui.selectmenu.css');
+    wp_register_style( 'selectmenu-modifications',       $td . '/form/css/selectmenu-modifications.css');
 
     // register scripts
     wp_register_script( 'jquery-ui-cdn' , $ghjq .'1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
@@ -58,12 +59,13 @@ function init_register_scripts() {
 
     // enqueue styles
     wp_enqueue_style( 'jquery-ui-theme-ui-lightness' );
-    wp_enqueue_style( 'theme_modifications' );
+    wp_enqueue_style( 'theme-modifications' );
     wp_enqueue_style( 'farbtasticStylesheet' );
-	wp_enqueue_style( 'image_form' );
+	wp_enqueue_style( 'image-form' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
     wp_enqueue_style( 'selectmenu' );
-
+    wp_enqueue_style( 'selectmenu-modifications' );
+    
     // enqueue scripts
     wp_enqueue_script( 'jquery-ui-cdn' );
     wp_enqueue_script( 'jQuery.form' );

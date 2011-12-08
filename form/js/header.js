@@ -365,6 +365,7 @@ jQuery(document).ready(
 						if (oa) {
 							
 							convertSectionFontsToSelectmenus(jQuery(oa).next());
+							convertSectionColorsToSelectmenus(jQuery(oa).next());
 							}
 		    			}
 			);
