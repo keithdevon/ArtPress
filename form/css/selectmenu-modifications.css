@@ -1,0 +1,9 @@
+.selectmenu-mod {
+    width: 111px; height: 20px;
+    border: 1px #dfdfdf solid; 
+    border-radius: 3px;
+}
+
+.selectmenu-blank {
+	border: none;
+}
