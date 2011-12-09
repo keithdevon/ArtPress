@@ -365,8 +365,8 @@ jQuery(document).ready(
 						// call updateDependents on the accordion
 						if (oa) {
 							
-							convertSectionFontsToSelectmenus(jQuery(oa).next());
-							convertSectionColorsToSelectmenus(jQuery(oa).next());
+							//convertSectionFontsToSelectmenus(jQuery(oa).next());
+							//convertSectionColorsToSelectmenus(jQuery(oa).next());
 							}
 		    			}
 			);

@@ -103,7 +103,7 @@ function updateDependents(section) {
 }
 
 // -----------------------------------------------------------------------------
-jQuery(document).ready(convertGlobalFontsToSelectmenus);
+//jQuery(document).ready(convertGlobalFontsToSelectmenus);
 styleFontDropdown = function(text) {
 	var newText = "<div><div style='min-height:1em; font-family:" + text + ";'>" + text + "</div></div>";
 	return newText;
@@ -151,8 +151,8 @@ function convertSectionColorsToSelectmenus( accordionSection ) {
 }
 jQuery(document).ready(function() {
 	jQuery('.ui-accordion').bind('accordionchange', function(event, ui) {
-		convertSectionFontsToSelectmenus(ui.newContent);
-		convertSectionColorsToSelectmenus(ui.newContent);
+		//convertSectionFontsToSelectmenus(ui.newContent);
+		//convertSectionColorsToSelectmenus(ui.newContent);
 	});
 });
 
