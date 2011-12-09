@@ -41,5 +41,6 @@ Other flags
 
 To make the <code>ap.py</code> extra verbose pass it the <code>-v</code> flag with some other flags.
 
-   ./ap.py -v -z 1.2.3
-   ./ap.py -v -t -p major
+    ./ap.py -v -z 1.2.3
+
+    ./ap.py -v -t -p major
