@@ -105,7 +105,7 @@ function updateDependents(section) {
 // -----------------------------------------------------------------------------
 //jQuery(document).ready(convertGlobalFontsToSelectmenus);
 styleFontDropdown = function(text) {
-	var newText = "<div><div style='min-height:1em; font-family:" + text + ";'>" + text + "</div></div>";
+	var newText = "<div><div class='font-family-select' style='font-family:" + text + ";'>" + text + "</div></div>";
 	return newText;
 };
 styleColorDropdown = function(text) {
