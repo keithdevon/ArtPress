@@ -120,6 +120,25 @@ function init_add_theme_pages() {
     
 }
 
+add_filter('contextual_help', 'artpress_help', 10, 3);
+
+function artpress_help( $contextual_help, $screen_id, $screen ) {
+    global $page_edit_config;
+    
+    if( $screen_id == $page_edit_config ) {
+        //$o = h4("ArtPress");
+        $o = 
+             div( alink(trailingslashit(get_theme_uri()) . 'support/tutorials/', 'ArtPress Tutorials')   )
+           . div( alink(trailingslashit(get_theme_uri()) . 'forums/'          , 'ArtPress Forums')      )
+           . div( alink(trailingslashit(get_theme_uri()) . 'contact-us/'      , 'Contact ArtPress')  )
+        ;
+        
+        $contextual_help .= $o; 
+    }
+    return $contextual_help;
+}
+
+
 function is_authenticated() {
     // $_POST will store the command to upgrade
     // if it's empty then there is nothing to do
