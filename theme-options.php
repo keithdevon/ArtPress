@@ -48,13 +48,14 @@ function init_register_scripts() {
     wp_register_style( 'selectmenu-modifications',       $td . '/form/css/selectmenu-modifications.css');
 
     // register scripts
-    wp_register_script( 'jquery-ui-cdn' , $ghjq .'1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
-    wp_register_script( 'jQuery.form' ,   $td . '/form/js/jquery.form.js'          , null , '2.83' , true  );                                                          
-    wp_register_script( 'farbtastic',     $td . '/scripts/farbtastic/farbtastic.js', array('jquery'));
-    wp_register_script( 'spin' ,          $td . '/form/js/spin.min.js'             , null , '1.0'  , false );                                                         
-    wp_register_script( 'header' ,        $td . '/form/js/header.js'               , null , '1.0'  , false );
-    wp_register_script( 'footer' ,        $td . '/form/js/footer.js'               , null , '1.0'  , true  );
-    wp_register_script( 'selectmenu' ,    $td . '/form/js/jquery.ui.selectmenu.js' , null , '1.0'  , false );
+    wp_register_script( 'jquery-ui-cdn' ,          $ghjq .'1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
+    wp_register_script( 'jQuery.form' ,            $td . '/form/js/jquery.form.js'          , null , '2.83' , true  );                                                          
+    wp_register_script( 'farbtastic',              $td . '/scripts/farbtastic/farbtastic.js', array('jquery'));
+    wp_register_script( 'spin' ,                   $td . '/form/js/spin.min.js'             , null , '1.0'  , false );                                                         
+    wp_register_script( 'header' ,                 $td . '/form/js/header.js'               , null , '1.0'  , false );
+    wp_register_script( 'footer' ,                 $td . '/form/js/footer.js'               , null , '1.0'  , true  );
+    wp_register_script( 'selectmenu' ,             $td . '/form/js/jquery.ui.selectmenu.js' , null , '1.0'  , false );
+    wp_register_script( 'selectmenu-artpress' ,    $td . '/form/js/selectmenu.js'           , null , '1.0'  , false );
 
 
     // enqueue styles
@@ -71,9 +72,10 @@ function init_register_scripts() {
     wp_enqueue_script( 'jQuery.form' );
     wp_enqueue_script( 'farbtastic');
     wp_enqueue_script( 'spin' );
+    wp_enqueue_script( 'selectmenu' );
+    wp_enqueue_script( 'selectmenu-artpress' );
     wp_enqueue_script( 'header' );
     wp_enqueue_script( 'footer' );
-    wp_enqueue_script( 'selectmenu' );
 
 
 }

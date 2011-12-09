@@ -103,59 +103,6 @@ function updateDependents(section) {
 }
 
 // -----------------------------------------------------------------------------
-jQuery(document).ready(convertGlobalFontsToSelectmenus);
-styleFontDropdown = function(text) {
-	var newText = "<div><div class='font-family-select' style='font-family:" + text + ";'>" + text + "</div></div>";
-	return newText;
-};
-styleColorDropdown = function(text) {
-	var title = 'color not specified';
-	var newText = "<div class='selectmenu-mod";
-	// don't add a border to the blank option
-	if(text) { 
-		newText +="' style='background: " + text + ";'";
-		title = text ;
-	} else {
-		newText += " selectmenu-blank'";
-		//newText +=" title=''";
-	}
-	newText += ">";
-	if(text=='transparent') {
-		newText += 'transparent';
-	}
-	newText += "</div>";
-	newText = "<div " + " title='" + title + "'" + ">" + newText + "</div>"; 
-	return newText;
-};
-function convertGlobalFontsToSelectmenus() {
-	// get the global fonts
-	var fonts = jQuery('select.globalFont');
-
-	fonts.selectmenu({
-		format : styleFontDropdown
-	});
-}
-
-function convertSectionFontsToSelectmenus( accordionSection ) {
-	var sectionFonts = jQuery(accordionSection).find('select.section_font');
-	sectionFonts.selectmenu({
-		format : styleFontDropdown
-	});
-}
-function convertSectionColorsToSelectmenus( accordionSection ) {
-	var sectionColors = jQuery(accordionSection).find('select.section_color');
-	sectionColors.selectmenu({
-		format : styleColorDropdown,
-		width : 200
-	});
-}
-jQuery(document).ready(function() {
-	jQuery('.ui-accordion').bind('accordionchange', function(event, ui) {
-		convertSectionFontsToSelectmenus(ui.newContent);
-		convertSectionColorsToSelectmenus(ui.newContent);
-	});
-});
-
 
 function updateSectionFontFamilies(section) {
 
@@ -197,3 +144,5 @@ function updateSectionFontFamilies(section) {
 		}
 	}
 }
+
+jQuery(document).ready( initForm ) ;
