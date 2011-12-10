@@ -176,7 +176,7 @@ function accordionClick(accordionLink) {
 }
 
 
-function handleResponse(response) {
+function handleChangeStyleResponse(response) {
 	// reset the elements that have been marked as changed
 	changedEls = {};
 	
@@ -204,7 +204,7 @@ function handleResponse(response) {
 	jQuery('#config-controls input').removeAttr('disabled');
 }
 
-function changeConfig(data) {
+function changeStyle(data) {
 	// disable controls
 	jQuery('#config-controls input').attr('disabled', '');
 	
@@ -215,7 +215,7 @@ function changeConfig(data) {
     
 	// handle response from server
 	jQuery.post(ajaxurl, data, function(response) {
-    	handleResponse(response);
+    	handleChangeStyleResponse(response);
     });
     
 }
@@ -234,7 +234,7 @@ function delete_config() {
 				'configName' : currentConfigName
 			}
         };
-		changeConfig(data);
+		changeStyle(data);
 	}
 }
 
@@ -251,7 +251,7 @@ function new_config() {
 				}
 		    };
 		        
-			changeConfig(data);
+			changeStyle(data);
 		}
 	}
 
@@ -270,7 +270,7 @@ function set_live_config() {
 			'configName' : currentConfigName
 		}
     };
-	changeConfig(data);
+	changeStyle(data);
 }
 
 function updateConfigSelect(html) {
@@ -289,7 +289,7 @@ function change_edit_config(selectObj) {
 			}
 	    };
 	        
-		changeConfig(data);
+		changeStyle(data);
 	}
 }
 function ajaxSave(configType, configName, actionString) {
