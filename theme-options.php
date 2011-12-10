@@ -53,6 +53,7 @@ function init_register_scripts() {
     wp_register_script( 'farbtastic',              $td . '/scripts/farbtastic/farbtastic.js', array('jquery'));
     wp_register_script( 'spin' ,                   $td . '/form/js/spin.min.js'             , null , '1.0'  , false );                                                         
     wp_register_script( 'header' ,                 $td . '/form/js/header.js'               , null , '1.0'  , false );
+    wp_register_script( 'validate' ,               $td . '/form/js/validate.js'             , null , '1.0'  , false );
     wp_register_script( 'footer' ,                 $td . '/form/js/footer.js'               , null , '1.0'  , true  );
     wp_register_script( 'selectmenu' ,             $td . '/form/js/jquery.ui.selectmenu.js' , null , '1.0'  , false );
     wp_register_script( 'selectmenu-artpress' ,    $td . '/form/js/selectmenu.js'           , null , '1.0'  , false );
@@ -74,9 +75,9 @@ function init_register_scripts() {
     wp_enqueue_script( 'spin' );
     wp_enqueue_script( 'selectmenu' );
     wp_enqueue_script( 'selectmenu-artpress' );
+    wp_enqueue_script( 'validate' );
     wp_enqueue_script( 'header' );
     wp_enqueue_script( 'footer' );
-
 
 }
 /**
