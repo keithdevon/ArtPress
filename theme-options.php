@@ -126,7 +126,6 @@ function artpress_help( $contextual_help, $screen_id, $screen ) {
     global $page_edit_config;
     
     if( $screen_id == $page_edit_config ) {
-        //$o = h4("ArtPress");
         $o = 
              div( alink(trailingslashit(get_theme_uri()) . 'support/tutorials/', 'ArtPress Tutorials')   )
            . div( alink(trailingslashit(get_theme_uri()) . 'forums/'          , 'ArtPress Forums')      )
@@ -138,39 +137,6 @@ function artpress_help( $contextual_help, $screen_id, $screen ) {
     return $contextual_help;
 }
 
-
-function is_authenticated() {
-    // $_POST will store the command to upgrade
-    // if it's empty then there is nothing to do
-    // so go back and display the form
-    if( empty( $_POST ) ) {
-        return true;
-    }
-    
-    check_admin_referer();
-    
-    $form_fields = array('upgrade');
-    $method = '';
-    $unzip_destination = WP_CONTENT_DIR . '/themes/';
-    
-    if ( isset($_POST['upgrade']) ) {
-        $url = wp_nonce_url('themes.php?page=page_upgrade_artpress');
-        //$url = 'themes.php?page=page_upgrade_artpress';
-                                               //($url, $method, false, false, $form_fields)
-        $creds = request_filesystem_credentials($url, $method, false, $unzip_destination, $form_fields);
-        if (false === $creds )  {
-            return; // stop processing here
-        }
-        
-        if ( ! WP_Filesystem($creds) ) {
-            // our credentials were no good, ask the user for them again
-            request_filesystem_credentials($url, $method, true, $unzip_destination, $form_fields);
-            return false;
-        }
-    }
-    
-    echo "successfully got credentials";
-}
 
 function page_upgrade_artpress() {
     if ( upgrade_artpress() ) return;
@@ -326,8 +292,6 @@ class Live_Button    extends Config_Button {
 function page_edit_config() {
     
     update_theme();
-    //if ( ! isset( $_REQUEST['updated'] ) )
-    //    $_REQUEST['updated'] = false;
     
     $options = get_option('ap_options');
 
