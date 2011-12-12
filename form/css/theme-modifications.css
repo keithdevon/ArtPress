@@ -51,7 +51,9 @@
     color: #eb8f00;
     text-transform: capitalize; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, body.wp-admin .ui-state-active a:hover, .ui-state-active a:active { 
-    color: #21759B; text-decoration: none; }
+    color: #21759B; 
+    text-decoration: none;
+    background-color: whiteSmoke; }
 .ui-tabs .ui-tabs-nav li {
     border-color:#ccc;
     }
