@@ -131,7 +131,7 @@ def create_new_version_number( level, current_version ):
 # this function updates the relevant string in that file
 def update_style_css_number( directory, new_number ):
     handleoutput( 'updating the version number in ' + directory + '/style.css to ' + new_number )
-    command =  "sed -i 's/^Version:.*/Version: " 
+    command =  "sed -i -e 's/^Version:.*/Version: " 
     command += new_number 
     command +=  "/' "
     command += directory 
