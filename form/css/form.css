@@ -78,7 +78,11 @@ margin:10px 0;
 
 /* Admin title */
 #style-manager h2 {
-display:block;
-width:300px;
-float:left;
-}
+    display:block;
+    width:300px;
+    float:left;
+    }
+
+#style-manager #config-controls h3 {
+    cursor:default;
+    }

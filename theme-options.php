@@ -338,7 +338,7 @@ function page_edit_config() {
     
     $controls = div( 
                     h3( 
-                        span('Styles') , attr_class('hndle') )
+                        span('Styles') )
                     . div(
                          $delete->get_html() 
                         . $live->get_html() 
