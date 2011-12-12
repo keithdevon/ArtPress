@@ -18,7 +18,11 @@ class ToolTips {
         "Gallery_Tab"     => "Edit the galleries page and site images."               ,
      
         /* Global Settings */
-        "Global_Color"           => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_1"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_2"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_3"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_4"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_5"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
         "Global_Font_Size"       => "Select the base size in pixels. All other font sizes will be based on this and the modular scale.",
         "Global_Font_Size_Ratio" => "Select the modular scale that you wish to use. This will determine the available font sizes and line spacing.",
         "Global_Font_Family"     => "Select a font family (typeface) to be used throughout the site. You can select from a number of font stacks that produce the most consistent results across all systems.",
