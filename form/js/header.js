@@ -103,54 +103,7 @@ function promptOutstandingChanges() {
 		else return false;
 	} else return true;
 }
-function isValidSize(val) {
-    if( val == '' ) {
-		return true;
-    } else {
-    	var num = parseFloat(val);
-    	if( num || num == 0) {
-    		return val.match('px$|em$|%$');
-	}  else {
-			return false;
-		}
-	}
-}
-function isValidHorizontalPosition(val) {
-	if ( val == 'left' || val == 'center' || val == 'right') {
-		return true;
-	} else return false;
-}
-function isValidVerticalPosition(val) {
-	if ( val == 'top' || val == 'center' || val == 'bottom') {
-		return true;
-	} else return false;
-}
-function checkValid( element, checkFunction ) {
-	var val = jQuery.trim(element.value);
-	element.value = val;
-	if(checkFunction(val)) {
-		inputHasChanged(element);
-		element.style.background = successColor;
-	} else {
-		jQuery(element).css('background-color', failColor).animate({'background-color': '#FFF'}, 'slow');
-		element.value = '';
-	}
-}
-function checkValidSize(sizeInputEl) {
-	checkValid( sizeInputEl, isValidSize );
-}
-function checkValidHorizontalPosition( posInputEl ) {
-	checkValid( posInputEl, function(val) {
-			return ( isValidSize(val) || isValidHorizontalPosition(val) );
-		}
-	);
-}
-function checkValidVerticalPosition( posInputEl ) {
-	checkValid( posInputEl, function(val) {
-			return ( isValidSize(val) || isValidVerticalPosition(val) );
-		}
-	);
-}
+
 
 function setOpenAccordion(tabName, accordionLink) { 
     openAccordions[tabName] = accordionLink;
@@ -176,7 +129,7 @@ function accordionClick(accordionLink) {
 }
 
 
-function handleResponse(response) {
+function handleChangeStyleResponse(response) {
 	// reset the elements that have been marked as changed
 	changedEls = {};
 	
@@ -189,9 +142,14 @@ function handleResponse(response) {
 	// update controls etc
 	updateFormInputs(response);
 	
+	
 	// bring back to life
 	form.fadeIn('fast');
 	jQuery('#config_up_download').fadeIn('fast');
+
+	// add event handlers
+	initForm();
+	
 	spinner.stop();
 	initColorPicker();                     
 	
@@ -199,7 +157,7 @@ function handleResponse(response) {
 	jQuery('#config-controls input').removeAttr('disabled');
 }
 
-function changeConfig(data) {
+function changeStyle(data) {
 	// disable controls
 	jQuery('#config-controls input').attr('disabled', '');
 	
@@ -210,7 +168,7 @@ function changeConfig(data) {
     
 	// handle response from server
 	jQuery.post(ajaxurl, data, function(response) {
-    	handleResponse(response);
+    	handleChangeStyleResponse(response);
     });
     
 }
@@ -229,7 +187,7 @@ function delete_config() {
 				'configName' : currentConfigName
 			}
         };
-		changeConfig(data);
+		changeStyle(data);
 	}
 }
 
@@ -246,7 +204,7 @@ function new_config() {
 				}
 		    };
 		        
-			changeConfig(data);
+			changeStyle(data);
 		}
 	}
 
@@ -265,7 +223,7 @@ function set_live_config() {
 			'configName' : currentConfigName
 		}
     };
-	changeConfig(data);
+	changeStyle(data);
 }
 
 function updateConfigSelect(html) {
@@ -284,10 +242,10 @@ function change_edit_config(selectObj) {
 			}
 	    };
 	        
-		changeConfig(data);
+		changeStyle(data);
 	}
 }
-function save(configType, configName, actionString) {
+function ajaxSave(configType, configName, actionString) {
 	// set save message
 	setMessage(getThemeNotifications(), {'message' : 'saving ...', 'message_type' : 'warning'}, 0, 0);	
 	
@@ -329,7 +287,7 @@ function save_config() {
 	var currentConfigType = jQuery("input[name=current_config_type]").val();
 	var currentConfigName = jQuery("input[name=current_config_name]").val();
 
-	save(currentConfigType, currentConfigName, 'save_config');
+	ajaxSave(currentConfigType, currentConfigName, 'save_config');
 }
 
 function save_as_config() {
@@ -337,51 +295,38 @@ function save_as_config() {
 	
 	if(candidate_config_name) {
 		// TODO check for outstanding changes	
-		save('user', candidate_config_name, 'save_as_config');
+		ajaxSave('user', candidate_config_name, 'save_as_config');
 	}
 }
 
-jQuery(document).ready(
-		function() {
-			jQuery('#ap_options_form').css('visibility', 'visible');
-	    	jQuery('div[id="-tabs"]').bind(  
-	    			'tabsshow', 
-		        	function(event, ui) { 
-		    			// get the open accordion for this tab
-		    			var tabName = ui.tab.innerHTML;
-		    			var oa = getOpenAccordion(tabName);
-						// call updateDependents on the accordion
-						if (oa) {
-							updateDependents(oa);
-							}
-		    			}
-			);
-	    	jQuery('div[id="-tabs"]').bind(  
-	    			'tabsshow', 
-		        	function(event, ui) { 
-		    			// get the open accordion for this tab
-		    			var tabName = ui.tab.innerHTML;
-		    			var oa = getOpenAccordion(tabName);
-						// call updateDependents on the accordion
-						if (oa) {
-							
-							convertSectionFontsToSelectmenus(jQuery(oa).next());
-							convertSectionColorsToSelectmenus(jQuery(oa).next());
-							}
-		    			}
-			);
-	    	jQuery.each(
-	    			jQuery('a[href^="#-tabs-"'), 
-	    			function(tabLink) {
-	    				tabLink.bind('click', 
-						function(tabLink) {
-	    					// get the open accordion for this tab
-	    					var name = tabLink.html;
-	    					updateDependents(name);    				
-	    				});
-	    			}
-			);
-	    	spinner.stop();
-	    	jQuery('#initial_load_spinner').remove();
-		}
+function initForm() {
+	jQuery('#ap_options_form').css('visibility', 'visible');
+	jQuery('div[id="-tabs"]').bind(  
+			'tabsshow', 
+        	function(event, ui) { 
+    			// get the open accordion for this tab
+    			var tabName = ui.tab.innerHTML;
+    			var oa = getOpenAccordion(tabName);
+				// call updateDependents on the accordion
+				if (oa) {
+					updateDependents(oa);
+					}
+    			}
 	);
+	selectMenuizeForm();
+	jQuery.each(
+			jQuery('a[href^="#-tabs-"'), 
+			function(tabLink) {
+				tabLink.bind('click', 
+				function(tabLink) {
+					// get the open accordion for this tab
+					var name = tabLink.html;
+					updateDependents(name);    				
+				});
+			}
+	);
+	spinner.stop();
+	jQuery('#initial_load_spinner').remove();
+}
+
+

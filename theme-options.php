@@ -48,13 +48,15 @@ function init_register_scripts() {
     wp_register_style( 'selectmenu-modifications',       $td . '/form/css/selectmenu-modifications.css');
 
     // register scripts
-    wp_register_script( 'jquery-ui-cdn' , $ghjq .'1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
-    wp_register_script( 'jQuery.form' ,   $td . '/form/js/jquery.form.js'          , null , '2.83' , true  );                                                          
-    wp_register_script( 'farbtastic',     $td . '/scripts/farbtastic/farbtastic.js', array('jquery'));
-    wp_register_script( 'spin' ,          $td . '/form/js/spin.min.js'             , null , '1.0'  , false );                                                         
-    wp_register_script( 'header' ,        $td . '/form/js/header.js'               , null , '1.0'  , false );
-    wp_register_script( 'footer' ,        $td . '/form/js/footer.js'               , null , '1.0'  , true  );
-    wp_register_script( 'selectmenu' ,    $td . '/form/js/jquery.ui.selectmenu.js' , null , '1.0'  , false );
+    wp_register_script( 'jquery-ui-cdn' ,          $ghjq .'1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
+    wp_register_script( 'jQuery.form' ,            $td . '/form/js/jquery.form.js'          , null , '2.83' , true  );                                                          
+    wp_register_script( 'farbtastic',              $td . '/scripts/farbtastic/farbtastic.js', array('jquery'));
+    wp_register_script( 'spin' ,                   $td . '/form/js/spin.min.js'             , null , '1.0'  , false );                                                         
+    wp_register_script( 'header' ,                 $td . '/form/js/header.js'               , null , '1.0'  , false );
+    wp_register_script( 'validate' ,               $td . '/form/js/validate.js'             , null , '1.0'  , false );
+    wp_register_script( 'footer' ,                 $td . '/form/js/footer.js'               , null , '1.0'  , true  );
+    wp_register_script( 'selectmenu' ,             $td . '/form/js/jquery.ui.selectmenu.js' , null , '1.0'  , false );
+    wp_register_script( 'selectmenu-artpress' ,    $td . '/form/js/selectmenu.js'           , null , '1.0'  , false );
 
 
     // enqueue styles
@@ -71,10 +73,11 @@ function init_register_scripts() {
     wp_enqueue_script( 'jQuery.form' );
     wp_enqueue_script( 'farbtastic');
     wp_enqueue_script( 'spin' );
+    wp_enqueue_script( 'selectmenu' );
+    wp_enqueue_script( 'selectmenu-artpress' );
+    wp_enqueue_script( 'validate' );
     wp_enqueue_script( 'header' );
     wp_enqueue_script( 'footer' );
-    wp_enqueue_script( 'selectmenu' );
-
 
 }
 /**
@@ -118,38 +121,23 @@ function init_add_theme_pages() {
     
 }
 
-function is_authenticated() {
-    // $_POST will store the command to upgrade
-    // if it's empty then there is nothing to do
-    // so go back and display the form
-    if( empty( $_POST ) ) {
-        return true;
-    }
+add_filter('contextual_help', 'artpress_help', 10, 3);
+
+function artpress_help( $contextual_help, $screen_id, $screen ) {
+    global $page_edit_config;
     
-    check_admin_referer();
-    
-    $form_fields = array('upgrade');
-    $method = '';
-    $unzip_destination = WP_CONTENT_DIR . '/themes/';
-    
-    if ( isset($_POST['upgrade']) ) {
-        $url = wp_nonce_url('themes.php?page=page_upgrade_artpress');
-        //$url = 'themes.php?page=page_upgrade_artpress';
-                                               //($url, $method, false, false, $form_fields)
-        $creds = request_filesystem_credentials($url, $method, false, $unzip_destination, $form_fields);
-        if (false === $creds )  {
-            return; // stop processing here
-        }
+    if( $screen_id == $page_edit_config ) {
+        $o = 
+             div( alink(trailingslashit(get_theme_uri()) . 'support/tutorials/', 'ArtPress Tutorials')   )
+           . div( alink(trailingslashit(get_theme_uri()) . 'forums/'          , 'ArtPress Forums')      )
+           . div( alink(trailingslashit(get_theme_uri()) . 'contact-us/'      , 'Contact ArtPress')  )
+        ;
         
-        if ( ! WP_Filesystem($creds) ) {
-            // our credentials were no good, ask the user for them again
-            request_filesystem_credentials($url, $method, true, $unzip_destination, $form_fields);
-            return false;
-        }
+        $contextual_help .= $o; 
     }
-    
-    echo "successfully got credentials";
+    return $contextual_help;
 }
+
 
 function page_upgrade_artpress() {
     if ( upgrade_artpress() ) return;
@@ -305,8 +293,6 @@ class Live_Button    extends Config_Button {
 function page_edit_config() {
     
     update_theme();
-    //if ( ! isset( $_REQUEST['updated'] ) )
-    //    $_REQUEST['updated'] = false;
     
     $options = get_option('ap_options');
 
