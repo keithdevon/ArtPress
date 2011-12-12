@@ -52,7 +52,8 @@ function getMessageDarkerColor( valuesMap ) {
 		return failColorDark;
 	}
 }
-function setMessage( obj, valuesMap, delayTime, fadeOutTime ) {
+function setMessage( valuesMap, delayTime, fadeOutTime ) {
+	var obj = getThemeNotifications()
 	obj.hide();
 	obj.html( valuesMap['message'] );
 	setMessageColor( obj, valuesMap );
@@ -73,7 +74,7 @@ function updateFormInputs( valuesMap ) {
 	jQuery("[name='current_config_type']").attr('value', valuesMap['configID'][0] );
 	jQuery("[name='current_config_name']").attr('value', valuesMap['configID'][1] );
 	
-	setMessage( jQuery('#themeNotifications'), valuesMap, 3000, 1500 );
+	setMessage( valuesMap, 3000, 1500 );
 	
 	var liveSwitch = jQuery('#live_switch');
 	if (valuesMap['isLive']) {
@@ -130,31 +131,48 @@ function accordionClick(accordionLink) {
 
 
 function handleChangeStyleResponse(response) {
-	// reset the elements that have been marked as changed
-	changedEls = {};
+	if( sessionExpired(response) ) {
+		
+		handleExpiredSession();
 	
-	// insert new form
-	response = jQuery.parseJSON(response.slice(0, -1));
-	var form = jQuery('#ap_options_form');
-	var formHTML = response['formHTML'];
-	form.html(formHTML);
+	} else {
 	
-	// update controls etc
-	updateFormInputs(response);
+		// reset the elements that have been marked as changed
+		changedEls = {};
+		
+		// insert new form
+		response = jQuery.parseJSON(response.slice(0, -1));
+		var form = jQuery('#ap_options_form');
+		var formHTML = response['formHTML'];
+		form.html(formHTML);
+		
+		// update controls etc
+		updateFormInputs(response);
+		
+		
+		// bring back to life
+		form.fadeIn('fast');
+		jQuery('#config_up_download').fadeIn('fast');
 	
-	
-	// bring back to life
-	form.fadeIn('fast');
-	jQuery('#config_up_download').fadeIn('fast');
+		// add event handlers
+		initForm();
+		
+		spinner.stop();
+		initColorPicker();                     
+		
+		// re-enable controls
+		jQuery('#config-controls input').removeAttr('disabled');
+	}
+}
 
-	// add event handlers
-	initForm();
-	
-	spinner.stop();
-	initColorPicker();                     
-	
-	// re-enable controls
-	jQuery('#config-controls input').removeAttr('disabled');
+function sessionExpired( response ) {
+	 return ( response == "-1" ) ? true : false;
+}
+function handleExpiredSession() {
+	setMessage(
+			{'message' : 'WordPress session has expired. Please <a href="' 
+				+ bloginfo.url + '/wp-login.php">login</a> in again.', 
+			 'message_type' : 'fail'}, 0, 0);
 }
 
 function changeStyle(data) {
@@ -247,7 +265,7 @@ function change_edit_config(selectObj) {
 }
 function ajaxSave(configType, configName, actionString) {
 	// set save message
-	setMessage(getThemeNotifications(), {'message' : 'saving ...', 'message_type' : 'warning'}, 0, 0);	
+	setMessage( {'message' : 'saving ...', 'message_type' : 'warning'}, 0, 0);	
 	
 	// make a deep copy of all changed input elements
 	var modifiedInputs = jQuery.extend(true, {}, changedEls);
@@ -270,16 +288,23 @@ function ajaxSave(configType, configName, actionString) {
 		}
     };
     jQuery.post(ajaxurl, data, function(response) {
-		response = jQuery.parseJSON(response.slice(0, -1));
-        updateFormInputs(response);
-        updateConfigSelect(response['configSelectHTML']);
-        for (var name in changedEls ) {
-			var el = jQuery('[name="' + name + '"]');
-			jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
-        }
-        // reset changedEls
-        changedEls = {};
-    });		
+    	if( sessionExpired(response) ) {
+    		
+    		handleExpiredSession();
+    	
+    	} else {
+
+			response = jQuery.parseJSON(response.slice(0, -1));
+		    updateFormInputs(response);
+		    updateConfigSelect(response['configSelectHTML']);
+		    for (var name in changedEls ) {
+				var el = jQuery('[name="' + name + '"]');
+				jQuery(el).animate({backgroundColor: '#FFF'}, 'slow');
+		    }
+		    // reset changedEls
+		    changedEls = {};
+    	}
+	});	
 }
 function save_config() {
 	// TODO check for outstanding changes	

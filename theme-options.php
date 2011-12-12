@@ -77,6 +77,7 @@ function init_register_scripts() {
     wp_enqueue_script( 'selectmenu-artpress' );
     wp_enqueue_script( 'validate' );
     wp_enqueue_script( 'header' );
+    wp_localize_script( 'header', 'bloginfo', array( 'url' => get_bloginfo('url')));
     wp_enqueue_script( 'footer' );
 
 }
