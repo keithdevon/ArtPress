@@ -54,15 +54,18 @@ def handleoutput( output ):
          print output
 
 def deactivate_on_test( function_name ):
-    list = ['update_version_number_file'
-            , 'upload_file'
-            , 'tag_commit'
-            , 'push_tags'
-            ]
+    if (parser.values.test) :
+        list = ['update_version_number_file'
+                , 'upload_file'
+                , 'tag_commit'
+                , 'push_tags'
+                ]
     
-    if ( function_name in list ):
-        return True
-    else: 
+        if ( function_name in list ):
+            return True
+        else: 
+            return False
+    else:
         return False
 
 def commandline( command ):
