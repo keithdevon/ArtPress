@@ -566,7 +566,7 @@ function ht_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 add_image_size( 'Gallery list', 350, 200, true );
 add_image_size( 'full-width', 1140, '', false );
 add_image_size( 'six-col', 548, '', false );
-add_image_size( 'four-col', 300, '', false );
+add_image_size( 'four-col', 350, '', false );
 add_image_size( 'three-col', 252, '', false );
 add_image_size( 'two-col', 154, '', false );
 
