@@ -7,7 +7,7 @@ require_once( TEMPLATEPATH . '/ht-functions/ht-column-shortcode.php' );
 require_once( TEMPLATEPATH . '/ht-widgets/ht-register-widgets.php' );
 require_once( TEMPLATEPATH . '/ht-widgets/ht-child-pages.php' );
 require_once( TEMPLATEPATH . '/ht-functions/ht-socials.php' );
-// TODO: make this conditional require_once( TEMPLATEPATH . '/ht-functions/ht-crumbs.php' );
+require_once( TEMPLATEPATH . '/ht-functions/ht-crumbs.php' );
 //require_once( TEMPLATEPATH . '/sidebars/ht-sidebar-picker.php');
 //require_once( TEMPLATEPATH . '/ht-widgets/ht-contact-widget.php');
 
