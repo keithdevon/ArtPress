@@ -28,13 +28,10 @@ require_once $dir . 'form/default-configurations.php';
 require_once $dir . 'form/image-form.php';
 require_once $dir . 'form/ajax-handlers.php';
 
-add_action( 'admin_enqueue_scripts', 'init_register_scripts' );
 add_action( 'admin_init', 'init_artpress_theme' );
 add_action( 'admin_menu', 'init_add_theme_pages' );
 
-// Load scripts
-function init_register_scripts() {
-
+function ap_register_styles() {
     $td = get_bloginfo('template_directory');
     $ghjq = 'http://ajax.googleapis.com/ajax/libs/jqueryui/'; // Google hosted jQuery
 
@@ -45,21 +42,26 @@ function init_register_scripts() {
     wp_register_style( 'image-form',                    $td . '/form/css/image-form.css');
     wp_register_style( 'ArtPressOptionsStylesheet',     $td . '/form/css/form.css');
     wp_register_style( 'selectmenu',                    $td . '/form/css/jquery.ui.selectmenu.css');
-    wp_register_style( 'selectmenu-modifications',       $td . '/form/css/selectmenu-modifications.css');
+    wp_register_style( 'selectmenu-modifications',      $td . '/form/css/selectmenu-modifications.css');
+}
+
+function ap_register_scripts() {
+    $td = get_bloginfo('template_directory');
+    $ghjq = 'http://ajax.googleapis.com/ajax/libs/jqueryui/'; // Google hosted jQuery
 
     // register scripts
-    wp_register_script( 'jquery-ui-cdn' ,          $ghjq .'1.8.5/jquery-ui.min.js' , array('jquery') , '1.8.14.custom.min' );                                                
+    wp_register_script( 'jquery-ui-cdn' ,          $ghjq .'1.8.5/jquery-ui.min.js'          , array('jquery') , '1.8.14.custom.min' );                                                
     wp_register_script( 'jQuery.form' ,            $td . '/form/js/jquery.form.js'          , null , '2.83' , true  );                                                          
-    wp_register_script( 'farbtastic',              $td . '/scripts/farbtastic/farbtastic.js', array('jquery'));
+    wp_register_script( 'farbtastic',              $td . '/scripts/farbtastic/farbtastic.js', array('jquery')       );
     wp_register_script( 'spin' ,                   $td . '/form/js/spin.min.js'             , null , '1.0'  , false );                                                         
     wp_register_script( 'header' ,                 $td . '/form/js/header.js'               , null , '1.0'  , false );
     wp_register_script( 'validate' ,               $td . '/form/js/validate.js'             , null , '1.0'  , false );
     wp_register_script( 'footer' ,                 $td . '/form/js/footer.js'               , null , '1.0'  , true  );
     wp_register_script( 'selectmenu' ,             $td . '/form/js/jquery.ui.selectmenu.js' , null , '1.0'  , false );
     wp_register_script( 'selectmenu-artpress' ,    $td . '/form/js/selectmenu.js'           , null , '1.0'  , false );
+}
 
-
-    // enqueue styles
+function ap_enqueue_styles() {
     wp_enqueue_style( 'jquery-ui-theme-ui-lightness' );
     wp_enqueue_style( 'theme-modifications' );
     wp_enqueue_style( 'farbtasticStylesheet' );
@@ -67,8 +69,9 @@ function init_register_scripts() {
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
     wp_enqueue_style( 'selectmenu' );
     wp_enqueue_style( 'selectmenu-modifications' );
-    
-    // enqueue scripts
+}
+
+function ap_enqueue_scripts() {
     wp_enqueue_script( 'jquery-ui-cdn' );
     wp_enqueue_script( 'jQuery.form' );
     wp_enqueue_script( 'farbtastic');
@@ -79,12 +82,14 @@ function init_register_scripts() {
     wp_enqueue_script( 'header' );
     wp_localize_script( 'header', 'bloginfo', array( 'url' => get_bloginfo('url')));
     wp_enqueue_script( 'footer' );
-
 }
+
 /**
  * Init plugin options to white list our options
  */
 function init_artpress_theme() {
+    ap_register_styles();
+    ap_register_scripts();
     register_setting( 'artpress_options',       'ap_options', 'handle_ap_options' );
     register_setting( 'artpress_image_options', 'ap_images',  'ap_image_validate' );
     init_ap_options();
@@ -120,6 +125,8 @@ function init_add_theme_pages() {
 
     add_submenu_page( 'artpress', 'Upgrade ArtPress', 'Upgrade', 'edit_theme_options', 'upgrade_artpress', 'page_upgrade_artpress');
     
+    add_action('admin_print_styles-'  . $page_edit_config, 'ap_enqueue_styles' );
+    add_action('admin_print_scripts-' . $page_edit_config, 'ap_enqueue_scripts');
 }
 
 add_filter('contextual_help', 'artpress_help', 10, 3);
