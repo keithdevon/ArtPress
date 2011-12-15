@@ -56,6 +56,11 @@ function create_my_post_types() {
             'rewrite' => array( 'slug' => 'galleries' ),
         )
     );
+    
+    if (get_option('artpress_rewrite_flush') == 'yes') {
+        flush_rewrite_rules();
+        update_option('artpress_rewrite_flush', 'no');
+    }
 }
 
 
