@@ -25,7 +25,7 @@ class HTChildMenu extends WP_Widget {
             <?php echo $before_widget; ?>
                   <?php if ( $title )
                         echo $before_title . $title . $after_title;
-                        else echo '<h3 class="widget-title">' . get_the_title() . '</h3>'; ?>
+                        else echo '<h3 class="widget-title">' . get_the_title() . ' Menu</h3>'; ?>
 
                         <ul class="sub-pages">
                         <?php echo $children; ?>

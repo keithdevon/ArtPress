@@ -6,6 +6,7 @@ add_action( 'init', 'create_my_post_types' );
  
 function create_my_post_types() {
   /* register_post_type( 'ap_collections',
+
         array(
             'labels' => array(
                 'name' => _x('Collections', 'post type general name'),
@@ -29,7 +30,7 @@ function create_my_post_types() {
             'register_meta_box_cb' => 'add_collection_metaboxes',
  
         )
-    );*/
+    ); */
     
     register_post_type( 'ap_galleries',
         array(
