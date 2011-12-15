@@ -65,10 +65,12 @@ function ap_enqueue_styles() {
     wp_enqueue_style( 'jquery-ui-theme-ui-lightness' );
     wp_enqueue_style( 'theme-modifications' );
     wp_enqueue_style( 'farbtasticStylesheet' );
-	wp_enqueue_style( 'image-form' );
     wp_enqueue_style( 'ArtPressOptionsStylesheet' );
     wp_enqueue_style( 'selectmenu' );
     wp_enqueue_style( 'selectmenu-modifications' );
+}
+function ap_image_enqueue_styles() {    
+	wp_enqueue_style( 'image-form' );
 }
 
 function ap_enqueue_scripts() {
@@ -114,8 +116,11 @@ function init_add_theme_pages() {
         0                            // menu position
         );
 
+    add_action('admin_print_styles-'  . $page_edit_config, 'ap_enqueue_styles' );
+    add_action('admin_print_scripts-' . $page_edit_config, 'ap_enqueue_scripts');
+
     // set up images page
-    add_submenu_page(
+    $page_images = add_submenu_page(
     	'artpress',                  // parent slug            
         __('Images'),                // page title             
         __('Images'),                // menu title             
@@ -123,11 +128,13 @@ function init_add_theme_pages() {
         'manage_images',             // menu slug              
         'ap_image_upload_page'       // page rendering function
         );
-
+    
+    add_action('admin_print_styles-'  . $page_images, 'ap_image_enqueue_styles' );
+    
+    
+    // upgrade page
     add_submenu_page( 'artpress', 'Upgrade ArtPress', 'Upgrade', 'edit_theme_options', 'upgrade_artpress', 'page_upgrade_artpress');
     
-    add_action('admin_print_styles-'  . $page_edit_config, 'ap_enqueue_styles' );
-    add_action('admin_print_scripts-' . $page_edit_config, 'ap_enqueue_scripts');
 }
 
 add_filter('contextual_help', 'artpress_help', 10, 3);
