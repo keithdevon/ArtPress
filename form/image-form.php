@@ -63,11 +63,13 @@ function ap_image_validate($new_settings) {
     // get previous settings
     $previous_settings = get_option('ap_images');
     if($previous_settings == null) $previous_settings = array();
+    // merge the new settings with the old
+    $new_settings = array_merge_recursive_distinct($previous_settings, $new_settings);
 
     // delete images
     if( isset($new_settings['delete-image']) && $delete = $new_settings['delete-image'] ) {
         foreach( array_keys($delete) as $aid ) {
-            unset($previous_settings['images'][$aid]);
+            unset($new_settings['images'][$aid]);
             wp_delete_attachment($aid);
 
             // delete logo-image from settings if the logo image is being deleted
@@ -109,7 +111,5 @@ function ap_image_validate($new_settings) {
         }
     }
 
-    // merge the new settings with the old
-    $new_settings = array_merge_recursive_distinct($previous_settings, $new_settings);
     return $new_settings;
 }
