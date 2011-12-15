@@ -8,6 +8,7 @@ function attribute($name, $value) {
 function attr_action        ($value) { return attribute('action',      $value);     }
 function attr_alt           ($value) { return attribute('alt',         $value);     }
 function attr_class         ($value) { return attribute('class',       $value);     }
+function attr_colspan       ($value) { return attribute('colspan',     $value);     }
 function attr_enctype       ($value) { return attribute('enctype',     $value);     }
 function attr_for           ($value) { return attribute('for',         $value);     }
 function attr_href          ($value) { return attribute('href',        $value);     }
@@ -24,6 +25,7 @@ function attr_on_mouse_down ($value) { return attribute('onmousedown', $value); 
 function attr_on_mouse_up   ($value) { return attribute('onmouseup',   $value);     }
 function attr_on_mouse_over ($value) { return attribute('onmouseover', $value);     }
 function attr_readonly      ()       { return attribute('readonly',    'readonly'); }
+function attr_rowspan       ($value) { return attribute('rowspan',     $value);     }
 function attr_size          ($value) { return attribute('size',        $value);     }
 function attr_src           ($value) { return attribute('src',         $value);     }
 function attr_title         ($value) { return attribute('title',       $value);     }
