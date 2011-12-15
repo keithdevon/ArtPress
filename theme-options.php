@@ -93,6 +93,7 @@ function init_artpress_theme() {
     register_setting( 'artpress_options',       'ap_options', 'handle_ap_options' );
     register_setting( 'artpress_image_options', 'ap_images',  'ap_image_validate' );
     init_ap_options();
+    if (get_option('blogname') == FALSE) add_option('artpress_rewrite_flush', 'yes'); //Flush the rewrite rules for our CPTs
 }
 
 $page_edit_config = null;
