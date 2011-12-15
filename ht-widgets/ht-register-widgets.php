@@ -11,7 +11,8 @@
 function twentyten_widgets_init() {
 
     // Area 7, located in the header. Empty by default.
-	register_sidebar( array(
+	/* TODO:
+    register_sidebar( array(
 		'name' => __( 'Header Widget Area', 'twentyten' ),
 		'id' => 'header-widget-area',
 		'description' => __( 'The header widget area', 'twentyten' ),
@@ -20,6 +21,7 @@ function twentyten_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
+	*/
 
 	// Sidebar A
 	register_sidebar( array(
