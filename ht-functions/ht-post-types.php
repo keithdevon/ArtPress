@@ -85,6 +85,7 @@ function ap_register_taxonomies() {
                 'new_item_name' => __( 'New Collection Name' ),
                 'menu_name' => __( 'Collections' ), ),
             'hierarchical' => true,
+            'rewrite' => array( 'slug' => 'collection' ),
         )
     );
 }
