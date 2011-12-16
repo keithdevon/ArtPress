@@ -5,7 +5,7 @@
 add_action( 'init', 'create_my_post_types' );
  
 function create_my_post_types() {
-  /* register_post_type( 'ap_collections',
+   register_post_type( 'ap_collections',
 
         array(
             'labels' => array(
@@ -30,7 +30,7 @@ function create_my_post_types() {
             'register_meta_box_cb' => 'add_collection_metaboxes',
  
         )
-    ); */
+    );
     
     register_post_type( 'ap_galleries',
         array(
@@ -85,7 +85,6 @@ function ap_register_taxonomies() {
                 'new_item_name' => __( 'New Collection Name' ),
                 'menu_name' => __( 'Collections' ), ),
             'hierarchical' => true,
-            'rewrite' => array( 'slug' => 'collection' ),
         )
     );
 }
