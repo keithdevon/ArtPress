@@ -74,6 +74,12 @@ class Background_Image_Tab extends Sub_Tab {
                     array(
                         new Background_Repeat(),
                         new Background_Attachment(),
+                        new Option_Row_Group('',
+                            array(
+                            new Column_Header('horizontal'),
+                            new Column_Header('vertical')
+                            )
+                        ),
                         new Background_Position()
                         ) 
                  ) 

@@ -13,11 +13,12 @@ function fancybox() {
 </script>
 <?php
 }
-
-if (!is_admin()) {
-	wp_enqueue_script('jquery');
-	wp_enqueue_script('jquery.fancybox', get_stylesheet_directory_uri().'/fancybox/jquery.fancybox.js', array('jquery'), '1.2.6');
-	wp_enqueue_script('jquery.easing', get_stylesheet_directory_uri().'/js/jquery.easing.js', array('jquery'), '1.3');
-	wp_enqueue_style('jquery.fancybox', get_stylesheet_directory_uri().'/fancybox/jquery.fancybox.css', false, '1.2.6');
-	add_action('wp_head', 'fancybox');
+function enqueue_fancybox_scripts() {
+    	wp_enqueue_script('jquery');
+    	wp_enqueue_style('jquery.fancybox', get_stylesheet_directory_uri().'/fancybox/jquery.fancybox.css', false, '1.2.6');
+    	wp_enqueue_script('jquery.fancybox', get_stylesheet_directory_uri().'/fancybox/jquery.fancybox.js', array('jquery'), '1.2.6');
+    	wp_enqueue_script('jquery.easing', get_stylesheet_directory_uri().'/js/jquery.easing.js', array('jquery'), '1.3');
+    	add_action('wp_head', 'fancybox');
 }
+
+add_action('wp_enqueue_scripts', 'enqueue_fancybox_scripts');
