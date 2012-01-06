@@ -7,6 +7,7 @@ require_once( TEMPLATEPATH . '/ht-functions/ht-column-shortcode.php' );
 require_once( TEMPLATEPATH . '/ht-widgets/ht-register-widgets.php' );
 require_once( TEMPLATEPATH . '/ht-widgets/ht-child-pages.php' );
 require_once( TEMPLATEPATH . '/ht-functions/ht-socials.php' );
+//require_once( TEMPLATEPATH . '/ht-functions/ht-crumbs.php' );
 //require_once( TEMPLATEPATH . '/sidebars/ht-sidebar-picker.php');
 //require_once( TEMPLATEPATH . '/ht-widgets/ht-contact-widget.php');
 
@@ -61,9 +62,10 @@ function twentyten_setup() {
 	if ( is_readable( $locale_file ) )
 		require_once( $locale_file );
 
-	// This theme uses wp_nav_menu() in one location.
+	// This theme uses wp_nav_menu() in two locations.
 	register_nav_menus( array(
 		'primary' => __( 'Primary Navigation', 'twentyten' ),
+		'primary-logged-out' => 'Primary Navigation(Logged out)',
 		'secondary' => 'Secondary Menu',
 	) );
 
@@ -565,7 +567,7 @@ function ht_get_attachment_image($attachment_id, $size = 'thumbnail', $icon = fa
 add_image_size( 'Gallery list', 350, 200, true );
 add_image_size( 'full-width', 1140, '', false );
 add_image_size( 'six-col', 548, '', false );
-add_image_size( 'four-col', 300, '', false );
+add_image_size( 'four-col', 350, '', false );
 add_image_size( 'three-col', 252, '', false );
 add_image_size( 'two-col', 154, '', false );
 
@@ -682,7 +684,7 @@ function ap_detect_menu_height() {
                 var ap_menu_height = jQuery(".menu-header ul li").height();
                 jQuery(".menu-header ul li .sub-menu").css("top", ap_menu_height);
             }
-            else() {
+            else {
                 var ap_menu_height = jQuery(".menu ul li").height();
                 jQuery(".menu ul li .children").css("top", ap_menu_height);
             }
@@ -691,3 +693,41 @@ function ap_detect_menu_height() {
 }
 
 add_action( 'wp_footer', 'ap_detect_menu_height' );
+
+
+add_filter("manage_upload_columns", 'upload_columns');
+add_action("manage_media_custom_column", 'media_custom_columns', 0, 2);
+
+function upload_columns($columns) {
+
+	unset($columns['parent']);
+	$columns['better_parent'] = "Parent";
+
+	return $columns;
+
+}
+ function media_custom_columns($column_name, $id) {
+
+	$post = get_post($id);
+
+	if($column_name != 'better_parent')
+		return;
+
+		if ( $post->post_parent > 0 ) {
+			if ( get_post($post->post_parent) ) {
+				$title =_draft_or_post_title($post->post_parent);
+			}
+			?>
+			<strong><a href="<?php echo get_edit_post_link( $post->post_parent ); ?>"><?php echo $title ?></a></strong>, <?php echo get_the_time(__('Y/m/d')); ?>
+			<br />
+			<a class="hide-if-no-js" onclick="findPosts.open('media[]','<?php echo $post->ID ?>');return false;" href="#the-list"><?php _e('Re-Attach'); ?></a>
+
+			<?php
+		} else {
+			?>
+			<?php _e('(Unattached)'); ?><br />
+			<a class="hide-if-no-js" onclick="findPosts.open('media[]','<?php echo $post->ID ?>');return false;" href="#the-list"><?php _e('Attach'); ?></a>
+			<?php
+		}
+
+}
