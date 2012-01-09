@@ -18,7 +18,11 @@ class ToolTips {
         "Gallery_Tab"     => "Edit the galleries page and site images."               ,
      
         /* Global Settings */
-        "Global_Color"           => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_1"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_2"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_3"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_4"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
+        "Global_Color_5"         => "Select a colour to be used throughout the site. Must be a hex value (e.g. #ff0000 for red).",
         "Global_Font_Size"       => "Select the base size in pixels. All other font sizes will be based on this and the modular scale.",
         "Global_Font_Size_Ratio" => "Select the modular scale that you wish to use. This will determine the available font sizes and line spacing.",
         "Global_Font_Family"     => "Select a font family (typeface) to be used throughout the site. You can select from a number of font stacks that produce the most consistent results across all systems.",
@@ -37,9 +41,9 @@ class ToolTips {
 
         /* Typography */
         "Typography_Tab"		   => "Font and text settings",
-        "Section_Foreground_Color" => "Select the text color of the element. Colors can be set in Global Settings",
-        "Section_Font"             => "Select the font family of the element. Font families can be set in Global Settings.",
-        "Section_Font_Size"        => "Select the font size here. Font sizes are based on the base font size and the font size ratio. You can edit these in Global Settings.",
+        "Section_Foreground_Color" => "Select the text color of the element. These colors can be changed in the Palette tab.",
+        "Section_Font"             => "Select the font family of the element. These font families can be changed in the Palette tab.",
+        "Section_Font_Size"        => "Select the font size here. Font sizes are based on the base font size and the font size ratio. You can edit these in the Palette tab.",
         "Font_Style"               => "Select from Normal, Italic or Oblique.",
         "Font_Weight"              => "Sets the boldness of a font.",
         "Text_Align"               => "Align the text to the left, right, center or fully justified.",

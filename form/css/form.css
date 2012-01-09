@@ -9,7 +9,7 @@ select#change_edit_config {
 
 table.form-table {
     table-layout: auto;
-    width: 1000px;
+    width: 800px;
     border-collapse:collapse;
 }
 
@@ -29,10 +29,15 @@ colgroup col:FIRST-CHILD{
     padding: 6px 6px 6px 6px;
     border: solid 1px white;
     float: left;
+    border-radius: 3px;
+    margin-top:10px;
+    clear:left;
 }
 #config-controls {
     float: right;
     text-align: left;
+    clear:right;
+    margin-top:10px;
 }
 #form-header .postbox h3 {
 font-size: 15px;
@@ -66,11 +71,21 @@ margin:10px 0;
 
 #ap_options_form {
 	visibility: hidden;
+	clear:both;
+}
+#initial_load_spinner {
+	position: fixed;
+	top: 50%;
+	left: 50%;
 }
 
 /* Admin title */
 #style-manager h2 {
-display:block;
-width:300px;
-float:left;
-}
+    display:block;
+    width:300px;
+    float:left;
+    }
+
+#style-manager #config-controls h3 {
+    cursor:default;
+    }

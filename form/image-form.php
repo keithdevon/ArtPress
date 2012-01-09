@@ -12,7 +12,8 @@ function get_ap_image_defaults() {
 function ap_image_upload_page() {
     global $post;
     $settings = get_option('ap_images');
-    $o = get_settings_fields('artpress_image_options');
+    $setting_fields = get_settings_fields('artpress_image_options');
+    $images_form = h2('Style images');
 
     // display existing artpress background images
     $rows = row(
@@ -40,22 +41,32 @@ function ap_image_upload_page() {
                 );
             }
         }
-        $o .= h2('Background images');
-        $o .= table($rows);
+        $rows .= row( td(button_submit('delete'), attr_colspan(4)) );
+        $images_form .= table($rows, attr_class('image-table'));
     } else {
-        $o .= p("Uploaded images will be displayed here.");
+        $images_form .= 
+            div( 
+                  span("Uploaded images will be displayed here.")
+                , attr_class('no-images-message') 
+            );
     }
 
     // display new image selector
-    $o .= h2('Upload new image');
-    $rows = row(td('select image') . td(input('file', attr_name('uploaded-image') . attr_size('40') )));
-    $rows .= row(td('optional description') . td(input('text', attr_name('ap_images[image-description]') . attr_size(30) )));
-    $o .= table($rows);
+    $upload_form = h2('Upload new style image');
+    $upload_form .= table( 
+                row(
+                    td('select image') . td(input('file', attr_name('uploaded-image') . attr_size('40') )) 
+                  . td('optional description') . td(input('text', attr_name('ap_images[image-description]') . attr_size(30) ))
+    	          . td( button_submit('upload') )            
+                )
+    );
+
 
     // create rest of page
-	$o .= button_submit('submit');
-	$form = form( 'post', 'options.php', $o, 'multipart/form-data' );
-    $div = div($form, attr_class('wrap, imageupload') );
+    $div = div(
+          form( 'post', 'options.php', $setting_fields . $images_form, 'multipart/form-data' )
+        . form( 'post', 'options.php', $setting_fields . $upload_form, 'multipart/form-data' )
+    , attr_class('wrap, imageupload') );
     echo $div;
 }
 function ap_image_validate($new_settings) {
@@ -63,11 +74,13 @@ function ap_image_validate($new_settings) {
     // get previous settings
     $previous_settings = get_option('ap_images');
     if($previous_settings == null) $previous_settings = array();
+    // merge the new settings with the old
+    $new_settings = array_merge_recursive_distinct($previous_settings, $new_settings);
 
     // delete images
     if( isset($new_settings['delete-image']) && $delete = $new_settings['delete-image'] ) {
         foreach( array_keys($delete) as $aid ) {
-            unset($previous_settings['images'][$aid]);
+            unset($new_settings['images'][$aid]);
             wp_delete_attachment($aid);
 
             // delete logo-image from settings if the logo image is being deleted
@@ -109,7 +122,5 @@ function ap_image_validate($new_settings) {
         }
     }
 
-    // merge the new settings with the old
-    $new_settings = array_merge_recursive_distinct($previous_settings, $new_settings);
     return $new_settings;
 }

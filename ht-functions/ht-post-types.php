@@ -5,7 +5,8 @@
 add_action( 'init', 'create_my_post_types' );
  
 function create_my_post_types() {
-    register_post_type( 'ap_collections',
+   register_post_type( 'ap_collections',
+
         array(
             'labels' => array(
                 'name' => _x('Collections', 'post type general name'),
@@ -54,6 +55,11 @@ function create_my_post_types() {
             'rewrite' => array( 'slug' => 'galleries' ),
         )
     );
+    
+    if (get_option('artpress_rewrite_flush') == 'yes') {
+        flush_rewrite_rules();
+        update_option('artpress_rewrite_flush', 'no');
+    }
 }
 
 
@@ -77,7 +83,7 @@ function ap_register_taxonomies() {
                 'update_item' => __( 'Update Collection' ),
                 'add_new_item' => __( 'Add New Collection' ),
                 'new_item_name' => __( 'New Collection Name' ),
-                'menu_name' => __( 'Collection' ), ),
+                'menu_name' => __( 'Collections' ), ),
             'hierarchical' => true,
         )
     );

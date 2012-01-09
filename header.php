@@ -60,7 +60,7 @@
 // http://core.trac.wordpress.org/ticket/14365
 
 if($options = get_option('ap_options')) {
-    $has_capability = current_user_can('manage_options'); // TODO is this the correct access right?
+    $has_capability = current_user_can('edit_theme_options'); // TODO is this the correct access right?
     
     if ( $has_capability ) {
 
@@ -80,6 +80,19 @@ if($options = get_option('ap_options')) {
 </head>
 
 <body <?php body_class(); ?>>
+	<?php
+	    $live_type = get_live_config_type($options);
+	    $live_name = get_live_config_name($options);
+	    $current_type = get_current_config_type($options);
+	    $current_name = get_current_config_name($options);
+	    if( $has_capability && ( $live_type != $current_type || $live_name != $current_name ) ) {
+    	    $theme_name = get_theme_name();
+    	    $url = get_bloginfo('url') . "/wp-admin/admin.php?page=artpress";
+    	    $link = alink( $url, "settings");
+    	    $content = "This style (<em>{$current_name}</em>) is not live. The live style can be changed in {$theme_name} {$link}";
+    	    echo div($content, attr_class('non-live-config-banner')); 
+	    }
+	 ?>
 
     <div id="header" class="container hfeed">
 		<div id="masthead" class="row">

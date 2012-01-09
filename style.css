@@ -2,9 +2,9 @@
 Theme Name: ArtPress
 Theme URI: wordpress-for-artists.com
 Description: ArtPress has been built specifically for artists. It is based on TwentyTen and the 1140px grid framework from cssgrid.net.
-Tags: Art, 1140px grid
-Author: Heart Themes
-Version: 0.2.4
+Tags: Art, 1140px grid, Artist, Responsive, Customisable
+Author: WordPress for Artists
+Version: 0.4.1
 License: GNU General Public License
 License URI: license.txt
 */
@@ -291,9 +291,22 @@ a:hover {
 	left: -9000px;
 }
 
-
 /* =Header
 -------------------------------------------------------------- */
+
+.non-live-config-banner {
+    text-align: center;
+    font-size: 14px;
+    font-family: sans-serif;
+    width: 100%;
+    color: #eee;
+    background: grey;
+    /*border: solid 1px grey;*/
+}
+
+.non-live-config-banner a:link, .non-live-config-banner a:VISITED {
+	color: #eee;
+}
 
 #header {
     padding-bottom:18px;

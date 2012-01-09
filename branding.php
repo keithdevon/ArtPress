@@ -13,11 +13,18 @@
                 $logo = $name; 
                 // TODO this currently doesn't take into consideration
                 // whether the live config is being viewed 
-                $current_config = Configuration::get_current_configuration_settings();
-                if( $current_config ) {
-                    if( isset($current_config['background-image:url'] ) ) {
+                $has_capability = current_user_can('edit_theme_options'); // TODO is this the correct access right?
+                
+                if ( $has_capability ) {
+                    $config = Configuration::get_current_configuration_settings();
+                }
+                else {
+                    $config = Configuration::get_live_configuration_settings();
+                }
+                if( $config ) {
+                    if( isset($config['background-image:url'] ) ) {
                         if( $image_options = get_option('ap_images') ) {
-                            if( $logo_image = $current_config['background-image:url'] ) {
+                            if( $logo_image = $config['background-image:url'] ) {
                                 $logo_val = intval($logo_image);
                                 if(isset($image_options['images'][$logo_val])) {
                                    if($img_url = $image_options['images'][$logo_val]) {

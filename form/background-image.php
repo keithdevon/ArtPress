@@ -27,6 +27,9 @@ class Background_Horizontal_Position extends Setting_Size_Text_Input {
             return false;
         }
     }
+    function get_html(  ) {
+        return parent::get_html( attr_on_change('checkValidHorizontalPosition(this)') );
+    }
 }
 class Background_Vertical_Position extends Setting_Size_Text_Input {
     function __construct($value='') {
@@ -38,6 +41,9 @@ class Background_Vertical_Position extends Setting_Size_Text_Input {
          } else {
              return false;
          }
+    }
+    function get_html(  ) {
+        return parent::get_html( attr_on_change('checkValidVerticalPosition(this)') );
     }
     function set_name($name) {
         parent::set_name($name);
@@ -68,6 +74,12 @@ class Background_Image_Tab extends Sub_Tab {
                     array(
                         new Background_Repeat(),
                         new Background_Attachment(),
+                        new Option_Row_Group('',
+                            array(
+                            new Column_Header('horizontal'),
+                            new Column_Header('vertical')
+                            )
+                        ),
                         new Background_Position()
                         ) 
                  ) 

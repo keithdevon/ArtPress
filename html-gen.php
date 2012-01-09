@@ -8,6 +8,7 @@ function attribute($name, $value) {
 function attr_action        ($value) { return attribute('action',      $value);     }
 function attr_alt           ($value) { return attribute('alt',         $value);     }
 function attr_class         ($value) { return attribute('class',       $value);     }
+function attr_colspan       ($value) { return attribute('colspan',     $value);     }
 function attr_enctype       ($value) { return attribute('enctype',     $value);     }
 function attr_for           ($value) { return attribute('for',         $value);     }
 function attr_href          ($value) { return attribute('href',        $value);     }
@@ -24,6 +25,7 @@ function attr_on_mouse_down ($value) { return attribute('onmousedown', $value); 
 function attr_on_mouse_up   ($value) { return attribute('onmouseup',   $value);     }
 function attr_on_mouse_over ($value) { return attribute('onmouseover', $value);     }
 function attr_readonly      ()       { return attribute('readonly',    'readonly'); }
+function attr_rowspan       ($value) { return attribute('rowspan',     $value);     }
 function attr_size          ($value) { return attribute('size',        $value);     }
 function attr_src           ($value) { return attribute('src',         $value);     }
 function attr_title         ($value) { return attribute('title',       $value);     }
@@ -86,6 +88,7 @@ function li($content, $attributes ="")          { return ot('li', $attributes)  
 function optgroup($label, $options)             { return ot('optgroup', attr_label($label)) . $options . ct('optgroup'); }
 function option($value, $content, $attributes=""){ return ot('option', attr_value($value) . $attributes) . $content . ct('option'); }
 function p($content, $attributes ="")           { return ot('p', $attributes)      . $content . ct('p'); }
+function script($content, $type="text/javascript") { return ot('script', attr_type($type)) . $content . ct('script'); }
 function select($name, $content, $attributes=""){ return ot('select', attr_name($name) . $attributes ) . $content . ct('select'); }
 function span($content, $attributes ="")         { return ot('span', $attributes)   . $content . ct('span'); }
 function textarea($content, $attributes ="")    { return ot('textarea', $attributes)  . $content . ct('textarea');}
@@ -105,4 +108,4 @@ function colgroup($number_of_cols) {
     }
     return ot('colgroup') . $cols . ct('colgroup');
 }
-?>
+

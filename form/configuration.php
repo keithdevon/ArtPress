@@ -99,8 +99,8 @@ function get_user_configuration_names($options) {
     return array_keys(get_user_configurations($options));
 }
 function user_configuration_name_exists($options, $user_config_name_candidate) {
-    if($names = get_user_configuration_names($options) ) {
-        return isset($names[$user_config_name_candidate]);
+    if($user_configs = get_user_configurations($options) ) {
+        return isset($user_configs[$user_config_name_candidate]);
     }
 }
 

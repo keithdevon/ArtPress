@@ -32,6 +32,7 @@
     font-weight: bold; 
     color: #1c94c4;
     text-transform: capitalize;
+    background: none;
     }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { 
     color: #ccc; 
@@ -39,7 +40,7 @@
     }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
     font-weight: bold;
-    background: #fff; }
+    background: none; }
 .ui-state-hover a, .ui-state-hover a:hover { 
     color: #de5731; 
     text-decoration: none; }
@@ -50,7 +51,9 @@
     color: #eb8f00;
     text-transform: capitalize; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, body.wp-admin .ui-state-active a:hover, .ui-state-active a:active { 
-    color: #21759B; text-decoration: none; }
+    color: #21759B; 
+    text-decoration: none;
+    background-color: whiteSmoke; }
 .ui-tabs .ui-tabs-nav li {
     border-color:#ccc;
     }

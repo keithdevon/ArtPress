@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+
+.imageupload table {
+    border-collapse: separate;
+    }
+.imageupload td, .imageupload th {
+
+    padding: 0.5em;
+
+}
+
+div.no-images-message {
+	margin: 1em; 
+	padding: 1em;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+div.no-images-message span {
+	color: #bbb;
+	font-style: italic;
+	border: 2px dotted #bbb; 
+	padding: 1em;
+}
+table.image-table {
+	border-collapse: collapse;
+	
+}
+
+table.image-table th {
+	text-align: left;
+}
+
+table.image-table td {
+	border-top: 1px solid #bbb;
+    text-align: right;
+    vertical-align: top;
+}
