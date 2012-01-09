@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Three columns, sidebar, content, sidebar
+ * Template Name: Three columns (sidebar, content, sidebar)
  *
  * A custom page template without sidebar.
  *
