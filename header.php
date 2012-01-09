@@ -86,7 +86,7 @@ if($options = get_option('ap_options')) {
             <div class="twelvecol">
                 <?php get_template_part( 'branding' ); // Logo file (branding.php) ?>
             </div>
-        </div>
+        </div><!-- #masthead -->
 
         <div class="row">
             <div id="main-nav" class="twelvecol">
@@ -95,6 +95,5 @@ if($options = get_option('ap_options')) {
         </div>
 
 
-			<div class="clear"></div>
-		</div><!-- #masthead -->
+        <div class="clear"></div>
 	</div><!-- #header -->
