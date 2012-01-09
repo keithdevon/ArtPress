@@ -14,7 +14,7 @@ function updateSectionColors(section) {
 	// get ahold of one section color
 	var sectionDiv = section.nextSibling;
 	// get all section colors
-	var section_colors = jQuery(sectionDiv).find('.section_color');
+	var section_colors = jQuery(sectionDiv).find('select.section_color');
 
 	// compare the global color options with a section color's options
 	// to see if they're inconsistent and therefore need updating
@@ -125,7 +125,7 @@ function updateSectionFontFamilies(section) {
 	// decide if update needs to happen
 	var sectionDiv = section.nextSibling;
 	// get all section fonts
-	var section_fonts = jQuery(sectionDiv).find('.section_font');
+	var section_fonts = jQuery(sectionDiv).find('select.section_font');
 
 	// compare the global font options with a section font's options
 	// to see if they are consistent
