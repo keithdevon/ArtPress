@@ -30,6 +30,9 @@ class Background_Horizontal_Position extends Setting_Size_Text_Input {
     function get_html(  ) {
         return parent::get_html( attr_on_change('checkValidHorizontalPosition(this)') );
     }
+    function get_css_value() {
+        return $this->get_value();
+    }
 }
 class Background_Vertical_Position extends Setting_Size_Text_Input {
     function __construct($value='') {
@@ -50,6 +53,9 @@ class Background_Vertical_Position extends Setting_Size_Text_Input {
     }
     function get_name() {
         return parent::get_name();
+    }
+    function get_css_value() {
+        return $this->get_value();
     }
 }
 class Background_Position extends CSS_Composite {
