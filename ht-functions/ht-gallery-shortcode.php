@@ -121,7 +121,7 @@ function ht_gallery_shortcode($attr) {
 		$link = isset($attr['link']) && 'file' == $attr['link'] ? wp_get_attachment_link($id, $ht_thumnail_size, false) : wp_get_attachment_link($id, $size, true, false);
 	   $break = '';
         $i++;
-        $output .= "<{$itemcol} class='gallery-item ";
+        $output .= "<{$itemcol} class='gallery-item internal-col  ";
         switch ($columns) {
         case 1:
             $col_class = "twelvecol ";

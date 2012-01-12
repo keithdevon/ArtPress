@@ -65,6 +65,7 @@ function twentyten_setup() {
 	// This theme uses wp_nav_menu() in two locations.
 	register_nav_menus( array(
 		'primary' => __( 'Primary Navigation', 'twentyten' ),
+		'primary-logged-out' => 'Primary Navigation(Logged out)',
 		'secondary' => 'Secondary Menu',
 	) );
 
@@ -681,7 +682,7 @@ function ap_detect_menu_height() {
         jQuery(document).ready(function () {
             if(jQuery(".menu-header ul li")) {
                 var ap_menu_height = jQuery(".menu-header ul li").height();
-                jQuery(".menu-header ul li .sub-menu").css("top", ap_menu_height);
+                jQuery(".menu-header>ul>li>.sub-menu").css("top", ap_menu_height);
             }
             else {
                 var ap_menu_height = jQuery(".menu ul li").height();

@@ -42,6 +42,8 @@
     	
     </<?php echo $heading_tag; ?>>
 
-    <div id="site-description"><?php bloginfo( 'description' ); ?></div>
+    <?php if(bloginfo( 'description' )) { ?> 
+        <div id="site-description"><?php bloginfo( 'description' ); ?></div>
+    <?php } ?>
 
 </div><!-- #branding -->

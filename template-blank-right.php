@@ -1,23 +1,16 @@
 <?php
 /**
- * Template Name: Two columns, blank, content
+ * Template Name: Two columns (content, blank)
  *
  * A custom page template without sidebar.
  *
- * The "Template Name:" bit above allows this to be selectable
- * from a dropdown menu on the edit page screen.
- *
- * @package WordPress
- * @subpackage Twenty_Ten
- * @since Twenty Ten 1.0
  */
 
 get_header(); ?>
     <div id="content" class="container">
 		<div class="blank-left row">
-		  <div class="fourcol"></div>
-			<div class="eightcol last" role="main">
-			 <?php get_template_part( 'ht-crumbs' );?>
+            <div class="eightcol" role="main">
+			 <?php// TODO: make this conditional --> get_template_part( 'ht-crumbs' );?>
 
 			<?php
 			/* Run the loop to output the page.
@@ -27,7 +20,8 @@ get_header(); ?>
 			 get_template_part( 'loop', 'page' );
 			?>
 
-			</div><!-- .eightcol last -->
+            </div><!-- .eightcol last -->
+            <div class="fourcol last"></div>
 			<div class="clear"></div>
 		</div><!-- .row -->
     </div><!-- content -->
