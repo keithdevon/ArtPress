@@ -703,7 +703,7 @@ function handle_ap_options( $new_settings ) {
             if( user_configuration_name_exists($options, $new_config_name ) ) {
                 return handle_user_config_name_exists($options, $new_config_name);
             } else {
-                $options = save_config(false, $options, 'user', $new_config_name, $new_settings['cs']);
+                $options = update_config($options, $new_settings);
                 return $options;
             }            
         } 
