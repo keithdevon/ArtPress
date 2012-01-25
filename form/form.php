@@ -66,22 +66,7 @@ interface IHas_Dependents{
     function add_dependent($setting);
     function get_dependents();
 }
-//function get_html_dependents($setting) {
-//    $the_class = get_class($setting);
-//    $o = "\n<script type=\"text/javascript\">\n";
-//    $o .= "dependentsOf_{$the_class} = new Array(";
-//    $arr = '';
-//    foreach($setting->get_dependents() as $dep) {
-//        //$o .= input('hidden', attr_class($setting->get_name()'') . attr_value($dep->get_name()));
-//        $name = $dep->get_name();
-//        $arr .= "'${name}',";
-//    }
-//    //$size = count($arr);
-//    $names  = substr($arr, 0, strlen($arr) -1);
-//    
-//    $o .= "{$names});</script>";
-//    return $o;
-//}
+
 //class Attributes {
 //    private $attributes;
 //    function __construct() {
