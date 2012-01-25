@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * This class represents a setting. It only introduces one new attribute: value.
+ * This class represents a setting.
  * This will be the current value of the setting.
  * @author jsd
  *
