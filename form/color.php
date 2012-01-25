@@ -104,9 +104,6 @@ class Section_Foreground_Color extends Section_Color {
     function __construct($value=0) {
         parent::__construct('color', 'color', $value);
     }
-    //function get_html() {
-    //    parent::get_html();
-    //}
 }
 /**
  * Class to chose one of the preselected colors as the background color
