@@ -59,6 +59,8 @@
 // TODO http://core.trac.wordpress.org/ticket/14673
 // http://core.trac.wordpress.org/ticket/14365
 
+$has_capability = false;
+
 if($options = get_option('ap_options')) {
     $has_capability = current_user_can('edit_theme_options'); // TODO is this the correct access right?
     
