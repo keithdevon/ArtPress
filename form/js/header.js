@@ -271,7 +271,7 @@ function ajaxSave(configType, configName, actionString) {
 	var modifiedInputs = jQuery.extend(true, {}, changedEls);
 	
 	// add all global elements
-	var globalSettings = jQuery('.globalSetting');
+	var globalSettings = jQuery('.globalSetting[name^="ap_options[cs]"]');
 	for(var index = 0; index < globalSettings.length; index++ ) {
 		var gs = globalSettings[index];
 		modifiedInputs[gs.name] = gs.value;
