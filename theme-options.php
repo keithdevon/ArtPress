@@ -360,20 +360,20 @@ function page_edit_config() {
     // download all configs form
     $setting_fields = get_settings_fields('artpress_options');
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_user_configs'));
-    $submit = input('submit', attr_value('download all user configs'));
+    $submit = input('submit', attr_value('download all user styles'));
     $download_all_controls = form('post', 'options.php', $setting_fields . $hidden . $submit, null);
     
     // download current config form
     $setting_fields = get_settings_fields('artpress_options');
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_current_config'));
-    $submit = input('submit', attr_value('download current config'));
+    $submit = input('submit', attr_value('download current style'));
     $download_current_controls = form('post', 'options.php', $setting_fields . $hidden . $submit, null);
     
     // upload configs
     $setting_fields = get_settings_fields('artpress_options');
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('upload_configs'));
     $file   = input('file', attr_name('config_file'));
-    $submit = input('submit', attr_value('upload configs'));
+    $submit = input('submit', attr_value('upload styles'));
     $upload_controls = form('post', 'options.php', $setting_fields . $hidden . $file . $submit, "multipart/form-data");
 
     // form content
