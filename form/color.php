@@ -28,12 +28,15 @@ abstract class Global_Color extends Setting_Text {
     function get_html() {
         return parent::get_html( attr_class('colorwell globalColor globalSetting') );
     }
+    static function reset_static_instances() {
+        self::$global_color_instances = array();
+    }
 }
 
 class Global_Color_1 extends Global_Color { 
     function __construct( $value='#000000' ) { 
         parent::__construct('color', 'color 1', $value); 
-    } 
+    }
 }
 
 class Global_Color_2 extends Global_Color { 
