@@ -59,18 +59,12 @@ class Global_Font_Group extends Option_Group {
     private $dependents = array();
 
     function __construct($display_name, $members=array()) {
-        //$self_singleton = self::$singleton;
-       // if( !$self_singleton ) {
-            Global_Font_Family::reset_static_instances();
-            //$gf1 = new Global_Font_Family('Font family 1', 0);
-            //$gf2 = new Global_Font_Family('Font family 2', 0);
-            //$gf3 = new Global_Font_Family('Font family 3', 0);
-            $gf1 = new Global_Font_Family_1(0);
-            $gf2 = new Global_Font_Family_2(0);
-            $gf3 = new Global_Font_Family_3(0);
-            parent::__construct($display_name, array($gf1, $gf2, $gf3));
-            self::$singleton = $this;
-        //}
+        Global_Font_Family::reset_static_instances();
+        $gf1 = new Global_Font_Family_1(0);
+        $gf2 = new Global_Font_Family_2(0);
+        $gf3 = new Global_Font_Family_3(0);
+        parent::__construct($display_name, array($gf1, $gf2, $gf3));
+        self::$singleton = $this;
     }
     function get_dependents() {
         return $this->dependents;
