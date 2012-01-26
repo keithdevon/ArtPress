@@ -175,13 +175,15 @@ $font_family_options = array('',
                         	'Verdana, Tahoma, Geneva, sans-serif'
                     	);
 // FONT
-class Global_Font_Family extends Setting_Dropdown {
+abstract class Global_Font_Family extends Setting_Dropdown {
     private static $global_font_family_chosen_instances = array();
 
-    function __construct($display_name, $value=0) {
+    function __construct($name, $display_name, $value=0) {
         global $font_family_options;
-        parent::__construct('font-family', $display_name, $font_family_options, $value);
+        parent::__construct($name, $display_name, $font_family_options, $value);
+        $before = self::$global_font_family_chosen_instances;
         self::$global_font_family_chosen_instances[] = $this;
+        $after = self::$global_font_family_chosen_instances;
     }
 
     static function get_global_font_family_options() {
@@ -203,6 +205,32 @@ class Global_Font_Family extends Setting_Dropdown {
         return parent::get_html(attr_class('globalFont globalSetting') //. attr_on_change("updateDependentsOf_Global_Font_Group()")
         );
     }
+    
+    static function reset_static_instances() {
+        self::$global_font_family_chosen_instances = array();
+    }
+}
+
+class Global_Font_Family_1 extends Global_Font_Family {
+    
+    function __construct( $value=0 ) {
+        parent::__construct('font-family', 'Font family 1', $value);
+    }
+    
+}
+class Global_Font_Family_2 extends Global_Font_Family {
+
+    function __construct( $value=0 ) {
+        parent::__construct('font-family__2', 'Font family 2', $value);
+    }
+
+}
+class Global_Font_Family_3 extends Global_Font_Family {
+
+    function __construct( $value=0 ) {
+        parent::__construct('font-family__3', 'Font family 3', $value);
+    }
+
 }
 /**
  * Class to represent a selector of one of the preselected font
@@ -217,7 +245,8 @@ class Section_Font extends CSS_Dropdown_Input implements ISetting_Depends_On_Glo
     }
 
     function get_opts() {
-        return Global_Font_Family::get_global_font_family_options();
+        $gffo = Global_Font_Family::get_global_font_family_options();
+        return $gffo;
     }
     function get_html() {
         return parent::get_html(attr_class('section_font'));

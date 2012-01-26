@@ -360,20 +360,20 @@ function page_edit_config() {
     // download all configs form
     $setting_fields = get_settings_fields('artpress_options');
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_user_configs'));
-    $submit = input('submit', attr_value('download all user configs'));
+    $submit = input('submit', attr_value('download all user styles'));
     $download_all_controls = form('post', 'options.php', $setting_fields . $hidden . $submit, null);
     
     // download current config form
     $setting_fields = get_settings_fields('artpress_options');
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('download_current_config'));
-    $submit = input('submit', attr_value('download current config'));
+    $submit = input('submit', attr_value('download current style'));
     $download_current_controls = form('post', 'options.php', $setting_fields . $hidden . $submit, null);
     
     // upload configs
     $setting_fields = get_settings_fields('artpress_options');
     $hidden = input('hidden', attr_name('ap_options[command]') . attr_value('upload_configs'));
     $file   = input('file', attr_name('config_file'));
-    $submit = input('submit', attr_value('upload configs'));
+    $submit = input('submit', attr_value('upload styles'));
     $upload_controls = form('post', 'options.php', $setting_fields . $hidden . $file . $submit, "multipart/form-data");
 
     // form content
@@ -591,6 +591,24 @@ function import_configs($options, $configs_array) {
     $options = set_message($options, 'success', 'Successfully uploaded config file');
     return $options;
 }
+
+function save_style_json_file( $contents, $filename ) {
+    
+    // get rid of any existing stuff in the buffer, and create new header
+    ob_clean();
+    header( "Content-type: text/plain" );
+    header("Content-Disposition: attachment; filename={$filename}.style.txt");
+    
+    // format the output
+    $new_lines_for_commas = str_replace('",',"\",\n",json_encode( $contents ));
+    $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
+    $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
+    
+    echo $new_lines_for_close_brackets;
+    exit;
+    
+}
+
 /**
  * All user interactions with theme settings are routed through this function.
  * ie everytime the user saves some settings, this function is invoked.
@@ -722,39 +740,14 @@ function handle_ap_options( $new_settings ) {
             $config_name = get_current_config_name($options);
             $config = get_current_config_values($options);
     
-            // get rid of any existing stuff in the buffer, and create new header
-            ob_clean();
-            header( "Content-type: text/plain" );
-            header('Content-Disposition: attachment; filename="current-config.txt"');
-            
-            // format the output
-            $new_lines_for_commas = str_replace(',',",\n",json_encode(array($config_name => $config)));
-            $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
-            $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
-            
-            echo $new_lines_for_close_brackets;
-            exit;
+            save_style_json_file( array($config_name => $config), $config_name );
             
         } 
         
         // download all user configs
         elseif($new_settings['command'] == 'download_user_configs') {
             
-            // get the configs
-            $user_configs = get_user_configurations($options);
-    
-            // get rid of any existing stuff in the buffer, and create new header
-            ob_clean();
-            header( "Content-type: text/plain" );
-            header('Content-Disposition: attachment; filename="user-configs.txt"');
-            
-            // format the output
-            $new_lines_for_commas = str_replace(',',",\n",json_encode($user_configs));
-            $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
-            $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
-            
-            echo $new_lines_for_close_brackets;
-            exit;
+            save_style_json_file( get_user_configurations($options), 'all.user.' );
             
         } 
         

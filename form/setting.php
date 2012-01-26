@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * This class represents a setting. It only introduces one new attribute: value.
+ * This class represents a setting.
  * This will be the current value of the setting.
  * @author jsd
  *
@@ -46,7 +46,6 @@ abstract class Setting extends Hierarchy implements Render_As_HTML, IValidate {
         return array($key=>$value);
     }
     function register_self() {
-        $rs = self::$registered_settings;
         self::$registered_settings[] = $this;
     }
     static function clear_registered_settings() {

@@ -4,18 +4,20 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
     private $dependents = array();
 
     function __construct($display_name, $members=null) {
-        if(!self::$singleton) {
-            if($members == null) {
-                $members = array(
-                    new Global_Color_1(),
-                    new Global_Color_2(),
-                    new Global_Color_3(),
-                    new Global_Color_4(),
-                    new Global_Color_5());
-            }
-            parent::__construct($display_name, $members);
-            self::$singleton = $this;
+        //$self_singleton = self::$singleton;
+        //if( !$self_singleton ) {
+        Global_Color::reset_static_instances();
+        if($members == null) {
+            $members = array(
+                new Global_Color_1(),
+                new Global_Color_2(),
+                new Global_Color_3(),
+                new Global_Color_4(),
+                new Global_Color_5());
         }
+        parent::__construct($display_name, $members);
+        self::$singleton = $this;
+        //}
     }
     function get_dependents() {
         return $this->dependents;
@@ -27,7 +29,7 @@ class Global_Color_Group extends Option_Group implements IHas_Dependents {
         global $page_edit_config;
 
         $children_html = colgroup(3);        
-        get_html_dependents($this);
+        //get_html_dependents($this);
         $children = self::$singleton->get_children();
         $first = true;
         if ( null != $children) {
@@ -57,10 +59,18 @@ class Global_Font_Group extends Option_Group {
     private $dependents = array();
 
     function __construct($display_name, $members=array()) {
-        if(!self::$singleton) {
-            parent::__construct($display_name, $members);
+        //$self_singleton = self::$singleton;
+       // if( !$self_singleton ) {
+            Global_Font_Family::reset_static_instances();
+            //$gf1 = new Global_Font_Family('Font family 1', 0);
+            //$gf2 = new Global_Font_Family('Font family 2', 0);
+            //$gf3 = new Global_Font_Family('Font family 3', 0);
+            $gf1 = new Global_Font_Family_1(0);
+            $gf2 = new Global_Font_Family_2(0);
+            $gf3 = new Global_Font_Family_3(0);
+            parent::__construct($display_name, array($gf1, $gf2, $gf3));
             self::$singleton = $this;
-        }
+        //}
     }
     function get_dependents() {
         return $this->dependents;
@@ -81,7 +91,7 @@ class Global_Font_Group extends Option_Group {
         global $page_edit_config;
 
         $children_html = colgroup(3); 
-        get_html_dependents($this);
+        //get_html_dependents($this);
         $children = self::$singleton->get_children();
         if ( null != $children) {
             foreach($children as $child) {
@@ -104,7 +114,8 @@ class Global_Font_Size_Group extends Option_Group {
     private $dependents = array();
 
     function __construct($display_name, $members=array()) {
-        if(!self::$singleton) {
+        $self_singleton = self::$singleton; 
+        if( !$self_singleton ) { // FIXME
             parent::__construct($display_name, $members);
             self::$singleton = $this;
 
@@ -117,7 +128,7 @@ class Global_Font_Size_Group extends Option_Group {
         global $page_edit_config;
         add_action('admin_footer-' . $page_edit_config, __CLASS__ . "::script");
         $children_html = colgroup(3);
-        get_html_dependents($this);
+        //get_html_dependents($this);
         $children = self::$singleton->get_children();
         if ( null != $children) {
             foreach($children as $child) {
@@ -204,10 +215,7 @@ class Global_Settings extends Main_Tab  {
             $gfss = new Global_Font_Size_Ratio();
             $members[] = new Global_Font_Size_Group('Global Font Size', array($gfs, $gfss));
 
-            $gf1 = new Global_Font_Family('Font family 1', 0);
-            $gf2 = new Global_Font_Family('Font family 2', 0);
-            $gf3 = new Global_Font_Family('Font family 3', 0);
-            $members[] = new Global_Font_Group('Global Fonts', array($gf1, $gf2, $gf3));
+            $members[] = new Global_Font_Group('Global Fonts', null);
 
             $members[] = new Logo_Image_Dropdown();
         }
