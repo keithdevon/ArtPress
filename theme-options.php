@@ -600,11 +600,13 @@ function save_style_json_file( $contents, $filename ) {
     header("Content-Disposition: attachment; filename={$filename}.style.txt");
     
     // format the output
-    $new_lines_for_commas = str_replace('",',"\",\n",json_encode( $contents ));
-    $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
-    $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
+    $json = json_encode( $contents );
+    $new_lines_for_commas         = str_replace('",', "\",\n", $json);
+    $new_lines_for_open_brackets  = str_replace('{',  "{\n",   $new_lines_for_commas);
+    $new_lines_for_close_brackets = str_replace('}',  "}\n",   $new_lines_for_open_brackets);
+    $strip_out_backslash_ns       = str_replace('\n', "\n",    $new_lines_for_close_brackets);
     
-    echo $new_lines_for_close_brackets;
+    echo $strip_out_backslash_ns;
     exit;
     
 }
