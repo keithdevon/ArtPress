@@ -102,4 +102,25 @@ function get_theme_name() {
 function get_theme_uri() {
     return get_this_theme_data('URI');
 }
+
+function replaceTree($search="", $replace="", $array=false, $keys_too=false)
+{
+    if (!is_array($array)) {
+        // Regular replace
+        return str_replace($search, $replace, $array);
+    }
+
+    $newArr = array();
+    foreach ($array as $k=>$v) {
+        // Replace keys as well?
+        $add_key = $k;
+        if ($keys_too) {
+            $add_key = str_replace($search, $replace, $k);
+        }
+
+        // Recurse
+        $newArr[$add_key] = replaceTree($search, $replace, $v, $keys_too);
+    }
+    return $newArr;
+}
 ?>
