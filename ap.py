@@ -45,7 +45,7 @@ def init_vars():
     for line in open( 'theme-options.php' ):
         m = re.search( "\$upload_directory.*CANONICAL", line )
         if( m ):
-            upload_directory = theme_uri + '/www/' + line.split()[-3][:-2][1:]
+            upload_directory = theme_uri + '/www' + line.split()[-3][:-2][1:]
         
     version_number_file_download_uri =  theme_uri + '/'  + version_file_name
     version_number_file_upload_uri   =  theme_uri + '/www/'  + version_file_name
