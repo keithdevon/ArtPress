@@ -364,8 +364,8 @@ div.menu li {
 }
 #access a {
 	display: block;
-	padding: 0;
-	margin:0 2em .5em 0;
+	padding: 0 0 .5em 0;
+	margin:0 2em 0em 0;
 	text-decoration: none;
 }
 #access ul ul {
