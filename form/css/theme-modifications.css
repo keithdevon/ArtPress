@@ -8,6 +8,7 @@
 
 .ui-widget-header { 
     border:none;
+    background:none;
     border-bottom: 1px solid #ddd; 
     background-color: #F1F1F1;
     background-image: -ms-linear-gradient(top,#F9F9F9,#ECECEC);
