@@ -28,7 +28,8 @@ def init_vars():
     global theme_name
     global theme_uri
     global upload_directory
-    global version_number_file_uri
+    global version_number_file_upload_uri
+    global version_number_file_download_uri
     
     new_cwd = os.path.dirname(__file__)
     os.chdir(new_cwd)
@@ -44,9 +45,10 @@ def init_vars():
     for line in open( 'theme-options.php' ):
         m = re.search( "\$upload_directory.*CANONICAL", line )
         if( m ):
-            upload_directory = theme_uri + line.split()[-3][:-2][1:]
+            upload_directory = theme_uri + '/www' + line.split()[-3][:-2][1:]
         
-    version_number_file_uri =  theme_uri + '/'  + version_file_name
+    version_number_file_download_uri =  theme_uri + '/'  + version_file_name
+    version_number_file_upload_uri   =  theme_uri + '/www/'  + version_file_name
 
 def handleoutput( output ):
     verbose = parser.values.verbose 
@@ -84,7 +86,7 @@ def commandline( command ):
     
 # gets the version number for the lastest update from the wpfa.com
 def get_version_number_file( ):
-    current_version_string = commands.getoutput( 'curl -s ' + version_number_file_uri )
+    current_version_string = commands.getoutput( 'curl -s ' + version_number_file_download_uri )
     handleoutput( 'The current version is: ' + current_version_string )
     if( len(current_version_string) == 0 ):
         print "cannot reach " + version_number_file_uri
@@ -96,7 +98,8 @@ def get_version_number_file( ):
 # uses curl/ftp to upload a given file to url
 def upload_file(file, destination_uri):
     handleoutput( 'uploading ' + file + ' to ' + destination_uri )
-    command = 'curl -u k31thd3v0n:kKeio0n\!kduir -T '
+#    command = 'curl -u k31thd3v0n:kKeio0n\!kduir -T '
+    command = 'curl -u artpres1:bArtpr355\!t -T '
     command += file
     command += ' ftp://ftp.' + destination_uri
     return commandline( command )
@@ -111,7 +114,7 @@ def update_version_number_file( new_version ):
         f.write( new_version )
     f.closed
     
-    return upload_file( version_file_path, version_number_file_uri ) 
+    return upload_file( version_file_path, version_number_file_upload_uri ) 
 
 # this takes a verion number x.y.z and according
 # to the level supplied [major,minor,patch] 

@@ -600,11 +600,13 @@ function save_style_json_file( $contents, $filename ) {
     header("Content-Disposition: attachment; filename={$filename}.style.txt");
     
     // format the output
-    $new_lines_for_commas = str_replace('",',"\",\n",json_encode( $contents ));
-    $new_lines_for_open_brackets = str_replace('{', "{\n", $new_lines_for_commas);
-    $new_lines_for_close_brackets = str_replace('}', "}\n", $new_lines_for_open_brackets);
+    $json = json_encode( $contents );
+    $new_lines_for_commas         = str_replace('",', "\",\n", $json);
+    $new_lines_for_open_brackets  = str_replace('{',  "{\n",   $new_lines_for_commas);
+    $new_lines_for_close_brackets = str_replace('}',  "}\n",   $new_lines_for_open_brackets);
+    $strip_out_backslash_ns       = str_replace('\n', "\n",    $new_lines_for_close_brackets);
     
-    echo $new_lines_for_close_brackets;
+    echo $strip_out_backslash_ns;
     exit;
     
 }
@@ -765,7 +767,37 @@ function handle_ap_options( $new_settings ) {
                 $file_name = $_FILES["config_file"]["tmp_name"];
                 $file_contents = file_get_contents($file_name);
 
+                /* need to strip out mid value line breaks to ensure that it is valid JSON */
+                // unique string that is unlikely to used in the CSS
+                $code = "¬£££¬";
+                
+                // 1 denotes true if we have come across an even number of quotes
+                // eg {"hello":"there",\n
+                // -1 denotes false if we have come across an odd number of quotes
+                // eg {"hello":"there\n
+                $closed = 1; 
+                
+                for( $i = 0; $i < strlen($file_contents); $i++ ) {
+                    $char = $file_contents[$i];
+                    if( $char == '"' ) {
+                        // bitwise operation, every time this line is run the value of
+                        // $close will flip between 1 and -1
+                        $closed = $closed ^ 1;
+
+                    /* if we've found a \n character then we need to splice in 
+                     * our unique string inplace of it */
+                    } else if( $char == "\n" ) {
+                        if( !$closed ) { 
+                            $file_contents = substr( $file_contents, 0, $i) . $code . substr( $file_contents, $i+1);
+                        }
+                    }
+                }
+                
                 if($configs_array = json_decode($file_contents, true) ) {
+                    /* now we've successfully parsed our json code 
+                     * we need to replace our unique strings with \n characters */
+                    $configs_array = replaceTree($code, "\n", $configs_array);
+                    
                     $options = import_configs($options, $configs_array);
                 } else {
                     $options['message'] = 'Cannot upload, config file is not well formed JSON';

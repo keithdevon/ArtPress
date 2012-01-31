@@ -181,9 +181,7 @@ abstract class Global_Font_Family extends Setting_Dropdown {
     function __construct($name, $display_name, $value=0) {
         global $font_family_options;
         parent::__construct($name, $display_name, $font_family_options, $value);
-        $before = self::$global_font_family_chosen_instances;
         self::$global_font_family_chosen_instances[] = $this;
-        $after = self::$global_font_family_chosen_instances;
     }
 
     static function get_global_font_family_options() {
