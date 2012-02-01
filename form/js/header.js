@@ -342,7 +342,7 @@ function initForm() {
 	jQuery.each(
 			jQuery('a[href^="#-tabs-"'), 
 			function(tabLink) {
-				tabLink.bind('click', 
+			    jQuery(tabLink).bind('click', 
 				function(tabLink) {
 					// get the open accordion for this tab
 					var name = tabLink.html;

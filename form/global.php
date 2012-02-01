@@ -189,8 +189,7 @@ class Global_Font_Size_Group extends Option_Group {
                        var select_value = sfs.value;
 
                         // replace options
-                        sfs.innerHTML = optionsHTML;
-
+			jQuery(sfs).html(optionsHTML);
                         // reset selected option
                         sfs.value = select_value;
 					}

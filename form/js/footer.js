@@ -21,19 +21,21 @@ function updateSectionColors(section) {
 	var first = section_colors[0];
 	if (colorOptions != first.innerHTML) { // FIXME currently doesn't give
 											// positive result due to whitespace
-		for ( var i = 0; i < section_colors.length; i++) {
-			var sc = section_colors[i];
-			// store currently selected option
-			var select_value = sc.value;
+	    for ( var i = 0; i < section_colors.length; i++) {
+		var sc = section_colors[i];
+		// store currently selected option
+		var select_value = sc.value;
 
-			// replace options
-			sc.innerHTML = colorOptions;
-			if (jQuery(sc).hasClass('section_background_color')) {
-				sc.innerHTML += outerHTML(new Option('transparent', colors.length));
-			}
-			// reset selected option
-			sc.value = select_value;
+		/* replace options */
+		if (jQuery(sc).hasClass('section_background_color')) {
+		    //sc.innerHTML += outerHTML(new Option('transparent', colors.length));
+		    colorOptions += outerHTML(new Option('transparent', colors.length));
 		}
+		jQuery(sc).html( colorOptions );
+		
+		// reset selected option
+		sc.value = select_value;
+	    }
 	}
 }
 
@@ -130,19 +132,18 @@ function updateSectionFontFamilies(section) {
 	// compare the global font options with a section font's options
 	// to see if they are consistent
 	var first = section_fonts[0];
-	if (options != first.innerHTML) {
-		for ( var i = 0; i < section_fonts.length; i++) {
-			var sf = section_fonts[i];
-			// store currently selected option
-			var select_value = sf.value;
+    if (options != first.innerHTML) {
+	for ( var i = 0; i < section_fonts.length; i++) {
+	    var sf = section_fonts[i];
+	    // store currently selected option
+	    var select_value = sf.value;
 
-			// replace options
-			sf.innerHTML = options;
-
-			// reset selected option
-			sf.value = select_value;
-		}
+	    // replace options
+	    jQuery(sf).html( options );
+	    // reset selected option
+	    sf.value = select_value;
 	}
+    }
 }
 
 jQuery(document).ready( initForm ) ;
